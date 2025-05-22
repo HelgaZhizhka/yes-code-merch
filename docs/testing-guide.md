@@ -1,4 +1,4 @@
-# ✅ Testing Guide
+# Testing Guide
 
 ## Unit Testing
 
