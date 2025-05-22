@@ -51,7 +51,7 @@ Figma design: [Yes Code Merch Store](https://www.figma.com/design/a5X7CFN20TD3To
 ### Installation
 1. Clone the repository:
    ```bash
-    git clone
+    git clone https://github.com/YesCode/yes-code-merch-store.git
    ```
 2. Navigate to the project directory:
     ```bash
