@@ -1,4 +1,4 @@
-1. Task: 
+1. Task:
 2. Type of change:
 
 - [ ] Feature
@@ -9,5 +9,5 @@
 - [ ] Tests
 - [ ] Project settings / configs
 
-3. Description: 
+3. Description:
 4. Screenshot:

@@ -1,5 +1,7 @@
-# Structure 
+# Structure
+
 ## FSD + TanStack + Zustand + Supabase + Tailwind CSS
+
 Feature-Sliced Design [FSD](https://feature-sliced.github.io/documentation/ru/docs/get-started) is a methodology for structuring applications in a way that promotes scalability, maintainability, and collaboration.
 It emphasizes the separation of concerns and encourages the use of reusable components and features.
 This project follows the FSD methodology, utilizing TanStack for routing and data management, Zustand for state management, Supabase for authentication and product database, and TypeScript for type safety.
@@ -7,14 +9,14 @@ Example of Full FSD structure.
 
 ```
 └── src/
-    ├── app/                    # initial logic application               
+    ├── app/                    # initial logic application
     |                           #
     ├── pages/                  # Layer: pages (router)
     |   ├── {some-page}/        #     Slice: (example: Product page)
     |   |   ├── api/            #         Segment: API logic (api instances,requests, ...)
     |   |   ├── lib/            #         Segment: Infrastructure logic (helpers/utils)
     |   |   ├── model/          #         Segment: Business logic
-    |   |   └── ui/             #         Segment: UI logic 
+    |   |   └── ui/             #         Segment: UI logic
     |                           #
     ├── widgets/                # Layer: reusable UI components
     |   ├── {some-widget}/      #     Slice: (example: Sidebar widget)
