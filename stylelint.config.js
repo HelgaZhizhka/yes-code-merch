@@ -25,4 +25,4 @@ export default {
     'keyframes-name-pattern': null,
     'declaration-block-single-line-max-declarations': null,
   },
-}
+};
