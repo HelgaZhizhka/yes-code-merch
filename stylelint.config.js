@@ -1,7 +1,9 @@
 /** @type {import('stylelint').Config} */
 export default {
   extends: ['stylelint-config-standard', 'stylelint-config-clean-order'],
+  customSyntax: 'postcss',
   rules: {
+    'import-notation': null,
     'at-rule-no-unknown': [
       true,
       {
@@ -15,6 +17,7 @@ export default {
           'plugin',
           'custom-variant',
           'theme',
+          'import',
         ],
       },
     ],
