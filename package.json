@@ -17,10 +17,12 @@
     "check": "npm run format && npm run lint:fix",
     "prepare": "husky",
     "lint:styles": "stylelint \"**/*.css\"",
-    "lint:styles:fix": "stylelint \"**/*.css\" --fix"
+    "lint:styles:fix": "stylelint \"**/*.css\" --fix",
+    "gen:types": "supabase gen types typescript --project-id abcdefghijklmnopqrst > src/shared/api/database.types.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
+    "@supabase/supabase-js": "^2.49.8",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-query": "^5.66.5",
     "@tanstack/react-query-devtools": "^5.66.5",
