@@ -1,22 +1,24 @@
 import { createRootRoute, createRouter } from '@tanstack/react-router';
 
+import App from '@app/layout';
+
+import { aboutRoute } from '@pages/about/route';
+import { cartRoute } from '@pages/cart/route';
+import { catalogRoute } from '@pages/catalog/route';
 import { demoRoute } from '@pages/demo/route.tsx';
+import { ErrorPage } from '@pages/error';
 import { homeRoute } from '@pages/home/route.tsx';
 import { loginRoute } from '@pages/login/route.tsx';
+import { notFoundRoute } from '@pages/not-found/route';
+import { productRoute } from '@pages/product/route';
 import { profileRoute } from '@pages/profile/route.tsx';
 import { registrationRoute } from '@pages/registration/route.tsx';
 
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 
-import App from '@/app';
-import { aboutRoute } from '@/pages/about/route';
-import { cartRoute } from '@/pages/cart/route';
-import { catalogRoute } from '@/pages/catalog/route';
-import { notFoundRoute } from '@/pages/not-found/route';
-import { productRoute } from '@/pages/product/route';
-
 const rootRoute = createRootRoute({
   component: App,
+  errorComponent: ErrorPage,
 });
 
 const routeTree = rootRoute.addChildren([

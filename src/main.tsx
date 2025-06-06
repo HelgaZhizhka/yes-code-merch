@@ -2,10 +2,11 @@ import { RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import '@/styles/index.css';
+import { router } from '@app/routing';
+
+import '@app/styles/index.css';
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
-import reportWebVitals from '@shared/lib/report-web-vitals.ts';
-import { router } from '@shared/routing';
+import { reportWebVitals } from '@shared/lib/utils';
 
 const rootElement = document.querySelector('#app');
 if (rootElement && !rootElement.innerHTML) {

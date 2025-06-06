@@ -1,4 +1,5 @@
-Welcome to your new TanStack app!
+# Welcome to TanStack app
+
 
 ## Shadcn
 
@@ -8,6 +9,18 @@ Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
 pnpx shadcn@latest add button
 ```
 
+
+## Setting up Netlify
+
+First install the Netlify CLI with:
+
+```bash
+npm install -g netlify-cli`
+```
+
+```bash
+netlify init
+```
 ## Routing
 
 This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a code based router. Which means that the routes are defined in code (in the `./src/main.tsx` file). If you like you can also use a file based routing setup by following the [File Based Routing](https://tanstack.com/router/latest/docs/framework/react/guide/file-based-routing) guide.

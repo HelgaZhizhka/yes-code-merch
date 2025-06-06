@@ -10,3 +10,5 @@ export const ROUTES = {
   DEMO: '/demo/tanstack-query',
   NOT_FOUND: '/*',
 } as const;
+
+export type Route = (typeof ROUTES)[keyof typeof ROUTES];

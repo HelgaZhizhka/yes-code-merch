@@ -1,8 +1,8 @@
 import type { RootRoute } from '@tanstack/react-router';
 import { createRoute } from '@tanstack/react-router';
 
-import { ROUTES } from '@shared/config/routes';
-import { requireGuest } from '@shared/lib/auth';
+import { ROUTES } from '@shared/config';
+import { requireGuest } from '@shared/lib/utils';
 
 import { Registration } from './';
 
