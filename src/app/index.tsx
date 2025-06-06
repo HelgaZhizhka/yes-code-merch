@@ -1,8 +1,20 @@
+import { Outlet } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+
+import { TanStackQueryLayout } from '@shared/api/tanstack-query';
+
+import { Footer } from '@/widgets/footer';
+import { Header } from '@/widgets/header';
+
 const App = (): React.JSX.Element => {
   return (
-    <div className="text-center">
-      <h1>Main</h1>
-    </div>
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+      <TanStackRouterDevtools />
+      <TanStackQueryLayout />
+    </>
   );
 };
 

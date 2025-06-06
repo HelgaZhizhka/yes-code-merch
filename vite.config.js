@@ -18,6 +18,7 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
       '@shared': resolve(__dirname, './src/shared'),
       '@pages': resolve(__dirname, './src/pages'),
+      '@widgets': resolve(__dirname, './src/widgets'),
     },
   },
   css: {

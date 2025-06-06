@@ -34,7 +34,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
-      "@pages/*": ["./src/pages/*"]
+      "@pages/*": ["./src/pages/*"],
+      "@widgets/*": ["./src/widgets/*"]
     }
   }
 }
