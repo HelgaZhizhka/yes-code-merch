@@ -10,6 +10,7 @@ const Header = (): React.JSX.Element => {
           Yes Code Merch
         </Link>
       </div>
+      {/* //TODO should be separated to component NavBar */}
       <nav>
         <Link to={ROUTES.ABOUT} className="mr-4">
           About

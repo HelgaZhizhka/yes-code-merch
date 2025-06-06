@@ -5,7 +5,6 @@ import App from '@app/layout';
 import { aboutRoute } from '@pages/about/route';
 import { cartRoute } from '@pages/cart/route';
 import { catalogRoute } from '@pages/catalog/route';
-import { demoRoute } from '@pages/demo/route.tsx';
 import { ErrorPage } from '@pages/error';
 import { homeRoute } from '@pages/home/route.tsx';
 import { loginRoute } from '@pages/login/route.tsx';
@@ -30,7 +29,6 @@ const routeTree = rootRoute.addChildren([
   productRoute(rootRoute),
   cartRoute(rootRoute),
   aboutRoute(rootRoute),
-  demoRoute(rootRoute),
   notFoundRoute(rootRoute),
 ]);
 
