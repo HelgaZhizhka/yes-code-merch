@@ -1,17 +1,21 @@
+import { RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from '@app/layout';
+import { router } from '@app/routing';
 
 import '@app/styles/index.css';
-import { reportWebVitals } from '@shared/lib/utils/';
+import { TanStackQueryProvider } from '@shared/api/tanstack-query';
+import { reportWebVitals } from '@shared/lib/utils';
 
 const rootElement = document.querySelector('#app');
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <App />
+      <TanStackQueryProvider.Provider>
+        <RouterProvider router={router} />
+      </TanStackQueryProvider.Provider>
     </StrictMode>
   );
 }
@@ -19,4 +23,4 @@ if (rootElement && !rootElement.innerHTML) {
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+reportWebVitals(console.log);
