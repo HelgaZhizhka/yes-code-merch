@@ -45,7 +45,6 @@ export default tseslint.config(
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
       '@typescript-eslint/consistent-type-imports': 'error',
-      '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/consistent-type-assertions': [
         'error',
         { assertionStyle: 'never' },
@@ -53,6 +52,18 @@ export default tseslint.config(
       '@typescript-eslint/explicit-member-accessibility': [
         'error',
         { accessibility: 'explicit', overrides: { constructors: 'off' } },
+      ],
+      '@typescript-eslint/explicit-function-return-type': [
+        'error',
+        {
+          allowConciseArrowFunctionExpressionsStartingWithVoid: true,
+          allowDirectConstAssertionInArrowFunctions: true,
+          allowTypedFunctionExpressions: true,
+          allowHigherOrderFunctions: true,
+          allowFunctionsWithoutTypeParameters: true,
+          allowExpressions: true,
+          allowedNames: [],
+        },
       ],
       '@typescript-eslint/member-ordering': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
@@ -63,12 +74,50 @@ export default tseslint.config(
             'builtin',
             'external',
             'internal',
-            'parent',
             'sibling',
+            'parent',
             'index',
           ],
           'newlines-between': 'always',
           alphabetize: { order: 'asc', caseInsensitive: true },
+          pathGroups: [
+            {
+              pattern: '@app/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@pages/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@widgets/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@features/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@entities/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@shared/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@/**',
+              group: 'internal',
+              position: 'after',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
         },
       ],
       'unicorn/no-array-callback-reference': 'off',

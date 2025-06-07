@@ -4,6 +4,10 @@
   "description": "A modern web application built with React, Tailwind CSS, and Vite.",
   "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HelgaZhizhka/yes-code-merch.git"
+  },
   "scripts": {
     "dev": "vite --port 3000 --open",
     "start": "vite --port 3000 --open",

@@ -1,9 +1,10 @@
-import reportWebVitals from '@shared/lib/report-web-vitals.ts';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from '@/app';
-import '@/styles/index.css';
+import App from '@app/layout';
+
+import '@app/styles/index.css';
+import { reportWebVitals } from '@shared/lib/utils/';
 
 const rootElement = document.querySelector('#app');
 if (rootElement && !rootElement.innerHTML) {

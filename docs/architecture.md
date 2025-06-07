@@ -64,3 +64,5 @@ Example of Full FSD structure.
     └── main.tsx                #         Segment: Entry point for the application
     └── index.html              #         Segment: HTML entry point
 ```
+
+![image info](fsd.png)
