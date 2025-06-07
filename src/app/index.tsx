@@ -1,21 +1,12 @@
-import { Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { RouterProvider } from '@tanstack/react-router';
 
-import { Footer } from '@app/components/footer';
-import { Header } from '@app/components/header';
+import { TanStackQueryProvider } from '@shared/api/tanstack-query';
+import { router } from '@shared/routing';
 
-import { TanStackQueryLayout } from '@shared/api/tanstack-query';
-
-const App = (): React.JSX.Element => {
-  return (
-    <>
-      <Header />
-      <Outlet />
-      <Footer />
-      <TanStackRouterDevtools />
-      <TanStackQueryLayout />
-    </>
-  );
-};
-
-export default App;
+export const App = (): React.JSX.Element => (
+  <>
+    <TanStackQueryProvider.Provider>
+      <RouterProvider router={router} />
+    </TanStackQueryProvider.Provider>
+  </>
+);

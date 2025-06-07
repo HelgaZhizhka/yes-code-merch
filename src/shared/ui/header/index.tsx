@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 
 import { ROUTES } from '@/shared/routing/types';
 
-const Header = (): React.JSX.Element => {
+export const Header = (): React.JSX.Element => {
   return (
     <header className="flex justify-between items-center">
       <div className="text-xl">
@@ -12,5 +12,3 @@ const Header = (): React.JSX.Element => {
     </header>
   );
 };
-
-export default Header;

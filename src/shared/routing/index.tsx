@@ -2,12 +2,12 @@ import { createRootRoute, createRouter } from '@tanstack/react-router';
 
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 
-import App from '@/app';
+import { Layout } from '@/layouts';
 
 import { homeRoute } from './routes';
 
 const rootRoute = createRootRoute({
-  component: App,
+  component: Layout,
 });
 
 const routeTree = rootRoute.addChildren([homeRoute(rootRoute)]);
