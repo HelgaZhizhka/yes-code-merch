@@ -1,2 +1,2 @@
-export { default as cn } from './cn';
-export { default as reportWebVitals } from './report-web-vitals';
+export * from './cn';
+export * from './report-web-vitals';

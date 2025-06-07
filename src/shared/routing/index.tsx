@@ -1,10 +1,10 @@
 import { createRootRoute, createRouter } from '@tanstack/react-router';
 
-import App from '@app/layout';
-
-import { homeRoute } from '@pages/home/route.tsx';
-
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
+
+import App from '@/app';
+
+import { homeRoute } from './routes';
 
 const rootRoute = createRootRoute({
   component: App,

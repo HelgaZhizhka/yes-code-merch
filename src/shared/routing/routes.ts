@@ -1,9 +1,9 @@
-import { createRoute } from '@tanstack/react-router';
 import type { RootRoute } from '@tanstack/react-router';
+import { createRoute } from '@tanstack/react-router';
 
-import { ROUTES } from '@shared/config';
+import { Home } from '@/pages/home';
 
-import { Home } from './';
+import { ROUTES } from './types';
 
 export const homeRoute = (parentRoute: RootRoute) =>
   createRoute({

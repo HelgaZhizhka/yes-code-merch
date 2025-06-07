@@ -1,8 +1,8 @@
 import { Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
-import { Footer } from '@widgets/footer';
-import { Header } from '@widgets/header';
+import { Footer } from '@app/components/footer';
+import { Header } from '@app/components/header';
 
 import { TanStackQueryLayout } from '@shared/api/tanstack-query';
 
