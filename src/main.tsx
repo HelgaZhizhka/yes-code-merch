@@ -4,9 +4,18 @@ import ReactDOM from 'react-dom/client';
 import { App } from '@app/index';
 import '@app/styles/index.css';
 
+import { RootElementClassNames, RootElementId } from '@shared/config/constants';
 import { reportWebVitals } from '@shared/lib/report-web-vitals';
 
-const rootElement = document.querySelector('#app');
+const rootElement =
+  document.querySelector(`#${RootElementId}`) ??
+  ((): HTMLDivElement => {
+    const element = document.createElement('div');
+    element.id = RootElementId;
+    element.className = RootElementClassNames;
+    document.body.append(element);
+    return element;
+  })();
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(

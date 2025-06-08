@@ -4,8 +4,9 @@ export const ROUTES = {
   REGISTRATION: '/registration',
   ABOUT: '/about',
   PROFILE: '/profile',
-  CATEGORY: '/category/:categoryId/:subcategoryId?',
-  PRODUCT: '/product/:categoryId/:subcategoryId?/:productId',
+  CATEGORY: '/category/$categoryId',
+  SUBCATEGORY: '/category/$categoryId/$subCategoryId',
+  PRODUCT: '/product/$productId',
   CART: '/cart',
   NOT_FOUND: '*',
 } as const;

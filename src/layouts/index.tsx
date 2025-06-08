@@ -10,7 +10,9 @@ export const Layout = (): React.JSX.Element => {
   return (
     <>
       <Header />
-      <Outlet />
+      <main className="flex-1">
+        <Outlet />
+      </main>
       <Footer />
       <TanStackRouterDevtools />
       <TanStackQueryLayout />
