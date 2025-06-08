@@ -1,10 +1,10 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from '@app/layout';
-
+import { App } from '@app/index';
 import '@app/styles/index.css';
-import { reportWebVitals } from '@shared/lib/utils/';
+
+import { reportWebVitals } from '@shared/lib/report-web-vitals';
 
 const rootElement = document.querySelector('#app');
 if (rootElement && !rootElement.innerHTML) {
