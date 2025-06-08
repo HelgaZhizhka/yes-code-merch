@@ -1,7 +1,7 @@
 import type { RootRoute } from '@tanstack/react-router';
 import { createRoute } from '@tanstack/react-router';
 
-import { Home } from '@/pages/home/ui';
+import { Home } from '@/pages/home';
 
 import { ROUTES } from './types';
 
