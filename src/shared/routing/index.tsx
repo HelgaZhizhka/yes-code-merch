@@ -3,7 +3,7 @@ import { createRootRoute, createRouter } from '@tanstack/react-router';
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 
 import { Layout } from '@/layouts';
-import ErrorPage from '@/pages/error';
+import { ErrorPage } from '@/pages/error';
 
 import {
   aboutRoute,

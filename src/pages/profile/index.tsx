@@ -1,4 +1,4 @@
-const Profile = (): React.JSX.Element => {
+export const Profile = (): React.JSX.Element => {
   return (
     <div>
       <h1 className="text-2xl">Profile Page</h1>
@@ -6,5 +6,3 @@ const Profile = (): React.JSX.Element => {
     </div>
   );
 };
-
-export default Profile;

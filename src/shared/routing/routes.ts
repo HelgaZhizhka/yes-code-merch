@@ -3,15 +3,15 @@ import { createRoute } from '@tanstack/react-router';
 
 import { requireAuth, requireGuest } from '@shared/lib/auth';
 
-import About from '@/pages/about';
-import Cart from '@/pages/cart';
-import Catalog from '@/pages/catalog';
+import { About } from '@/pages/about';
+import { Cart } from '@/pages/cart';
+import { Catalog } from '@/pages/catalog';
 import { Home } from '@/pages/home';
-import Login from '@/pages/login';
-import NotFound from '@/pages/not-found';
-import Product from '@/pages/product';
-import Profile from '@/pages/profile';
-import Registration from '@/pages/registration';
+import { Login } from '@/pages/login';
+import { NotFound } from '@/pages/not-found';
+import { Product } from '@/pages/product';
+import { Profile } from '@/pages/profile';
+import { Registration } from '@/pages/registration';
 
 import { ROUTES } from './types';
 

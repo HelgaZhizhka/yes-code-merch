@@ -1,4 +1,4 @@
-const ErrorPage = ({ error }: { error: Error }): React.JSX.Element => {
+export const ErrorPage = ({ error }: { error: Error }): React.JSX.Element => {
   return (
     <div className="p-4">
       <h1 className="text-2xl mb-4">Something is wrong...</h1>
@@ -6,5 +6,3 @@ const ErrorPage = ({ error }: { error: Error }): React.JSX.Element => {
     </div>
   );
 };
-
-export default ErrorPage;

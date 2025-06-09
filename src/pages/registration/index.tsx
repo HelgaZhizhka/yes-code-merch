@@ -1,4 +1,4 @@
-const Registration = (): React.JSX.Element => {
+export const Registration = (): React.JSX.Element => {
   return (
     <div>
       <h1 className="text-2xl">Registration Page</h1>
@@ -6,5 +6,3 @@ const Registration = (): React.JSX.Element => {
     </div>
   );
 };
-
-export default Registration;

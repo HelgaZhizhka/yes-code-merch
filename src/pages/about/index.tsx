@@ -1,4 +1,4 @@
-const About = (): React.JSX.Element => {
+export const About = (): React.JSX.Element => {
   return (
     <div>
       <h1 className="text-2xl">About Page</h1>
@@ -6,5 +6,3 @@ const About = (): React.JSX.Element => {
     </div>
   );
 };
-
-export default About;

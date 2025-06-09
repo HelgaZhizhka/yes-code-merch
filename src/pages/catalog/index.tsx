@@ -1,5 +1,6 @@
 import { useParams } from '@tanstack/react-router';
-const Catalog = (): React.JSX.Element => {
+
+export const Catalog = (): React.JSX.Element => {
   const params = useParams({ strict: false });
   return (
     <div>
@@ -11,5 +12,3 @@ const Catalog = (): React.JSX.Element => {
     </div>
   );
 };
-
-export default Catalog;

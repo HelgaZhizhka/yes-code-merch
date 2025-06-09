@@ -1,4 +1,4 @@
-const Cart = (): React.JSX.Element => {
+export const Cart = (): React.JSX.Element => {
   return (
     <div>
       <h1 className="text-2xl">Cart Page</h1>
@@ -6,5 +6,3 @@ const Cart = (): React.JSX.Element => {
     </div>
   );
 };
-
-export default Cart;
