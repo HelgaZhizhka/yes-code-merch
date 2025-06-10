@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { App } from '@app/index';
 import '@app/styles/index.css';
 
-import { RootElementClassNames, RootElementId } from '@shared/config/constants';
+import { RootElementClassNames, RootElementId } from '@shared/config';
 import { reportWebVitals } from '@shared/lib/report-web-vitals';
 
 const rootElement =

@@ -1,3 +1,1 @@
-export const Footer = (): React.JSX.Element => {
-  return <footer>Footer</footer>;
-};
+export const Footer = (): React.JSX.Element => <footer>Footer</footer>;
