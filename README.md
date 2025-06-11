@@ -4,7 +4,7 @@ A modern, single-page e-commerce application built with React TanStack TypeScrip
 
 ## Deploy
 
-[Yes Code Merch Store](https://yes-code-merch.netlify.app/)
+[Yes Code Merch Store](https://yes-code.netlify.app/)
 
 ## Design
 
