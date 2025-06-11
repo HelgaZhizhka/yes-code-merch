@@ -200,4 +200,8 @@ code {
   img {
     @apply max-w-full h-auto;
   }
+
+  :where(button, [role="button"]):not([disabled]) {
+    cursor: pointer;
+  }
 }
