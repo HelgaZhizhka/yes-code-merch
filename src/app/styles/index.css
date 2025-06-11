@@ -1,39 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
 
-body {
-  @apply m-0;
-
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
 :root {
-  --background: oklch(100% 0 0deg);
-  --foreground: oklch(14.1% 0.005 285.823deg);
+  --background: #fafafa;
+  --foreground: #0b0a0a;
+  --primary: #f2760f;
+  --primary-foreground: #1a1a1a;
+  --primary-light: #ff9843;
+  --primary-light-foreground: #1a1a1a;
+  --secondary: #3e17ff;
+  --secondary-foreground: #fafafa;
+  --accent: #b62dd3;
+  --accent-foreground: #fafafa;
+  --success: #008a40;
+  --success-foreground: #fafafa;
   --card: oklch(100% 0 0deg);
   --card-foreground: oklch(14.1% 0.005 285.823deg);
   --popover: oklch(100% 0 0deg);
   --popover-foreground: oklch(14.1% 0.005 285.823deg);
-  --primary: oklch(21% 0.006 285.885deg);
-  --primary-foreground: oklch(98.5% 0 0deg);
-  --secondary: oklch(96.7% 0.001 286.375deg);
-  --secondary-foreground: oklch(21% 0.006 285.885deg);
   --muted: oklch(96.7% 0.001 286.375deg);
   --muted-foreground: oklch(55.2% 0.016 285.938deg);
-  --accent: oklch(96.7% 0.001 286.375deg);
-  --accent-foreground: oklch(21% 0.006 285.885deg);
   --destructive: oklch(57.7% 0.245 27.325deg);
-  --destructive-foreground: oklch(57.7% 0.245 27.325deg);
+  --destructive-foreground: #fafafa;
   --border: oklch(92% 0.004 286.32deg);
   --input: oklch(92% 0.004 286.32deg);
   --ring: oklch(87.1% 0.006 286.286deg);
@@ -51,28 +41,29 @@ code {
   --sidebar-accent-foreground: oklch(21% 0.006 285.885deg);
   --sidebar-border: oklch(92% 0.004 286.32deg);
   --sidebar-ring: oklch(87.1% 0.006 286.286deg);
+  --font-sans:
+    'Mukta', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen,
+    ubuntu, cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 .dark {
-  --background: oklch(14.1% 0.005 285.823deg);
-  --foreground: oklch(98.5% 0 0deg);
+  --background: #0b0a0a;
+  --foreground: #fafafa;
+  --primary-foreground: #fafafa;
+  --secondary-foreground: #fafafa;
+  --muted: oklch(27.4% 0.006 286.033deg);
+  --muted-foreground: oklch(70.5% 0.015 286.067deg);
+  --success: #00c95e;
+  --success-foreground: #0b0a0a;
+  --border: oklch(27.4% 0.006 286.033deg);
+  --input: oklch(27.4% 0.006 286.033deg);
+  --ring: oklch(44.2% 0.017 285.786deg);
   --card: oklch(14.1% 0.005 285.823deg);
   --card-foreground: oklch(98.5% 0 0deg);
   --popover: oklch(14.1% 0.005 285.823deg);
   --popover-foreground: oklch(98.5% 0 0deg);
-  --primary: oklch(98.5% 0 0deg);
-  --primary-foreground: oklch(21% 0.006 285.885deg);
-  --secondary: oklch(27.4% 0.006 286.033deg);
-  --secondary-foreground: oklch(98.5% 0 0deg);
-  --muted: oklch(27.4% 0.006 286.033deg);
-  --muted-foreground: oklch(70.5% 0.015 286.067deg);
-  --accent: oklch(27.4% 0.006 286.033deg);
-  --accent-foreground: oklch(98.5% 0 0deg);
-  --destructive: oklch(39.6% 0.141 25.723deg);
-  --destructive-foreground: oklch(63.7% 0.237 25.331deg);
-  --border: oklch(27.4% 0.006 286.033deg);
-  --input: oklch(27.4% 0.006 286.033deg);
-  --ring: oklch(44.2% 0.017 285.786deg);
+  --destructive: oklch(39.6% 0.245 27.325deg);
+  --destructive-foreground: #fafafa;
   --chart-1: oklch(48.8% 0.243 264.376deg);
   --chart-2: oklch(69.6% 0.17 162.48deg);
   --chart-3: oklch(76.9% 0.188 70.08deg);
@@ -107,6 +98,10 @@ code {
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-primary-light: var(--primary-light);
+  --color-primary-light-foreground: var(--primary-light-foreground);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -133,6 +128,64 @@ code {
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply m-0 font-sans antialiased bg-background text-foreground;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    @apply bg-muted px-1 py-0.5 rounded text-sm;
+
+    font-family:
+      source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  }
+
+  h1 {
+    @apply text-4xl font-bold leading-tight;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold leading-snug;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold leading-snug;
+  }
+
+  h4 {
+    @apply text-xl font-medium leading-normal;
+  }
+
+  h5 {
+    @apply text-lg font-medium leading-normal;
+  }
+
+  h6 {
+    @apply text-base font-medium leading-normal;
+  }
+
+  p {
+    @apply text-base leading-normal;
+  }
+
+  a {
+    @apply text-primary underline-offset-4 transition-colors;
+  }
+
+  a:hover {
+    @apply text-primary-foreground;
+  }
+
+  pre {
+    @apply bg-secondary p-4 rounded overflow-x-auto;
+  }
+
+  img {
+    @apply max-w-full h-auto;
+  }
+
+  :where(button, [role='button']):not([disabled]) {
+    cursor: pointer;
   }
 }

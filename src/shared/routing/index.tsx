@@ -5,6 +5,8 @@ import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 import { Layout } from '@/layouts';
 import { ErrorPage } from '@/pages/error';
 
+const isDev = import.meta.env.DEV;
+
 import {
   aboutRoute,
   cartRoute,
@@ -16,6 +18,7 @@ import {
   profileRoute,
   registrationRoute,
   subCategoryRoute,
+  uiReviewRoute,
 } from './routes';
 
 const rootRoute = createRootRoute({
@@ -34,6 +37,7 @@ const routeTree = rootRoute.addChildren([
   productRoute(rootRoute),
   cartRoute(rootRoute),
   notFoundRoute(rootRoute),
+  ...(isDev ? [uiReviewRoute(rootRoute)] : []),
 ]);
 
 export const router = createRouter({

@@ -12,6 +12,7 @@ import { NotFound } from '@/pages/not-found';
 import { Product } from '@/pages/product';
 import { Profile } from '@/pages/profile';
 import { Registration } from '@/pages/registration';
+import { UIPreviewPage } from '@/pages/ui-preview';
 
 import { ROUTES } from './types';
 
@@ -86,4 +87,11 @@ export const profileRoute = (parentRoute: RootRoute) =>
     path: ROUTES.PROFILE,
     component: Profile,
     beforeLoad: requireAuth,
+  });
+
+export const uiReviewRoute = (parentRoute: RootRoute) =>
+  createRoute({
+    path: '/ui-preview',
+    getParentRoute: () => parentRoute,
+    component: UIPreviewPage,
   });
