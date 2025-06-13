@@ -92,7 +92,12 @@ export const Footer = (): React.JSX.Element => {
           <ul className="space-y-2">
             <li className="flex items-center gap-2">
               <Phone className="w-5 h-5" />
-              <span>(+971) 58 8284186</span>
+              <a
+                href="tel:+971588284186"
+                className="text-accent-foreground hover:text-primary-foreground"
+              >
+                (+971) 58 8284186
+              </a>
             </li>
             <li className="flex items-center gap-2">
               <MessageCircle className="w-5 h-5" />
@@ -102,7 +107,7 @@ export const Footer = (): React.JSX.Element => {
               <Mail className="w-5 h-5" />
               <a
                 href="mailto:yescode@gmail.com"
-                className="text-accent-foreground hover:text-primary-foreground transition"
+                className="text-accent-foreground hover:text-primary-foreground"
               >
                 yescode@gmail.com
               </a>
