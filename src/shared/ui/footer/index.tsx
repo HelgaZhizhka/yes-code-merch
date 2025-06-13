@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { ROUTES } from '@/shared/routing/types';
+import Logo from '@/shared/assets/logo.svg';
 
 import { Phone, Mail, MessageCircle } from 'lucide-react';
 
@@ -7,8 +8,11 @@ export const Footer = (): React.JSX.Element => {
   return (
     <footer className="bg-accent text-accent-foreground">
       <div className="container max-w-screen-xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between gap-8">
-        <div className="flex flex-col gap-4">
-          <img src="logo.svg" alt="YesCode Logo" className="w-24" />
+        <div className="flex flex-col gap-1">
+          <Link to={ROUTES.HOME}>
+            <img src={Logo} alt="YesCode Logo" className="w-24" />
+          </Link>
+          <h1 className="text-base">YesCode: Merch for True Coders</h1>
           <nav className="flex flex-col gap-1">
             <Link
               to={ROUTES.ABOUT}
