@@ -33,7 +33,7 @@ export const Footer = (): React.JSX.Element => {
             </div>
           </nav>
         </div>
-        <div>
+        <div className="hidden md:block">
           <h5 className="font-bold mb-2">Categories</h5>
           <ul className="space-y-1">
             <li>
