@@ -1,8 +1,8 @@
+import Logo from '@shared/assets/logo.svg';
+import { ROUTES } from '@shared/model/constants';
 import { Link } from '@tanstack/react-router';
-import { ROUTES } from '@/shared/routing/types';
-import Logo from '@/shared/assets/logo.svg';
 
-import { Phone, Mail, MessageCircle } from 'lucide-react';
+import { Mail, MessageCircle, Phone } from 'lucide-react';
 
 export const Footer = (): React.JSX.Element => {
   return (

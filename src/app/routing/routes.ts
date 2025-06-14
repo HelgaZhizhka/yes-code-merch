@@ -1,7 +1,9 @@
 import type { RootRoute } from '@tanstack/react-router';
-import { createRoute } from '@tanstack/react-router';
+import { createRoute, redirect } from '@tanstack/react-router';
 
-import { requireAuth, requireGuest } from '@shared/lib/auth';
+import { isAuthorized } from '@entities/session/model/selectors';
+
+import { ROUTES } from '@shared/model/constants';
 
 import { About } from '@/pages/about';
 import { Cart } from '@/pages/cart';
@@ -14,7 +16,21 @@ import { Profile } from '@/pages/profile';
 import { Registration } from '@/pages/registration';
 import { UIPreviewPage } from '@/pages/ui-preview';
 
-import { ROUTES } from './types';
+import type { BeforeLoadContext } from './interfaces';
+
+export const requireAuth = (opts: BeforeLoadContext) => {
+  if (opts?.preload) return;
+  if (!isAuthorized()) {
+    throw redirect({ to: ROUTES.LOGIN });
+  }
+};
+
+export const requireGuest = (opts: BeforeLoadContext) => {
+  if (opts?.preload) return;
+  if (isAuthorized()) {
+    throw redirect({ to: ROUTES.HOME });
+  }
+};
 
 export const homeRoute = (parentRoute: RootRoute) =>
   createRoute({

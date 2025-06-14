@@ -1,7 +1,8 @@
 import { RouterProvider } from '@tanstack/react-router';
 
+import { router } from '@app/routing';
+
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
-import { router } from '@shared/routing';
 
 export const App = (): React.JSX.Element => (
   <>
