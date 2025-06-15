@@ -5,7 +5,6 @@ import { useSessionStore } from '../model/store';
 export const initSession = async () => {
   const { data } = await supabase.auth.getSession();
   useSessionStore.getState().setSession(data.session);
-  console.log(data.session);
 
   const {
     data: { subscription },
