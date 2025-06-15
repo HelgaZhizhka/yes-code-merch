@@ -1,4 +1,7 @@
+import { toast } from 'sonner';
+
 import { Button } from '@shared/ui/button';
+import { Toaster } from '@shared/ui/sonner';
 
 import { Badge } from '@/shared/ui/badge';
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
@@ -30,6 +33,9 @@ export const UIPreviewPage = () => (
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
         <span className="relative inline-flex size-3 rounded-full bg-primary"></span>
       </span>
+      <Button onClick={() => toast.success('My  toast')}>
+        Give me a toast
+      </Button>
     </section>
 
     <section className="space-y-2">
@@ -71,5 +77,6 @@ export const UIPreviewPage = () => (
         muted
       </div>
     </section>
+    <Toaster position="bottom-right" richColors closeButton expand={true} />
   </div>
 );
