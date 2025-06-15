@@ -14,6 +14,8 @@
   --secondary-foreground: #fafafa;
   --accent: #eef7ff;
   --accent-foreground: #0b0a0a;
+  --violet: #b62dd3;
+  --violet-foreground: #fafafa;
   --success: #008a40;
   --success-foreground: #fafafa;
   --card: oklch(100% 0 0deg);
@@ -96,6 +98,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-violet: var(--violet);
+  --color-violet-foreground: var(--violet-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);

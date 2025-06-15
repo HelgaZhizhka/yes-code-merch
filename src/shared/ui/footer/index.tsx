@@ -6,7 +6,7 @@ import { Mail, MessageCircle, Phone } from 'lucide-react';
 
 export const Footer = (): React.JSX.Element => {
   return (
-    <footer className="bg-accent text-accent-foreground">
+    <footer className="bg-violet text-violet-foreground">
       <div className="container max-w-screen-xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between gap-8">
         <div className="flex flex-col gap-1">
           <Link to={ROUTES.HOME}>
@@ -16,21 +16,21 @@ export const Footer = (): React.JSX.Element => {
           <nav className="flex flex-col gap-1">
             <Link
               to={ROUTES.ABOUT}
-              className="text-accent-foreground hover:text-primary-foreground"
+              className="text-violet-foreground hover:text-primary-foreground"
             >
               About Us
             </Link>
             <div className="flex gap-2">
               <Link
                 to={ROUTES.LOGIN}
-                className="text-accent-foreground hover:text-primary-foreground"
+                className="text-violet-foreground hover:text-primary-foreground"
               >
                 Login
               </Link>
               <span>|</span>
               <Link
                 to={ROUTES.REGISTRATION}
-                className="text-accent-foreground hover:text-primary-foreground"
+                className="text-violet-foreground hover:text-primary-foreground"
               >
                 Registration
               </Link>
@@ -46,7 +46,7 @@ export const Footer = (): React.JSX.Element => {
                 params={{
                   categoryId: 'Closes',
                 }}
-                className="text-accent-foreground hover:text-primary-foreground"
+                className="text-violet-foreground hover:text-primary-foreground"
               >
                 Closes
               </Link>
@@ -57,7 +57,7 @@ export const Footer = (): React.JSX.Element => {
                 params={{
                   categoryId: 'Drinkware',
                 }}
-                className="text-accent-foreground hover:text-primary-foreground"
+                className="text-violet-foreground hover:text-primary-foreground"
               >
                 Drinkware
               </Link>
@@ -68,7 +68,7 @@ export const Footer = (): React.JSX.Element => {
                 params={{
                   categoryId: 'Office',
                 }}
-                className="text-accent-foreground hover:text-primary-foreground"
+                className="text-violet-foreground hover:text-primary-foreground"
               >
                 Office
               </Link>
@@ -79,7 +79,7 @@ export const Footer = (): React.JSX.Element => {
                 params={{
                   categoryId: 'Bags',
                 }}
-                className="text-accent-foreground hover:text-primary-foreground"
+                className="text-violet-foreground hover:text-primary-foreground"
               >
                 Bags
               </Link>
@@ -94,7 +94,7 @@ export const Footer = (): React.JSX.Element => {
               <Phone className="w-5 h-5" />
               <a
                 href="tel:+971588284186"
-                className="text-accent-foreground hover:text-primary-foreground"
+                className="text-violet-foreground hover:text-primary-foreground"
               >
                 (+971) 58 8284186
               </a>
@@ -107,7 +107,7 @@ export const Footer = (): React.JSX.Element => {
               <Mail className="w-5 h-5" />
               <a
                 href="mailto:yescode@gmail.com"
-                className="text-accent-foreground hover:text-primary-foreground"
+                className="text-violet-foreground hover:text-primary-foreground"
               >
                 yescode@gmail.com
               </a>
@@ -116,7 +116,7 @@ export const Footer = (): React.JSX.Element => {
         </div>
       </div>
 
-      <div className="bg-foreground text-accent-foreground text-center py-3 text-xs">
+      <div className="bg-foreground text-violet-foreground text-center py-3 text-xs">
         © {new Date().getFullYear()}. All rights reserved.
       </div>
     </footer>
