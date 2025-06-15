@@ -8,7 +8,7 @@ import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 
 export const Registration = (): React.JSX.Element => {
-  const { mutate: register, isPending, error, data } = useRegistration();
+  const { mutate: register, isPending, error } = useRegistration();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -51,11 +51,6 @@ export const Registration = (): React.JSX.Element => {
         />
 
         {error && <p className="text-red-500 text-sm">{error.message}</p>}
-        {data && !data.session && data.user && (
-          <p className="text-green-600 text-sm">
-            Check your email for confirmation link.
-          </p>
-        )}
 
         <Button type="submit" disabled={isPending}>
           {isPending ? 'Registering…' : 'Register'}
