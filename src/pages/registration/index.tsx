@@ -1,11 +1,10 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { useRegistration } from '@features/auth/hooks/use-registration';
-
-import { ROUTES } from '@shared/model/constants';
+import { ROUTES } from '@shared/model/routes';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
+import { useRegistration } from '@shared/viewer/model/hooks';
 
 export const Registration = (): React.JSX.Element => {
   const { mutate: register, isPending, error } = useRegistration();

@@ -8,8 +8,7 @@ import { TanStackQueryLayout } from '@shared/api/tanstack-query';
 import { Button } from '@shared/ui/button';
 import { Footer } from '@shared/ui/footer';
 import { Header } from '@shared/ui/header';
-
-import { useLogout } from '@/features/auth/hooks/use-logout';
+import { useLogout } from '@shared/viewer/model/hooks';
 
 export const Layout = (): React.JSX.Element => {
   const logout = useLogout();

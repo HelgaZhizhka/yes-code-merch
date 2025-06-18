@@ -1,20 +1,19 @@
 import type { RootRoute } from '@tanstack/react-router';
 import { createRoute, redirect } from '@tanstack/react-router';
 
-import { isAuthorized } from '@entities/session/model/selectors';
+import { About } from '@pages/about';
+import { Cart } from '@pages/cart';
+import { Catalog } from '@pages/catalog';
+import { Home } from '@pages/home';
+import { Login } from '@pages/login';
+import { NotFound } from '@pages/not-found';
+import { Product } from '@pages/product';
+import { Profile } from '@pages/profile';
+import { Registration } from '@pages/registration';
+import { UIPreviewPage } from '@pages/ui-preview';
 
-import { ROUTES } from '@shared/model/constants';
-
-import { About } from '@/pages/about';
-import { Cart } from '@/pages/cart';
-import { Catalog } from '@/pages/catalog';
-import { Home } from '@/pages/home';
-import { Login } from '@/pages/login';
-import { NotFound } from '@/pages/not-found';
-import { Product } from '@/pages/product';
-import { Profile } from '@/pages/profile';
-import { Registration } from '@/pages/registration';
-import { UIPreviewPage } from '@/pages/ui-preview';
+import { ROUTES } from '@shared/model/routes';
+import { isAuthorized } from '@shared/viewer/model/selectors';
 
 import type { BeforeLoadContext } from './interfaces';
 

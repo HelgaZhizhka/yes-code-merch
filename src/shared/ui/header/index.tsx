@@ -1,5 +1,6 @@
-import { ROUTES } from '@shared/model/constants';
 import { Link } from '@tanstack/react-router';
+
+import { ROUTES } from '@shared/model/routes';
 
 export const Header = (): React.JSX.Element => {
   return (

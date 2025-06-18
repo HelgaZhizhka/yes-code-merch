@@ -1,5 +1,5 @@
 import Logo from '@shared/assets/logo.svg';
-import { ROUTES } from '@shared/model/constants';
+import { ROUTES } from '@shared/model/routes';
 import { Link } from '@tanstack/react-router';
 
 import { Mail, MessageCircle, Phone } from 'lucide-react';

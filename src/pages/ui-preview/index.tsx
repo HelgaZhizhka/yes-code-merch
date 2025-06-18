@@ -1,10 +1,9 @@
+import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
-
-import { Badge } from '@/shared/ui/badge';
-import { Card, CardContent, CardHeader } from '@/shared/ui/card';
-import { Checkbox } from '@/shared/ui/checkbox';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
+import { Card, CardContent, CardHeader } from '@shared/ui/card';
+import { Checkbox } from '@shared/ui/checkbox';
+import { Input } from '@shared/ui/input';
+import { Label } from '@shared/ui/label';
 
 export const UIPreviewPage = () => (
   <div className="p-6 space-y-8 bg-background font-sans min-h-screen">

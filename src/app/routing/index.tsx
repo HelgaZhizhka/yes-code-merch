@@ -1,9 +1,10 @@
 import { createRootRoute, createRouter } from '@tanstack/react-router';
 
+import { ErrorPage } from '@pages/error';
+
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 
 import { Layout } from '@/layouts';
-import { ErrorPage } from '@/pages/error';
 
 const isDev = import.meta.env.DEV;
 

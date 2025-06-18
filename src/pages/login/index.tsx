@@ -1,11 +1,10 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { useLogin } from '@features/auth/hooks/use-login';
-
-import { ROUTES } from '@shared/model/constants';
+import { ROUTES } from '@shared/model/routes';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
+import { useLogin } from '@shared/viewer/model/hooks';
 
 export const Login = (): React.JSX.Element => {
   const { mutate: login, isPending, error } = useLogin();
