@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
 
 import ErrorImage from '@shared/assets/404.png';
+import { cn } from '@shared/lib/utils';
 import { ROUTES } from '@shared/routing/types';
 import { Button } from '@shared/ui/button';
 
@@ -11,7 +12,10 @@ export const NotFound = (): React.JSX.Element => {
     <div className="flex flex-col items-center justify-center min-h-screen gap-2">
       <div className="relative flex items-center justify-center">
         <h2
-          className={`absolute bottom-15 text-9xl sm:text-[15rem] md:text-[20rem] lg:text-[30rem] text-primary ${styles['animate-glitch']}`}
+          className={cn(
+            'absolute text-9xl sm:text-[15rem] md:text-[20rem] lg:text-[30rem] text-primary',
+            styles['animate-glitch']
+          )}
         >
           404
         </h2>
