@@ -9,11 +9,11 @@ import styles from './not-found.module.css';
 
 export const NotFound = (): React.JSX.Element => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-2">
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
       <div className="relative flex items-center justify-center">
         <h2
           className={cn(
-            'absolute text-9xl sm:text-[15rem] md:text-[20rem] lg:text-[30rem] text-primary',
+            'absolute text-9xl sm:text-[15rem] md:text-[25rem] lg:text-[35rem] text-primary pointer-events-none',
             styles['animate-glitch']
           )}
         >
@@ -22,7 +22,7 @@ export const NotFound = (): React.JSX.Element => {
         <img
           src={ErrorImage}
           alt="Not found"
-          className="z-10 w-64 sm:w-100 md:w-130 lg:w-190"
+          className="z-10 w-40 sm:w-70 md:w-110 lg:w-160 mt-10 lg:mt-20"
         />
       </div>
       <h3 className="text-center">
