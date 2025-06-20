@@ -23,7 +23,7 @@ export const Header = (): React.JSX.Element => {
         </Link>
         <div className="flex flex-col gap-4 grow-1">
           <div className="flex justify-between w-full grow-1">
-            <Banner />
+            <Banner category="T-Shirts" />
             <PhoneWidget />
           </div>
           <div className="h-full">
