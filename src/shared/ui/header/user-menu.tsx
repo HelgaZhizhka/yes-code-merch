@@ -1,7 +1,9 @@
-import { ROUTES } from '@/shared/routing/types';
 import { Link } from '@tanstack/react-router';
-import { Button } from '@shared/ui/button';
 import { ShoppingCart, User } from 'lucide-react';
+
+import { Button } from '@shared/ui/button';
+
+import { ROUTES } from '@/shared/routing/types';
 
 export const UserMenu = (): React.JSX.Element => {
   const isAuthenticated = false;

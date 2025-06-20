@@ -1,6 +1,8 @@
-import { ROUTES } from '@/shared/routing/types';
-import icon from '@shared/assets/subtract.svg';
 import { Link } from '@tanstack/react-router';
+
+import icon from '@shared/assets/subtract.svg';
+
+import { ROUTES } from '@/shared/routing/types';
 
 type BannerProps = { category: string };
 
@@ -8,7 +10,7 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
   let Text: React.JSX.Element = <>Discounts are coming!</>;
 
   switch (category) {
-    case 'DrinkWare':
+    case 'DrinkWare': {
       Text = (
         <>
           Free shipping on all{' '}
@@ -23,7 +25,8 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
         </>
       );
       break;
-    case 'T-Shirts':
+    }
+    case 'T-Shirts': {
       Text = (
         <>
           Discount on all{' '}
@@ -41,8 +44,10 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
         </>
       );
       break;
-    default:
+    }
+    default: {
       break;
+    }
   }
 
   return <p className="text-xl">{Text}</p>;
@@ -51,7 +56,7 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
 export const Banner = ({ category }: BannerProps): React.JSX.Element => {
   return (
     <div className="flex gap-2 grow-1 items-center">
-      <img src={icon} width={28} height={28} />
+      <img src={icon} width={28} height={28} alt="discount icon" />
       <BannerText category={category} />
     </div>
   );

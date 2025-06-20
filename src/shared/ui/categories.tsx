@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import type React from 'react';
+
 import { ROUTES } from '@shared/routing/types';
 
 export const Categories = (): React.JSX.Element => {

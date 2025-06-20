@@ -1,12 +1,13 @@
 import { Link } from '@tanstack/react-router';
 
-import { ROUTES } from '@/shared/routing/types';
-
 import logo from '@shared/assets/header-logo-sprite.svg';
-import { UserMenu } from './user-menu';
 import { Categories } from '@shared/ui/categories';
 import { PhoneWidget } from '@shared/ui/phone-widget';
+
+import { ROUTES } from '@/shared/routing/types';
+
 import { Banner } from './banner';
+import { UserMenu } from './user-menu';
 
 export const Header = (): React.JSX.Element => {
   return (
