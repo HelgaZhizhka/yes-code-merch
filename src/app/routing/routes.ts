@@ -1,5 +1,5 @@
 import type { RootRoute } from '@tanstack/react-router';
-import { createRoute, redirect } from '@tanstack/react-router';
+import { createRoute } from '@tanstack/react-router';
 
 import { About } from '@pages/about';
 import { Cart } from '@pages/cart';
@@ -12,24 +12,8 @@ import { Profile } from '@pages/profile';
 import { Registration } from '@pages/registration';
 import { UIPreviewPage } from '@pages/ui-preview';
 
-import { ROUTES } from '@shared/model/routes';
-import { isAuthorized } from '@shared/viewer/model/selectors';
-
-import type { BeforeLoadContext } from './interfaces';
-
-export const requireAuth = (opts: BeforeLoadContext) => {
-  if (opts?.preload) return;
-  if (!isAuthorized()) {
-    throw redirect({ to: ROUTES.LOGIN });
-  }
-};
-
-export const requireGuest = (opts: BeforeLoadContext) => {
-  if (opts?.preload) return;
-  if (isAuthorized()) {
-    throw redirect({ to: ROUTES.HOME });
-  }
-};
+import { ROUTES } from '@shared/config/routes';
+import { createAuthGuard } from '@shared/viewer/lib/auth-guard';
 
 export const homeRoute = (parentRoute: RootRoute) =>
   createRoute({
@@ -71,7 +55,7 @@ export const loginRoute = (parentRoute: RootRoute) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.LOGIN,
     component: Login,
-    beforeLoad: requireGuest,
+    beforeLoad: createAuthGuard('guest'),
   });
 
 export const registrationRoute = (parentRoute: RootRoute) =>
@@ -79,7 +63,7 @@ export const registrationRoute = (parentRoute: RootRoute) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.REGISTRATION,
     component: Registration,
-    beforeLoad: requireGuest,
+    beforeLoad: createAuthGuard('guest'),
   });
 
 export const notFoundRoute = (parentRoute: RootRoute) =>
@@ -101,7 +85,7 @@ export const profileRoute = (parentRoute: RootRoute) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.PROFILE,
     component: Profile,
-    beforeLoad: requireAuth,
+    beforeLoad: createAuthGuard('authorized'),
   });
 
 export const uiReviewRoute = (parentRoute: RootRoute) =>

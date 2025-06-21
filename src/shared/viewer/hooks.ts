@@ -8,11 +8,13 @@ import {
 import { supabase } from '@shared/api/supabase-client';
 import { useSessionStore } from '@shared/viewer/model/store';
 
-import type { RegistrationResult } from './interfaces';
-import type { LoginDTO } from './login-dto';
-import type { RegistrationDTO } from './registration-dto';
+import type {
+  LoginDTO,
+  RegistrationDTO,
+  RegistrationResult,
+} from './model/interfaces';
 
-import { login, registration } from '..';
+import { login, registration } from '.';
 
 export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   return useMutation<Session, Error, LoginDTO>({

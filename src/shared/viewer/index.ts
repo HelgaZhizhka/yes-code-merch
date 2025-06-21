@@ -1,10 +1,12 @@
 import type { Session } from '@supabase/supabase-js';
 
 import { supabase } from '@shared/api/supabase-client';
-import type { LoginDTO } from '@shared/viewer/model/login-dto';
-import type { RegistrationDTO } from '@shared/viewer/model/registration-dto';
 
-import type { RegistrationResult } from './model/interfaces';
+import type {
+  LoginDTO,
+  RegistrationDTO,
+  RegistrationResult,
+} from './model/interfaces';
 
 export const login = async ({
   email,
