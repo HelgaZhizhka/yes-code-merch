@@ -1,23 +1,51 @@
-import { Link } from '@tanstack/react-router';
-import { ShoppingCart, User } from 'lucide-react';
+import { Link, useRouter } from '@tanstack/react-router';
+import { LogOut, ShoppingCart, User } from 'lucide-react';
 
+import { ROUTES } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
-
-import { ROUTES } from '@/shared/routing/types';
+import { useLogout } from '@shared/viewer/hooks';
+import {
+  useIsAuthorized,
+  useIsSessionLoaded,
+} from '@shared/viewer/model/selectors';
 
 export const UserMenu = (): React.JSX.Element => {
-  const isAuthenticated = false;
+  const isAuthorized = useIsAuthorized();
+  const isLoaded = useIsSessionLoaded();
+  const logout = useLogout();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.navigate({ to: ROUTES.HOME });
+  };
+
+  if (!isLoaded) {
+    return <div className="w-3 h-3 animate-pulse bg-primary rounded-full" />;
+  }
 
   return (
     <nav className="flex gap-4 text-inherit">
-      {isAuthenticated ? (
-        <Link to={ROUTES.PROFILE}>
-          <User
-            className="w-9 h-9 text-primary-foreground"
-            role="img"
-            aria-label="User icon"
-          />
-        </Link>
+      {isAuthorized ? (
+        <>
+          <Link to={ROUTES.PROFILE}>
+            <User
+              className="w-9 h-9 text-primary-foreground"
+              role="img"
+              aria-label="User icon"
+            />
+          </Link>
+          <button
+            className="p-0 m-0 bg-none border-none"
+            onClick={handleLogout}
+          >
+            <LogOut
+              className="w-9 h-9 text-primary-foreground"
+              role="img"
+              aria-label="LogOut icon"
+            />
+          </button>
+        </>
       ) : (
         <>
           <Button variant={'outline'} size={'lg'}>

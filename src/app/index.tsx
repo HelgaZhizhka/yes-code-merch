@@ -1,12 +1,19 @@
 import { RouterProvider } from '@tanstack/react-router';
 
-import { TanStackQueryProvider } from '@shared/api/tanstack-query';
-import { router } from '@shared/routing';
+import { router } from '@app/routing';
 
-export const App = (): React.JSX.Element => (
-  <>
-    <TanStackQueryProvider.Provider>
-      <RouterProvider router={router} />
-    </TanStackQueryProvider.Provider>
-  </>
-);
+import { useInitSession } from '@entities/session/hooks';
+
+import { TanStackQueryProvider } from '@shared/api/tanstack-query';
+
+export const App = (): React.JSX.Element => {
+  useInitSession();
+
+  return (
+    <>
+      <TanStackQueryProvider.Provider>
+        <RouterProvider router={router} />
+      </TanStackQueryProvider.Provider>
+    </>
+  );
+};

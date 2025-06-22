@@ -1,10 +1,9 @@
 import { Link } from '@tanstack/react-router';
 
 import logo from '@shared/assets/header-logo-sprite.svg';
+import { ROUTES } from '@shared/config/routes';
 import { Categories } from '@shared/ui/categories';
 import { PhoneWidget } from '@shared/ui/phone-widget';
-
-import { ROUTES } from '@/shared/routing/types';
 
 import { Banner } from './banner';
 import { UserMenu } from './user-menu';

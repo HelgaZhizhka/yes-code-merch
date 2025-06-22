@@ -1,20 +1,19 @@
 import type { RootRoute } from '@tanstack/react-router';
 import { createRoute } from '@tanstack/react-router';
 
-import { requireAuth, requireGuest } from '@shared/lib/auth';
+import { About } from '@pages/about';
+import { Cart } from '@pages/cart';
+import { Catalog } from '@pages/catalog';
+import { Home } from '@pages/home';
+import { Login } from '@pages/login';
+import { NotFound } from '@pages/not-found';
+import { Product } from '@pages/product';
+import { Profile } from '@pages/profile';
+import { Registration } from '@pages/registration';
+import { UIPreviewPage } from '@pages/ui-preview';
 
-import { About } from '@/pages/about';
-import { Cart } from '@/pages/cart';
-import { Catalog } from '@/pages/catalog';
-import { Home } from '@/pages/home';
-import { Login } from '@/pages/login';
-import { NotFound } from '@/pages/not-found';
-import { Product } from '@/pages/product';
-import { Profile } from '@/pages/profile';
-import { Registration } from '@/pages/registration';
-import { UIPreviewPage } from '@/pages/ui-preview';
-
-import { ROUTES } from './types';
+import { ROUTES } from '@shared/config/routes';
+import { createAuthGuard } from '@shared/viewer/lib/auth-guard';
 
 export const homeRoute = (parentRoute: RootRoute) =>
   createRoute({
@@ -56,7 +55,7 @@ export const loginRoute = (parentRoute: RootRoute) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.LOGIN,
     component: Login,
-    beforeLoad: requireGuest,
+    beforeLoad: createAuthGuard('guest'),
   });
 
 export const registrationRoute = (parentRoute: RootRoute) =>
@@ -64,7 +63,7 @@ export const registrationRoute = (parentRoute: RootRoute) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.REGISTRATION,
     component: Registration,
-    beforeLoad: requireGuest,
+    beforeLoad: createAuthGuard('guest'),
   });
 
 export const notFoundRoute = (parentRoute: RootRoute) =>
@@ -86,7 +85,7 @@ export const profileRoute = (parentRoute: RootRoute) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.PROFILE,
     component: Profile,
-    beforeLoad: requireAuth,
+    beforeLoad: createAuthGuard('authorized'),
   });
 
 export const uiReviewRoute = (parentRoute: RootRoute) =>

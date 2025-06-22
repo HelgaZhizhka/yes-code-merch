@@ -1,8 +1,7 @@
 import { Link } from '@tanstack/react-router';
 
 import icon from '@shared/assets/subtract.svg';
-
-import { ROUTES } from '@/shared/routing/types';
+import { ROUTES } from '@shared/config/routes';
 
 type BannerProps = { category: string };
 

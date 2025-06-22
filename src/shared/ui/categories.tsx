@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import type React from 'react';
 
-import { ROUTES } from '@shared/routing/types';
+import { ROUTES } from '@shared/config/routes';
 
 export const Categories = (): React.JSX.Element => {
   const catArray = ['Clothes', 'DrinkWare', 'Office', 'Bags'];
