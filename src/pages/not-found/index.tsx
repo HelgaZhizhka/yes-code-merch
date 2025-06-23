@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router';
 
 import ErrorImage from '@shared/assets/404.png';
+import { ROUTES } from '@shared/config/routes';
 import { cn } from '@shared/lib/utils';
-import { ROUTES } from '@shared/routing/types';
 import { Button } from '@shared/ui/button';
 
 import styles from './not-found.module.css';

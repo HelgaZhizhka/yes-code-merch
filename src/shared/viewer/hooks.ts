@@ -12,7 +12,7 @@ import type {
   LoginDTO,
   RegistrationDTO,
   RegistrationResult,
-} from './model/interfaces';
+} from './interfaces';
 
 import { login, registration } from '.';
 

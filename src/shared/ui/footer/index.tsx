@@ -3,8 +3,15 @@ import { Mail, MessageCircle, Phone } from 'lucide-react';
 
 import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
+import { useAuth } from '@shared/hooks/use-auth';
+import { ListsView } from '@shared/types';
+import { AuthMenu } from '@shared/ui/auth-menu';
+import { Categories } from '@shared/ui/categories';
+import { ContactWidget } from '@shared/ui/contact-widget';
 
 export const Footer = (): React.JSX.Element => {
+  const { isAuthorized, isLoaded, handleLogout } = useAuth();
+
   return (
     <footer className="bg-violet text-violet-foreground">
       <div className="container max-w-screen-xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between gap-8">
@@ -12,7 +19,7 @@ export const Footer = (): React.JSX.Element => {
           <Link to={ROUTES.HOME}>
             <img src={Logo} alt="YesCode Logo" className="w-24" />
           </Link>
-          <h1 className="text-base">YesCode: Merch for True Coders</h1>
+          <h1 className="text-base mt-2">YesCode: Merch for True Coders</h1>
           <nav className="flex flex-col gap-1">
             <Link
               to={ROUTES.ABOUT}
@@ -20,97 +27,44 @@ export const Footer = (): React.JSX.Element => {
             >
               About Us
             </Link>
-            <div className="flex gap-2">
-              <Link
-                to={ROUTES.LOGIN}
-                className="text-violet-foreground hover:text-primary-foreground"
-              >
-                Login
-              </Link>
-              <span>|</span>
-              <Link
-                to={ROUTES.REGISTRATION}
-                className="text-violet-foreground hover:text-primary-foreground"
-              >
-                Registration
-              </Link>
-            </div>
+            <AuthMenu
+              isAuthorized={isAuthorized}
+              isLoaded={isLoaded}
+              variant={ListsView.VERTICAL}
+              onLogout={handleLogout}
+            />
           </nav>
         </div>
         <div className="hidden md:block">
           <h5 className="font-bold mb-2">Categories</h5>
-          <ul className="space-y-1">
-            <li>
-              <Link
-                to={ROUTES.CATEGORY}
-                params={{
-                  categoryId: 'Closes',
-                }}
-                className="text-violet-foreground hover:text-primary-foreground"
-              >
-                Closes
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTES.CATEGORY}
-                params={{
-                  categoryId: 'Drinkware',
-                }}
-                className="text-violet-foreground hover:text-primary-foreground"
-              >
-                Drinkware
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTES.CATEGORY}
-                params={{
-                  categoryId: 'Office',
-                }}
-                className="text-violet-foreground hover:text-primary-foreground"
-              >
-                Office
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTES.CATEGORY}
-                params={{
-                  categoryId: 'Bags',
-                }}
-                className="text-violet-foreground hover:text-primary-foreground"
-              >
-                Bags
-              </Link>
-            </li>
-          </ul>
+          <Categories variant={ListsView.VERTICAL} />
         </div>
 
         <div>
           <h5 className="font-bold mb-2">Contact us</h5>
           <ul className="space-y-2">
             <li className="flex items-center gap-2">
-              <Phone className="w-5 h-5" />
-              <a
-                href="tel:+971588284186"
-                className="text-violet-foreground hover:text-primary-foreground"
-              >
-                (+971) 58 8284186
-              </a>
+              <ContactWidget
+                icon={<Phone className="w-5 h-5" />}
+                label="(+971) 58 8284186"
+                href="tel:971588284186"
+                variant={ListsView.VERTICAL}
+              />
             </li>
             <li className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5" />
-              <span>(+971) 58 8284186</span>
+              <ContactWidget
+                icon={<MessageCircle className="w-5 h-5" />}
+                label="(+971) 58 8284186"
+                variant={ListsView.VERTICAL}
+              />
             </li>
             <li className="flex items-center gap-2">
-              <Mail className="w-5 h-5" />
-              <a
+              <ContactWidget
+                icon={<Mail className="w-5 h-5" />}
+                label="yescode@gmail.com"
                 href="mailto:yescode@gmail.com"
-                className="text-violet-foreground hover:text-primary-foreground"
-              >
-                yescode@gmail.com
-              </a>
+                variant={ListsView.VERTICAL}
+              />
             </li>
           </ul>
         </div>

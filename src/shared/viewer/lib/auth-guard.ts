@@ -4,7 +4,8 @@ import { ROUTES } from '@shared/config/routes';
 import type { BeforeLoadContext } from '@shared/model/interfaces';
 import { isAuthorized, isSessionLoaded } from '@shared/viewer/model/selectors';
 import { useSessionStore } from '@shared/viewer/model/store';
-import type { AuthGuardType } from '@shared/viewer/model/types';
+
+type AuthGuardType = 'authorized' | 'guest';
 
 export function createAuthGuard(type: AuthGuardType) {
   return async (opts: BeforeLoadContext) => {
