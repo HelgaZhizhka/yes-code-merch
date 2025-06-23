@@ -2,8 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { User } from 'lucide-react';
 
 import { ROUTES } from '@shared/config/routes';
-import { ListsView } from '@shared/model/constants';
-import type { ListsViewType } from '@shared/model/types';
+import { ListsView, type ListsViewType } from '@shared/types';
 
 export const ProfileLink = ({
   variant,

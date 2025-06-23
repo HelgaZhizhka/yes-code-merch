@@ -1,7 +1,6 @@
 import { LogOut } from 'lucide-react';
 
-import { ListsView } from '@shared/model/constants';
-import type { ListsViewType } from '@shared/model/types';
+import { ListsView, type ListsViewType } from '@shared/types';
 
 interface LogoutButtonProps {
   variant: ListsViewType;

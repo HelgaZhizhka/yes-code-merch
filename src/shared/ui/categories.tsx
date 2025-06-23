@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router';
 import type React from 'react';
 
+import { CATEGORIES } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
 import { cn } from '@shared/lib/utils';
-import { CATEGORIES, ListsView } from '@shared/model/constants';
-import type { ListsViewType } from '@shared/model/types';
+import { ListsView, type ListsViewType } from '@shared/types';
 
 interface CategoriesProps {
   variant?: ListsViewType;

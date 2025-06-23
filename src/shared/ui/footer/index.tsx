@@ -4,11 +4,10 @@ import { Mail, MessageCircle, Phone } from 'lucide-react';
 import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
 import { useAuth } from '@shared/hooks/use-auth';
+import { ListsView } from '@shared/types';
+import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
-
-import { ListsView } from '@/shared/model/constants';
-import { AuthMenu } from '@/shared/ui/auth-menu';
-import { ContactWidget } from '@/shared/ui/contact-widget';
+import { ContactWidget } from '@shared/ui/contact-widget';
 
 export const Footer = (): React.JSX.Element => {
   const { isAuthorized, isLoaded, handleLogout } = useAuth();

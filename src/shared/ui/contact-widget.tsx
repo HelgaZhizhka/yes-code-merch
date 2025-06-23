@@ -1,6 +1,5 @@
 import { cn } from '@shared/lib/utils';
-import { ListsView } from '@shared/model/constants';
-import type { ListsViewType } from '@shared/model/types';
+import { ListsView, type ListsViewType } from '@shared/types';
 
 interface PhoneWidgetProps {
   icon: React.JSX.Element;
