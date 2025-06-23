@@ -1,7 +1,7 @@
 import { redirect } from '@tanstack/react-router';
 
 import { ROUTES } from '@shared/config/routes';
-import type { BeforeLoadContext } from '@shared/model/interfaces';
+import type { BeforeLoadContext } from '@shared/interfaces';
 import { isAuthorized, isSessionLoaded } from '@shared/viewer/model/selectors';
 import { useSessionStore } from '@shared/viewer/model/store';
 
