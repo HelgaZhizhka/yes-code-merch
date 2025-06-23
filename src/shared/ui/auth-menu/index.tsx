@@ -31,7 +31,7 @@ export const AuthMenu = ({
       {isAuthorized ? (
         <>
           <ProfileLink variant={variant} />
-          <Separator />
+          {variant === ListsView.VERTICAL && <Separator />}
           <LogoutButton variant={variant} onLogout={onLogout} />
         </>
       ) : (

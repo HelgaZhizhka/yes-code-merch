@@ -6,7 +6,7 @@ import type {
   LoginDTO,
   RegistrationDTO,
   RegistrationResult,
-} from './model/interfaces';
+} from './interfaces';
 
 export const login = async ({
   email,
