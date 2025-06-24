@@ -2,7 +2,7 @@ name: Notify PR in Telegram
 
 on:
   pull_request:
-    types: [opened, ready_for_review, closed]
+    types: [opened, ready_for_review, closed, synchronize]
 
 jobs:
   notify:
@@ -26,6 +26,9 @@ jobs:
               ;;
             closed)
               TEXT="✅ *PR closed or merged*\n👤 $PR_AUTHOR\n🔗 [$PR_TITLE]($PR_URL)"
+              ;;
+            synchronize)
+              TEXT="🔁 *PR updated (new commit pushed)*\n👤 $PR_AUTHOR\n🔗 [$PR_TITLE]($PR_URL)"
               ;;
             *)
               TEXT="ℹ️ Pull Request updated"
