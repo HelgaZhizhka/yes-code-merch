@@ -30,7 +30,7 @@ Figma design: [Yes Code Merch Store](https://www.figma.com/design/a5X7CFN20TD3To
 - **pnpm**: A fast, disk space-efficient package manager.
 - **Netlify**: A platform for deploying and hosting web applications.
 - **GitHub Actions**: For continuous integration and deployment (CI/CD).
-- **StoryBook**: A tool for developing UI components in isolation.
+- **StoryBook**: A tool for developing UI components in isolation.[Storybook](https://storybook.js.org/)
 
 ## Getting Started
 
