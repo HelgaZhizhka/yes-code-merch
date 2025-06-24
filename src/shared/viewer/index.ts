@@ -17,8 +17,8 @@ export const login = async ({
     password,
   });
 
-  if (error || !data.session) {
-    throw error || new Error('No session');
+  if (error ?? !data.session) {
+    throw error ?? new Error('No session');
   }
 
   return data.session;

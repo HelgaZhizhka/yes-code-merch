@@ -10,10 +10,8 @@ export const App = (): React.JSX.Element => {
   useInitSession();
 
   return (
-    <>
-      <TanStackQueryProvider.Provider>
-        <RouterProvider router={router} />
-      </TanStackQueryProvider.Provider>
-    </>
+    <TanStackQueryProvider.Provider>
+      <RouterProvider router={router} />
+    </TanStackQueryProvider.Provider>
   );
 };
