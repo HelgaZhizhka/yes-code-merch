@@ -70,7 +70,7 @@ export const Footer = (): React.JSX.Element => {
         </div>
       </div>
 
-      <div className="bg-foreground text-violet-foreground text-center py-3 text-xs">
+      <div className="bg-dark-background text-violet-foreground text-center py-3 text-xs">
         © {new Date().getFullYear()}. All rights reserved.
       </div>
     </footer>

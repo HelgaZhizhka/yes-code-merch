@@ -57,7 +57,7 @@ export const Header = (): React.JSX.Element => {
           </div>
         </div>
       </div>
-      <div className="bg-foreground h-17 flex items-center pl-11">
+      <div className="bg-dark-background h-17 flex items-center pl-11">
         <Categories />
       </div>
     </header>

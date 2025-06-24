@@ -9,7 +9,6 @@ import { Checkbox } from '@/shared/ui/checkbox';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 
-
 export const UIPreviewPage = () => (
   <div className="p-6 space-y-8 bg-background font-sans min-h-screen">
     <section className="space-y-2">
