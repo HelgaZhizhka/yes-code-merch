@@ -10,5 +10,3 @@ export const ROUTES = {
   CART: '/cart',
   NOT_FOUND: '*',
 } as const;
-
-export type Route = (typeof ROUTES)[keyof typeof ROUTES];

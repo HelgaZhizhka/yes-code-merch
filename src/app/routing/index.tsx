@@ -1,11 +1,11 @@
 import { createRootRoute, createRouter } from '@tanstack/react-router';
 
+import { ErrorPage } from '@pages/error';
+
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
+import { Loader } from '@shared/ui/loader';
 
 import { Layout } from '@/layouts';
-import { ErrorPage } from '@/pages/error';
-
-const isDev = import.meta.env.DEV;
 
 import {
   aboutRoute,
@@ -21,6 +21,7 @@ import {
   uiReviewRoute,
 } from './routes';
 
+const isDev = import.meta.env.DEV;
 const rootRoute = createRootRoute({
   component: Layout,
   errorComponent: ErrorPage,
@@ -49,6 +50,7 @@ export const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+  defaultPendingComponent: Loader,
 });
 
 declare module '@tanstack/react-router' {

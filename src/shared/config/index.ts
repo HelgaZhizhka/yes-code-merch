@@ -4,3 +4,5 @@ export const config = {
 };
 export const RootElementId = 'app';
 export const RootElementClassNames = 'min-h-screen flex flex-col';
+export const CATEGORIES = ['Clothes', 'DrinkWare', 'Office', 'Bags'];
+export const SaleCategoryName = 'T-Shirts';
