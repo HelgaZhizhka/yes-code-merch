@@ -1,13 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import type { ThemeState } from './interfaces';
-import { ThemeEnum } from './types';
+import { Theme, type ThemeType } from '@shared/theme/types';
 
+export interface ThemeState {
+  theme: ThemeType;
+  setTheme(theme: ThemeType): void;
+}
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      theme: ThemeEnum.Light,
+      theme: Theme.LIGHT,
       setTheme: (theme) => {
         set({ theme });
       },
