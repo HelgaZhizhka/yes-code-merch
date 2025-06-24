@@ -2,10 +2,7 @@ import { Link } from '@tanstack/react-router';
 
 import { ROUTES } from '@shared/config/routes';
 import { ListsView, type ListsViewType } from '@shared/types';
-import {
-  classNamesOutlineLinkButton,
-  classNamesPrimaryLinkButton,
-} from '@shared/ui/button';
+import { getLinkButtonClass } from '@shared/ui/link-button';
 
 import { Separator } from './separator';
 
@@ -17,22 +14,18 @@ export const AuthLinks = ({
   <>
     <Link
       to={ROUTES.LOGIN}
-      className={
-        variant === ListsView.VERTICAL
-          ? 'text-violet-foreground hover:text-primary-foreground'
-          : classNamesOutlineLinkButton
-      }
+      className={getLinkButtonClass(
+        variant === ListsView.VERTICAL ? 'simple' : 'outline'
+      )}
     >
       Sign in
     </Link>
     {variant === ListsView.VERTICAL && <Separator />}
     <Link
       to={ROUTES.REGISTRATION}
-      className={
-        variant === ListsView.VERTICAL
-          ? 'text-violet-foreground hover:text-primary-foreground'
-          : classNamesPrimaryLinkButton
-      }
+      className={getLinkButtonClass(
+        variant === ListsView.VERTICAL ? 'simple' : 'primary'
+      )}
     >
       Sign up
     </Link>
