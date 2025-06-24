@@ -28,7 +28,7 @@ Figma design: [Yes Code Merch Store](https://www.figma.com/design/a5X7CFN20TD3To
 - **Prettier**: An opinionated code formatter.
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
 
-[![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=your_project_key&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=your_project_key)
+[![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=yes-code-merch&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=yes-code-merch)
 
 
 ## Getting Started
