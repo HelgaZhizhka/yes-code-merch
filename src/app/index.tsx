@@ -6,8 +6,11 @@ import { useInitSession } from '@entities/session/hooks';
 
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 
+import { useTheme } from '@/shared/theme/hooks';
+
 export const App = (): React.JSX.Element => {
   useInitSession();
+  useTheme();
 
   return (
     <>
