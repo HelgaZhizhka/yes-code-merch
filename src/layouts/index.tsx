@@ -13,7 +13,7 @@ export const Layout = (): React.JSX.Element => (
       <Outlet />
     </main>
     <Footer />
-    <Toaster position="bottom-right" richColors closeButton expand={true} />
+    <Toaster />
     <TanStackRouterDevtools />
     <TanStackQueryLayout />
   </>

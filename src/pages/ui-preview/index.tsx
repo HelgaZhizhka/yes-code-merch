@@ -77,6 +77,6 @@ export const UIPreviewPage = () => (
         muted
       </div>
     </section>
-    <Toaster position="bottom-right" richColors closeButton expand={true} />
+    <Toaster />
   </div>
 );

@@ -1,8 +1,16 @@
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
-//TODO useTheme hook to get theme colors
+
+import { useTheme } from '@shared/theme/hooks';
+
 const Toaster = ({ ...props }: ToasterProps) => {
+  const { theme = 'light' } = useTheme();
   return (
     <Sonner
+      theme={theme}
+      position="bottom-right"
+      closeButton
+      richColors
+      expand
       className="toaster group"
       style={
         {
