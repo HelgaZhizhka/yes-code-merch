@@ -1,7 +1,6 @@
 import { toast } from 'sonner';
 
 import { Button } from '@shared/ui/button';
-import { Toaster } from '@shared/ui/sonner';
 
 import { Badge } from '@/shared/ui/badge';
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
@@ -77,6 +76,5 @@ export const UIPreviewPage = () => (
         muted
       </div>
     </section>
-    <Toaster />
   </div>
 );
