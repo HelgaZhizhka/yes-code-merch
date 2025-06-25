@@ -39,3 +39,11 @@ export const registration = async ({
     user: data.user,
   };
 };
+
+export const logout = async (): Promise<void> => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw error;
+  }
+};

@@ -4,6 +4,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { TanStackQueryLayout } from '@shared/api/tanstack-query';
 import { Footer } from '@shared/ui/footer';
 import { Header } from '@shared/ui/header';
+import { Toaster } from '@shared/ui/sonner';
 
 export const Layout = (): React.JSX.Element => (
   <>
@@ -12,6 +13,7 @@ export const Layout = (): React.JSX.Element => (
       <Outlet />
     </main>
     <Footer />
+    <Toaster position="bottom-right" richColors closeButton expand={true} />
     <TanStackRouterDevtools />
     <TanStackQueryLayout />
   </>

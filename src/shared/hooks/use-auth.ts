@@ -15,8 +15,12 @@ export const useAuth = () => {
   const router = useRouter();
 
   const handleLogout = useCallback(async () => {
-    await logout();
-    router.navigate({ to: ROUTES.HOME });
+    try {
+      await logout();
+      router.navigate({ to: ROUTES.HOME });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   }, [logout, router]);
 
   return { isAuthorized, isLoaded, handleLogout };

@@ -1,10 +1,20 @@
 import { redirect } from '@tanstack/react-router';
 
 import { ROUTES } from '@shared/config/routes';
-import type { BeforeLoadContext } from '@shared/interfaces';
 import { isAuthorized, isSessionLoaded } from '@shared/viewer/model/selectors';
 import { useSessionStore } from '@shared/viewer/model/store';
 
+interface BeforeLoadContext {
+  preload?: boolean;
+  context?: unknown;
+  location?: {
+    pathname: string;
+    search: Record<string, unknown>;
+    searchStr: string;
+    state: unknown;
+    hash: string;
+  };
+}
 type AuthGuardType = 'authorized' | 'guest';
 
 export function createAuthGuard(type: AuthGuardType) {

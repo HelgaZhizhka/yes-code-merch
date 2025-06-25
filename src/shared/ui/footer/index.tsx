@@ -4,7 +4,7 @@ import { Mail, MessageCircle, Phone } from 'lucide-react';
 import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
 import { useAuth } from '@shared/hooks/use-auth';
-import { ListsView } from '@shared/types';
+import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
@@ -30,14 +30,14 @@ export const Footer = (): React.JSX.Element => {
             <AuthMenu
               isAuthorized={isAuthorized}
               isLoaded={isLoaded}
-              variant={ListsView.VERTICAL}
+              variant={LayoutView.FOOTER}
               onLogout={handleLogout}
             />
           </nav>
         </div>
         <div className="hidden md:block">
           <h5 className="font-bold mb-2">Categories</h5>
-          <Categories variant={ListsView.VERTICAL} />
+          <Categories variant={LayoutView.FOOTER} />
         </div>
 
         <div>
@@ -48,14 +48,14 @@ export const Footer = (): React.JSX.Element => {
                 icon={<Phone className="w-5 h-5" />}
                 label="(+971) 58 8284186"
                 href="tel:971588284186"
-                variant={ListsView.VERTICAL}
+                variant={LayoutView.FOOTER}
               />
             </li>
             <li className="flex items-center gap-2">
               <ContactWidget
                 icon={<MessageCircle className="w-5 h-5" />}
                 label="(+971) 58 8284186"
-                variant={ListsView.VERTICAL}
+                variant={LayoutView.FOOTER}
               />
             </li>
             <li className="flex items-center gap-2">
@@ -63,7 +63,7 @@ export const Footer = (): React.JSX.Element => {
                 icon={<Mail className="w-5 h-5" />}
                 label="yescode@gmail.com"
                 href="mailto:yescode@gmail.com"
-                variant={ListsView.VERTICAL}
+                variant={LayoutView.FOOTER}
               />
             </li>
           </ul>

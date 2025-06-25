@@ -5,7 +5,6 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
-import { supabase } from '@shared/api/supabase-client';
 import { useSessionStore } from '@shared/viewer/model/store';
 
 import type {
@@ -14,7 +13,7 @@ import type {
   RegistrationResult,
 } from './interfaces';
 
-import { login, registration } from '.';
+import { login, logout, registration } from '.';
 
 export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   return useMutation<Session, Error, LoginDTO>({
@@ -34,7 +33,7 @@ export const useLogout = () => {
   const queryClient = useQueryClient();
 
   return async () => {
-    await supabase.auth.signOut();
+    await logout();
     useSessionStore.getState().setSession(null);
     queryClient.clear();
   };

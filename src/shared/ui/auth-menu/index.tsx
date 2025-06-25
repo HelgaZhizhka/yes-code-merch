@@ -1,5 +1,7 @@
+import { cva } from 'class-variance-authority';
+
 import { cn } from '@shared/lib/utils';
-import { ListsView, type ListsViewType } from '@shared/types';
+import { LayoutView, type LayoutViewType } from '@shared/types';
 
 import { AuthLinks } from './auth-links';
 import { LogoutButton } from './logout-button';
@@ -9,29 +11,36 @@ import { Separator } from './separator';
 interface AuthMenuProps {
   isAuthorized: boolean;
   isLoaded: boolean;
-  variant?: ListsViewType;
+  variant?: LayoutViewType;
   onLogout(): void;
 }
 
-const containerVariants: Record<ListsViewType, string> = {
-  default: 'flex gap-4 items-center',
-  vertical: 'flex gap-2 items-center',
-};
+const containerVariants = cva('flex items-center', {
+  variants: {
+    variant: {
+      header: 'gap-4',
+      footer: 'gap-2',
+    },
+  },
+  defaultVariants: {
+    variant: 'header',
+  },
+});
 
 export const AuthMenu = ({
   isAuthorized,
   isLoaded,
-  variant = ListsView.DEFAULT,
+  variant = LayoutView.HEADER,
   onLogout,
 }: AuthMenuProps): React.JSX.Element | null => {
   if (!isLoaded) return null;
 
   return (
-    <nav className={cn(containerVariants[variant])}>
+    <nav className={cn(containerVariants({ variant }))}>
       {isAuthorized ? (
         <>
           <ProfileLink variant={variant} />
-          {variant === ListsView.VERTICAL && <Separator />}
+          {variant === LayoutView.FOOTER && <Separator />}
           <LogoutButton variant={variant} onLogout={onLogout} />
         </>
       ) : (
