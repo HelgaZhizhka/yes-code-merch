@@ -28,6 +28,7 @@ Figma design: [Yes Code Merch Store](https://www.figma.com/design/a5X7CFN20TD3To
 - **Prettier**: An opinionated code formatter.
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
 
+
 ## Getting Started
 
 ### Prerequisites
