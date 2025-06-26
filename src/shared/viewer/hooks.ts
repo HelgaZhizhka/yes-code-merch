@@ -4,16 +4,22 @@ import {
   useQueryClient,
   type UseMutationResult,
 } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
+import { useCallback } from 'react';
 
+import { ROUTES } from '@shared/config/routes';
+import {
+  useIsAuthorized,
+  useIsSessionLoaded,
+} from '@shared/viewer/model/selectors';
 import { useSessionStore } from '@shared/viewer/model/store';
 
+import { login, logout, registration } from './api';
 import type {
   LoginDTO,
   RegistrationDTO,
   RegistrationResult,
 } from './interfaces';
-
-import { login, logout, registration } from '.';
 
 export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   return useMutation<Session, Error, LoginDTO>({
@@ -55,4 +61,22 @@ export const useRegistration = (): UseMutationResult<
       }
     },
   });
+};
+
+export const useAuth = () => {
+  const isAuthorized = useIsAuthorized();
+  const isLoaded = useIsSessionLoaded();
+  const logout = useLogout();
+  const router = useRouter();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+      router.navigate({ to: ROUTES.HOME });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }, [logout, router]);
+
+  return { isAuthorized, isLoaded, handleLogout };
 };

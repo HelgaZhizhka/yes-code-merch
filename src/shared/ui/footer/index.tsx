@@ -3,11 +3,11 @@ import { Mail, MessageCircle, Phone } from 'lucide-react';
 
 import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
-import { useAuth } from '@shared/hooks/use-auth';
 import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
+import { useAuth } from '@shared/viewer/hooks';
 
 export const Footer = (): React.JSX.Element => {
   const { isAuthorized, isLoaded, handleLogout } = useAuth();

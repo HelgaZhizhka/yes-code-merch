@@ -4,11 +4,10 @@ import { Phone, ShoppingCart } from 'lucide-react';
 import logo from '@shared/assets/header-logo-sprite.svg';
 import { SaleCategoryName } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
-import { useAuth } from '@shared/hooks/use-auth';
+import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
-
-import { AuthMenu } from '@/shared/ui/auth-menu';
-import { ContactWidget } from '@/shared/ui/contact-widget';
+import { ContactWidget } from '@shared/ui/contact-widget';
+import { useAuth } from '@shared/viewer/hooks';
 
 import { Banner } from './banner';
 
