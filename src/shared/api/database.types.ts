@@ -9,39 +9,111 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      customers: {
+      addresses: {
         Row: {
+          city: string;
+          country: string;
           created_at: string;
-          dateOfBirth: string | null;
-          email: string | null;
-          firstName: string | null;
-          id: number;
-          lastName: string | null;
-          middleName: string | null;
-          password: string | null;
-          title: string | null;
+          id: string;
+          is_billing_address: boolean;
+          is_default_billing: boolean;
+          is_default_shipping: boolean;
+          is_shipping_address: boolean;
+          postal_code: string;
+          street: string;
+          updated_at: string;
+          user_id: string;
         };
         Insert: {
+          city: string;
+          country: string;
           created_at?: string;
-          dateOfBirth?: string | null;
-          email?: string | null;
-          firstName?: string | null;
-          id?: number;
-          lastName?: string | null;
-          middleName?: string | null;
-          password?: string | null;
-          title?: string | null;
+          id?: string;
+          is_billing_address?: boolean;
+          is_default_billing?: boolean;
+          is_default_shipping?: boolean;
+          is_shipping_address?: boolean;
+          postal_code: string;
+          street: string;
+          updated_at?: string;
+          user_id?: string;
         };
         Update: {
+          city?: string;
+          country?: string;
           created_at?: string;
-          dateOfBirth?: string | null;
-          email?: string | null;
-          firstName?: string | null;
-          id?: number;
-          lastName?: string | null;
-          middleName?: string | null;
-          password?: string | null;
-          title?: string | null;
+          id?: string;
+          is_billing_address?: boolean;
+          is_default_billing?: boolean;
+          is_default_shipping?: boolean;
+          is_shipping_address?: boolean;
+          postal_code?: string;
+          street?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'addresses_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'customers';
+            referencedColumns: ['user_id'];
+          },
+          {
+            foreignKeyName: 'fk_country';
+            columns: ['country'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['iso_code'];
+          },
+        ];
+      };
+      countries: {
+        Row: {
+          iso_code: string;
+          name: string;
+        };
+        Insert: {
+          iso_code: string;
+          name: string;
+        };
+        Update: {
+          iso_code?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
+      customers: {
+        Row: {
+          company: string | null;
+          created_at: string;
+          date_of_birth: string | null;
+          first_name: string | null;
+          last_name: string | null;
+          phone: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          company?: string | null;
+          created_at?: string;
+          date_of_birth?: string | null;
+          first_name?: string | null;
+          last_name?: string | null;
+          phone?: string | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          company?: string | null;
+          created_at?: string;
+          date_of_birth?: string | null;
+          first_name?: string | null;
+          last_name?: string | null;
+          phone?: string | null;
+          updated_at?: string;
+          user_id?: string;
         };
         Relationships: [];
       };

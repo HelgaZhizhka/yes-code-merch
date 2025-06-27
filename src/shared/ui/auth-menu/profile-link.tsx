@@ -2,14 +2,14 @@ import { Link } from '@tanstack/react-router';
 import { User } from 'lucide-react';
 
 import { ROUTES } from '@shared/config/routes';
-import { ListsView, type ListsViewType } from '@shared/types';
+import { LayoutView, type LayoutViewType } from '@shared/types';
 
 export const ProfileLink = ({
   variant,
 }: {
-  variant: ListsViewType;
+  variant: LayoutViewType;
 }): React.JSX.Element =>
-  variant === ListsView.VERTICAL ? (
+  variant === LayoutView.FOOTER ? (
     <Link
       to={ROUTES.PROFILE}
       className="text-violet-foreground hover:text-primary-foreground"

@@ -13,10 +13,8 @@ export const App = (): React.JSX.Element => {
   useTheme();
 
   return (
-    <>
-      <TanStackQueryProvider.Provider>
-        <RouterProvider router={router} />
-      </TanStackQueryProvider.Provider>
-    </>
+    <TanStackQueryProvider.Provider>
+      <RouterProvider router={router} />
+    </TanStackQueryProvider.Provider>
   );
 };

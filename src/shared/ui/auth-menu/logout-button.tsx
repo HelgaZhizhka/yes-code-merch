@@ -1,9 +1,9 @@
 import { LogOut } from 'lucide-react';
 
-import { ListsView, type ListsViewType } from '@shared/types';
+import { LayoutView, type LayoutViewType } from '@shared/types';
 
 interface LogoutButtonProps {
-  variant: ListsViewType;
+  variant: LayoutViewType;
   onLogout(): void;
 }
 
@@ -11,7 +11,7 @@ export const LogoutButton = ({
   variant,
   onLogout,
 }: LogoutButtonProps): React.JSX.Element =>
-  variant === ListsView.VERTICAL ? (
+  variant === LayoutView.FOOTER ? (
     <button
       className="text-violet-foreground hover:text-primary-foreground"
       onClick={onLogout}

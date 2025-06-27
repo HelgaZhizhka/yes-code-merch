@@ -1,29 +1,38 @@
+import { cva } from 'class-variance-authority';
+
 import { cn } from '@shared/lib/utils';
-import { ListsView, type ListsViewType } from '@shared/types';
+import { LayoutView, type LayoutViewType } from '@shared/types';
 
 interface PhoneWidgetProps {
   icon: React.JSX.Element;
   label: string;
   href?: string;
-  variant?: ListsViewType;
+  variant?: LayoutViewType;
 }
 
-const linkVariants: Record<ListsViewType, string> = {
-  default: 'text-primary-foreground',
-  vertical: 'text-violet-foreground hover:underline',
-};
+const linkVariants = cva('', {
+  variants: {
+    variant: {
+      header: 'text-primary-foreground hover:text-primary-foreground',
+      footer: 'text-violet-foreground',
+    },
+  },
+  defaultVariants: {
+    variant: 'header',
+  },
+});
 
 export const ContactWidget = ({
   icon,
   label,
   href,
-  variant = ListsView.DEFAULT,
+  variant = LayoutView.HEADER,
 }: PhoneWidgetProps): React.JSX.Element => {
   return (
     <>
       {icon}
       {href ? (
-        <a href={href} className={cn(linkVariants[variant])}>
+        <a href={href} className={cn(linkVariants({ variant }))}>
           {label}
         </a>
       ) : (

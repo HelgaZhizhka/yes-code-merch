@@ -1,38 +1,31 @@
 import { Link } from '@tanstack/react-router';
 
 import { ROUTES } from '@shared/config/routes';
-import { ListsView, type ListsViewType } from '@shared/types';
-import {
-  classNamesOutlineLinkButton,
-  classNamesPrimaryLinkButton,
-} from '@shared/ui/button';
+import { LayoutView, type LayoutViewType } from '@shared/types';
+import { getLinkButtonClass } from '@shared/ui/link-button';
 
 import { Separator } from './separator';
 
 export const AuthLinks = ({
   variant,
 }: {
-  variant: ListsViewType;
+  variant: LayoutViewType;
 }): React.JSX.Element => (
   <>
     <Link
       to={ROUTES.LOGIN}
-      className={
-        variant === ListsView.VERTICAL
-          ? 'text-violet-foreground hover:text-primary-foreground'
-          : classNamesOutlineLinkButton
-      }
+      className={getLinkButtonClass(
+        variant === LayoutView.FOOTER ? 'white' : 'outline'
+      )}
     >
       Sign in
     </Link>
-    {variant === ListsView.VERTICAL && <Separator />}
+    {variant === LayoutView.FOOTER && <Separator />}
     <Link
       to={ROUTES.REGISTRATION}
-      className={
-        variant === ListsView.VERTICAL
-          ? 'text-violet-foreground hover:text-primary-foreground'
-          : classNamesPrimaryLinkButton
-      }
+      className={getLinkButtonClass(
+        variant === LayoutView.FOOTER ? 'white' : 'primary'
+      )}
     >
       Sign up
     </Link>

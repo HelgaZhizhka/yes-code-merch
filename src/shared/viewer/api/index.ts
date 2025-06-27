@@ -1,12 +1,11 @@
 import type { Session } from '@supabase/supabase-js';
 
 import { supabase } from '@shared/api/supabase-client';
-
 import type {
   LoginDTO,
   RegistrationDTO,
   RegistrationResult,
-} from './interfaces';
+} from '@shared/viewer/interfaces';
 
 export const login = async ({
   email,
@@ -18,7 +17,7 @@ export const login = async ({
   });
 
   if (error || !data.session) {
-    throw error || new Error('No session');
+    throw error ?? new Error('No session');
   }
 
   return data.session;
@@ -38,4 +37,12 @@ export const registration = async ({
     session: data.session,
     user: data.user,
   };
+};
+
+export const logout = async (): Promise<void> => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw error;
+  }
 };

@@ -1,9 +1,12 @@
-import { Badge } from '@shared/ui/badge';
+import { toast } from 'sonner';
+
 import { Button } from '@shared/ui/button';
-import { Card, CardContent, CardHeader } from '@shared/ui/card';
-import { Checkbox } from '@shared/ui/checkbox';
-import { Input } from '@shared/ui/input';
-import { Label } from '@shared/ui/label';
+
+import { Badge } from '@/shared/ui/badge';
+import { Card, CardContent, CardHeader } from '@/shared/ui/card';
+import { Checkbox } from '@/shared/ui/checkbox';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
 export const UIPreviewPage = () => (
   <div className="p-6 space-y-8 bg-background font-sans min-h-screen">
@@ -29,6 +32,9 @@ export const UIPreviewPage = () => (
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
         <span className="relative inline-flex size-3 rounded-full bg-primary"></span>
       </span>
+      <Button onClick={() => toast.success('My  toast')}>
+        Give me a toast
+      </Button>
     </section>
 
     <section className="space-y-2">

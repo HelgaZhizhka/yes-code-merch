@@ -6,9 +6,7 @@ export const Catalog = (): React.JSX.Element => {
     <div>
       <h1 className="text-2xl">Catalog Page</h1>
       <p>This is the Catalog page component.</p>
-      <>
-        {params.categoryId} {params.subCategoryId}
-      </>
+      {params.categoryId} {params.subCategoryId}
     </div>
   );
 };

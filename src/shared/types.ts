@@ -1,6 +1,6 @@
-export const ListsView = {
-  DEFAULT: 'default',
-  VERTICAL: 'vertical',
+export const LayoutView = {
+  HEADER: 'header',
+  FOOTER: 'footer',
 } as const;
 
-export type ListsViewType = (typeof ListsView)[keyof typeof ListsView];
+export type LayoutViewType = (typeof LayoutView)[keyof typeof LayoutView];
