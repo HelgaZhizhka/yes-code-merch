@@ -7,6 +7,7 @@ import { ROUTES } from '@shared/config/routes';
 import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
+import { ThemeSwitcher } from '@shared/ui/theme-switcher';
 import { useAuth } from '@shared/viewer/hooks';
 
 import { Banner } from './banner';
@@ -56,8 +57,9 @@ export const Header = (): React.JSX.Element => {
           </div>
         </div>
       </div>
-      <div className="bg-dark-background h-17 flex items-center pl-11">
+      <div className="bg-dark-background h-17 flex items-center pl-11 pr-11 justify-between">
         <Categories />
+        <ThemeSwitcher />
       </div>
     </header>
   );
