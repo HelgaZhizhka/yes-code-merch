@@ -1,33 +1,18 @@
-import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useRegistrationForm } from '@features/auth/hooks';
 
-import { ROUTES } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 
-import { useRegistration } from '@/entities/session/hooks';
-
 export const Registration = (): React.JSX.Element => {
-  const { mutate: register, isPending, error } = useRegistration();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!email || !password) return;
-
-    register(
-      { email, password },
-      {
-        onSuccess: (result) => {
-          if (result.session) {
-            navigate({ to: ROUTES.HOME });
-          }
-        },
-      }
-    );
-  };
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    isPending,
+    error,
+  } = useRegistrationForm();
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useLoginForm } from '@features/login/hooks';
+import { useLoginForm } from '@features/auth/hooks';
 
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
