@@ -1,9 +1,29 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { useLogin, useRegistration } from '@entities/session/hooks';
+import {
+  useLogin,
+  useRegistration,
+  useSessionAuth,
+} from '@entities/session/hooks';
 
 import { ROUTES } from '@shared/config/routes';
+
+export const useAuth = () => {
+  const navigate = useNavigate();
+  const {
+    isAuthorized,
+    isLoaded,
+    handleLogout: sessionHandleLogout,
+  } = useSessionAuth();
+
+  const handleLogout = async () => {
+    await sessionHandleLogout();
+    navigate({ to: ROUTES.HOME });
+  };
+
+  return { isAuthorized, isLoaded, handleLogout };
+};
 
 export function useLoginForm() {
   const [email, setEmail] = useState('');
