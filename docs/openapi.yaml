@@ -1,8 +1,8 @@
 openapi: 3.0.1
 info:
-  title: "Authentication API"
-  version: "1.0.0"
-  description: "API endpoints for user registration, login, and logout via Supabase"
+  title: 'Authentication API'
+  version: '1.0.0'
+  description: 'API endpoints for user registration, login, and logout via Supabase'
 servers:
   - url: https://tlnboeuoaezawexbrblg.supabase.co/auth/v1
 
@@ -12,9 +12,9 @@ security:
 paths:
   /signup:
     post:
-      summary: "Register a new user"
+      summary: 'Register a new user'
       tags:
-        - "Auth"
+        - 'Auth'
       security:
         - SupabaseKey: []
       requestBody:
@@ -22,24 +22,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SignUpInput"
+              $ref: '#/components/schemas/SignUpInput'
       responses:
         '200':
-          description: "User registered successfully"
+          description: 'User registered successfully'
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthResponse"
+                $ref: '#/components/schemas/AuthResponse'
         '400':
-          description: "Invalid input data"
+          description: 'Invalid input data'
         '500':
-          description: "Server error"
+          description: 'Server error'
 
   /token:
     post:
-      summary: "Login existing user (Password grant)"
+      summary: 'Login existing user (Password grant)'
       tags:
-        - "Auth"
+        - 'Auth'
       security:
         - SupabaseKey: []
       parameters:
@@ -55,34 +55,34 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginInput"
+              $ref: '#/components/schemas/LoginInput'
       responses:
         '200':
-          description: "User logged in successfully"
+          description: 'User logged in successfully'
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthResponse"
+                $ref: '#/components/schemas/AuthResponse'
         '400':
-          description: "Invalid credentials"
+          description: 'Invalid credentials'
         '500':
-          description: "Server error"
+          description: 'Server error'
 
   /logout:
     post:
-      summary: "Logout current user"
+      summary: 'Logout current user'
       tags:
-        - "Auth"
+        - 'Auth'
       security:
         - SupabaseKey: []
         - BearerAuth: []
       responses:
         '200':
-          description: "User logged out successfully"
+          description: 'User logged out successfully'
         '401':
-          description: "Invalid or missing authentication"
+          description: 'Invalid or missing authentication'
         '500':
-          description: "Server error"
+          description: 'Server error'
 
 components:
   securitySchemes:
@@ -102,34 +102,34 @@ components:
         email:
           type: string
           format: email
-          example: "user@example.com"
+          example: 'user@example.com'
         password:
           type: string
           format: password
-          example: "password123"
+          example: 'password123'
         first_name:
           type: string
-          example: "Olga"
+          example: 'Olga'
         last_name:
           type: string
-          example: "Ivanova"
+          example: 'Ivanova'
         date_of_birth:
           type: string
           format: date
-          example: "1978-05-12"
+          example: '1978-05-12'
         phone:
           type: string
-          example: "+79991234567"
+          example: '+79991234567'
         company:
           type: string
-          example: "MyCompany LLC"
+          example: 'MyCompany LLC'
         shippingAddress:
-          $ref: "#/components/schemas/AddressInput"
+          $ref: '#/components/schemas/AddressInput'
         billingAddress:
-          $ref: "#/components/schemas/AddressInput"
+          $ref: '#/components/schemas/AddressInput'
         useShippingAsBilling:
           type: boolean
-          description: "Use shipping address as billing address if true"
+          description: 'Use shipping address as billing address if true'
           example: true
       required:
         - email
@@ -144,11 +144,11 @@ components:
         email:
           type: string
           format: email
-          example: "user@example.com"
+          example: 'user@example.com'
         password:
           type: string
           format: password
-          example: "password123"
+          example: 'password123'
       required:
         - email
         - password
@@ -162,11 +162,11 @@ components:
             id:
               type: string
               format: uuid
-              example: "d6a8e3b2-4f5c-11eb-ae93-0242ac130002"
+              example: 'd6a8e3b2-4f5c-11eb-ae93-0242ac130002'
             email:
               type: string
               format: email
-              example: "user@example.com"
+              example: 'user@example.com'
         session:
           type: object
           properties:
@@ -183,17 +183,17 @@ components:
       properties:
         country:
           type: string
-          description: "ISO 3166-1 alpha-2 country code"
-          example: "RU"
+          description: 'ISO 3166-1 alpha-2 country code'
+          example: 'RU'
         city:
           type: string
-          example: "Moscow"
+          example: 'Moscow'
         street:
           type: string
-          example: "Tverskaya 7"
+          example: 'Tverskaya 7'
         postal_code:
           type: string
-          example: "125009"
+          example: '125009'
       required:
         - country
         - city
