@@ -1,6 +1,26 @@
-import { useEffect } from 'react';
+import type { Session } from '@supabase/supabase-js';
+import {
+  useMutation,
+  useQueryClient,
+  type UseMutationResult,
+} from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
+import { useCallback, useEffect } from 'react';
 
+import { createUser, login, logout } from '@entities/session/api';
+import type {
+  LoginDTO,
+  RegistrationDTO,
+  RegistrationResult,
+} from '@entities/session/interfaces';
 import { initSession } from '@entities/session/lib/init-session';
+import {
+  useIsAuthorized,
+  useIsSessionLoaded,
+} from '@entities/session/model/selectors';
+import { useSessionStore } from '@entities/session/model/store';
+
+import { ROUTES } from '@shared/config/routes';
 
 export const useInitSession = () => {
   useEffect(() => {
@@ -12,4 +32,64 @@ export const useInitSession = () => {
       if (unsubscribe) unsubscribe();
     };
   }, []);
+};
+
+export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
+  return useMutation<Session, Error, LoginDTO>({
+    mutationFn: login,
+    onSuccess: (session) => {
+      useSessionStore.getState().setSession(session);
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Login error:', error.message);
+      }
+    },
+  });
+};
+
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+
+  return async () => {
+    await logout();
+    useSessionStore.getState().setSession(null);
+    queryClient.clear();
+  };
+};
+
+export const useRegistration = (): UseMutationResult<
+  RegistrationResult,
+  Error,
+  RegistrationDTO
+> => {
+  return useMutation<RegistrationResult, Error, RegistrationDTO>({
+    mutationFn: createUser,
+    onSuccess: (result) => {
+      useSessionStore.getState().setSession(result.session ?? null);
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Registration error:', error.message);
+      }
+    },
+  });
+};
+
+export const useAuth = () => {
+  const isAuthorized = useIsAuthorized();
+  const isLoaded = useIsSessionLoaded();
+  const logout = useLogout();
+  const router = useRouter();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+      router.navigate({ to: ROUTES.HOME });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }, [logout, router]);
+
+  return { isAuthorized, isLoaded, handleLogout };
 };

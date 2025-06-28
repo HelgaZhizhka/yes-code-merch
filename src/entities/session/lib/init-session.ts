@@ -1,5 +1,6 @@
+import { useSessionStore } from '@entities/session/model/store';
+
 import { supabase } from '@shared/api/supabase-client';
-import { useSessionStore } from '@shared/viewer/model/store';
 
 export const initSession = async () => {
   const { data } = await supabase.auth.getSession();

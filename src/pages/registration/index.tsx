@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { ROUTES } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
-import { useRegistration } from '@shared/viewer/hooks';
+
+import { useRegistration } from '@/entities/session/hooks';
 
 export const Registration = (): React.JSX.Element => {
   const { mutate: register, isPending, error } = useRegistration();

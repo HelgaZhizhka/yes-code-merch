@@ -122,7 +122,25 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      complete_registration: {
+        Args: {
+          _first_name: string;
+          _last_name: string;
+          _date_of_birth: string;
+          _phone: string;
+          _company: string;
+          _ship_country: string;
+          _ship_city: string;
+          _ship_street: string;
+          _ship_postal: string;
+          _use_ship_as_bill: boolean;
+          _bill_country?: string;
+          _bill_city?: string;
+          _bill_street?: string;
+          _bill_postal?: string;
+        };
+        Returns: undefined;
+      };
     };
     Enums: {
       [_ in never]: never;

@@ -1,32 +1,18 @@
-import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useLoginForm } from '@features/login/hooks';
 
-import { ROUTES } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
-import { useLogin } from '@shared/viewer/hooks';
 
 export const Login = (): React.JSX.Element => {
-  const { mutate: login, isPending, error } = useLogin();
-  const navigate = useNavigate();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!email || !password) return;
-
-    login(
-      { email, password },
-      {
-        onSuccess: () => {
-          navigate({ to: ROUTES.HOME });
-        },
-      }
-    );
-  };
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    isPending,
+    error,
+  } = useLoginForm();
 
   return (
     <div>

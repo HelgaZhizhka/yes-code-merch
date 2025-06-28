@@ -1,11 +1,12 @@
 import type { Session } from '@supabase/supabase-js';
 
 import { supabase } from '@shared/api/supabase-client';
+
 import type {
   LoginDTO,
   RegistrationDTO,
   RegistrationResult,
-} from '@shared/viewer/interfaces';
+} from '@/entities/session/interfaces';
 
 export const login = async ({
   email,
@@ -23,7 +24,7 @@ export const login = async ({
   return data.session;
 };
 
-export const registration = async ({
+export const createUser = async ({
   email,
   password,
 }: RegistrationDTO): Promise<RegistrationResult> => {
@@ -46,3 +47,20 @@ export const logout = async (): Promise<void> => {
     throw error;
   }
 };
+
+// await supabase.rpc('complete_registration', {
+//   first_name:       form.first_name,
+//   last_name:        form.last_name,
+//   date_of_birth:    form.date_of_birth,
+//   phone:            form.phone,
+//   company:          form.company,
+//   ship_country:     form.shippingAddress.country,
+//   ship_city:        form.shippingAddress.city,
+//   ship_street:      form.shippingAddress.street,
+//   ship_postal:      form.shippingAddress.postal_code,
+//   use_ship_as_bill: form.useShippingAsBilling,
+//   bill_country:     form.billingAddress?.country,
+//   bill_city:        form.billingAddress?.city,
+//   bill_street:      form.billingAddress?.street,
+//   bill_postal:      form.billingAddress?.postal_code
+// });
