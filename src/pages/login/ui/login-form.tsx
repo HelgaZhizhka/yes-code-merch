@@ -85,7 +85,6 @@ export const LoginForm = (): React.JSX.Element => {
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute right-2 top-2.5 text-muted-foreground hover:text-foreground transition-all"
-                  tabIndex={-1}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
