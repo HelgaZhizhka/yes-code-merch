@@ -55,7 +55,7 @@ export const useLogout = () => {
   };
 };
 
-export const useRegistration = (): UseMutationResult<
+export const useCreateUser = (): UseMutationResult<
   RegistrationResult,
   Error,
   RegistrationDTO

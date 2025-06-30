@@ -2,12 +2,15 @@ import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import {
+  useCreateUser,
   useLogin,
-  useRegistration,
   useSessionAuth,
 } from '@entities/session/hooks';
 
 import { ROUTES } from '@shared/config/routes';
+
+import { createCustomer } from '@/entities/customer/api';
+import { data } from '@/entities/customer/api/data';
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -58,21 +61,26 @@ export function useLoginForm() {
 }
 
 export function useRegistrationForm() {
-  const { mutate: register, isPending, error } = useRegistration();
+  const { mutate: createUser, isPending, error } = useCreateUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || !password) return;
 
-    register(
+    createUser(
       { email, password },
       {
-        onSuccess: (result) => {
-          if (result.session) {
+        onSuccess: async () => {
+          try {
+            //TODO передать user_id из createUser в createCustomer
+            await createCustomer(data);
             navigate({ to: ROUTES.HOME });
+          } catch (error) {
+            // Обработай ошибку создания customer (например, toast)
+            console.error('Create customer error:', error);
           }
         },
       }

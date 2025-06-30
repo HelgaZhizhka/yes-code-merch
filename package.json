@@ -23,8 +23,7 @@
     "prepare": "husky",
     "lint:styles": "stylelint \"**/*.css\"",
     "lint:styles:fix": "stylelint \"**/*.css\" --fix",
-    "gen:types": "supabase gen types typescript --project-id tlnboeuoaezawexbrblg --schema public > src/shared/api/database.types.ts",
-    "docs": "docker run --rm --name swagger-ui -p 8080:8080 -e SWAGGER_JSON=/openapi.yaml -v \"${INIT_CWD:-$(pwd)}/docs/openapi.yaml:/openapi.yaml:ro\" swaggerapi/swagger-ui:latest"
+    "gen:types": "supabase gen types typescript --project-id tlnboeuoaezawexbrblg --schema public > src/shared/api/database.types.ts"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.2",
