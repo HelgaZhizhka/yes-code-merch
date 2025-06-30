@@ -44,8 +44,8 @@ export const LoginForm = (): React.JSX.Element => {
       onSuccess: () => {
         navigate({ to: ROUTES.HOME });
       },
-      onError: (err) => {
-        toast.error(err.message);
+      onError: (error) => {
+        toast.error(error.message);
       },
     });
   };
@@ -85,6 +85,7 @@ export const LoginForm = (): React.JSX.Element => {
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute right-2 top-2.5 text-muted-foreground hover:text-foreground transition-all"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
