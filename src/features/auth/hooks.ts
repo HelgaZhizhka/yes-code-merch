@@ -9,9 +9,6 @@ import {
 
 import { ROUTES } from '@shared/config/routes';
 
-import { createCustomer } from '@/entities/customer/api';
-import { data } from '@/entities/customer/api/data';
-
 export const useAuth = () => {
   const navigate = useNavigate();
   const {
@@ -73,14 +70,10 @@ export function useRegistrationForm() {
     createUser(
       { email, password },
       {
-        onSuccess: async () => {
-          try {
-            //TODO передать user_id из createUser в createCustomer
-            await createCustomer(data);
+        onSuccess: (result) => {
+          if (result.session) {
+            //TODO create customer profile with addresses
             navigate({ to: ROUTES.HOME });
-          } catch (error) {
-            // Обработай ошибку создания customer (например, toast)
-            console.error('Create customer error:', error);
           }
         },
       }
