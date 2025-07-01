@@ -1,31 +1,40 @@
-import type { RegisterDTO } from '@shared/interfaces';
+import { useState } from 'react';
+
+import type { RegisterDTO } from '@shared/api/auth/interfaces';
 import { useRegister } from '@shared/viewer/hooks';
 
 export const useRegistrationForm = () => {
   const { mutate: register, isPending, error } = useRegister();
 
-  const testViewer: RegisterDTO = {
-    email: 'test@example.com',
-    password: '1tT444&4',
-    firstName: 'User',
-    lastName: 'Test',
+  const initProfile: RegisterDTO = {
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
     shippingAddress: {
-      country: 'RU',
-      city: 'Moscow',
-      street: '123 Main St',
-      postal_code: '10001',
+      country: '',
+      city: '',
+      street: '',
+      postal_code: '',
     },
-    useShippingAsBilling: true,
+    useShippingAsBilling: false,
   };
+
+  const [profile, setProfile] = useState<RegisterDTO>(initProfile);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    register(testViewer);
+
+    if (!profile) return;
+
+    register(profile);
   };
 
   return {
     handleSubmit,
     isPending,
     error,
+    profile,
+    setProfile,
   };
 };

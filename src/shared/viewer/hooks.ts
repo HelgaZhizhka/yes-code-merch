@@ -7,7 +7,7 @@ import {
 import { useCallback } from 'react';
 
 import { login, logout, register } from '@shared/api/auth';
-import type { LoginDTO, RegisterDTO } from '@shared/interfaces';
+import type { LoginDTO, RegisterDTO } from '@shared/api/auth/interfaces';
 import {
   useIsAuthorized,
   useIsSessionLoaded,

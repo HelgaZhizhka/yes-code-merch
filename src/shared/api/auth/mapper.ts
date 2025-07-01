@@ -1,4 +1,4 @@
-import type { Viewer } from '@shared/interfaces';
+import type { Viewer } from './interfaces';
 
 export const mapDataToRpcArgs = (viewer: Viewer) => {
   const {
