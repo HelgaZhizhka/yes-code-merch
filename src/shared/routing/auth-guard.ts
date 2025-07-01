@@ -1,12 +1,11 @@
 import { redirect } from '@tanstack/react-router';
 
+import { ROUTES } from '@shared/config/routes';
 import {
   isAuthorized,
   isSessionLoaded,
-} from '@entities/session/model/selectors';
-import { useSessionStore } from '@entities/session/model/store';
-
-import { ROUTES } from '@shared/config/routes';
+  useSessionStore,
+} from '@shared/session/model';
 
 interface BeforeLoadContext {
   preload?: boolean;

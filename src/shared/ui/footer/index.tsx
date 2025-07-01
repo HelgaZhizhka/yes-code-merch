@@ -3,17 +3,15 @@ import { Mail, MessageCircle, Phone } from 'lucide-react';
 
 import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
-import type { AuthProps } from '@shared/interfaces';
 import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
+import { useAuth } from '@shared/viewer/hooks';
 
-export const Footer = ({
-  isAuthorized,
-  isLoaded,
-  onLogout,
-}: AuthProps): React.JSX.Element => {
+export const Footer = (): React.JSX.Element => {
+  const { isAuthorized, isLoaded, handleLogout } = useAuth();
+
   return (
     <footer className="bg-violet text-violet-foreground">
       <div className="container max-w-screen-xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between gap-8">
@@ -33,7 +31,7 @@ export const Footer = ({
               isAuthorized={isAuthorized}
               isLoaded={isLoaded}
               variant={LayoutView.FOOTER}
-              onLogout={onLogout}
+              onLogout={handleLogout}
             />
           </nav>
         </div>

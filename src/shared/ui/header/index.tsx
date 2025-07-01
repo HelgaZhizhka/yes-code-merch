@@ -4,19 +4,17 @@ import { Phone, ShoppingCart } from 'lucide-react';
 import logo from '@shared/assets/header-logo-sprite.svg';
 import { SaleCategoryName } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
-import type { AuthProps } from '@shared/interfaces';
 import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import { ThemeSwitcher } from '@shared/ui/theme-switcher';
+import { useAuth } from '@shared/viewer/hooks';
 
 import { Banner } from './banner';
 
-export const Header = ({
-  isAuthorized,
-  isLoaded,
-  onLogout,
-}: AuthProps): React.JSX.Element => {
+export const Header = (): React.JSX.Element => {
+  const { isAuthorized, isLoaded, handleLogout } = useAuth();
+
   return (
     <header className="flex flex-col">
       <div className="flex justify-between items-center gap-25 p-5 pl-11 pr-11">
@@ -46,7 +44,7 @@ export const Header = ({
               <AuthMenu
                 isAuthorized={isAuthorized}
                 isLoaded={isLoaded}
-                onLogout={onLogout}
+                onLogout={handleLogout}
               />
               <Link to={ROUTES.CART} className="flex items-center">
                 <ShoppingCart

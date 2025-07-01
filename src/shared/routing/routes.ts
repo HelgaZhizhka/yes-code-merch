@@ -12,9 +12,8 @@ import { Profile } from '@pages/profile';
 import { Registration } from '@pages/registration';
 import { UIPreviewPage } from '@pages/ui-preview';
 
-import { createAuthGuard } from '@features/auth/lib/auth-guard';
-
 import { ROUTES } from '@shared/config/routes';
+import { createAuthGuard } from '@shared/routing/auth-guard';
 
 export const homeRoute = (parentRoute: RootRoute) =>
   createRoute({

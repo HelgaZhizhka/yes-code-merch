@@ -1,7 +1,7 @@
-import { useLoginForm } from '@features/auth/hooks';
-
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
+
+import { useLoginForm } from './hooks';
 
 export const Login = (): React.JSX.Element => {
   const {
