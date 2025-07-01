@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { initSession } from '@entities/session/lib/init-session';
+import { initSession } from '@shared/session/lib/init-session';
 
 export const useInitSession = () => {
   useEffect(() => {

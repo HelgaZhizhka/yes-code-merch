@@ -12,3 +12,17 @@ export const useSessionStore = create<SessionState>((set) => ({
   isSessionLoaded: false,
   setSession: (session) => set({ session, isSessionLoaded: true }),
 }));
+
+export const useIsAuthorized = () =>
+  useSessionStore((state) => !!state.session?.user);
+
+export const useIsSessionLoaded = () =>
+  useSessionStore((state) => state.isSessionLoaded);
+
+export const isAuthorized = () => {
+  return !!useSessionStore.getState().session?.user;
+};
+
+export const isSessionLoaded = () => {
+  return useSessionStore.getState().isSessionLoaded;
+};
