@@ -6,3 +6,6 @@ export const RootElementId = 'app';
 export const RootElementClassNames = 'min-h-screen flex flex-col';
 export const CATEGORIES = ['Clothes', 'DrinkWare', 'Office', 'Bags'];
 export const SaleCategoryName = 'T-Shirts';
+export const RpcFunctions = {
+  registration: 'complete_registration',
+} as const;

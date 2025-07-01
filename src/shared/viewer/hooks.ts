@@ -4,22 +4,31 @@ import {
   useQueryClient,
   type UseMutationResult,
 } from '@tanstack/react-query';
-import { useRouter } from '@tanstack/react-router';
 import { useCallback } from 'react';
 
-import { ROUTES } from '@shared/config/routes';
+import { login, logout, register } from '@shared/api/auth';
+import type { LoginDTO, RegisterDTO } from '@shared/api/auth/interfaces';
 import {
   useIsAuthorized,
   useIsSessionLoaded,
-} from '@shared/viewer/model/selectors';
-import { useSessionStore } from '@shared/viewer/model/store';
+  useSessionStore,
+} from '@shared/session/model';
 
-import { login, logout, registration } from './api';
-import type {
-  LoginDTO,
-  RegistrationDTO,
-  RegistrationResult,
-} from './interfaces';
+export const useAuth = () => {
+  const isAuthorized = useIsAuthorized();
+  const isLoaded = useIsSessionLoaded();
+  const logout = useLogout();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }, [logout]);
+
+  return { isAuthorized, isLoaded, handleLogout };
+};
 
 export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   return useMutation<Session, Error, LoginDTO>({
@@ -45,38 +54,13 @@ export const useLogout = () => {
   };
 };
 
-export const useRegistration = (): UseMutationResult<
-  RegistrationResult,
-  Error,
-  RegistrationDTO
-> => {
-  return useMutation<RegistrationResult, Error, RegistrationDTO>({
-    mutationFn: registration,
-    onSuccess: (result) => {
-      useSessionStore.getState().setSession(result.session ?? null);
+export const useRegister = () =>
+  useMutation<Session, Error, RegisterDTO>({
+    mutationFn: register,
+    onSuccess: (session) => {
+      useSessionStore.getState().setSession(session);
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        console.error('Registration error:', error.message);
-      }
+    onError: (error) => {
+      console.error('Registration failed', error);
     },
   });
-};
-
-export const useAuth = () => {
-  const isAuthorized = useIsAuthorized();
-  const isLoaded = useIsSessionLoaded();
-  const logout = useLogout();
-  const router = useRouter();
-
-  const handleLogout = useCallback(async () => {
-    try {
-      await logout();
-      router.navigate({ to: ROUTES.HOME });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  }, [logout, router]);
-
-  return { isAuthorized, isLoaded, handleLogout };
-};

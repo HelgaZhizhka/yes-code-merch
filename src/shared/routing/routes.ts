@@ -5,16 +5,17 @@ import { About } from '@pages/about';
 import { Cart } from '@pages/cart';
 import { Catalog } from '@pages/catalog';
 import { Home } from '@pages/home';
-import { Login } from '@pages/login';
 import { NotFound } from '@pages/not-found';
 import { Product } from '@pages/product';
-import { Profile } from '@pages/profile';
-import { Registration } from '@pages/registration';
 import { UIPreviewPage } from '@pages/ui-preview';
 
-import { createAuthGuard } from '@entities/session/lib/auth-guard';
-
 import { ROUTES } from '@shared/config/routes';
+
+import {
+  ProtectedLogin,
+  ProtectedProfile,
+  ProtectedRegistration,
+} from './protected-routes';
 
 export const homeRoute = (parentRoute: RootRoute) =>
   createRoute({
@@ -55,16 +56,14 @@ export const loginRoute = (parentRoute: RootRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.LOGIN,
-    component: Login,
-    beforeLoad: createAuthGuard('guest'),
+    component: ProtectedLogin,
   });
 
 export const registrationRoute = (parentRoute: RootRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.REGISTRATION,
-    component: Registration,
-    beforeLoad: createAuthGuard('guest'),
+    component: ProtectedRegistration,
   });
 
 export const notFoundRoute = (parentRoute: RootRoute) =>
@@ -85,8 +84,7 @@ export const profileRoute = (parentRoute: RootRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.PROFILE,
-    component: Profile,
-    beforeLoad: createAuthGuard('authorized'),
+    component: ProtectedProfile,
   });
 
 export const uiReviewRoute = (parentRoute: RootRoute) =>

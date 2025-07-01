@@ -22,6 +22,7 @@ import {
 } from './routes';
 
 const isDev = import.meta.env.DEV;
+
 const rootRoute = createRootRoute({
   component: Layout,
   errorComponent: ErrorPage,
