@@ -1,27 +1,37 @@
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
+import {
+  type LoginFormType,
+  loginSchema,
+} from '@pages/login/model/validation-schema';
 
 import { useLogin } from '@shared/viewer/hooks';
 
 export const useLoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { mutate: login, isPending, error } = useLogin();
+  const { mutate: login, isPending } = useLogin();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const form = useForm<LoginFormType>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    mode: 'onChange',
+  });
 
-    if (!email || !password) return;
-
-    login({ email, password });
+  const onSubmit = (data: LoginFormType) => {
+    login(data, {
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
   };
 
   return {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    handleSubmit,
+    form,
+    onSubmit,
     isPending,
-    error,
   };
 };
