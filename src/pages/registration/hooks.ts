@@ -6,7 +6,7 @@ export const useRegistrationForm = () => {
 
   const testViewer: RegisterDTO = {
     email: 'test@example.com',
-    password: 'password',
+    password: '1tT444&4',
     firstName: 'User',
     lastName: 'Test',
     shippingAddress: {

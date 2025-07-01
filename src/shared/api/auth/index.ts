@@ -47,9 +47,11 @@ export const signUp = async ({
     throw error;
   }
 
+  const { session, user } = data;
+
   return {
-    session: data.session,
-    user: data.user,
+    session,
+    user,
   };
 };
 
@@ -72,9 +74,10 @@ export const createViewer = async (
 };
 
 export const register = async (dto: RegisterDTO): Promise<Session> => {
+  const { email, password } = dto;
   const { session, user } = await signUp({
-    email: dto.email,
-    password: dto.password,
+    email,
+    password,
   });
 
   if (!session || !user) throw new Error('Registration failed at signUp');
