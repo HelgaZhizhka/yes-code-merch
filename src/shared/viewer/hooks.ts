@@ -9,9 +9,10 @@ import { useCallback } from 'react';
 import { login, logout, register } from '@shared/api/auth';
 import type { LoginDTO, RegisterDTO } from '@shared/api/auth/interfaces';
 import {
+  clearSession,
+  setSession,
   useIsAuthorized,
   useIsSessionLoaded,
-  useSessionStore,
 } from '@shared/session/model';
 
 export const useAuth = () => {
@@ -34,7 +35,7 @@ export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   return useMutation<Session, Error, LoginDTO>({
     mutationFn: login,
     onSuccess: (session) => {
-      useSessionStore.getState().setSession(session);
+      setSession(session);
     },
     onError: (error: unknown) => {
       if (error instanceof Error) {
@@ -49,7 +50,7 @@ export const useLogout = () => {
 
   return async () => {
     await logout();
-    useSessionStore.getState().setSession(null);
+    clearSession();
     queryClient.clear();
   };
 };
@@ -58,7 +59,7 @@ export const useRegister = () =>
   useMutation<Session, Error, RegisterDTO>({
     mutationFn: register,
     onSuccess: (session) => {
-      useSessionStore.getState().setSession(session);
+      setSession(session);
     },
     onError: (error) => {
       console.error('Registration failed', error);
