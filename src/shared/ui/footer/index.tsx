@@ -5,9 +5,9 @@ import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
 import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
+import { useAuth } from '@shared/ui/auth-menu/hooks';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
-import { useAuth } from '@shared/viewer/hooks';
 
 export const Footer = (): React.JSX.Element => {
   const { isAuthorized, isLoaded, handleLogout } = useAuth();

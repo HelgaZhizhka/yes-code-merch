@@ -4,32 +4,10 @@ import {
   useQueryClient,
   type UseMutationResult,
 } from '@tanstack/react-query';
-import { useCallback } from 'react';
 
 import { login, logout, register } from '@shared/api/auth';
 import type { LoginDTO, RegisterDTO } from '@shared/api/auth/interfaces';
-import {
-  clearSession,
-  setSession,
-  useIsAuthorized,
-  useIsSessionLoaded,
-} from '@shared/session/model';
-
-export const useAuth = () => {
-  const isAuthorized = useIsAuthorized();
-  const isLoaded = useIsSessionLoaded();
-  const logout = useLogout();
-
-  const handleLogout = useCallback(async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  }, [logout]);
-
-  return { isAuthorized, isLoaded, handleLogout };
-};
+import { clearSession, setSession } from '@shared/session/model';
 
 export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   return useMutation<Session, Error, LoginDTO>({
@@ -39,7 +17,7 @@ export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
     },
     onError: (error: unknown) => {
       if (error instanceof Error) {
-        console.error('Login error:', error.message);
+        console.error('Login failed:', error.message);
       }
     },
   });
@@ -61,7 +39,9 @@ export const useRegister = () =>
     onSuccess: (session) => {
       setSession(session);
     },
-    onError: (error) => {
-      console.error('Registration failed', error);
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Registration failed:', error.message);
+      }
     },
   });

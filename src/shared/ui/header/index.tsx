@@ -5,10 +5,10 @@ import logo from '@shared/assets/header-logo-sprite.svg';
 import { SaleCategoryName } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
 import { AuthMenu } from '@shared/ui/auth-menu';
+import { useAuth } from '@shared/ui/auth-menu/hooks';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import { ThemeSwitcher } from '@shared/ui/theme-switcher';
-import { useAuth } from '@shared/viewer/hooks';
 
 import { Banner } from './banner';
 

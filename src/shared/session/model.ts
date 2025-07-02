@@ -23,7 +23,6 @@ export const useSessionStore = create<SessionState>((set) => ({
   clearSession: () =>
     set({
       session: null,
-      isSessionLoaded: false,
       isAuthorized: false,
     }),
 }));

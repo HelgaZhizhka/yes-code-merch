@@ -20,7 +20,6 @@ export interface BeforeLoadContext {
 export const authGuard = (mode: AuthMode) => {
   return (opts: BeforeLoadContext) => {
     const { isSessionLoaded, isAuthorized } = opts.context ?? {};
-    console.log(isSessionLoaded, isAuthorized);
 
     if (opts?.preload) return;
 

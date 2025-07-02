@@ -20,6 +20,7 @@ export const PasswordInput = ({ ...props }: PasswordInputProps) => {
         onClick={() => setShowPassword((prev) => !prev)}
         className="absolute right-2 top-2.5 text-muted-foreground hover:text-foreground transition-all"
         aria-label={showPassword ? 'Hide password' : 'Show password'}
+        title={showPassword ? 'Hide password' : 'Show password'}
       >
         {showPassword ? (
           <EyeOff className="w-5 h-5" />
