@@ -11,12 +11,12 @@ export const useRegistrationForm = () => {
     password: '',
     firstName: '',
     lastName: '',
-    shippingAddress: {
-      country: '',
-      city: '',
-      street: '',
-      postal_code: '',
-    },
+    phone: '',
+    title: '',
+    dateOfBirth: '',
+    company: '',
+    shippingAddresses: [],
+    billingAddresses: [],
     useShippingAsBilling: false,
   };
 

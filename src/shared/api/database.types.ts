@@ -14,13 +14,19 @@ export type Database = {
           city: string;
           country: string;
           created_at: string;
+          email: string | null;
+          first_name: string | null;
           id: string;
           is_billing_address: boolean;
           is_default_billing: boolean;
           is_default_shipping: boolean;
           is_shipping_address: boolean;
+          last_name: string | null;
+          phone: string | null;
           postal_code: string;
-          street: string;
+          street_name: string | null;
+          street_number: string | null;
+          title: string | null;
           updated_at: string;
           user_id: string;
         };
@@ -28,13 +34,19 @@ export type Database = {
           city: string;
           country: string;
           created_at?: string;
+          email?: string | null;
+          first_name?: string | null;
           id?: string;
           is_billing_address?: boolean;
           is_default_billing?: boolean;
           is_default_shipping?: boolean;
           is_shipping_address?: boolean;
+          last_name?: string | null;
+          phone?: string | null;
           postal_code: string;
-          street: string;
+          street_name?: string | null;
+          street_number?: string | null;
+          title?: string | null;
           updated_at?: string;
           user_id?: string;
         };
@@ -42,13 +54,19 @@ export type Database = {
           city?: string;
           country?: string;
           created_at?: string;
+          email?: string | null;
+          first_name?: string | null;
           id?: string;
           is_billing_address?: boolean;
           is_default_billing?: boolean;
           is_default_shipping?: boolean;
           is_shipping_address?: boolean;
+          last_name?: string | null;
+          phone?: string | null;
           postal_code?: string;
-          street?: string;
+          street_name?: string | null;
+          street_number?: string | null;
+          title?: string | null;
           updated_at?: string;
           user_id?: string;
         };
@@ -73,14 +91,17 @@ export type Database = {
         Row: {
           iso_code: string;
           name: string;
+          region: string | null;
         };
         Insert: {
           iso_code: string;
           name: string;
+          region?: string | null;
         };
         Update: {
           iso_code?: string;
           name?: string;
+          region?: string | null;
         };
         Relationships: [];
       };
@@ -89,8 +110,11 @@ export type Database = {
           company: string | null;
           created_at: string;
           date_of_birth: string | null;
+          email: string | null;
           first_name: string | null;
           last_name: string | null;
+          phone: string | null;
+          title: string | null;
           updated_at: string;
           user_id: string;
         };
@@ -98,8 +122,11 @@ export type Database = {
           company?: string | null;
           created_at?: string;
           date_of_birth?: string | null;
+          email?: string | null;
           first_name?: string | null;
           last_name?: string | null;
+          phone?: string | null;
+          title?: string | null;
           updated_at?: string;
           user_id: string;
         };
@@ -107,8 +134,11 @@ export type Database = {
           company?: string | null;
           created_at?: string;
           date_of_birth?: string | null;
+          email?: string | null;
           first_name?: string | null;
           last_name?: string | null;
+          phone?: string | null;
+          title?: string | null;
           updated_at?: string;
           user_id?: string;
         };
@@ -120,21 +150,50 @@ export type Database = {
     };
     Functions: {
       complete_registration: {
-        Args: {
-          _first_name: string;
-          _last_name: string;
-          _ship_country: string;
-          _ship_city: string;
-          _ship_street: string;
-          _ship_postal: string;
-          _use_ship_as_bill?: boolean;
-          _date_of_birth?: string;
-          _company?: string;
-          _bill_country?: string;
-          _bill_city?: string;
-          _bill_street?: string;
-          _bill_postal?: string;
-        };
+        Args:
+          | {
+              _title: string;
+              _first_name: string;
+              _last_name: string;
+              _phone: string;
+              _email: string;
+              _ship_country: string;
+              _ship_city: string;
+              _ship_street_name: string;
+              _ship_street_number: string;
+              _ship_postal: string;
+              _date_of_birth?: string;
+              _company?: string;
+              _ship_is_default?: boolean;
+              _use_ship_as_bill?: boolean;
+              _bill_country?: string;
+              _bill_city?: string;
+              _bill_street_name?: string;
+              _bill_street_number?: string;
+              _bill_postal?: string;
+              _bill_is_default?: boolean;
+            }
+          | {
+              _title: string;
+              _first_name: string;
+              _last_name: string;
+              _phone: string;
+              _ship_country: string;
+              _ship_city: string;
+              _ship_street_name: string;
+              _ship_street_number: string;
+              _ship_postal: string;
+              _date_of_birth?: string;
+              _company?: string;
+              _ship_is_default?: boolean;
+              _use_ship_as_bill?: boolean;
+              _bill_country?: string;
+              _bill_city?: string;
+              _bill_street_name?: string;
+              _bill_street_number?: string;
+              _bill_postal?: string;
+              _bill_is_default?: boolean;
+            };
         Returns: undefined;
       };
     };

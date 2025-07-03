@@ -3,6 +3,7 @@ import { setSession } from '@shared/session/model';
 
 export const initSession = async () => {
   const { data } = await supabase.auth.getSession();
+  console.log(data.session);
   setSession(data.session ?? null);
 
   const {

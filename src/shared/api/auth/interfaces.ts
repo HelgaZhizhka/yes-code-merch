@@ -15,24 +15,31 @@ export interface SignUpResponse {
   user: User | null;
 }
 
+export interface Address {
+  country: string;
+  city: string;
+  streetName: string;
+  streetNumber: string;
+  postalCode: string;
+  isDefault: boolean;
+  title?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+}
+
 export interface Viewer {
   firstName: string;
   lastName: string;
+  phone: string;
+  email: string;
+  shippingAddresses: Address[];
+  useShippingAsBilling: boolean;
+  billingAddresses?: Address[];
+  title?: string;
   dateOfBirth?: string;
   company?: string;
-  shippingAddress: {
-    country: string;
-    city: string;
-    street: string;
-    postal_code: string;
-  };
-  useShippingAsBilling: boolean;
-  billingAddress?: {
-    country: string;
-    city: string;
-    street: string;
-    postal_code: string;
-  };
 }
 
 export type RegisterDTO = SignUpDTO & Viewer;

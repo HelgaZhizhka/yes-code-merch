@@ -11,7 +11,7 @@ import type {
   SignUpResponse,
   Viewer,
 } from './interfaces';
-import { mapDataToRpcArgs } from './mapper';
+import { mapViewerDataToRpcArgs } from './mapper';
 
 export const login = async ({
   email,
@@ -61,11 +61,12 @@ type CompleteRegistrationResult =
 export const createViewer = async (
   viewer: Viewer
 ): Promise<CompleteRegistrationResult> => {
-  const rpcArgs = mapDataToRpcArgs(viewer);
+  const rpcArgs = mapViewerDataToRpcArgs(viewer);
   const { data, error } = await supabase.rpc(
     RpcFunctions.registration,
     rpcArgs
   );
+
   if (error) {
     throw error;
   }
