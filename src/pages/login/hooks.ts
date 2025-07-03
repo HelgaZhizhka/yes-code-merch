@@ -8,9 +8,8 @@ import {
   loginSchema,
 } from '@pages/login/model/validation-schema';
 
+import { ROUTES } from '@shared/config/routes';
 import { useLogin } from '@shared/viewer/hooks';
-
-import { ROUTES } from '@/shared/config/routes';
 
 export const useLoginForm = () => {
   const navigate = useNavigate();

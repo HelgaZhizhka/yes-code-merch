@@ -10,8 +10,7 @@ import {
   FormMessage,
 } from '@shared/ui/form';
 import { Input } from '@shared/ui/input';
-
-import { PasswordInput } from '@/shared/ui/password-input';
+import { PasswordInput } from '@shared/ui/password-input';
 
 export const LoginForm = (): React.JSX.Element => {
   const { form, onSubmit, isPending } = useLoginForm();

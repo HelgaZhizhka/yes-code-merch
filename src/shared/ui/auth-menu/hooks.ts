@@ -3,10 +3,9 @@ import { useCallback } from 'react';
 import { toast } from 'sonner';
 
 import { ROUTES } from '@shared/config/routes';
+import { router } from '@shared/routing';
 import { useIsAuthorized, useIsSessionLoaded } from '@shared/session/model';
 import { useLogout } from '@shared/viewer/hooks';
-
-import { router } from '@/shared/routing';
 
 export const useAuth = () => {
   const isAuthorized = useIsAuthorized();

@@ -5,16 +5,16 @@ import { About } from '@pages/about';
 import { Cart } from '@pages/cart';
 import { Catalog } from '@pages/catalog';
 import { Home } from '@pages/home';
+import { Login } from '@pages/login';
 import { NotFound } from '@pages/not-found';
 import { Product } from '@pages/product';
 import { Profile } from '@pages/profile';
+import { Registration } from '@pages/registration';
 import { UIPreviewPage } from '@pages/ui-preview';
 
 import { ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
-import { Login } from '@/pages/login';
-import { Registration } from '@/pages/registration';
 
 import { authGuard } from './auth-guard';
 
