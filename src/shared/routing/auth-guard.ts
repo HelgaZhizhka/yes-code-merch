@@ -1,6 +1,5 @@
 import { redirect } from '@tanstack/react-router';
 
-import { ROUTES } from '@shared/config/routes';
 import { ViewerStatus, type ViewerStatusType } from '@shared/viewer';
 
 export interface BeforeLoadContext {
@@ -18,9 +17,12 @@ export interface BeforeLoadContext {
   };
 }
 
-export type AuthMode = 'authorized' | 'guest';
+export interface AuthGuardProps {
+  requireAuth?: boolean;
+  redirectTo: string;
+}
 
-export const authGuard = (mode: 'authorized' | 'guest') => {
+export const authGuard = ({ requireAuth, redirectTo }: AuthGuardProps) => {
   return (opts: BeforeLoadContext) => {
     const { status } = opts.context ?? { status: ViewerStatus.INITIAL };
 
@@ -30,12 +32,14 @@ export const authGuard = (mode: 'authorized' | 'guest') => {
       return;
     }
 
-    if (mode === 'authorized' && status !== ViewerStatus.AUTHENTICATED) {
-      throw redirect({ to: ROUTES.LOGIN });
+    const isAuthenticated = status === ViewerStatus.AUTHENTICATED;
+
+    if (requireAuth && !isAuthenticated) {
+      throw redirect({ to: redirectTo });
     }
 
-    if (mode === 'guest' && status === ViewerStatus.AUTHENTICATED) {
-      throw redirect({ to: ROUTES.HOME });
+    if (!requireAuth && isAuthenticated) {
+      throw redirect({ to: redirectTo });
     }
   };
 };

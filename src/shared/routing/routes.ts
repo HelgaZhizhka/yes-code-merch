@@ -69,7 +69,7 @@ export const loginRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.LOGIN,
-    beforeLoad: authGuard('guest'),
+    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
     component: Login,
   });
 
@@ -77,7 +77,7 @@ export const registrationRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.REGISTRATION,
-    beforeLoad: authGuard('guest'),
+    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
     component: Registration,
   });
 
@@ -92,7 +92,7 @@ export const profileRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.PROFILE,
-    beforeLoad: authGuard('authorized'),
+    beforeLoad: authGuard({ requireAuth: true, redirectTo: ROUTES.LOGIN }),
     component: Profile,
   });
 
