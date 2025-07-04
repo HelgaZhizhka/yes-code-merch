@@ -20,7 +20,7 @@ export const useAuth = () => {
         navigate({ to: ROUTES.HOME });
       }
     } catch {
-      toast.error(error?.message || 'Logout failed');
+      toast.error(error?.message ?? 'Logout failed');
     }
   }, [logout, navigate, error]);
 
