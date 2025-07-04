@@ -4,10 +4,59 @@ import {
   useQueryClient,
   type UseMutationResult,
 } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
-import { login, logout, register } from '@shared/api/auth';
+import {
+  getSession,
+  login,
+  logout,
+  onAuthStateChange,
+  register,
+} from '@shared/api/auth';
 import type { LoginDTO, RegisterDTO } from '@shared/api/auth/interfaces';
-import { clearSession, setSession } from '@shared/session/model';
+import type { AsyncAction } from '@shared/types';
+
+import {
+  clearSession,
+  setError,
+  setSession,
+  startLoading,
+  useError,
+  useStatus,
+  ViewerStatus,
+} from './model';
+
+export const useInitViewer = (): void => {
+  useEffect(() => {
+    startLoading();
+    const getInitialSession = async () => {
+      try {
+        const session = await getSession();
+
+        if (session) {
+          setSession(session);
+        } else {
+          clearSession();
+        }
+      } catch (error) {
+        console.error('Error loading session:', error);
+
+        if (error instanceof Error) {
+          setError(error);
+        } else {
+          setError(new Error('Unknown error loading session'));
+        }
+      }
+    };
+    getInitialSession();
+    const subscription = onAuthStateChange((session) => {
+      setSession(session);
+    });
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, []);
+};
 
 export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   return useMutation<Session, Error, LoginDTO>({
@@ -23,7 +72,7 @@ export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   });
 };
 
-export const useLogout = () => {
+export const useLogout = (): AsyncAction => {
   const queryClient = useQueryClient();
 
   return async () => {
@@ -33,7 +82,7 @@ export const useLogout = () => {
   };
 };
 
-export const useRegister = () =>
+export const useRegister = (): UseMutationResult<Session, Error, RegisterDTO> =>
   useMutation<Session, Error, RegisterDTO>({
     mutationFn: register,
     onSuccess: (session) => {
@@ -45,3 +94,24 @@ export const useRegister = () =>
       }
     },
   });
+
+export interface AuthProps {
+  isLoading: boolean;
+  isGuest: boolean;
+  isAuthenticated: boolean;
+  error?: Error | null;
+  logout(): Promise<void>;
+}
+
+export const useViewerState = (): AuthProps => {
+  const status = useStatus();
+  const logout = useLogout();
+  const error = useError();
+
+  const isLoading =
+    status === ViewerStatus.LOADING || status === ViewerStatus.INITIAL;
+  const isGuest = status === ViewerStatus.GUEST;
+  const isAuthenticated = status === ViewerStatus.AUTHENTICATED;
+
+  return { isLoading, isGuest, isAuthenticated, error, logout };
+};

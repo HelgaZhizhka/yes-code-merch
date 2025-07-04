@@ -1,28 +1,29 @@
-import { useInitSession } from '@shared/session/hooks';
-import {
-  useIsAuthorized,
-  useIsSessionLoaded,
-  type SessionContext,
-} from '@shared/session/model';
 import { useTheme } from '@shared/theme/hooks';
+import {
+  useInitViewer,
+  useStatus,
+  ViewerStatus,
+  type ViewerStatusType,
+} from '@shared/viewer';
 
 interface AppInitResult {
   isAppReady: boolean;
-  context: SessionContext;
+  context: {
+    status: ViewerStatusType;
+  };
 }
 
 export const useAppInit = (): AppInitResult => {
-  useInitSession();
+  const status = useStatus();
+
+  useInitViewer();
   useTheme();
 
-  const isSessionLoaded = useIsSessionLoaded();
-  const isAuthorized = useIsAuthorized();
-
   return {
-    isAppReady: isSessionLoaded,
+    isAppReady:
+      status === ViewerStatus.AUTHENTICATED || status === ViewerStatus.GUEST,
     context: {
-      isSessionLoaded,
-      isAuthorized,
+      status,
     },
   };
 };

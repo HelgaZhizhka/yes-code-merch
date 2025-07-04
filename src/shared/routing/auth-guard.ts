@@ -1,13 +1,14 @@
 import { redirect } from '@tanstack/react-router';
 
 import { ROUTES } from '@shared/config/routes';
-import type { SessionContext } from '@shared/session/model';
-
-type AuthMode = 'authorized' | 'guest';
+import { ViewerStatus, type ViewerStatusType } from '@shared/viewer';
 
 export interface BeforeLoadContext {
   preload?: boolean;
-  context?: SessionContext;
+  context?: {
+    status: ViewerStatusType;
+    queryClient?: unknown;
+  };
   location?: {
     pathname: string;
     search: Record<string, unknown>;
@@ -17,21 +18,23 @@ export interface BeforeLoadContext {
   };
 }
 
-export const authGuard = (mode: AuthMode) => {
+export type AuthMode = 'authorized' | 'guest';
+
+export const authGuard = (mode: 'authorized' | 'guest') => {
   return (opts: BeforeLoadContext) => {
-    const { isSessionLoaded, isAuthorized } = opts.context ?? {};
+    const { status } = opts.context ?? { status: ViewerStatus.INITIAL };
 
     if (opts?.preload) return;
 
-    if (!isSessionLoaded) {
+    if (status === ViewerStatus.INITIAL || status === ViewerStatus.LOADING) {
       return;
     }
 
-    if (mode === 'authorized' && !isAuthorized) {
+    if (mode === 'authorized' && status !== ViewerStatus.AUTHENTICATED) {
       throw redirect({ to: ROUTES.LOGIN });
     }
 
-    if (mode === 'guest' && isAuthorized) {
+    if (mode === 'guest' && status === ViewerStatus.AUTHENTICATED) {
       throw redirect({ to: ROUTES.HOME });
     }
   };

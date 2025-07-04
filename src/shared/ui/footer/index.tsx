@@ -5,13 +5,16 @@ import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
 import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
-import { useAuth } from '@shared/ui/auth-menu/hooks';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
+import type { AuthProps } from '@shared/viewer';
 
-export const Footer = (): React.JSX.Element => {
-  const { isAuthorized, isLoaded, handleLogout } = useAuth();
-
+export const Footer = ({
+  isLoading,
+  isGuest,
+  isAuthenticated,
+  logout,
+}: AuthProps): React.JSX.Element => {
   return (
     <footer className="bg-violet text-violet-foreground">
       <div className="container max-w-screen-xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between gap-8">
@@ -28,10 +31,11 @@ export const Footer = (): React.JSX.Element => {
               About Us
             </Link>
             <AuthMenu
-              isAuthorized={isAuthorized}
-              isLoaded={isLoaded}
+              isLoading={isLoading}
+              isGuest={isGuest}
+              isAuthenticated={isAuthenticated}
+              logout={logout}
               variant={LayoutView.FOOTER}
-              onLogout={handleLogout}
             />
           </nav>
         </div>

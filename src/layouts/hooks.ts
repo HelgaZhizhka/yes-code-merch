@@ -4,14 +4,12 @@ import { toast } from 'sonner';
 
 import { ROUTES } from '@shared/config/routes';
 import { router } from '@shared/routing';
-import { useIsAuthorized, useIsSessionLoaded } from '@shared/session/model';
-import { useLogout } from '@shared/viewer/hooks';
+import { useViewerState } from '@shared/viewer';
 
 export const useAuth = () => {
-  const isAuthorized = useIsAuthorized();
-  const isLoaded = useIsSessionLoaded();
-  const logout = useLogout();
   const navigate = useNavigate();
+  const { isAuthenticated, isGuest, isLoading, error, logout } =
+    useViewerState();
 
   const handleLogout = useCallback(async () => {
     try {
@@ -22,9 +20,9 @@ export const useAuth = () => {
         navigate({ to: ROUTES.HOME });
       }
     } catch {
-      toast.error('Logout failed');
+      toast.error(error?.message || 'Logout failed');
     }
-  }, [logout, navigate]);
+  }, [logout, navigate, error]);
 
-  return { isAuthorized, isLoaded, handleLogout };
+  return { isLoading, isGuest, isAuthenticated, error, handleLogout };
 };
