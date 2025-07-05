@@ -17,7 +17,7 @@ export const Layout = (): React.JSX.Element => {
         isLoading={isLoading}
         isGuest={isGuest}
         isAuthenticated={isAuthenticated}
-        logout={handleLogout}
+        onLogout={handleLogout}
       />
       <main className="flex-1">
         <Outlet />
@@ -26,7 +26,7 @@ export const Layout = (): React.JSX.Element => {
         isLoading={isLoading}
         isGuest={isGuest}
         isAuthenticated={isAuthenticated}
-        logout={handleLogout}
+        onLogout={handleLogout}
       />
       <Toaster />
       <TanStackRouterDevtools />

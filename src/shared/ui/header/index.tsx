@@ -12,12 +12,16 @@ import type { AuthProps } from '@shared/viewer';
 
 import { Banner } from './banner';
 
+interface HeaderProps extends AuthProps {
+  onLogout(): Promise<void>;
+}
+
 export const Header = ({
   isLoading,
   isGuest,
   isAuthenticated,
-  logout,
-}: AuthProps): React.JSX.Element => {
+  onLogout,
+}: HeaderProps): React.JSX.Element => {
   return (
     <header className="flex flex-col">
       <div className="flex justify-between items-center gap-25 p-5 pl-11 pr-11">
@@ -48,7 +52,7 @@ export const Header = ({
                 isLoading={isLoading}
                 isGuest={isGuest}
                 isAuthenticated={isAuthenticated}
-                logout={logout}
+                onLogout={onLogout}
               />
               <Link to={ROUTES.CART} className="flex items-center">
                 <ShoppingCart

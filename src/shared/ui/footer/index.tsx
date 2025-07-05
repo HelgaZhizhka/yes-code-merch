@@ -9,12 +9,16 @@ import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import type { AuthProps } from '@shared/viewer';
 
+interface FooterProps extends AuthProps {
+  onLogout(): Promise<void>;
+}
+
 export const Footer = ({
   isLoading,
   isGuest,
   isAuthenticated,
-  logout,
-}: AuthProps): React.JSX.Element => {
+  onLogout,
+}: FooterProps): React.JSX.Element => {
   return (
     <footer className="bg-violet text-violet-foreground">
       <div className="container max-w-screen-xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between gap-8">
@@ -34,7 +38,7 @@ export const Footer = ({
               isLoading={isLoading}
               isGuest={isGuest}
               isAuthenticated={isAuthenticated}
-              logout={logout}
+              onLogout={onLogout}
               variant={LayoutView.FOOTER}
             />
           </nav>

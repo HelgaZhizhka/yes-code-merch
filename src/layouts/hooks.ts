@@ -4,12 +4,12 @@ import { toast } from 'sonner';
 
 import { ROUTES } from '@shared/config/routes';
 import { router } from '@shared/routing';
-import { useViewerState } from '@shared/viewer';
+import { useLogout, useViewerState } from '@shared/viewer';
 
 export const useAuth = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isGuest, isLoading, error, logout } =
-    useViewerState();
+  const logout = useLogout();
+  const { isAuthenticated, isGuest, isLoading, error } = useViewerState();
 
   const handleLogout = useCallback(async () => {
     try {

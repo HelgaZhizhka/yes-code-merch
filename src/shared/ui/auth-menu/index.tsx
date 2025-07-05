@@ -11,6 +11,7 @@ import { Separator } from './separator';
 
 interface AuthMenuProps extends AuthProps {
   variant?: LayoutViewType;
+  onLogout: () => Promise<void>;
 }
 
 const containerVariants = cva('flex items-center', {
@@ -30,7 +31,7 @@ export const AuthMenu = ({
   isLoading,
   isGuest,
   isAuthenticated,
-  logout,
+  onLogout,
 }: AuthMenuProps): React.JSX.Element | null => {
   if (isLoading) return null;
 
@@ -40,7 +41,7 @@ export const AuthMenu = ({
         <>
           <ProfileLink variant={variant} />
           {variant === LayoutView.FOOTER && <Separator />}
-          <LogoutButton variant={variant} onLogout={logout} />
+          <LogoutButton variant={variant} onLogout={onLogout} />
         </>
       )}
       {isGuest && <AuthLinks variant={variant} />}

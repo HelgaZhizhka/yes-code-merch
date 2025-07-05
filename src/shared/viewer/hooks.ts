@@ -100,18 +100,17 @@ export interface AuthProps {
   isGuest: boolean;
   isAuthenticated: boolean;
   error?: Error | null;
-  logout(): Promise<void>;
 }
 
 export const useViewerState = (): AuthProps => {
   const status = useStatus();
-  const logout = useLogout();
   const error = useError();
 
-  const isLoading =
-    status === ViewerStatus.LOADING || status === ViewerStatus.INITIAL;
-  const isGuest = status === ViewerStatus.GUEST;
-  const isAuthenticated = status === ViewerStatus.AUTHENTICATED;
-
-  return { isLoading, isGuest, isAuthenticated, error, logout };
+  return {
+    isLoading:
+      status === ViewerStatus.LOADING || status === ViewerStatus.INITIAL,
+    isGuest: status === ViewerStatus.GUEST,
+    isAuthenticated: status === ViewerStatus.AUTHENTICATED,
+    error,
+  };
 };
