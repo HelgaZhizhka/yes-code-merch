@@ -1,17 +1,18 @@
 import { withThemeByClassName } from '@storybook/addon-themes';
-import type { Preview } from '@storybook/react-vite';
+import type { Preview, ReactRenderer } from '@storybook/react-vite';
 
 import { withStyleDecorator } from './style-decorator';
 
 const preview: Preview = {
   decorators: [
     withStyleDecorator,
-    withThemeByClassName({
+    withThemeByClassName<ReactRenderer>({
       themes: {
         light: 'light',
         dark: 'dark',
       },
       defaultTheme: 'light',
+      parentSelector: 'html',
     }),
   ],
   parameters: {
@@ -20,6 +21,9 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    theming: {
+      themeOverride: 'dark',
     },
 
     a11y: {
