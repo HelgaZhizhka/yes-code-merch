@@ -4,3 +4,4 @@ export const LayoutView = {
 } as const;
 
 export type LayoutViewType = (typeof LayoutView)[keyof typeof LayoutView];
+export type AsyncAction = () => Promise<void>;

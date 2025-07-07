@@ -2,17 +2,16 @@ import { cva } from 'class-variance-authority';
 
 import { cn } from '@shared/lib/utils';
 import { LayoutView, type LayoutViewType } from '@shared/types';
+import type { AuthProps } from '@shared/viewer';
 
 import { AuthLinks } from './auth-links';
 import { LogoutButton } from './logout-button';
 import { ProfileLink } from './profile-link';
 import { Separator } from './separator';
 
-interface AuthMenuProps {
-  isAuthorized: boolean;
-  isLoaded: boolean;
+interface AuthMenuProps extends AuthProps {
   variant?: LayoutViewType;
-  onLogout(): void;
+  onLogout: () => Promise<void>;
 }
 
 const containerVariants = cva('flex items-center', {
@@ -28,24 +27,24 @@ const containerVariants = cva('flex items-center', {
 });
 
 export const AuthMenu = ({
-  isAuthorized,
-  isLoaded,
   variant = LayoutView.HEADER,
+  isLoading,
+  isGuest,
+  isAuthenticated,
   onLogout,
 }: AuthMenuProps): React.JSX.Element | null => {
-  if (!isLoaded) return null;
+  if (isLoading) return null;
 
   return (
     <nav className={cn(containerVariants({ variant }))}>
-      {isAuthorized ? (
+      {isAuthenticated && (
         <>
           <ProfileLink variant={variant} />
           {variant === LayoutView.FOOTER && <Separator />}
           <LogoutButton variant={variant} onLogout={onLogout} />
         </>
-      ) : (
-        <AuthLinks variant={variant} />
       )}
+      {isGuest && <AuthLinks variant={variant} />}
     </nav>
   );
 };

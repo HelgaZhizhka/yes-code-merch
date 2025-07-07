@@ -6,15 +6,31 @@ import { Footer } from '@shared/ui/footer';
 import { Header } from '@shared/ui/header';
 import { Toaster } from '@shared/ui/sonner';
 
-export const Layout = (): React.JSX.Element => (
-  <>
-    <Header />
-    <main className="flex-1">
-      <Outlet />
-    </main>
-    <Footer />
-    <Toaster />
-    <TanStackRouterDevtools />
-    <TanStackQueryLayout />
-  </>
-);
+import { useAuth } from './hooks';
+
+export const Layout = (): React.JSX.Element => {
+  const { isLoading, isGuest, isAuthenticated, handleLogout } = useAuth();
+
+  return (
+    <>
+      <Header
+        isLoading={isLoading}
+        isGuest={isGuest}
+        isAuthenticated={isAuthenticated}
+        onLogout={handleLogout}
+      />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer
+        isLoading={isLoading}
+        isGuest={isGuest}
+        isAuthenticated={isAuthenticated}
+        onLogout={handleLogout}
+      />
+      <Toaster />
+      <TanStackRouterDevtools />
+      <TanStackQueryLayout />
+    </>
+  );
+};

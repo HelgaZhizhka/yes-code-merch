@@ -5,86 +5,95 @@ import { About } from '@pages/about';
 import { Cart } from '@pages/cart';
 import { Catalog } from '@pages/catalog';
 import { Home } from '@pages/home';
+import { Login } from '@pages/login';
 import { NotFound } from '@pages/not-found';
 import { Product } from '@pages/product';
+import { Profile } from '@pages/profile';
+import { Registration } from '@pages/registration';
 import { UIPreviewPage } from '@pages/ui-preview';
 
 import { ROUTES } from '@shared/config/routes';
 
-import {
-  ProtectedLogin,
-  ProtectedProfile,
-  ProtectedRegistration,
-} from './protected-routes';
+import { Layout } from '@/layouts';
 
-export const homeRoute = (parentRoute: RootRoute) =>
+import { authGuard } from './auth-guard';
+
+type FlexibleRouteType =
+  | RootRoute
+  | ReturnType<typeof pathlessLayoutRoute>
+  | ReturnType<typeof createRoute>;
+
+export const pathlessLayoutRoute = (parentRoute: RootRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    id: 'pathlessLayout',
+    component: Layout,
+  });
+
+export const homeRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.HOME,
     component: Home,
   });
 
-export const aboutRoute = (parentRoute: RootRoute) =>
+export const aboutRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.ABOUT,
     component: About,
   });
 
-export const cartRoute = (parentRoute: RootRoute) =>
+export const cartRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.CART,
     component: Cart,
   });
 
-export const categoryRoute = (parentRoute: RootRoute) =>
+export const categoryRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.CATEGORY,
     component: Catalog,
   });
 
-export const subCategoryRoute = (parentRoute: RootRoute) =>
+export const subCategoryRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.SUBCATEGORY,
     component: Catalog,
   });
 
-export const loginRoute = (parentRoute: RootRoute) =>
+export const loginRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.LOGIN,
-    component: ProtectedLogin,
+    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
+    component: Login,
   });
 
-export const registrationRoute = (parentRoute: RootRoute) =>
+export const registrationRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.REGISTRATION,
-    component: ProtectedRegistration,
+    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
+    component: Registration,
   });
 
-export const notFoundRoute = (parentRoute: RootRoute) =>
-  createRoute({
-    getParentRoute: () => parentRoute,
-    path: ROUTES.NOT_FOUND,
-    component: NotFound,
-  });
-
-export const productRoute = (parentRoute: RootRoute) =>
+export const productRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.PRODUCT,
     component: Product,
   });
 
-export const profileRoute = (parentRoute: RootRoute) =>
+export const profileRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.PROFILE,
-    component: ProtectedProfile,
+    beforeLoad: authGuard({ requireAuth: true, redirectTo: ROUTES.LOGIN }),
+    component: Profile,
   });
 
 export const uiReviewRoute = (parentRoute: RootRoute) =>
@@ -92,4 +101,11 @@ export const uiReviewRoute = (parentRoute: RootRoute) =>
     path: '/ui-preview',
     getParentRoute: () => parentRoute,
     component: UIPreviewPage,
+  });
+
+export const notFoundRoute = (parentRoute: RootRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.NOT_FOUND,
+    component: NotFound,
   });

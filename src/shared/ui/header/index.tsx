@@ -8,13 +8,20 @@ import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import { ThemeSwitcher } from '@shared/ui/theme-switcher';
-import { useAuth } from '@shared/viewer/hooks';
+import type { AuthProps } from '@shared/viewer';
 
 import { Banner } from './banner';
 
-export const Header = (): React.JSX.Element => {
-  const { isAuthorized, isLoaded, handleLogout } = useAuth();
+interface HeaderProps extends AuthProps {
+  onLogout(): Promise<void>;
+}
 
+export const Header = ({
+  isLoading,
+  isGuest,
+  isAuthenticated,
+  onLogout,
+}: HeaderProps): React.JSX.Element => {
   return (
     <header className="flex flex-col">
       <div className="flex justify-between items-center gap-25 p-5 pl-11 pr-11">
@@ -42,9 +49,10 @@ export const Header = (): React.JSX.Element => {
             <nav className="flex gap-4 grow-1 justify-end items-center text-2xl">
               <Link to={ROUTES.ABOUT}>About Us</Link>
               <AuthMenu
-                isAuthorized={isAuthorized}
-                isLoaded={isLoaded}
-                onLogout={handleLogout}
+                isLoading={isLoading}
+                isGuest={isGuest}
+                isAuthenticated={isAuthenticated}
+                onLogout={onLogout}
               />
               <Link to={ROUTES.CART} className="flex items-center">
                 <ShoppingCart

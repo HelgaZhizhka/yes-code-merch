@@ -5,8 +5,6 @@ import { ErrorPage } from '@pages/error';
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 import { Loader } from '@shared/ui/loader';
 
-import { Layout } from '@/layouts';
-
 import {
   aboutRoute,
   cartRoute,
@@ -14,6 +12,7 @@ import {
   homeRoute,
   loginRoute,
   notFoundRoute,
+  pathlessLayoutRoute,
   productRoute,
   profileRoute,
   registrationRoute,
@@ -24,22 +23,25 @@ import {
 const isDev = import.meta.env.DEV;
 
 const rootRoute = createRootRoute({
-  component: Layout,
   errorComponent: ErrorPage,
 });
 
+const layoutRoute = pathlessLayoutRoute(rootRoute);
+
 const routeTree = rootRoute.addChildren([
-  homeRoute(rootRoute),
-  aboutRoute(rootRoute),
-  loginRoute(rootRoute),
-  registrationRoute(rootRoute),
-  profileRoute(rootRoute),
-  categoryRoute(rootRoute),
-  subCategoryRoute(rootRoute),
-  productRoute(rootRoute),
-  cartRoute(rootRoute),
-  notFoundRoute(rootRoute),
+  layoutRoute.addChildren([
+    homeRoute(layoutRoute),
+    aboutRoute(layoutRoute),
+    loginRoute(layoutRoute),
+    registrationRoute(layoutRoute),
+    profileRoute(layoutRoute),
+    categoryRoute(layoutRoute),
+    subCategoryRoute(layoutRoute),
+    productRoute(layoutRoute),
+    cartRoute(layoutRoute),
+  ]),
   ...(isDev ? [uiReviewRoute(rootRoute)] : []),
+  notFoundRoute(rootRoute),
 ]);
 
 export const router = createRouter({

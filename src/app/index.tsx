@@ -2,16 +2,20 @@ import { RouterProvider } from '@tanstack/react-router';
 
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 import { router } from '@shared/routing';
-import { useInitSession } from '@shared/session/hooks';
-import { useTheme } from '@shared/theme/hooks';
+import { Loader } from '@shared/ui/loader';
+
+import { useAppInit } from './hooks';
 
 export const App = (): React.JSX.Element => {
-  useInitSession();
-  useTheme();
+  const { isAppReady, context } = useAppInit();
+
+  if (!isAppReady) {
+    return <Loader />;
+  }
 
   return (
     <TanStackQueryProvider.Provider>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} context={context} />
     </TanStackQueryProvider.Provider>
   );
 };
