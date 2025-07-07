@@ -27,6 +27,10 @@ Figma design: [Yes Code Merch Store](https://www.figma.com/design/a5X7CFN20TD3To
 - **ESLint**: A tool for identifying and fixing problems in JavaScript code.
 - **Prettier**: An opinionated code formatter.
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **pnpm**: A fast, disk space-efficient package manager.
+- **Netlify**: A platform for deploying and hosting web applications.
+- **GitHub Actions**: For continuous integration and deployment (CI/CD).
+- **StoryBook**: A tool for developing UI components in isolation.[Storybook](https://storybook.js.org/)
 
 ## Getting Started
 
