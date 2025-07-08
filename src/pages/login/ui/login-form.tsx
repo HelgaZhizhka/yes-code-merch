@@ -1,5 +1,8 @@
+import { Link } from '@tanstack/react-router';
+
 import { useLoginForm } from '@pages/login/hooks';
 
+import { ROUTES } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
 import {
   Form,
@@ -10,6 +13,7 @@ import {
   FormMessage,
 } from '@shared/ui/form';
 import { Input } from '@shared/ui/input';
+import { getLinkButtonClass } from '@shared/ui/link-button';
 import { PasswordInput } from '@shared/ui/password-input';
 
 export const LoginForm = (): React.JSX.Element => {
@@ -46,13 +50,28 @@ export const LoginForm = (): React.JSX.Element => {
           )}
         />
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isPending || !form.formState.isValid}
-        >
-          {isPending ? 'Logging in...' : 'Login'}
-        </Button>
+        <div className="space-y-2">
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isPending || !form.formState.isValid}
+          >
+            {isPending ? 'Logging in...' : 'Login'}
+          </Button>
+          <div className="flex items-center gap-4">
+            <div className="flex-1 h-px bg-border" />
+            or
+            <div className="flex-1 h-px bg-border" />
+          </div>
+          <Link
+            to={ROUTES.REGISTRATION}
+            className={
+              getLinkButtonClass('outline', 'sm') + ' w-full justify-center'
+            }
+          >
+            Sign up
+          </Link>
+        </div>
       </form>
     </Form>
   );
