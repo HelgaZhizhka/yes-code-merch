@@ -19,7 +19,7 @@ export const Layout = (): React.JSX.Element => {
         isAuthenticated={isAuthenticated}
         onLogout={handleLogout}
       />
-      <main className="flex-1">
+      <main className="flex flex-1">
         <Outlet />
       </main>
       <Footer
