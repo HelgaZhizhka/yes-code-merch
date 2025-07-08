@@ -17,10 +17,7 @@ import {
   profileRoute,
   registrationRoute,
   subCategoryRoute,
-  uiReviewRoute,
 } from './routes';
-
-const isDev = import.meta.env.DEV;
 
 const rootRoute = createRootRoute({
   errorComponent: ErrorPage,
@@ -40,7 +37,6 @@ const routeTree = rootRoute.addChildren([
     productRoute(layoutRoute),
     cartRoute(layoutRoute),
   ]),
-  ...(isDev ? [uiReviewRoute(rootRoute)] : []),
   notFoundRoute(rootRoute),
 ]);
 

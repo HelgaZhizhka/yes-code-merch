@@ -10,7 +10,6 @@ import { NotFound } from '@pages/not-found';
 import { Product } from '@pages/product';
 import { Profile } from '@pages/profile';
 import { Registration } from '@pages/registration';
-import { UIPreviewPage } from '@pages/ui-preview';
 
 import { ROUTES } from '@shared/config/routes';
 
@@ -94,13 +93,6 @@ export const profileRoute = (parentRoute: FlexibleRouteType) =>
     path: ROUTES.PROFILE,
     beforeLoad: authGuard({ requireAuth: true, redirectTo: ROUTES.LOGIN }),
     component: Profile,
-  });
-
-export const uiReviewRoute = (parentRoute: RootRoute) =>
-  createRoute({
-    path: '/ui-preview',
-    getParentRoute: () => parentRoute,
-    component: UIPreviewPage,
   });
 
 export const notFoundRoute = (parentRoute: RootRoute) =>
