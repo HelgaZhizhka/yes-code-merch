@@ -11,7 +11,7 @@ export const ViewerStatus = {
 
 export type ViewerStatusType = (typeof ViewerStatus)[keyof typeof ViewerStatus];
 
-export interface ViewerState {
+interface ViewerState {
   status: ViewerStatusType;
   session: Session | null;
   error: Error | null;

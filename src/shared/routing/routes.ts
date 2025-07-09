@@ -1,4 +1,4 @@
-import type { RootRoute } from '@tanstack/react-router';
+import type { AnyRoute, RootRoute } from '@tanstack/react-router';
 import { createRoute } from '@tanstack/react-router';
 
 import { About } from '@pages/about';
@@ -10,8 +10,11 @@ import { NotFound } from '@pages/not-found';
 import { Product } from '@pages/product';
 import { Profile } from '@pages/profile';
 import { Registration } from '@pages/registration';
+import { ConfirmStep } from '@pages/registration/ui/confirm-step';
+import { FirstStep } from '@pages/registration/ui/first-step';
+import { SecondStep } from '@pages/registration/ui/second-step';
 
-import { ROUTES } from '@shared/config/routes';
+import { REGISTRATION_STEPS, ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
 
@@ -27,6 +30,43 @@ export const pathlessLayoutRoute = (parentRoute: RootRoute) =>
     getParentRoute: () => parentRoute,
     id: 'pathlessLayout',
     component: Layout,
+  });
+
+export const registrationLayoutRoute = (parentRoute: FlexibleRouteType) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    id: 'registration-layout',
+    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
+    component: Registration,
+  });
+
+export const registrationFirstStepRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: REGISTRATION_STEPS.INIT,
+    component: FirstStep,
+  });
+
+export const registrationNextStepRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: REGISTRATION_STEPS.NEXT,
+    component: SecondStep,
+  });
+
+export const registrationConfirmStepRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: REGISTRATION_STEPS.CONFIRM,
+    component: ConfirmStep,
+  });
+
+export const loginRoute = (parentRoute: FlexibleRouteType) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.LOGIN,
+    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
+    component: Login,
   });
 
 export const homeRoute = (parentRoute: FlexibleRouteType) =>
@@ -62,22 +102,6 @@ export const subCategoryRoute = (parentRoute: FlexibleRouteType) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.SUBCATEGORY,
     component: Catalog,
-  });
-
-export const loginRoute = (parentRoute: FlexibleRouteType) =>
-  createRoute({
-    getParentRoute: () => parentRoute,
-    path: ROUTES.LOGIN,
-    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
-    component: Login,
-  });
-
-export const registrationRoute = (parentRoute: FlexibleRouteType) =>
-  createRoute({
-    getParentRoute: () => parentRoute,
-    path: ROUTES.REGISTRATION,
-    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
-    component: Registration,
   });
 
 export const productRoute = (parentRoute: FlexibleRouteType) =>

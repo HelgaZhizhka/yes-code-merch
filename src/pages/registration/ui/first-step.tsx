@@ -1,5 +1,3 @@
-import { useLoginForm } from '@pages/login/hooks';
-
 import { Button } from '@shared/ui/button';
 import {
   Form,
@@ -12,12 +10,20 @@ import {
 import { Input } from '@shared/ui/input';
 import { PasswordInput } from '@shared/ui/password-input';
 
-export const LoginForm = (): React.JSX.Element => {
-  const { form, onSubmit, isPending } = useLoginForm();
+import { RedirectLink } from './redirect-link';
+
+import { useFormStep } from '../hooks';
+
+export const FirstStep = (): React.JSX.Element => {
+  const { form, handleNextStep } = useFormStep();
+
+  const handleSubmit = (data: unknown) => {
+    handleNextStep(data);
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="email"
@@ -45,14 +51,24 @@ export const LoginForm = (): React.JSX.Element => {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isPending || !form.formState.isValid}
-        >
-          {isPending ? 'Logging in...' : 'Login'}
-        </Button>
+        <FormField
+          control={form.control}
+          name="confirm-password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <PasswordInput {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-col gap-4">
+          <Button type="submit">Continue</Button>
+        </div>
       </form>
+      <RedirectLink />
     </Form>
   );
 };

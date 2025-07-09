@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 
 import { Theme, type ThemeType } from '@shared/theme/types';
 
-export interface ThemeState {
+interface ThemeState {
   theme: ThemeType;
   setTheme(theme: ThemeType): void;
 }
