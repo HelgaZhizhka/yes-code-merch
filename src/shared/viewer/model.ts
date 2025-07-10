@@ -1,5 +1,6 @@
 import type { Session } from '@supabase/supabase-js';
-import { create } from 'zustand';
+
+import { createAppStore } from '@shared/lib/ create-app-store';
 
 export const ViewerStatus = {
   INITIAL: 'initial',
@@ -22,38 +23,43 @@ interface ViewerState {
   setError(error: Error): void;
 }
 
-export const useViewerStore = create<ViewerState>((set) => ({
-  status: ViewerStatus.INITIAL,
-  session: null,
-  error: null,
+export const useViewerStore = createAppStore<ViewerState>(
+  (set) => ({
+    status: ViewerStatus.INITIAL,
+    session: null,
+    error: null,
 
-  setSession: (session) =>
-    set({
-      session,
-      status: session ? ViewerStatus.AUTHENTICATED : ViewerStatus.GUEST,
-      error: null,
-    }),
+    setSession: (session) =>
+      set({
+        session,
+        status: session ? ViewerStatus.AUTHENTICATED : ViewerStatus.GUEST,
+        error: null,
+      }),
 
-  clearSession: () =>
-    set({
-      session: null,
-      status: ViewerStatus.GUEST,
-      error: null,
-    }),
+    clearSession: () =>
+      set({
+        session: null,
+        status: ViewerStatus.GUEST,
+        error: null,
+      }),
 
-  startLoading: () =>
-    set({
-      status: ViewerStatus.LOADING,
-    }),
+    startLoading: () =>
+      set({
+        status: ViewerStatus.LOADING,
+      }),
 
-  setError: (error: Error) => {
-    set({
-      status: ViewerStatus.ERROR,
-      session: null,
-      error,
-    });
-  },
-}));
+    setError: (error: Error) => {
+      set({
+        status: ViewerStatus.ERROR,
+        session: null,
+        error,
+      });
+    },
+  }),
+  {
+    name: 'viewer',
+  }
+);
 
 export const setSession = (session: Session | null) =>
   useViewerStore.getState().setSession(session);

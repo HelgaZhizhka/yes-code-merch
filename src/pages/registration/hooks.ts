@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { ROUTES, STEP_TO_ROUTE } from '@shared/config/routes';
 import { useRegister } from '@shared/viewer/hooks';
 
-import { useFormStore } from './model/store';
+import { useFormStore } from './model';
 
 export const useSubmitForm = () => {
   const navigate = useNavigate();
