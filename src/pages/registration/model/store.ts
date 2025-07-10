@@ -1,7 +1,5 @@
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-
-import type { RegisterDTO } from '@/shared/api/auth/interfaces';
+import type { RegisterDTO } from '@shared/api/auth/interfaces';
+import { createAppStore } from '@shared/lib/ create-app-store';
 
 interface RegistrationFormState {
   currentStep: number;
@@ -27,29 +25,23 @@ const getStorageData = (): RegistrationFormState | null => {
   }
 };
 
-export const useRegistrationFormStore = create<RegistrationFormState>()(
-  devtools(
-    persist(
-      (set, get) => ({
-        currentStep: INIT_STEP,
-        formData: null,
-        setCurrentStep: (step: number) => set({ currentStep: step }),
-        setFormData: (data: RegisterDTO) =>
-          set((state: RegistrationFormState) => ({
-            formData: { ...state.formData, ...data },
-          })),
-        resetForm: () => set({ currentStep: 1, formData: null }),
-        getLatestState: () => getStorageData() || get(),
-      }),
-      {
-        name: 'registration-form-storage',
-        partialize: (state: RegistrationFormState) => ({
-          formData: state.formData,
-        }),
-      }
-    ),
-    {
-      name: 'registration-form-storage',
-    }
-  )
+export const useFormStore = createAppStore<RegistrationFormState>(
+  (set, get) => ({
+    currentStep: INIT_STEP,
+    formData: null,
+    setCurrentStep: (step: number) => set({ currentStep: step }),
+    setFormData: (data: RegisterDTO) =>
+      set((state: RegistrationFormState) => ({
+        formData: { ...state.formData, ...data },
+      })),
+    resetForm: () => set({ currentStep: 1, formData: null }),
+    getLatestState: () => getStorageData() || get(),
+  }),
+  {
+    name: 'registration-form-storage',
+    enablePersist: true,
+    partialize: (state: RegistrationFormState) => ({
+      formData: state.formData,
+    }),
+  }
 );

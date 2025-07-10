@@ -1,83 +1,79 @@
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
-import type { RegisterDTO } from '@shared/api/auth/interfaces';
-import { STEP_TO_ROUTE } from '@shared/config/routes';
+import { ROUTES, STEP_TO_ROUTE } from '@shared/config/routes';
 import { useRegister } from '@shared/viewer/hooks';
 
-import { useRegistrationFormStore } from './model/store';
+import { useFormStore } from './model/store';
 
-export const useRegistrationForm = () => {
+export const useSubmitForm = () => {
+  const navigate = useNavigate();
   const { mutate: register, isPending, error } = useRegister();
+  const { formData, resetForm } = useFormStore();
 
-  const initProfile: RegisterDTO = {
-    email: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    title: '',
-    dateOfBirth: '',
-    company: '',
-    shippingAddresses: [],
-    billingAddresses: [],
-    useShippingAsBilling: false,
-  };
+  const handleFormSubmit = async () => {
+    console.log('submit registration');
+    if (!formData) return;
 
-  const [profile, setProfile] = useState<RegisterDTO>(initProfile);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!profile) return;
-
-    register(profile);
+    register(formData, {
+      onError: (error) => {
+        toast.error(error.message);
+      },
+      onSuccess: () => {
+        toast.success('Registration successful');
+        navigate({ to: ROUTES.HOME });
+      },
+    });
+    resetForm();
   };
 
   return {
-    handleSubmit,
+    handleFormSubmit,
     isPending,
     error,
-    profile,
-    setProfile,
   };
 };
 
-export const useFormStep = (): {
+interface FormStep {
   currentStep: number;
-  form: ReturnType<typeof useForm>;
-  handleNextStep: (data: unknown) => void;
-  handleBack: () => void;
-} => {
+  setCurrentStep(step: number): void;
+  handleNextStep(): void;
+  handleBack(): void;
+  handleConfirm(): void;
+}
+
+export const useFormStep = (): FormStep => {
   const navigate = useNavigate();
-  const { currentStep, setCurrentStep, setFormData, getLatestState } =
-    useRegistrationFormStore();
+  //TODO handle form data with React hook forms
+  const { currentStep, setCurrentStep } = useFormStore();
+  const { handleFormSubmit } = useSubmitForm();
 
-  const form = useForm({
-    mode: 'onChange',
-    defaultValues: getLatestState().formData,
-  });
-
-  const handleNextStep = (data: unknown) => {
+  const handleNextStep = () => {
     const nextStep = currentStep + 1;
-    setFormData(data);
+    // TODO should implement setFormData(data);
+    console.log('next step', nextStep);
     setCurrentStep(nextStep);
     navigate({ to: STEP_TO_ROUTE[nextStep] });
   };
 
   const handleBack = () => {
     const prevStep = currentStep - 1;
-    const currentValues = form.getValues();
-    setFormData(currentValues);
+    console.log('prev step', prevStep);
     setCurrentStep(prevStep);
+    // TODO should implement setFormData(data);
     navigate({ to: STEP_TO_ROUTE[prevStep] });
   };
 
+  const handleConfirm = () => {
+    handleFormSubmit();
+    console.log('confirm step');
+  };
+
   return {
-    form,
     handleNextStep,
     handleBack,
     currentStep,
+    setCurrentStep,
+    handleConfirm,
   };
 };
