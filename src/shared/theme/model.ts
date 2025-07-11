@@ -1,4 +1,4 @@
-import { createAppStore } from '@shared/lib/ create-app-store';
+import { createAppStore } from '@shared/lib/create-app-store';
 import { Theme, type ThemeType } from '@shared/theme/types';
 
 interface ThemeState {

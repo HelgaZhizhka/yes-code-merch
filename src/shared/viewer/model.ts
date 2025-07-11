@@ -1,6 +1,6 @@
 import type { Session } from '@supabase/supabase-js';
 
-import { createAppStore } from '@shared/lib/ create-app-store';
+import { createAppStore } from '@shared/lib/create-app-store';
 
 export const ViewerStatus = {
   INITIAL: 'initial',

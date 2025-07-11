@@ -1,5 +1,5 @@
 import type { RegisterDTO } from '@shared/api/auth/interfaces';
-import { createAppStore } from '@shared/lib/ create-app-store';
+import { createAppStore } from '@shared/lib/create-app-store';
 
 interface RegistrationFormState {
   currentStep: number;
