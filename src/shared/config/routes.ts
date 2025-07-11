@@ -1,7 +1,6 @@
 export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
-  REGISTRATION: '/registration',
   ABOUT: '/about',
   PROFILE: '/profile',
   CATEGORY: '/category/$categoryId',
@@ -10,3 +9,17 @@ export const ROUTES = {
   CART: '/cart',
   NOT_FOUND: '*',
 } as const;
+
+export enum REGISTRATION_STEPS {
+  INIT = '/registration',
+  NEXT = '/second-step',
+  CONFIRM = '/confirm-step',
+}
+
+export const STEP_TO_ROUTE: Record<number, REGISTRATION_STEPS> = {
+  1: REGISTRATION_STEPS.INIT,
+  2: REGISTRATION_STEPS.NEXT,
+  3: REGISTRATION_STEPS.CONFIRM,
+};
+
+export type ROUTES_KEYS = (typeof ROUTES)[keyof typeof ROUTES];

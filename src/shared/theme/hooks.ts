@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 
-import { useThemeStore } from '@shared/theme/model/store';
+import { setTheme, useThemeValue } from '@shared/theme/model';
 import { Theme } from '@shared/theme/types';
 
 export const useTheme = () => {
-  const theme = useThemeStore((state) => state.theme);
-  const setTheme = useThemeStore((state) => state.setTheme);
+  const theme = useThemeValue();
 
   useEffect(() => {
     document.documentElement.classList.toggle(Theme.DARK, theme === Theme.DARK);

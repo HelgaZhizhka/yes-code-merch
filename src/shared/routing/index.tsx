@@ -15,7 +15,10 @@ import {
   pathlessLayoutRoute,
   productRoute,
   profileRoute,
-  registrationRoute,
+  registrationConfirmStepRoute,
+  registrationFirstStepRoute,
+  registrationLayoutRoute,
+  registrationNextStepRoute,
   subCategoryRoute,
 } from './routes';
 
@@ -24,13 +27,18 @@ const rootRoute = createRootRoute({
 });
 
 const layoutRoute = pathlessLayoutRoute(rootRoute);
+const registrationLayout = registrationLayoutRoute(layoutRoute);
 
 const routeTree = rootRoute.addChildren([
   layoutRoute.addChildren([
     homeRoute(layoutRoute),
     aboutRoute(layoutRoute),
     loginRoute(layoutRoute),
-    registrationRoute(layoutRoute),
+    registrationLayout.addChildren([
+      registrationFirstStepRoute(registrationLayout),
+      registrationNextStepRoute(registrationLayout),
+      registrationConfirmStepRoute(registrationLayout),
+    ]),
     profileRoute(layoutRoute),
     categoryRoute(layoutRoute),
     subCategoryRoute(layoutRoute),
