@@ -10,3 +10,7 @@ export const SaleCategoryName = 'T-Shirts';
 export const RpcFunctions = {
   registration: 'complete_registration',
 } as const;
+export const MockCredentials = {
+  email: 'mail@mail.com',
+  password: 'Test123!',
+};

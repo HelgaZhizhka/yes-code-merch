@@ -2,12 +2,11 @@ import { describe, it, expect } from 'vitest';
 
 import { loginSchema } from '@pages/login/model/validation-schema';
 
+import { MockCredentials } from '@shared/config';
+
 describe('loginSchema', () => {
   it('passes with valid email and password', () => {
-    const result = loginSchema.safeParse({
-      email: 'mail@mail.com',
-      password: 'Password1!',
-    });
+    const result = loginSchema.safeParse(MockCredentials);
     expect(result.success).toBe(true);
   });
 
@@ -27,8 +26,8 @@ describe('loginSchema', () => {
 
   it('fails with invalid email', () => {
     const result = loginSchema.safeParse({
-      email: 'mail',
-      password: 'Password1!',
+      email: MockCredentials.email[0],
+      password: MockCredentials.password,
     });
     expect(result.success).toBe(false);
     if (!result.success) {
@@ -40,8 +39,8 @@ describe('loginSchema', () => {
 
   it('fails with short password', () => {
     const result = loginSchema.safeParse({
-      email: 'mail@mail.com',
-      password: 'P',
+      email: MockCredentials.email,
+      password: MockCredentials.password[0],
     });
     expect(result.success).toBe(false);
     if (!result.success) {

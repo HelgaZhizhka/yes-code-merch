@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { useLoginForm } from '@pages/login/hooks';
 
+import { MockCredentials } from '@shared/config';
+
 const loginMock = vi.fn();
 
 vi.mock('@shared/viewer/hooks', () => ({
@@ -19,10 +21,7 @@ vi.mock('@tanstack/react-router', () => ({
 describe('useLoginForm', () => {
   it('calls login with data', async () => {
     const { result } = renderHook(() => useLoginForm());
-    const data = {
-      email: 'mail@mail.com',
-      password: 'Password1!',
-    };
+    const data = MockCredentials;
 
     await act(async () => {
       result.current.onSubmit(data);
