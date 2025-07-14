@@ -15,7 +15,8 @@ export const AuthLinks = ({
     <Link
       to={ROUTES.LOGIN}
       className={getLinkButtonClass(
-        variant === LayoutView.FOOTER ? 'white' : 'outline'
+        variant === LayoutView.FOOTER ? 'white' : 'outline',
+        variant === LayoutView.FOOTER ? 'sm' : 'xl'
       )}
     >
       Sign in
@@ -24,7 +25,8 @@ export const AuthLinks = ({
     <Link
       to={REGISTRATION_STEPS.INIT}
       className={getLinkButtonClass(
-        variant === LayoutView.FOOTER ? 'white' : 'primary'
+        variant === LayoutView.FOOTER ? 'white' : 'primary',
+        variant === LayoutView.FOOTER ? 'sm' : 'xl'
       )}
     >
       Sign up
