@@ -103,7 +103,7 @@ export const EmailValidation: Story = {
           <Input
             name="email"
             type="email"
-            value={value as string}
+            value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Enter email to validate"
           />
@@ -122,7 +122,7 @@ export const PasswordStrength: Story = {
         schema={registrationSchema.shape.password}
         renderInput={(value, onChange) => (
           <PasswordField
-            value={value as string}
+            value={value}
             onChange={(v) => {
               if (typeof v === 'string') {
                 onChange(v);

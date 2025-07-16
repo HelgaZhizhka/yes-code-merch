@@ -62,14 +62,10 @@ const getStepFromUrl = (url: string): number => {
 };
 
 const getSchemaForStep = (step: number) => {
-  switch (step) {
-    case 1: {
-      return initStepSchema;
-    }
-    default: {
-      return registrationSchema;
-    }
+  if (step === 1) {
+    return initStepSchema;
   }
+  return registrationSchema;
 };
 
 export const useFormStep = (): FormStep => {
