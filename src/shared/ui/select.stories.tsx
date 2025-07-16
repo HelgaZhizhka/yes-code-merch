@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { COUNTRIES } from '@shared/config';
+
 import {
   Select,
   SelectContent,
@@ -43,45 +45,11 @@ export const WithScrolling: Story = {
         <SelectValue placeholder="Select country" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="gr">Germany</SelectItem>
-        <SelectItem value="fr">France</SelectItem>
-        <SelectItem value="it">Italy</SelectItem>
-        <SelectItem value="es">Spain</SelectItem>
-        <SelectItem value="pl">Poland</SelectItem>
-        <SelectItem value="pt">Portugal</SelectItem>
-        <SelectItem value="bg">Bulgaria</SelectItem>
-        <SelectItem value="ro">Romania</SelectItem>
-        <SelectItem value="rs">Serbia</SelectItem>
-        <SelectItem value="hr">Croatia</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="tr">Turkey</SelectItem>
-        <SelectItem value="ba">Bosnia and Herzegovina</SelectItem>
+        {Object.entries(COUNTRIES).map(([code, name]) => (
+          <SelectItem key={code} value={code}>
+            {name}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   ),
