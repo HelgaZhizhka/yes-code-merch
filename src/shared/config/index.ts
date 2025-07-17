@@ -11,6 +11,6 @@ export const RpcFunctions = {
   registration: 'complete_registration',
 } as const;
 export const MockCredentials = {
-  email: process.env.MOCK_EMAIL ?? '',
-  password: process.env.MOCK_PASSWORD ?? '',
+  email: import.meta.env.MOCK_EMAIL ?? '',
+  password: import.meta.env.MOCK_PASSWORD ?? '',
 };
