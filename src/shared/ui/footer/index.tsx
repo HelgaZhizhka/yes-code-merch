@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router';
 import { Mail, MessageCircle, Phone } from 'lucide-react';
 
 import Logo from '@shared/assets/logo.svg';
-import { TODAY } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
 import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
@@ -13,6 +12,8 @@ import type { AuthProps } from '@shared/viewer';
 interface FooterProps extends AuthProps {
   onLogout(): Promise<void>;
 }
+
+const FULL_YEAR = new Date().getFullYear();
 
 export const Footer = ({
   isLoading,
@@ -80,7 +81,7 @@ export const Footer = ({
       </div>
 
       <div className="bg-dark-background text-violet-foreground text-center py-3 text-xs">
-        © {TODAY.getFullYear()}. All rights reserved.
+        © {FULL_YEAR}. All rights reserved.
       </div>
     </footer>
   );

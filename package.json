@@ -25,7 +25,7 @@
     "lint:styles": "stylelint \"**/*.css\"",
     "lint:styles:fix": "stylelint \"**/*.css\" --fix",
     "gen:types": "supabase gen types typescript --project-id tlnboeuoaezawexbrblg --schema public > src/shared/api/database.types.ts",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "NODE_NO_WARNINGS=1 storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {

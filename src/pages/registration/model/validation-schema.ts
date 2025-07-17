@@ -1,7 +1,11 @@
 import PostalCodes from 'postal-codes-js';
 import { z } from 'zod';
 
-import { COUNTRIES, MIN_AGE, TODAY } from '@shared/config';
+import { COUNTRIES } from '@shared/api/countries';
+
+export const MIN_AGE = 1;
+export const MAX_AGE = 120;
+export const TODAY = new Date();
 
 export const PASSWORD_PATTERNS = {
   digits: /\d/,
@@ -17,7 +21,35 @@ export const VALIDATION_REGEX = {
   streetNumberPattern: /^\d+[a-zA-Z]?$/,
 };
 
-export type PasswordStrength = 'low' | 'medium' | 'high';
+export const PASSWORD_STRENGTH = {
+  LOW: 'low',
+  MEDIUM: 'medium',
+  HIGH: 'high',
+} as const;
+
+export type PasswordStrength =
+  (typeof PASSWORD_STRENGTH)[keyof typeof PASSWORD_STRENGTH];
+
+export const PASSWORD_STRENGTH_MESSAGES: Record<PasswordStrength, string> = {
+  [PASSWORD_STRENGTH.LOW]:
+    'Weak password: Add a mix of digits, lowercase and uppercase letters, and symbols',
+  [PASSWORD_STRENGTH.MEDIUM]:
+    "Medium strength: Add what's missing (uppercase letters, symbols) for stronger protection",
+  [PASSWORD_STRENGTH.HIGH]: 'Strong password: Good job!',
+};
+
+export const getPasswordStrengthColor = (
+  strength: PasswordStrength
+): string => {
+  const strengthColors: Record<PasswordStrength | 'default', string> = {
+    [PASSWORD_STRENGTH.LOW]: 'bg-red-500',
+    [PASSWORD_STRENGTH.MEDIUM]: 'bg-yellow-500',
+    [PASSWORD_STRENGTH.HIGH]: 'bg-green-500',
+    default: 'bg-gray-200',
+  };
+
+  return strengthColors[strength] ?? strengthColors.default;
+};
 
 export const getPasswordStrength = (password: string): PasswordStrength => {
   const hasDigits = PASSWORD_PATTERNS.digits.test(password);
@@ -33,15 +65,15 @@ export const getPasswordStrength = (password: string): PasswordStrength => {
   ].filter(Boolean).length;
 
   if (hasDigits && !hasLowercase && !hasUppercase && !hasSymbols) {
-    return 'low';
+    return PASSWORD_STRENGTH.LOW;
   } else if (hasDigits && (hasLowercase || hasUppercase) && !hasSymbols) {
-    return 'medium';
+    return PASSWORD_STRENGTH.MEDIUM;
   } else if (hasDigits && hasLowercase && hasUppercase && hasSymbols) {
-    return 'high';
+    return PASSWORD_STRENGTH.HIGH;
   } else if (charTypesCount >= 3) {
-    return 'medium';
+    return PASSWORD_STRENGTH.MEDIUM;
   } else {
-    return 'low';
+    return PASSWORD_STRENGTH.LOW;
   }
 };
 
@@ -50,7 +82,7 @@ export const getPasswordFeedback = (
 ): { strength: PasswordStrength; message: string } => {
   if (!password) {
     return {
-      strength: 'low',
+      strength: PASSWORD_STRENGTH.LOW,
       message:
         'Password must be at least 8 characters and include digits, lowercase and uppercase letters, and symbols',
     };
@@ -60,23 +92,23 @@ export const getPasswordFeedback = (
 
   const isTooShort = password.length < 8;
 
-  if (isTooShort && strength === 'high') {
-    strength = 'medium';
+  if (isTooShort && strength === PASSWORD_STRENGTH.HIGH) {
+    strength = PASSWORD_STRENGTH.MEDIUM;
   }
 
   let message = '';
   switch (strength) {
-    case 'low': {
+    case PASSWORD_STRENGTH.LOW: {
       message =
         'Weak password: Add a mix of digits, lowercase and uppercase letters, and symbols';
       break;
     }
-    case 'medium': {
+    case PASSWORD_STRENGTH.MEDIUM: {
       message =
         "Medium strength: Add what's missing (uppercase letters, symbols) for stronger protection";
       break;
     }
-    case 'high': {
+    case PASSWORD_STRENGTH.HIGH: {
       message = 'Strong password: Good job!';
       break;
     }

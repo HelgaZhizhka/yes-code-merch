@@ -3,7 +3,7 @@ import type { JSX, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import { COUNTRIES, MIN_AGE } from '@shared/config';
+import { COUNTRIES } from '@shared/api/countries';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
 import { Input } from '@shared/ui/input';
@@ -231,12 +231,6 @@ export const PersonalInfo: Story = {
 
 export const DateOfBirthValidation: Story = {
   render: () => {
-    const today = new Date();
-    const validDate = new Date(today);
-    validDate.setFullYear(today.getFullYear() - (MIN_AGE + 5));
-
-    const invalidDate = new Date(today);
-    invalidDate.setFullYear(today.getFullYear() - (MIN_AGE - 1));
     return (
       <div className="space-y-6">
         <InteractiveValidationDemo

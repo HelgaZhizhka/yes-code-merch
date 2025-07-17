@@ -2,8 +2,11 @@ import { useState } from 'react';
 
 import { PasswordInput } from '@shared/ui/password-input';
 
-import type { PasswordStrength } from '../model/validation-schema';
-import { getPasswordFeedback } from '../model/validation-schema';
+import {
+  PASSWORD_STRENGTH,
+  getPasswordFeedback,
+  getPasswordStrengthColor,
+} from '../model/validation-schema';
 
 interface PasswordFieldProps {
   value: string;
@@ -11,22 +14,6 @@ interface PasswordFieldProps {
   onChange(value: string | React.ChangeEvent<HTMLInputElement>): void;
 }
 
-const getStrengthColor = (strength: PasswordStrength): string => {
-  switch (strength) {
-    case 'low': {
-      return 'bg-red-500';
-    }
-    case 'medium': {
-      return 'bg-yellow-500';
-    }
-    case 'high': {
-      return 'bg-green-500';
-    }
-    default: {
-      return 'bg-gray-200';
-    }
-  }
-};
 export const PasswordField = ({
   value,
   onChange,
@@ -52,13 +39,13 @@ export const PasswordField = ({
         <div className="space-y-2">
           <div className="flex gap-1 h-1">
             <div
-              className={`h-full w-1/3 ${strength === 'low' || strength === 'medium' || strength === 'high' ? getStrengthColor('low') : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === PASSWORD_STRENGTH.LOW || strength === PASSWORD_STRENGTH.MEDIUM || strength === PASSWORD_STRENGTH.HIGH ? getPasswordStrengthColor(PASSWORD_STRENGTH.LOW) : 'bg-gray-200'}`}
             ></div>
             <div
-              className={`h-full w-1/3 ${strength === 'medium' || strength === 'high' ? getStrengthColor('medium') : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === PASSWORD_STRENGTH.MEDIUM || strength === PASSWORD_STRENGTH.HIGH ? getPasswordStrengthColor(PASSWORD_STRENGTH.MEDIUM) : 'bg-gray-200'}`}
             ></div>
             <div
-              className={`h-full w-1/3 ${strength === 'high' ? getStrengthColor('high') : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === PASSWORD_STRENGTH.HIGH ? getPasswordStrengthColor(PASSWORD_STRENGTH.HIGH) : 'bg-gray-200'}`}
             ></div>
           </div>
           <p className="text-sm text-gray-600">{message}</p>

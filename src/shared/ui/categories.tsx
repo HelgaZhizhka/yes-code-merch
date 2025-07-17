@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { cva } from 'class-variance-authority';
 import type React from 'react';
 
-import { CATEGORIES } from '@shared/config';
+import { CATEGORIES } from '@shared/api/categories';
 import { ROUTES } from '@shared/config/routes';
 import { cn } from '@shared/lib/utils';
 import { LayoutView, type LayoutViewType } from '@shared/types';
