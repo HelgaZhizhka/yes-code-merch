@@ -96,23 +96,8 @@ export const getPasswordFeedback = (
     strength = PASSWORD_STRENGTH.MEDIUM;
   }
 
-  let message = '';
-  switch (strength) {
-    case PASSWORD_STRENGTH.LOW: {
-      message =
-        'Weak password: Add a mix of digits, lowercase and uppercase letters, and symbols';
-      break;
-    }
-    case PASSWORD_STRENGTH.MEDIUM: {
-      message =
-        "Medium strength: Add what's missing (uppercase letters, symbols) for stronger protection";
-      break;
-    }
-    case PASSWORD_STRENGTH.HIGH: {
-      message = 'Strong password: Good job!';
-      break;
-    }
-  }
+  let message =
+    PASSWORD_STRENGTH_MESSAGES[strength] ?? 'Unknown password strength';
 
   if (isTooShort) {
     message = `${message} (Password must be at least 8 characters)`;
