@@ -20,6 +20,8 @@ import {
   registrationLayoutRoute,
   registrationNextStepRoute,
   subCategoryRoute,
+  forgotPasswordRoute,
+  resetPasswordRoute,
 } from './routes';
 
 const rootRoute = createRootRoute({
@@ -34,6 +36,8 @@ const routeTree = rootRoute.addChildren([
     homeRoute(layoutRoute),
     aboutRoute(layoutRoute),
     loginRoute(layoutRoute),
+    forgotPasswordRoute(layoutRoute),
+    resetPasswordRoute(layoutRoute),
     registrationLayout.addChildren([
       registrationFirstStepRoute(registrationLayout),
       registrationNextStepRoute(registrationLayout),

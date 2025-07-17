@@ -4,6 +4,7 @@ import { createRoute } from '@tanstack/react-router';
 import { About } from '@pages/about';
 import { Cart } from '@pages/cart';
 import { Catalog } from '@pages/catalog';
+import { ForgotPassword } from '@pages/forgot-password';
 import { Home } from '@pages/home';
 import { Login } from '@pages/login';
 import { NotFound } from '@pages/not-found';
@@ -13,6 +14,7 @@ import { Registration } from '@pages/registration';
 import { ConfirmStep } from '@pages/registration/ui/confirm-step';
 import { FirstStep } from '@pages/registration/ui/first-step';
 import { SecondStep } from '@pages/registration/ui/second-step';
+import { ResetPassword } from '@pages/reset-password';
 
 import { REGISTRATION_STEPS, ROUTES } from '@shared/config/routes';
 
@@ -67,6 +69,22 @@ export const loginRoute = (parentRoute: FlexibleRouteType) =>
     path: ROUTES.LOGIN,
     beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
     component: Login,
+  });
+
+export const forgotPasswordRoute = (parentRoute: FlexibleRouteType) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.FORGOT_PASSWORD,
+    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
+    component: ForgotPassword,
+  });
+
+export const resetPasswordRoute = (parentRoute: FlexibleRouteType) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.RESET_PASSWORD,
+    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
+    component: ResetPassword,
   });
 
 export const homeRoute = (parentRoute: FlexibleRouteType) =>
