@@ -4,7 +4,7 @@ import { fn } from 'storybook/test';
 import { Checkbox } from './checkbox';
 
 const meta = {
-  title: 'shared/ui/forms/checkbox',
+  title: 'shared/ui/form/checkbox',
   component: Checkbox,
   parameters: {
     layout: 'centered',

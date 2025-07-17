@@ -2,7 +2,10 @@ import type { Session } from '@supabase/supabase-js';
 
 import type { Database } from '@shared/api/database.types';
 import { supabase } from '@shared/api/supabase-client';
-import { RpcFunctions } from '@shared/config';
+
+export const RpcFunctions = {
+  registration: 'complete_registration',
+} as const;
 
 import type {
   LoginDTO,

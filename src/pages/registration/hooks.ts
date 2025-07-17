@@ -1,13 +1,20 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { ROUTES, STEP_TO_ROUTE } from '@shared/config/routes';
 import { useRegister } from '@shared/viewer/hooks';
 
-import { INIT_STEP, useFormStore } from './model';
+import type { RegisterDTO } from '@/shared/api/auth/interfaces';
 
-// TODO handle form data with React hook forms and step validation
+import { INIT_STEP, useFormStore } from './model';
+import {
+  initStepSchema,
+  registrationSchema,
+  type InitStepType,
+} from './model/validation-schema';
 
 export const useSubmitForm = () => {
   const navigate = useNavigate();
@@ -17,7 +24,7 @@ export const useSubmitForm = () => {
   const handleFormSubmit = async () => {
     if (!formData) return;
 
-    register(formData, {
+    register(formData as RegisterDTO, {
       onError: (error) => {
         toast.error(error.message);
       },
@@ -37,6 +44,7 @@ export const useSubmitForm = () => {
 };
 
 interface FormStep {
+  form: ReturnType<typeof useForm<InitStepType>>;
   currentStep: number;
   setCurrentStep(step: number): void;
   handleNextStep(): void;
@@ -53,10 +61,21 @@ const getStepFromUrl = (url: string): number => {
   return INIT_STEP;
 };
 
+const getSchemaForStep = (step: number) => {
+  switch (step) {
+    case 1: {
+      return initStepSchema;
+    }
+    default: {
+      return registrationSchema;
+    }
+  }
+};
+
 export const useFormStep = (): FormStep => {
   const navigate = useNavigate();
   const routerState = useRouterState();
-  const { currentStep, setCurrentStep } = useFormStore();
+  const { currentStep, setCurrentStep, formData, setFormData } = useFormStore();
   const { handleFormSubmit } = useSubmitForm();
 
   useEffect(() => {
@@ -68,15 +87,32 @@ export const useFormStep = (): FormStep => {
     }
   }, [routerState.location.pathname, currentStep, setCurrentStep]);
 
+  const schema = getSchemaForStep(currentStep);
+
+  const form = useForm<InitStepType>({
+    resolver: zodResolver(schema),
+    defaultValues: formData ?? {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+    mode: 'onChange',
+    criteriaMode: 'all',
+  });
+
   const handleNextStep = () => {
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
+    const values = form.getValues();
+    setFormData(values);
     navigate({ to: STEP_TO_ROUTE[nextStep] });
   };
 
   const handleBack = () => {
     const prevStep = currentStep - 1;
     setCurrentStep(prevStep);
+    const values = form.getValues();
+    setFormData(values);
     navigate({ to: STEP_TO_ROUTE[prevStep] });
   };
 
@@ -85,6 +121,7 @@ export const useFormStep = (): FormStep => {
   };
 
   return {
+    form,
     handleNextStep,
     handleBack,
     currentStep,

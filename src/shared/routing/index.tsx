@@ -16,7 +16,7 @@ import {
   productRoute,
   profileRoute,
   registrationConfirmStepRoute,
-  registrationFirstStepRoute,
+  registrationInitStepRoute,
   registrationLayoutRoute,
   registrationNextStepRoute,
   subCategoryRoute,
@@ -39,7 +39,7 @@ const routeTree = rootRoute.addChildren([
     forgotPasswordRoute(layoutRoute),
     resetPasswordRoute(layoutRoute),
     registrationLayout.addChildren([
-      registrationFirstStepRoute(registrationLayout),
+      registrationInitStepRoute(registrationLayout),
       registrationNextStepRoute(registrationLayout),
       registrationConfirmStepRoute(registrationLayout),
     ]),

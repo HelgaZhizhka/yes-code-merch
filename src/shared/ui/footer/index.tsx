@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { Mail, MessageCircle, Phone } from 'lucide-react';
 
 import Logo from '@shared/assets/logo.svg';
+import { TODAY } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
 import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
@@ -79,7 +80,7 @@ export const Footer = ({
       </div>
 
       <div className="bg-dark-background text-violet-foreground text-center py-3 text-xs">
-        © {new Date().getFullYear()}. All rights reserved.
+        © {TODAY.getFullYear()}. All rights reserved.
       </div>
     </footer>
   );

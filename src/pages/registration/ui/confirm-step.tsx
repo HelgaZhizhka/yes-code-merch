@@ -12,7 +12,6 @@ export const ConfirmStep = (): React.JSX.Element => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h2>Confirm form</h2>
       <div className="flex flex-col gap-4">
         <Button type="submit">Sign up</Button>
         <Button type="button" variant="outline" onClick={handleBack}>

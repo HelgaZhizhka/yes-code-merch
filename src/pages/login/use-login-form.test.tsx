@@ -1,9 +1,9 @@
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useLoginForm } from '@pages/login/hooks';
 
-import { MockCredentials } from '@shared/config';
+import { MockCredentials } from '@shared/config/test-config';
 
 const loginMock = vi.fn();
 
