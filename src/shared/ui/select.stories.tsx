@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { COUNTRIES } from '@shared/api/countries';
+import { useCountries } from '@shared/countries';
 
 import {
   Select,
@@ -39,20 +39,24 @@ export const Default: Story = {
 };
 
 export const WithScrolling: Story = {
-  render: () => (
-    <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select country" />
-      </SelectTrigger>
-      <SelectContent>
-        {Object.entries(COUNTRIES).map(([code, name]) => (
-          <SelectItem key={code} value={code}>
-            {name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  ),
+  render: () => {
+    const countries = useCountries();
+
+    return (
+      <Select>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select country" />
+        </SelectTrigger>
+        <SelectContent>
+          {countries.map((country) => (
+            <SelectItem key={country.code} value={country.code}>
+              {country.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    );
+  },
 };
 
 export const Small: Story = {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { PasswordInput } from '@shared/ui/password-input';
 
@@ -24,13 +24,16 @@ export const PasswordField = ({
 
   const showFeedback = (value?.length ?? 0) > 0 || isFocused;
 
+  const handleFocus = useCallback(() => setIsFocused(true), []);
+  const handleBlur = useCallback(() => setIsFocused(false), []);
+
   return (
     <div className="space-y-2">
       <PasswordInput
         value={value}
         onChange={onChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         className={error ? 'border-red-500' : ''}
         placeholder="Enter your password"
       />

@@ -1,8 +1,6 @@
 import PostalCodes from 'postal-codes-js';
 import { z } from 'zod';
 
-import { COUNTRIES } from '@shared/api/countries';
-
 export const MIN_AGE = 1;
 export const MAX_AGE = 120;
 export const TODAY = new Date();
@@ -108,13 +106,7 @@ export const getPasswordFeedback = (
 
 export const addressSchema = z
   .object({
-    country: z
-      .string()
-      .trim()
-      .min(1, 'Country is required')
-      .refine((key) => COUNTRIES[key] !== undefined, {
-        message: 'Please select a valid country',
-      }),
+    country: z.string().trim().min(1, 'Country is required'),
     city: z
       .string()
       .trim()

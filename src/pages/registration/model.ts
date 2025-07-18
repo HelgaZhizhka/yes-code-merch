@@ -46,5 +46,6 @@ export const useFormStore = createAppStore<RegistrationFormState>(
     partialize: (state: RegistrationFormState) => ({
       formData: state.formData,
     }),
+    useSessionStorage: true,
   }
 );

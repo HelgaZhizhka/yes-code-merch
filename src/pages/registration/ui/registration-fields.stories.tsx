@@ -3,7 +3,7 @@ import type { JSX, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import { COUNTRIES } from '@shared/api/countries';
+import { useCountries } from '@shared/countries';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
 import { Input } from '@shared/ui/input';
@@ -296,6 +296,8 @@ export const AddressValidation: Story = {
               postalCode: string;
             };
 
+            const countries = useCountries();
+
             return (
               <div className="flex flex-col gap-2">
                 <Select
@@ -309,9 +311,9 @@ export const AddressValidation: Story = {
                     <SelectValue placeholder="Select country" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(COUNTRIES).map(([code, name]) => (
-                      <SelectItem key={code} value={code}>
-                        {name}
+                    {countries.map((country) => (
+                      <SelectItem key={country.code} value={country.code}>
+                        {country.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
