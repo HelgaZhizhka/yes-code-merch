@@ -11,7 +11,7 @@ import {
 interface PasswordFieldProps {
   value: string;
   error?: string;
-  onChange(value: string | React.ChangeEvent<HTMLInputElement>): void;
+  onChange(event: React.ChangeEvent<HTMLInputElement>): void;
 }
 
 export const PasswordField = ({
@@ -31,7 +31,7 @@ export const PasswordField = ({
     <div className="space-y-2">
       <PasswordInput
         value={value}
-        onChange={onChange}
+        onChange={(event) => onChange(event)}
         onFocus={handleFocus}
         onBlur={handleBlur}
         className={error ? 'border-red-500' : ''}
