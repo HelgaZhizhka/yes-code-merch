@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { PasswordInput } from '@shared/ui/password-input';
 
 import {
-  PASSWORD_STRENGTH,
+  STRENGTH,
   getPasswordFeedback,
   getPasswordStrengthColor,
 } from '../model/validation-schema';
@@ -42,13 +42,13 @@ export const PasswordField = ({
         <div className="space-y-2">
           <div className="flex gap-1 h-1">
             <div
-              className={`h-full w-1/3 ${strength === PASSWORD_STRENGTH.LOW || strength === PASSWORD_STRENGTH.MEDIUM || strength === PASSWORD_STRENGTH.HIGH ? getPasswordStrengthColor(PASSWORD_STRENGTH.LOW) : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === STRENGTH.LOW || strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.LOW) : 'bg-gray-200'}`}
             ></div>
             <div
-              className={`h-full w-1/3 ${strength === PASSWORD_STRENGTH.MEDIUM || strength === PASSWORD_STRENGTH.HIGH ? getPasswordStrengthColor(PASSWORD_STRENGTH.MEDIUM) : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.MEDIUM) : 'bg-gray-200'}`}
             ></div>
             <div
-              className={`h-full w-1/3 ${strength === PASSWORD_STRENGTH.HIGH ? getPasswordStrengthColor(PASSWORD_STRENGTH.HIGH) : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.HIGH) : 'bg-gray-200'}`}
             ></div>
           </div>
           <p className="text-sm text-gray-600">{message}</p>
