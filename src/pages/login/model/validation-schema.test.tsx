@@ -1,3 +1,4 @@
+/* sonarjs-disable typescript:S2068 */
 import { describe, expect, it } from 'vitest';
 
 import { loginSchema } from '@pages/login/model/validation-schema';

@@ -1,3 +1,4 @@
+/* sonarjs-disable typescript:S2068 */
 import PostalCodes from 'postal-codes-js';
 import { z } from 'zod';
 
