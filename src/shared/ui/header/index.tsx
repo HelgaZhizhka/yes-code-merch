@@ -28,9 +28,11 @@ export const Header = ({
         <Link to={ROUTES.HOME}>
           <svg
             className="h-24 w-40 text-foreground"
-            role="img"
-            aria-label="Yes Code Merch logo"
+            aria-hidden="false"
+            focusable="false"
+            aria-labelledby="logo-title"
           >
+            <title id="logo-title">Yes Code Merch logo</title>
             <use href={`${logo}#logo`}></use>
           </svg>
         </Link>
@@ -57,8 +59,9 @@ export const Header = ({
               <Link to={ROUTES.CART} className="flex items-center">
                 <ShoppingCart
                   className="w-9 h-9 text-primary-foreground"
-                  role="img"
-                  aria-label="Shopping cart icon"
+                  aria-hidden="false"
+                  focusable="false"
+                  aria-labelledby="cart-title"
                 />
               </Link>
             </nav>

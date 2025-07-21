@@ -1,11 +1,15 @@
-import type { RegisterDTO } from '@shared/api/auth/interfaces';
 import { createAppStore } from '@shared/lib/create-app-store';
+
+import type {
+  InitStepType,
+  RegistrationFormType,
+} from './model/validation-schema';
 
 interface RegistrationFormState {
   currentStep: number;
-  formData: RegisterDTO | null;
+  formData: InitStepType | RegistrationFormType | null;
   setCurrentStep(step: number): void;
-  setFormData(data: RegisterDTO): void;
+  setFormData(data: InitStepType | RegistrationFormType): void;
   resetForm(): void;
   getLatestState(): RegistrationFormState;
 }
@@ -30,7 +34,7 @@ export const useFormStore = createAppStore<RegistrationFormState>(
     currentStep: INIT_STEP,
     formData: null,
     setCurrentStep: (step: number) => set({ currentStep: step }),
-    setFormData: (data: RegisterDTO) =>
+    setFormData: (data: InitStepType | RegistrationFormType) =>
       set((state: RegistrationFormState) => ({
         formData: { ...state.formData, ...data },
       })),
@@ -39,9 +43,9 @@ export const useFormStore = createAppStore<RegistrationFormState>(
   }),
   {
     name: 'registration-form-storage',
-    enablePersist: true,
     partialize: (state: RegistrationFormState) => ({
       formData: state.formData,
     }),
+    useSessionStorage: true,
   }
 );

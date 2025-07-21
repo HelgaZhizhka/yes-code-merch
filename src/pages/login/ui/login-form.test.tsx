@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 import { describe, it, expect, vi } from 'vitest';
 
@@ -20,17 +20,25 @@ vi.mock('@pages/login/hooks', () => ({
 }));
 
 describe('LoginForm', () => {
-  it('renders inputs and submit button', () => {
+  it('renders inputs and submit button', async () => {
     render(<LoginForm />);
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /login/i })
+      ).toBeInTheDocument();
+    });
   });
 
-  it('disables submit button and shows loading when isPending is true', () => {
+  it('disables submit button and shows loading when isPending is true', async () => {
     isPending = true;
     render(<LoginForm />);
-    const button = screen.getByRole('button', { name: /logging in.../i });
-    expect(button).toBeDisabled();
+
+    await waitFor(() => {
+      const button = screen.getByRole('button', { name: /logging in.../i });
+      expect(button).toBeDisabled();
+    });
   });
 });

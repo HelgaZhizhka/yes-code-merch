@@ -1,8 +1,9 @@
-import { describe, it, expect } from 'vitest';
+/* sonarjs-disable typescript:S2068 */
+import { describe, expect, it } from 'vitest';
 
 import { loginSchema } from '@pages/login/model/validation-schema';
 
-import { MockCredentials } from '@shared/config';
+import { MockCredentials } from '@shared/config/test-config';
 
 describe('loginSchema', () => {
   it('passes with valid email and password', () => {
@@ -17,10 +18,15 @@ describe('loginSchema', () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.format().email?._errors[0]).toBe('Email is required');
-      expect(result.error.format().password?._errors[0]).toBe(
-        'Password is required'
+      const emailError = result.error.issues.find(
+        (issue) => issue.path[0] === 'email'
       );
+      const passwordError = result.error.issues.find(
+        (issue) => issue.path[0] === 'password'
+      );
+
+      expect(emailError?.message).toBe('Invalid email format');
+      expect(passwordError?.message).toBe('Password is required');
     }
   });
 
@@ -31,9 +37,10 @@ describe('loginSchema', () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.format().email?._errors).toContain(
-        'Invalid email format'
+      const emailError = result.error.issues.find(
+        (issue) => issue.path[0] === 'email'
       );
+      expect(emailError?.message).toBe('Invalid email format');
     }
   });
 
@@ -44,7 +51,10 @@ describe('loginSchema', () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.format().password?._errors[0]).toBe(
+      const passwordError = result.error.issues.find(
+        (issue) => issue.path[0] === 'password'
+      );
+      expect(passwordError?.message).toBe(
         'Password must be at least 8 characters long'
       );
     }

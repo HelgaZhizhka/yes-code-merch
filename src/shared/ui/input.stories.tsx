@@ -4,7 +4,7 @@ import { fn } from 'storybook/test';
 import { Input } from './input';
 
 const meta = {
-  title: 'shared/ui/forms/input',
+  title: 'shared/ui/form/input',
   component: Input,
   parameters: {
     layout: 'centered',

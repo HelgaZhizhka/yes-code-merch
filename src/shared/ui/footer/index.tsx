@@ -13,6 +13,8 @@ interface FooterProps extends AuthProps {
   onLogout(): Promise<void>;
 }
 
+const FULL_YEAR = new Date().getFullYear();
+
 export const Footer = ({
   isLoading,
   isGuest,
@@ -79,7 +81,7 @@ export const Footer = ({
       </div>
 
       <div className="bg-dark-background text-violet-foreground text-center py-3 text-xs">
-        © {new Date().getFullYear()}. All rights reserved.
+        © {FULL_YEAR}. All rights reserved.
       </div>
     </footer>
   );

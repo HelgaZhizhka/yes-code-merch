@@ -12,8 +12,8 @@ import { Product } from '@pages/product';
 import { Profile } from '@pages/profile';
 import { Registration } from '@pages/registration';
 import { ConfirmStep } from '@pages/registration/ui/confirm-step';
-import { FirstStep } from '@pages/registration/ui/first-step';
-import { SecondStep } from '@pages/registration/ui/second-step';
+import { InitStep } from '@pages/registration/ui/init-step';
+import { NextStep } from '@pages/registration/ui/next-step';
 import { ResetPassword } from '@pages/reset-password';
 
 import { REGISTRATION_STEPS, ROUTES } from '@shared/config/routes';
@@ -42,18 +42,18 @@ export const registrationLayoutRoute = (parentRoute: FlexibleRouteType) =>
     component: Registration,
   });
 
-export const registrationFirstStepRoute = (parentRoute: AnyRoute) =>
+export const registrationInitStepRoute = (parentRoute: AnyRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: REGISTRATION_STEPS.INIT,
-    component: FirstStep,
+    component: InitStep,
   });
 
 export const registrationNextStepRoute = (parentRoute: AnyRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: REGISTRATION_STEPS.NEXT,
-    component: SecondStep,
+    component: NextStep,
   });
 
 export const registrationConfirmStepRoute = (parentRoute: AnyRoute) =>
