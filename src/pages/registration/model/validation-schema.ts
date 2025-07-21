@@ -5,7 +5,7 @@ export const MIN_AGE = 1;
 export const MAX_AGE = 120;
 export const TODAY = new Date();
 
-export const PASSWORD_PATTERNS = {
+export const PATTERNS = {
   digits: /\d/,
   lowercase: /[a-z]/,
   uppercase: /[A-Z]/,
@@ -19,41 +19,38 @@ export const VALIDATION_REGEX = {
   streetNumberPattern: /^\d+[a-zA-Z]?$/,
 };
 
-export const PASSWORD_STRENGTH = {
+export const STRENGTH = {
   LOW: 'low',
   MEDIUM: 'medium',
   HIGH: 'high',
 } as const;
 
-export type PasswordStrength =
-  (typeof PASSWORD_STRENGTH)[keyof typeof PASSWORD_STRENGTH];
+export type Strength = (typeof STRENGTH)[keyof typeof STRENGTH];
 
-export const PASSWORD_STRENGTH_MESSAGES: Record<PasswordStrength, string> = {
-  [PASSWORD_STRENGTH.LOW]:
+export const STRENGTH_MESSAGES: Record<Strength, string> = {
+  [STRENGTH.LOW]:
     'Weak password: Add a mix of digits, lowercase and uppercase letters, and symbols',
-  [PASSWORD_STRENGTH.MEDIUM]:
+  [STRENGTH.MEDIUM]:
     "Medium strength: Add what's missing (uppercase letters, symbols) for stronger protection",
-  [PASSWORD_STRENGTH.HIGH]: 'Strong password: Good job!',
+  [STRENGTH.HIGH]: 'Strong password: Good job!',
 };
 
-export const getPasswordStrengthColor = (
-  strength: PasswordStrength
-): string => {
-  const strengthColors: Record<PasswordStrength | 'default', string> = {
-    [PASSWORD_STRENGTH.LOW]: 'bg-red-500',
-    [PASSWORD_STRENGTH.MEDIUM]: 'bg-yellow-500',
-    [PASSWORD_STRENGTH.HIGH]: 'bg-green-500',
+export const getPasswordStrengthColor = (strength: Strength): string => {
+  const strengthColors: Record<Strength | 'default', string> = {
+    [STRENGTH.LOW]: 'bg-red-500',
+    [STRENGTH.MEDIUM]: 'bg-yellow-500',
+    [STRENGTH.HIGH]: 'bg-green-500',
     default: 'bg-gray-200',
   };
 
   return strengthColors[strength] ?? strengthColors.default;
 };
 
-export const getPasswordStrength = (password: string): PasswordStrength => {
-  const hasDigits = PASSWORD_PATTERNS.digits.test(password);
-  const hasLowercase = PASSWORD_PATTERNS.lowercase.test(password);
-  const hasUppercase = PASSWORD_PATTERNS.uppercase.test(password);
-  const hasSymbols = PASSWORD_PATTERNS.symbols.test(password);
+export const getPasswordStrength = (password: string): Strength => {
+  const hasDigits = PATTERNS.digits.test(password);
+  const hasLowercase = PATTERNS.lowercase.test(password);
+  const hasUppercase = PATTERNS.uppercase.test(password);
+  const hasSymbols = PATTERNS.symbols.test(password);
 
   const charTypesCount = [
     hasDigits,
@@ -63,24 +60,24 @@ export const getPasswordStrength = (password: string): PasswordStrength => {
   ].filter(Boolean).length;
 
   if (hasDigits && !hasLowercase && !hasUppercase && !hasSymbols) {
-    return PASSWORD_STRENGTH.LOW;
+    return STRENGTH.LOW;
   } else if (hasDigits && (hasLowercase || hasUppercase) && !hasSymbols) {
-    return PASSWORD_STRENGTH.MEDIUM;
+    return STRENGTH.MEDIUM;
   } else if (hasDigits && hasLowercase && hasUppercase && hasSymbols) {
-    return PASSWORD_STRENGTH.HIGH;
+    return STRENGTH.HIGH;
   } else if (charTypesCount >= 3) {
-    return PASSWORD_STRENGTH.MEDIUM;
+    return STRENGTH.MEDIUM;
   } else {
-    return PASSWORD_STRENGTH.LOW;
+    return STRENGTH.LOW;
   }
 };
 
 export const getPasswordFeedback = (
   password: string
-): { strength: PasswordStrength; message: string } => {
+): { strength: Strength; message: string } => {
   if (!password) {
     return {
-      strength: PASSWORD_STRENGTH.LOW,
+      strength: STRENGTH.LOW,
       message:
         'Password must be at least 8 characters and include digits, lowercase and uppercase letters, and symbols',
     };
@@ -90,12 +87,11 @@ export const getPasswordFeedback = (
 
   const isTooShort = password.length < 8;
 
-  if (isTooShort && strength === PASSWORD_STRENGTH.HIGH) {
-    strength = PASSWORD_STRENGTH.MEDIUM;
+  if (isTooShort && strength === STRENGTH.HIGH) {
+    strength = STRENGTH.MEDIUM;
   }
 
-  let message =
-    PASSWORD_STRENGTH_MESSAGES[strength] ?? 'Unknown password strength';
+  let message = STRENGTH_MESSAGES[strength] ?? 'Unknown password strength';
 
   if (isTooShort) {
     message = `${message} (Password must be at least 8 characters)`;
