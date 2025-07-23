@@ -18,10 +18,10 @@ interface FormFieldWrapperProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
-  control: Control<TFieldValues>;
-  name: TName;
-  label: string;
-  children: (
+  readonly control: Control<TFieldValues>;
+  readonly name: TName;
+  readonly label: string;
+  readonly children: (
     field: ControllerRenderProps<TFieldValues, TName>
   ) => React.ReactNode;
 }
