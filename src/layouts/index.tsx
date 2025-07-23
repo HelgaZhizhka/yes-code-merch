@@ -9,7 +9,8 @@ import { Toaster } from '@shared/ui/sonner';
 import { useAuth } from './hooks';
 
 export const Layout = (): React.JSX.Element => {
-  const { isLoading, isGuest, isAuthenticated, handleLogout } = useAuth();
+  const { isLoading, isGuest, isAuthenticated, isError, handleLogout } =
+    useAuth();
 
   return (
     <>
@@ -17,6 +18,7 @@ export const Layout = (): React.JSX.Element => {
         isLoading={isLoading}
         isGuest={isGuest}
         isAuthenticated={isAuthenticated}
+        isError={isError}
         onLogout={handleLogout}
       />
       <main className="flex flex-1">
@@ -26,6 +28,7 @@ export const Layout = (): React.JSX.Element => {
         isLoading={isLoading}
         isGuest={isGuest}
         isAuthenticated={isAuthenticated}
+        isError={isError}
         onLogout={handleLogout}
       />
       <Toaster />

@@ -5,12 +5,12 @@ import { supabase } from '@shared/api/supabase-client';
 import { config } from '@shared/config';
 import { ONBOARDING_STEPS } from '@shared/config/routes';
 
+import type { LoginDTO, SignUpDTO, Viewer } from './interfaces';
+import { mapViewerDataToRpcArgs } from './mapper';
+
 export const RpcFunctions = {
   registration: 'complete_registration',
 } as const;
-
-import type { LoginDTO, SignUpDTO, Viewer } from './interfaces';
-import { mapViewerDataToRpcArgs } from './mapper';
 
 export const getSession = async (): Promise<Session | null> => {
   const { data } = await supabase.auth.getSession();
@@ -59,10 +59,26 @@ export const signUp = async ({ email, password }: SignUpDTO): Promise<User> => {
       emailRedirectTo: `${config.HOST}${ONBOARDING_STEPS.INIT}`,
     },
   });
+
+  console.log('SignUp Response:', {
+    user: data?.user,
+
+    session: data?.session,
+    error,
+  });
+
+  if (error) {
+    throw error;
+  }
+
   const { user } = data;
 
-  if (error || !user) {
-    throw error ?? new Error('No user');
+  if (!user) {
+    throw new Error('User registration failed');
+  }
+
+  if (user && Array.isArray(user.identities) && user.identities.length === 0) {
+    throw new Error('You are already registered. Please log in');
   }
 
   return user;

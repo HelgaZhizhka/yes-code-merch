@@ -66,6 +66,7 @@ export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
     },
     onError: (error: unknown) => {
       if (error instanceof Error) {
+        setError(error);
         console.error('Login failed:', error.message);
       }
     },
@@ -87,6 +88,7 @@ export const useRegistration = (): UseMutationResult<User, Error, SignUpDTO> =>
     mutationFn: signUp,
     onError: (error: unknown) => {
       if (error instanceof Error) {
+        setError(error);
         console.error('Registration failed:', error.message);
       }
     },
@@ -96,6 +98,7 @@ export interface AuthProps {
   isLoading: boolean;
   isGuest: boolean;
   isAuthenticated: boolean;
+  isError: boolean;
   error?: Error | null;
 }
 
@@ -108,6 +111,7 @@ export const useViewerState = (): AuthProps => {
       status === ViewerStatus.LOADING || status === ViewerStatus.INITIAL,
     isGuest: status === ViewerStatus.GUEST,
     isAuthenticated: status === ViewerStatus.AUTHENTICATED,
+    isError: status === ViewerStatus.ERROR,
     error,
   };
 };

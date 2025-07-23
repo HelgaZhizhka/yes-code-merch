@@ -20,6 +20,7 @@ export const Header = ({
   isLoading,
   isGuest,
   isAuthenticated,
+  isError,
   onLogout,
 }: HeaderProps): React.JSX.Element => {
   return (
@@ -54,6 +55,7 @@ export const Header = ({
                 isLoading={isLoading}
                 isGuest={isGuest}
                 isAuthenticated={isAuthenticated}
+                isError={isError}
                 onLogout={onLogout}
               />
               <Link to={ROUTES.CART} className="flex items-center">

@@ -31,6 +31,7 @@ export const AuthMenu = ({
   isLoading,
   isGuest,
   isAuthenticated,
+  isError,
   onLogout,
 }: AuthMenuProps): React.JSX.Element | null => {
   if (isLoading) return null;
@@ -44,7 +45,7 @@ export const AuthMenu = ({
           <LogoutButton variant={variant} onLogout={onLogout} />
         </>
       )}
-      {isGuest && <AuthLinks variant={variant} />}
+      {(isGuest || isError) && <AuthLinks variant={variant} />}
     </nav>
   );
 };

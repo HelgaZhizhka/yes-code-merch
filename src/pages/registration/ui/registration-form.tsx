@@ -1,12 +1,6 @@
 import { Button } from '@shared/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@shared/ui/form';
+import { Form } from '@shared/ui/form';
+import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
 import { PasswordField } from '@shared/ui/password-field';
 import { PasswordInput } from '@shared/ui/password-input';
@@ -16,63 +10,44 @@ import { RedirectLink } from './redirect-link';
 import { useRegistrationForm } from '../hooks';
 
 export const RegistrationForm = (): React.JSX.Element => {
-  const { form, onSubmit } = useRegistrationForm();
+  const { form, onSubmit, isPending } = useRegistrationForm();
   return (
     <div className="flex flex-col gap-3 max-w-lg p-8 w-full">
       <h2 className="mb-6 text-center">Welcome to YesCode!</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="Email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FormFieldWrapper control={form.control} name="email" label="Email">
+              {(field) => <Input type="email" placeholder="Email" {...field} />}
+            </FormFieldWrapper>
 
-            <FormField
+            <FormFieldWrapper
               control={form.control}
               name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <PasswordField
-                      value={field.value ?? ''}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
+              label="Password"
+            >
+              {(field) => (
+                <PasswordField
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                />
               )}
-            />
+            </FormFieldWrapper>
 
-            <FormField
+            <FormFieldWrapper
               control={form.control}
               name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              label="Confirm Password"
+            >
+              {(field) => <PasswordInput {...field} />}
+            </FormFieldWrapper>
 
             <Button
               type="submit"
               className="w-full"
-              disabled={!form.formState.isValid}
+              disabled={isPending || !form.formState.isValid}
             >
-              Sign Up
+              {isPending ? 'Signing up...' : 'Sign up'}
             </Button>
           </div>
         </form>

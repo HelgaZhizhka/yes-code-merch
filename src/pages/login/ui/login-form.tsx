@@ -1,14 +1,8 @@
 import { useLoginForm } from '@pages/login/hooks';
 
 import { Button } from '@shared/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@shared/ui/form';
+import { Form } from '@shared/ui/form';
+import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
 import { PasswordInput } from '@shared/ui/password-input';
 
@@ -18,39 +12,22 @@ export const LoginForm = (): React.JSX.Element => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="Email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
+        <FormFieldWrapper control={form.control} name="email" label="Email">
+          {(field) => <Input type="email" placeholder="Email" {...field} />}
+        </FormFieldWrapper>
+        <FormFieldWrapper
           control={form.control}
           name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <PasswordInput {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          label="Password"
+        >
+          {(field) => <PasswordInput {...field} />}
+        </FormFieldWrapper>
         <Button
           type="submit"
           className="w-full"
           disabled={isPending || !form.formState.isValid}
         >
-          {isPending ? 'Logging in...' : 'Login'}
+          {isPending ? 'Signing in...' : 'Sign in'}
         </Button>
       </form>
     </Form>
