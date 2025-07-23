@@ -22,6 +22,14 @@ export const Login = (): React.JSX.Element => (
       >
         Sign up
       </Link>
+      <div className="mt-6">
+        <p className="text-sm text-muted-foreground text-center">
+          Forgot your password?{' '}
+          <Link className="text-primary hover:underline" to={ROUTES.FORGOT}>
+            Reset here
+          </Link>
+        </p>
+      </div>
     </div>
     <img
       src={Rectangle}
