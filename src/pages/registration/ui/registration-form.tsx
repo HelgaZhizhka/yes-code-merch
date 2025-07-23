@@ -8,23 +8,20 @@ import {
   FormMessage,
 } from '@shared/ui/form';
 import { Input } from '@shared/ui/input';
+import { PasswordField } from '@shared/ui/password-field';
 import { PasswordInput } from '@shared/ui/password-input';
 
-import { PasswordField } from './password-field';
 import { RedirectLink } from './redirect-link';
 
-import { useFormStep } from '../hooks';
+import { useRegistrationForm } from '../hooks';
 
-export const InitStep = (): React.JSX.Element => {
-  const { form, handleNextStep } = useFormStep();
-
+export const RegistrationForm = (): React.JSX.Element => {
+  const { form, onSubmit } = useRegistrationForm();
   return (
-    <>
+    <div className="flex flex-col gap-3 max-w-lg p-8 w-full">
+      <h2 className="mb-6 text-center">Welcome to YesCode!</h2>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleNextStep)}
-          className="space-y-6"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
@@ -81,6 +78,6 @@ export const InitStep = (): React.JSX.Element => {
         </form>
       </Form>
       <RedirectLink />
-    </>
+    </div>
   );
 };

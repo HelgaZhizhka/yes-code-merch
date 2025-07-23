@@ -9,19 +9,21 @@ import {
   aboutRoute,
   cartRoute,
   categoryRoute,
+  forgotPasswordRoute,
   homeRoute,
   loginRoute,
   notFoundRoute,
+  onboardingAddressStepRoute,
+  onboardingInitStepRoute,
+  onboardingLayoutRoute,
   pathlessLayoutRoute,
   productRoute,
   profileRoute,
-  registrationConfirmStepRoute,
-  registrationInitStepRoute,
+  registrationFormRoute,
   registrationLayoutRoute,
-  registrationNextStepRoute,
-  subCategoryRoute,
-  forgotPasswordRoute,
+  registrationSuccessRoute,
   resetPasswordRoute,
+  subCategoryRoute,
 } from './routes';
 
 const rootRoute = createRootRoute({
@@ -30,18 +32,22 @@ const rootRoute = createRootRoute({
 
 const layoutRoute = pathlessLayoutRoute(rootRoute);
 const registrationLayout = registrationLayoutRoute(layoutRoute);
+const onboardingLayout = onboardingLayoutRoute(layoutRoute);
 
 const routeTree = rootRoute.addChildren([
   layoutRoute.addChildren([
     homeRoute(layoutRoute),
     aboutRoute(layoutRoute),
     loginRoute(layoutRoute),
+    registrationLayout.addChildren([
+      registrationFormRoute(registrationLayout),
+      registrationSuccessRoute(registrationLayout),
+    ]),
     forgotPasswordRoute(layoutRoute),
     resetPasswordRoute(layoutRoute),
-    registrationLayout.addChildren([
-      registrationInitStepRoute(registrationLayout),
-      registrationNextStepRoute(registrationLayout),
-      registrationConfirmStepRoute(registrationLayout),
+    onboardingLayout.addChildren([
+      onboardingInitStepRoute(onboardingLayout),
+      onboardingAddressStepRoute(onboardingLayout),
     ]),
     profileRoute(layoutRoute),
     categoryRoute(layoutRoute),

@@ -1,4 +1,4 @@
-import type { Session } from '@supabase/supabase-js';
+import type { Session, User } from '@supabase/supabase-js';
 import {
   useMutation,
   useQueryClient,
@@ -11,9 +11,9 @@ import {
   login,
   logout,
   onAuthStateChange,
-  register,
+  signUp,
 } from '@shared/api/auth';
-import type { LoginDTO, RegisterDTO } from '@shared/api/auth/interfaces';
+import type { LoginDTO, SignUpDTO } from '@shared/api/auth/interfaces';
 import type { AsyncAction } from '@shared/types';
 
 import {
@@ -82,12 +82,9 @@ export const useLogout = (): AsyncAction => {
   };
 };
 
-export const useRegister = (): UseMutationResult<Session, Error, RegisterDTO> =>
-  useMutation<Session, Error, RegisterDTO>({
-    mutationFn: register,
-    onSuccess: (session) => {
-      setSession(session);
-    },
+export const useRegistration = (): UseMutationResult<User, Error, SignUpDTO> =>
+  useMutation<User, Error, SignUpDTO>({
+    mutationFn: signUp,
     onError: (error: unknown) => {
       if (error instanceof Error) {
         console.error('Registration failed:', error.message);

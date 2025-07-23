@@ -6,7 +6,7 @@ import {
   STRENGTH,
   getPasswordFeedback,
   getPasswordStrengthColor,
-} from '../model/validation-schema';
+} from './model/validation-schema';
 
 interface PasswordFieldProps {
   value: string;

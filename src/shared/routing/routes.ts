@@ -8,17 +8,19 @@ import { ForgotPassword } from '@pages/forgot-password';
 import { Home } from '@pages/home';
 import { Login } from '@pages/login';
 import { NotFound } from '@pages/not-found';
+import { Onboarding } from '@pages/onboarding';
+import { AddressStep } from '@pages/onboarding/ui/address-step';
+import { InitStep } from '@pages/onboarding/ui/init-step';
 import { Product } from '@pages/product';
 import { Profile } from '@pages/profile';
 import { Registration } from '@pages/registration';
-import { ConfirmStep } from '@pages/registration/ui/confirm-step';
-import { InitStep } from '@pages/registration/ui/init-step';
-import { NextStep } from '@pages/registration/ui/next-step';
+import { RegistrationForm } from '@pages/registration/ui/registration-form';
 import { ResetPassword } from '@pages/reset-password';
 
-import { REGISTRATION_STEPS, ROUTES } from '@shared/config/routes';
+import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
+import { RegistrationSuccess } from '@/pages/registration/ui/registration-success';
 
 import { authGuard } from './auth-guard';
 
@@ -42,25 +44,39 @@ export const registrationLayoutRoute = (parentRoute: FlexibleRouteType) =>
     component: Registration,
   });
 
-export const registrationInitStepRoute = (parentRoute: AnyRoute) =>
+export const registrationFormRoute = (parentRoute: AnyRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
-    path: REGISTRATION_STEPS.INIT,
+    path: ROUTES.REGISTRATION,
+    component: RegistrationForm,
+  });
+
+export const registrationSuccessRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.REGISTRATION_SUCCESS,
+    component: RegistrationSuccess,
+  });
+
+export const onboardingLayoutRoute = (parentRoute: FlexibleRouteType) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    id: 'onboarding-layout',
+    component: Onboarding,
+  });
+
+export const onboardingInitStepRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ONBOARDING_STEPS.INIT,
     component: InitStep,
   });
 
-export const registrationNextStepRoute = (parentRoute: AnyRoute) =>
+export const onboardingAddressStepRoute = (parentRoute: AnyRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
-    path: REGISTRATION_STEPS.NEXT,
-    component: NextStep,
-  });
-
-export const registrationConfirmStepRoute = (parentRoute: AnyRoute) =>
-  createRoute({
-    getParentRoute: () => parentRoute,
-    path: REGISTRATION_STEPS.CONFIRM,
-    component: ConfirmStep,
+    path: ONBOARDING_STEPS.ADDRESS,
+    component: AddressStep,
   });
 
 export const loginRoute = (parentRoute: FlexibleRouteType) =>
@@ -74,7 +90,7 @@ export const loginRoute = (parentRoute: FlexibleRouteType) =>
 export const forgotPasswordRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
-    path: ROUTES.FORGOT_PASSWORD,
+    path: ROUTES.FORGOT,
     beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
     component: ForgotPassword,
   });
@@ -82,7 +98,7 @@ export const forgotPasswordRoute = (parentRoute: FlexibleRouteType) =>
 export const resetPasswordRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
-    path: ROUTES.RESET_PASSWORD,
+    path: ROUTES.RESET,
     beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
     component: ResetPassword,
   });
