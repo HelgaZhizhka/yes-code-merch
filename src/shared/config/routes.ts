@@ -1,8 +1,10 @@
 export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
-  FORGOT_PASSWORD: '/forgot',
-  RESET_PASSWORD: '/reset',
+  REGISTRATION: '/registration',
+  REGISTRATION_SUCCESS: '/registration/success',
+  FORGOT: '/forgot',
+  RESET: '/reset',
   ABOUT: '/about',
   PROFILE: '/profile',
   CATEGORY: '/category/$categoryId',
@@ -12,16 +14,9 @@ export const ROUTES = {
   NOT_FOUND: '*',
 } as const;
 
-export enum REGISTRATION_STEPS {
-  INIT = '/registration',
-  NEXT = '/second-step',
-  CONFIRM = '/confirm-step',
-}
-
-export const STEP_TO_ROUTE: Record<number, REGISTRATION_STEPS> = {
-  1: REGISTRATION_STEPS.INIT,
-  2: REGISTRATION_STEPS.NEXT,
-  3: REGISTRATION_STEPS.CONFIRM,
-};
+export const ONBOARDING_STEPS = {
+  INIT: '/onboarding',
+  ADDRESS: '/onboarding/address',
+} as const;
 
 export type ROUTES_KEYS = (typeof ROUTES)[keyof typeof ROUTES];

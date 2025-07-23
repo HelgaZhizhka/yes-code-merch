@@ -1,5 +1,3 @@
-import type { Session, User } from '@supabase/supabase-js';
-
 export interface LoginDTO {
   email: string;
   password: string;
@@ -8,11 +6,6 @@ export interface LoginDTO {
 export interface SignUpDTO {
   email: string;
   password: string;
-}
-
-export interface SignUpResponse {
-  session: Session | null;
-  user: User | null;
 }
 
 export interface Address {

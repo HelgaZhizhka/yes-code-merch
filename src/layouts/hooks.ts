@@ -9,7 +9,8 @@ import { useLogout, useViewerState } from '@shared/viewer';
 export const useAuth = () => {
   const navigate = useNavigate();
   const logout = useLogout();
-  const { isAuthenticated, isGuest, isLoading, error } = useViewerState();
+  const { isAuthenticated, isGuest, isLoading, isError, error } =
+    useViewerState();
 
   const handleLogout = useCallback(async () => {
     try {
@@ -24,5 +25,5 @@ export const useAuth = () => {
     }
   }, [logout, navigate, error]);
 
-  return { isLoading, isGuest, isAuthenticated, error, handleLogout };
+  return { isLoading, isGuest, isAuthenticated, isError, error, handleLogout };
 };

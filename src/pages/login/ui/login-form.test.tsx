@@ -27,7 +27,7 @@ describe('LoginForm', () => {
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
       expect(
-        screen.getByRole('button', { name: /login/i })
+        screen.getByRole('button', { name: /sign in/i })
       ).toBeInTheDocument();
     });
   });
@@ -37,7 +37,7 @@ describe('LoginForm', () => {
     render(<LoginForm />);
 
     await waitFor(() => {
-      const button = screen.getByRole('button', { name: /logging in.../i });
+      const button = screen.getByRole('button', { name: /signing in.../i });
       expect(button).toBeDisabled();
     });
   });

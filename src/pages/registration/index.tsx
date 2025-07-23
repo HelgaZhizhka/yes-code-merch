@@ -1,10 +1,21 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
-export const Registration = (): React.JSX.Element => (
-  <div className="flex flex-1 items-center justify-center flex-col">
-    <div className="flex flex-col gap-3 max-w-lg p-8 w-full">
-      <h2 className="mb-6">Welcome to YesCode!</h2>
+import { ONBOARDING_STEPS } from '@shared/config/routes';
+import { useViewerState } from '@shared/viewer/hooks';
+
+export const Registration = (): React.JSX.Element => {
+  const { isAuthenticated } = useViewerState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate({ to: ONBOARDING_STEPS.INIT });
+    }
+  }, [isAuthenticated, navigate]);
+  return (
+    <div className="flex flex-1 items-center justify-center flex-col">
       <Outlet />
     </div>
-  </div>
-);
+  );
+};

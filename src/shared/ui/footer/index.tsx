@@ -19,6 +19,7 @@ export const Footer = ({
   isLoading,
   isGuest,
   isAuthenticated,
+  isError,
   onLogout,
 }: FooterProps): React.JSX.Element => {
   return (
@@ -40,6 +41,7 @@ export const Footer = ({
               isLoading={isLoading}
               isGuest={isGuest}
               isAuthenticated={isAuthenticated}
+              isError={isError}
               onLogout={onLogout}
               variant={LayoutView.FOOTER}
             />

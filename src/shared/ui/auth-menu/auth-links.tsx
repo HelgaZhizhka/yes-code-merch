@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 
-import { REGISTRATION_STEPS, ROUTES } from '@shared/config/routes';
+import { ROUTES } from '@shared/config/routes';
 import { LayoutView, type LayoutViewType } from '@shared/types';
 import { getLinkButtonClass } from '@shared/ui/link-button';
 
@@ -23,7 +23,7 @@ export const AuthLinks = ({
     </Link>
     {variant === LayoutView.FOOTER && <Separator />}
     <Link
-      to={REGISTRATION_STEPS.INIT}
+      to={ROUTES.REGISTRATION}
       className={getLinkButtonClass(
         variant === LayoutView.FOOTER ? 'white' : 'primary',
         variant === LayoutView.FOOTER ? 'sm' : 'xl'

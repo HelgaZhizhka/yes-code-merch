@@ -21,7 +21,9 @@ export const useAppInit = (): AppInitResult => {
 
   return {
     isAppReady:
-      status === ViewerStatus.AUTHENTICATED || status === ViewerStatus.GUEST,
+      status === ViewerStatus.AUTHENTICATED ||
+      status === ViewerStatus.GUEST ||
+      status === ViewerStatus.ERROR,
     context: {
       status,
     },

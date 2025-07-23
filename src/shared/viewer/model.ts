@@ -74,3 +74,5 @@ export const startLoading = () => useViewerStore.getState().startLoading();
 export const useStatus = () => useViewerStore((state) => state.status);
 
 export const useError = () => useViewerStore((state) => state.error);
+
+export const useUser = () => useViewerStore((state) => state.session?.user);
