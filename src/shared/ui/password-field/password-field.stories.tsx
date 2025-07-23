@@ -81,25 +81,6 @@ const InteractiveValidationDemo = <T,>({
     </Card>
   );
 };
-//   render: () => (
-//     <div className="space-y-6">
-//       <InteractiveValidationDemo
-//         label="Interactive Email Validation"
-//         initialValue=""
-//         schema={registrationSchema.shape.email}
-//         renderInput={(value, onChange) => (
-//           <Input
-//             name="email"
-//             type="email"
-//             value={value}
-//             onChange={(e) => onChange(e.target.value)}
-//             placeholder="Enter email to validate"
-//           />
-//         )}
-//       />
-//     </div>
-//   ),
-// };
 
 export const PasswordStrength: Story = {
   render: () => (

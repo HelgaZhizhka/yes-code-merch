@@ -72,7 +72,7 @@ export const RegistrationForm = (): React.JSX.Element => {
               className="w-full"
               disabled={!form.formState.isValid}
             >
-              Continue
+              Sign Up
             </Button>
           </div>
         </form>
