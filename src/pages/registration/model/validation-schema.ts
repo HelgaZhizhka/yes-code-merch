@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { confirmPasswordSchema, emailSchema } from '@shared/schemas';
+import { confirmPasswordSchema, emailSchema } from '@shared/lib/schemas';
 import { passwordSchema } from '@shared/ui/password-field/model/validation-schema';
 
 export const registrationSchema = z
