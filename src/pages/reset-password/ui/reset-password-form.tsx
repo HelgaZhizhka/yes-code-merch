@@ -7,11 +7,11 @@ import { PasswordField } from '@shared/ui/password-field';
 import { PasswordInput } from '@shared/ui/password-input';
 
 export const ResetPasswordForm = (): React.JSX.Element => {
-  const { form } = useResetPasswordForm();
+  const { form, onSubmit, isPending } = useResetPasswordForm();
 
   return (
     <Form {...form}>
-      <form className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormFieldWrapper
           control={form.control}
           name="password"
@@ -36,9 +36,9 @@ export const ResetPasswordForm = (): React.JSX.Element => {
         <Button
           type="submit"
           className="w-full"
-          disabled={!form.formState.isValid}
+          disabled={isPending || !form.formState.isValid}
         >
-          Save Password
+          {isPending ? 'Sending...' : 'Save Password'}
         </Button>
       </form>
     </Form>

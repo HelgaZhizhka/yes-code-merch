@@ -8,6 +8,14 @@ export interface SignUpDTO {
   password: string;
 }
 
+export interface ResetPasswordDTO {
+  email: string;
+}
+
+export interface UpdateUserDTO {
+  password?: string;
+}
+
 export interface Address {
   country: string;
   city: string;

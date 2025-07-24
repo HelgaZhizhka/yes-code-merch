@@ -3,9 +3,15 @@ import type { Session, User } from '@supabase/supabase-js';
 import type { Database } from '@shared/api/database.types';
 import { supabase } from '@shared/api/supabase-client';
 import { config } from '@shared/config';
-import { ONBOARDING_STEPS } from '@shared/config/routes';
+import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
-import type { LoginDTO, SignUpDTO, Viewer } from './interfaces';
+import type {
+  ResetPasswordDTO,
+  LoginDTO,
+  SignUpDTO,
+  UpdateUserDTO,
+  Viewer,
+} from './interfaces';
 import { mapViewerDataToRpcArgs } from './mapper';
 
 export const RpcFunctions = {
@@ -79,6 +85,40 @@ export const signUp = async ({ email, password }: SignUpDTO): Promise<User> => {
 
   if (user && Array.isArray(user.identities) && user.identities.length === 0) {
     throw new Error('You are already registered. Please log in');
+  }
+
+  return user;
+};
+
+export const resetPassword = async ({
+  email,
+}: ResetPasswordDTO): Promise<object> => {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${config.HOST}${ROUTES.RESET}`,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
+export const updateUser = async ({
+  password,
+}: UpdateUserDTO): Promise<User> => {
+  const { data, error } = await supabase.auth.updateUser({
+    password: password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  const { user } = data;
+
+  if (!user) {
+    throw new Error('User update failed');
   }
 
   return user;

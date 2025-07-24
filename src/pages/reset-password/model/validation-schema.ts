@@ -1,10 +1,11 @@
 import { z } from 'zod';
 
+import { confirmPasswordSchema } from '@shared/lib/schemas';
 import { passwordSchema } from '@shared/ui/password-field/model/validation-schema';
 
 export const resetPasswordSchema = z
   .object({
-    confirmPassword: z.string().trim().min(1, 'Confirm password is required'),
+    confirmPassword: confirmPasswordSchema,
   })
   .extend(passwordSchema.shape)
   .refine((data) => data.password === data.confirmPassword, {
