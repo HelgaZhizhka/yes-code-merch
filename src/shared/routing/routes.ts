@@ -99,7 +99,6 @@ export const resetPasswordRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.RESET,
-    beforeLoad: authGuard({ requireAuth: false, redirectTo: ROUTES.HOME }),
     component: ResetPassword,
   });
 

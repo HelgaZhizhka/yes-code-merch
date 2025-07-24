@@ -11,9 +11,16 @@ import {
   login,
   logout,
   onAuthStateChange,
+  resetPassword,
   signUp,
+  updateUser,
 } from '@shared/api/auth';
-import type { LoginDTO, SignUpDTO } from '@shared/api/auth/interfaces';
+import type {
+  LoginDTO,
+  ResetPasswordDTO,
+  SignUpDTO,
+  UpdateUserDTO,
+} from '@shared/api/auth/interfaces';
 import type { AsyncAction } from '@shared/types';
 
 import {
@@ -93,6 +100,37 @@ export const useRegistration = (): UseMutationResult<User, Error, SignUpDTO> =>
       }
     },
   });
+
+export const useResetPassword = (): UseMutationResult<
+  object,
+  Error,
+  ResetPasswordDTO
+> => {
+  return useMutation<object, Error, ResetPasswordDTO>({
+    mutationFn: resetPassword,
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        setError(error);
+        console.error('Reset failed:', error.message);
+      }
+    },
+  });
+};
+
+export const useUpdateUser = (): UseMutationResult<
+  User,
+  Error,
+  UpdateUserDTO
+> => {
+  return useMutation<User, Error, UpdateUserDTO>({
+    mutationFn: updateUser,
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('User update failed:', error.message);
+      }
+    },
+  });
+};
 
 export interface AuthProps {
   isLoading: boolean;
