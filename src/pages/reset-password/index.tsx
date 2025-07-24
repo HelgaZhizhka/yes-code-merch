@@ -1,21 +1,10 @@
-import { useNavigate } from '@tanstack/react-router';
-import { Loader } from 'lucide-react';
-import { useEffect } from 'react';
-
 import { ResetPasswordForm } from '@pages/reset-password/ui/reset-password-form';
 
-import { ROUTES } from '@shared/config/routes';
-import { useViewerState } from '@shared/viewer';
+import { Loader } from '@shared/ui/loader';
+import { useAuthRedirect } from '@shared/viewer';
 
 export const ResetPassword = (): React.JSX.Element => {
-  const navigate = useNavigate();
-  const { isLoading, isGuest } = useViewerState();
-
-  useEffect(() => {
-    if (isGuest) {
-      navigate({ to: ROUTES.LOGIN });
-    }
-  }, [isGuest, navigate]);
+  const { isLoading } = useAuthRedirect();
 
   if (isLoading) {
     return (

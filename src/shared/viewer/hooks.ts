@@ -4,6 +4,7 @@ import {
   useQueryClient,
   type UseMutationResult,
 } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import {
@@ -21,6 +22,7 @@ import type {
   SignUpDTO,
   UpdateUserDTO,
 } from '@shared/api/auth/interfaces';
+import { ROUTES } from '@shared/config/routes';
 import type { AsyncAction } from '@shared/types';
 
 import {
@@ -152,4 +154,17 @@ export const useViewerState = (): AuthProps => {
     isError: status === ViewerStatus.ERROR,
     error,
   };
+};
+
+export const useAuthRedirect = () => {
+  const navigate = useNavigate();
+  const { isLoading, isGuest } = useViewerState();
+
+  useEffect(() => {
+    if (isGuest) {
+      navigate({ to: ROUTES.LOGIN });
+    }
+  }, [isGuest, navigate]);
+
+  return { isLoading };
 };
