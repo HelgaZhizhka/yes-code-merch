@@ -7,13 +7,15 @@ import {
 import { useEffect } from 'react';
 
 import {
+  completeRegistration,
   getSession,
   login,
   logout,
   onAuthStateChange,
   signUp,
+  type CompleteRegistrationResult,
 } from '@shared/api/auth';
-import type { LoginDTO, SignUpDTO } from '@shared/api/auth/interfaces';
+import type { LoginDTO, SignUpDTO, Viewer } from '@shared/api/auth/interfaces';
 import type { AsyncAction } from '@shared/types';
 
 import {
@@ -86,6 +88,21 @@ export const useLogout = (): AsyncAction => {
 export const useRegistration = (): UseMutationResult<User, Error, SignUpDTO> =>
   useMutation<User, Error, SignUpDTO>({
     mutationFn: signUp,
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        setError(error);
+        console.error('Registration failed:', error.message);
+      }
+    },
+  });
+
+export const useCompleteRegistration = (): UseMutationResult<
+  CompleteRegistrationResult,
+  Error,
+  Viewer
+> =>
+  useMutation<CompleteRegistrationResult, Error, Viewer>({
+    mutationFn: completeRegistration,
     onError: (error: unknown) => {
       if (error instanceof Error) {
         setError(error);

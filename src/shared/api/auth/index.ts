@@ -84,10 +84,10 @@ export const signUp = async ({ email, password }: SignUpDTO): Promise<User> => {
   return user;
 };
 
-type CompleteRegistrationResult =
+export type CompleteRegistrationResult =
   Database['public']['Functions']['complete_registration']['Returns'];
 
-export const createViewer = async (
+export const completeRegistration = async (
   viewer: Viewer
 ): Promise<CompleteRegistrationResult> => {
   const rpcArgs = mapViewerDataToRpcArgs(viewer);

@@ -8,7 +8,7 @@ import { getLinkButtonClass } from '@shared/ui/link-button';
 
 export const Login = (): React.JSX.Element => (
   <div className="relative flex flex-1 items-center justify-center flex-col">
-    <div className="flex flex-col gap-3 max-w-lg p-8 w-full">
+    <div className="flex flex-col gap-3 max-w-lg p-4 md:p-8 w-full">
       <h2 className="mb-6 text-center">Welcome back to YesCode!</h2>
       <LoginForm />
       <div className="flex items-center gap-4">
@@ -25,7 +25,7 @@ export const Login = (): React.JSX.Element => (
       <div className="mt-6">
         <p className="text-sm text-muted-foreground text-center">
           Forgot your password?{' '}
-          <Link className="text-primary hover:underline" to={ROUTES.FORGOT}>
+          <Link className="hover:underline" to={ROUTES.FORGOT}>
             Reset here
           </Link>
         </p>
