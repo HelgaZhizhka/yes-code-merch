@@ -11,34 +11,49 @@ export const InitStep = (): React.JSX.Element => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleNextStep)} className="space-y-6">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 items-start">
           <FormFieldWrapper
             control={form.control}
             name="firstName"
-            label="First Name"
+            label="First Name*"
           >
             {(field) => (
-              <Input type="text" placeholder="First Name" {...field} />
+              <Input
+                type="text"
+                placeholder="First Name"
+                autoComplete="given-name"
+                {...field}
+              />
             )}
           </FormFieldWrapper>
 
           <FormFieldWrapper
             control={form.control}
             name="lastName"
-            label="Last Name"
+            label="Last Name*"
           >
             {(field) => (
-              <Input type="text" placeholder="Last Name" {...field} />
+              <Input
+                type="text"
+                placeholder="Last Name"
+                autoComplete="family-name"
+                {...field}
+              />
             )}
           </FormFieldWrapper>
 
           <FormFieldWrapper
             control={form.control}
             name="dateOfBirth"
-            label="Date of Birth"
+            label="Date of Birth*"
           >
             {(field) => (
-              <Input type="date" placeholder="Date of Birth" {...field} />
+              <Input
+                type="date"
+                placeholder="Date of Birth"
+                autoComplete="bday"
+                {...field}
+              />
             )}
           </FormFieldWrapper>
 

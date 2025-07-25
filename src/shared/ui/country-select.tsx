@@ -10,14 +10,16 @@ import {
 } from '@shared/ui/select';
 
 interface CountrySelectProps {
-  value: string | undefined;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
+  readonly value: string | undefined;
+  readonly name?: string;
+  readonly onChange: (value: string) => void;
+  readonly placeholder?: string;
+  readonly disabled?: boolean;
 }
 
 export function CountrySelect({
   value,
+  name,
   onChange,
   placeholder = 'Select a country',
   disabled = false,
@@ -25,7 +27,13 @@ export function CountrySelect({
   const countries = useCountries();
 
   return (
-    <Select value={value} onValueChange={onChange} disabled={disabled}>
+    <Select
+      value={value}
+      onValueChange={onChange}
+      disabled={disabled}
+      name={name}
+      autoComplete="off"
+    >
       <SelectTrigger className="w-full">
         <SelectValue placeholder={placeholder} />
         <SelectContent>

@@ -13,7 +13,14 @@ export const ForgotPasswordForm = (): React.JSX.Element => {
     <Form {...form}>
       <form className="space-y-6">
         <FormFieldWrapper control={form.control} name="email" label="Email">
-          {(field) => <Input type="email" placeholder="Email" {...field} />}
+          {(field) => (
+            <Input
+              type="email"
+              autoComplete="email"
+              placeholder="Email"
+              {...field}
+            />
+          )}
         </FormFieldWrapper>
         <Button
           type="submit"

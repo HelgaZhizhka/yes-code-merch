@@ -41,8 +41,7 @@ export const addressSchema = z
         'Street number should be in format XXX or XXXa'
       ),
     postalCode: z.string().trim().min(1, 'Postal code is required'),
-    isDefault: z.boolean().optional(),
-    useShippingAsBilling: z.boolean().optional(),
+    isDefault: z.boolean(),
   })
   .check((ctx) => {
     const { country, postalCode } = ctx.value;
@@ -102,6 +101,9 @@ export const profileSchema = z.object({
     ),
   title: z.string().optional(),
   company: z.string().optional(),
+  shippingAddresses: z.array(addressSchema),
+  billingAddresses: z.array(addressSchema),
+  useShippingAsBilling: z.boolean(),
 });
 
 export type ProfileFormType = z.infer<typeof profileSchema>;

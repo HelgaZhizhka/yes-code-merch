@@ -9,14 +9,20 @@ import {
 } from './model/validation-schema';
 
 interface PasswordFieldProps {
-  value: string;
-  error?: string;
+  readonly value: string;
+  readonly error?: string;
+  readonly name?: string;
+  readonly id?: string;
+  readonly ref?: React.RefObject<HTMLInputElement>;
   onChange(event: React.ChangeEvent<HTMLInputElement>): void;
 }
 
 export const PasswordField = ({
   value,
   onChange,
+  name,
+  id,
+  ref,
   error,
 }: PasswordFieldProps): React.JSX.Element => {
   const [isFocused, setIsFocused] = useState(false);
@@ -30,10 +36,14 @@ export const PasswordField = ({
   return (
     <div className="space-y-2">
       <PasswordInput
+        name={name}
         value={value}
+        id={id}
+        ref={ref}
         onChange={(event) => onChange(event)}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        autoComplete="new-password"
         className={error ? 'border-red-500' : ''}
         placeholder="Enter your password"
       />
@@ -54,8 +64,6 @@ export const PasswordField = ({
           <p className="text-sm text-gray-600">{message}</p>
         </div>
       )}
-
-      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 };

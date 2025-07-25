@@ -15,24 +15,16 @@ export interface Address {
   streetNumber: string;
   postalCode: string;
   isDefault: boolean;
-  title?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  phone?: string;
 }
 
 export interface Viewer {
   firstName: string;
   lastName: string;
   phone: string;
-  email: string;
   shippingAddresses: Address[];
   useShippingAsBilling: boolean;
-  billingAddresses?: Address[];
+  billingAddresses: Address[];
+  dateOfBirth: string;
   title?: string;
-  dateOfBirth?: string;
   company?: string;
 }
-
-export type RegisterDTO = SignUpDTO & Viewer;

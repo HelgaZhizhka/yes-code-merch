@@ -17,7 +17,14 @@ export const RegistrationForm = (): React.JSX.Element => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormFieldWrapper control={form.control} name="email" label="Email">
-            {(field) => <Input type="email" placeholder="Email" {...field} />}
+            {(field) => (
+              <Input
+                type="email"
+                autoComplete="email"
+                placeholder="Email"
+                {...field}
+              />
+            )}
           </FormFieldWrapper>
 
           <FormFieldWrapper
@@ -29,6 +36,8 @@ export const RegistrationForm = (): React.JSX.Element => {
               <PasswordField
                 value={field.value ?? ''}
                 onChange={field.onChange}
+                name={field.name}
+                error={form.formState.errors.password?.message?.toString()}
               />
             )}
           </FormFieldWrapper>

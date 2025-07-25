@@ -83,7 +83,7 @@ export const getPasswordFeedback = (
   let message = STRENGTH_MESSAGES[strength] ?? 'Unknown password strength';
 
   if (isTooShort) {
-    message = `${message} (Password must be at least 8 characters)`;
+    message = `${message}`;
   }
 
   return { strength, message };

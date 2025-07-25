@@ -8,70 +8,16 @@ import { ONBOARDING_STEPS } from '@shared/config/routes';
 import { useCompleteRegistration } from '@shared/viewer/hooks';
 
 import { useFormStore } from './model';
-import {
-  addressSchema,
-  profileSchema,
-  type AddressFormType,
-  type ProfileFormType,
-} from './model/validation-schema';
-
-export const useOnboardingForm = () => {
-  const { mutate: completeRegistration, isPending } = useCompleteRegistration();
-  const { formData } = useFormStore();
-
-  const navigate = useNavigate();
-
-  const onSubmit = async () => {
-    // Объединяем данные profile и address в один объект для отправки
-    const payload = {
-      ...formData.profile,
-      ...formData.address,
-      // TODO: Добавить обязательные поля, которых нет в formData, например email
-    };
-
-    completeRegistration(payload, {
-      onError: (error) => {
-        toast.error(error.message);
-      },
-      onSuccess: () => {
-        toast.success('Registration successful');
-        navigate({ to: ONBOARDING_STEPS.INIT });
-      },
-    });
-  };
-
-  return {
-    onSubmit,
-    isPending,
-  };
-};
+import { profileSchema, type ProfileFormType } from './model/validation-schema';
 
 const STEPS = [
   {
     key: 'profile',
     route: ONBOARDING_STEPS.INIT,
-    schema: profileSchema,
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      dateOfBirth: '',
-      phone: '',
-      title: '',
-      company: '',
-    },
   },
   {
-    key: 'address',
+    key: 'addresses',
     route: ONBOARDING_STEPS.ADDRESS,
-    schema: addressSchema,
-    defaultValues: {
-      streetName: '',
-      streetNumber: '',
-      city: '',
-      postalCode: '',
-      country: '',
-      isDefault: false,
-    },
   },
 ] as const;
 
@@ -87,32 +33,68 @@ const getStepIndexByKey = (key: StepKey): number => {
   return STEPS.findIndex((s) => s.key === key);
 };
 
+const defaultValues = {
+  firstName: '',
+  lastName: '',
+  dateOfBirth: '',
+  phone: '',
+  title: '',
+  company: '',
+  shippingAddresses: [
+    {
+      country: '',
+      city: '',
+      streetName: '',
+      streetNumber: '',
+      postalCode: '',
+      isDefault: false,
+    },
+  ],
+  billingAddresses: [
+    {
+      country: '',
+      city: '',
+      streetName: '',
+      streetNumber: '',
+      postalCode: '',
+      isDefault: false,
+    },
+  ],
+  useShippingAsBilling: true,
+};
+
 export const useFormStep = () => {
   const navigate = useNavigate();
   const routerState = useRouterState();
   const { formData, setFormData } = useFormStore();
-  const { onSubmit, isPending } = useOnboardingForm();
+  const { mutate: completeRegistration, isPending } = useCompleteRegistration();
 
   const currentStepKey = getStepKeyFromUrl(routerState.location.pathname);
   const currentStepIndex = getStepIndexByKey(currentStepKey);
 
-  const currentStep = STEPS[currentStepIndex];
-
-  const form = useForm<ProfileFormType | AddressFormType>({
-    resolver: zodResolver(currentStep.schema),
-    defaultValues: formData[currentStep.key] ?? currentStep.defaultValues,
+  const form = useForm<ProfileFormType>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: formData ?? defaultValues,
     mode: 'onChange',
     criteriaMode: 'all',
   });
 
   const handleSubmit = useCallback(async () => {
-    setFormData(currentStep.key, form.getValues());
-    await onSubmit();
-  }, [form, setFormData, currentStep.key, onSubmit]);
+    setFormData(form.getValues());
+    completeRegistration(form.getValues(), {
+      onError: (error) => {
+        toast.error(error.message);
+      },
+      onSuccess: () => {
+        toast.success('Registration successful');
+        navigate({ to: ONBOARDING_STEPS.INIT });
+      },
+    });
+  }, [form, setFormData, completeRegistration, navigate]);
 
   const handleNextStep = useCallback(() => {
     const values = form.getValues();
-    setFormData(currentStep.key, values);
+    setFormData(values);
 
     const nextStep = STEPS[currentStepIndex + 1];
 
@@ -121,11 +103,11 @@ export const useFormStep = () => {
     }
 
     navigate({ to: nextStep.route });
-  }, [form, currentStep, currentStepIndex, setFormData, navigate]);
+  }, [form, currentStepIndex, setFormData, navigate]);
 
   const handleBack = useCallback(() => {
     const values = form.getValues();
-    setFormData(currentStep.key, values);
+    setFormData(values);
 
     const prevStep = STEPS[currentStepIndex - 1];
 
@@ -134,7 +116,7 @@ export const useFormStep = () => {
     }
 
     navigate({ to: prevStep.route });
-  }, [form, currentStep, currentStepIndex, setFormData, navigate]);
+  }, [form, currentStepIndex, setFormData, navigate]);
 
   return {
     form,
