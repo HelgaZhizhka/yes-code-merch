@@ -3,12 +3,11 @@ import type { JSX, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
+import { newPasswordSchema } from '@shared/lib/schemas';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
 
-import { passwordSchema } from './model/validation-schema';
-
-import { PasswordField } from '../password-field';
+import { PasswordField } from './password-field';
 
 const meta = {
   title: 'shared/ui/form/password-field',
@@ -88,7 +87,7 @@ export const PasswordStrength: Story = {
       <InteractiveValidationDemo
         label="Interactive Password Validation"
         initialValue=""
-        schema={passwordSchema.shape.password}
+        schema={newPasswordSchema.shape.password}
         renderInput={(value, onChange) => (
           <PasswordField
             value={value}
