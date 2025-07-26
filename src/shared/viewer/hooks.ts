@@ -4,6 +4,7 @@ import {
   useQueryClient,
   type UseMutationResult,
 } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import {
@@ -12,10 +13,18 @@ import {
   login,
   logout,
   onAuthStateChange,
+  resetPassword,
   signUp,
+  updateUser,
   type CompleteRegistrationResult,
 } from '@shared/api/auth';
-import type { LoginDTO, SignUpDTO, Viewer } from '@shared/api/auth/interfaces';
+import type { Viewer } from '@shared/api/auth/interfaces';
+import type {
+  AuthCredentials,
+  ResetPasswordDTO,
+  UpdateUserDTO,
+} from '@shared/api/auth/types';
+import { ROUTES } from '@shared/config/routes';
 import type { AsyncAction } from '@shared/types';
 
 import {
@@ -60,8 +69,12 @@ export const useInitViewer = (): void => {
   }, []);
 };
 
-export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
-  return useMutation<Session, Error, LoginDTO>({
+export const useLogin = (): UseMutationResult<
+  Session,
+  Error,
+  AuthCredentials
+> => {
+  return useMutation<Session, Error, AuthCredentials>({
     mutationFn: login,
     onSuccess: (session) => {
       setSession(session);
@@ -85,8 +98,12 @@ export const useLogout = (): AsyncAction => {
   };
 };
 
-export const useRegistration = (): UseMutationResult<User, Error, SignUpDTO> =>
-  useMutation<User, Error, SignUpDTO>({
+export const useRegistration = (): UseMutationResult<
+  User,
+  Error,
+  AuthCredentials
+> =>
+  useMutation<User, Error, AuthCredentials>({
     mutationFn: signUp,
     onError: (error: unknown) => {
       if (error instanceof Error) {
@@ -95,6 +112,37 @@ export const useRegistration = (): UseMutationResult<User, Error, SignUpDTO> =>
       }
     },
   });
+
+export const useResetPassword = (): UseMutationResult<
+  object,
+  Error,
+  ResetPasswordDTO
+> => {
+  return useMutation<object, Error, ResetPasswordDTO>({
+    mutationFn: resetPassword,
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        setError(error);
+        console.error('Reset failed:', error.message);
+      }
+    },
+  });
+};
+
+export const useUpdateUser = (): UseMutationResult<
+  User,
+  Error,
+  UpdateUserDTO
+> => {
+  return useMutation<User, Error, UpdateUserDTO>({
+    mutationFn: updateUser,
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('User update failed:', error.message);
+      }
+    },
+  });
+};
 
 export const useCompleteRegistration = (): UseMutationResult<
   CompleteRegistrationResult,
@@ -131,4 +179,17 @@ export const useViewerState = (): AuthProps => {
     isError: status === ViewerStatus.ERROR,
     error,
   };
+};
+
+export const useAuthRedirect = () => {
+  const navigate = useNavigate();
+  const { isLoading, isGuest } = useViewerState();
+
+  useEffect(() => {
+    if (isGuest) {
+      navigate({ to: ROUTES.LOGIN });
+    }
+  }, [isGuest, navigate]);
+
+  return { isLoading };
 };

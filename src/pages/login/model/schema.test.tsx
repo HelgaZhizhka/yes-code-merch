@@ -1,9 +1,9 @@
 /* sonarjs-disable typescript:S2068 */
 import { describe, expect, it } from 'vitest';
 
-import { loginSchema } from '@pages/login/model/validation-schema';
-
 import { MockCredentials } from '@shared/config/test-config';
+
+import { loginSchema } from './schema';
 
 describe('loginSchema', () => {
   it('passes with valid email and password', () => {

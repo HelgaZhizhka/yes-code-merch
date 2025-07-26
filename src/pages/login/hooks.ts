@@ -3,13 +3,10 @@ import { useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import {
-  type LoginFormType,
-  loginSchema,
-} from '@pages/login/model/validation-schema';
-
 import { ROUTES } from '@shared/config/routes';
 import { useLogin } from '@shared/viewer/hooks';
+
+import { type LoginFormType, loginSchema } from './model/schema';
 
 export const useLoginForm = () => {
   const navigate = useNavigate();

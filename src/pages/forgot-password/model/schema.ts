@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
+import { emailValidator } from '@shared/lib/validators';
+
 export const forgotPasswordSchema = z.object({
-  email: z.email({
-    pattern: z.regexes.html5Email,
-    message: 'Invalid email format',
-  }),
+  email: emailValidator,
 });
 
 export type ForgotPasswordFormType = z.infer<typeof forgotPasswordSchema>;

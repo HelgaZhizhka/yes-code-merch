@@ -6,10 +6,7 @@ import { toast } from 'sonner';
 import { ROUTES } from '@shared/config/routes';
 import { useRegistration } from '@shared/viewer/hooks';
 
-import {
-  registrationSchema,
-  type RegistrationFormType,
-} from './model/validation-schema';
+import { registrationSchema, type RegistrationFormType } from './model/schema';
 
 export const useRegistrationForm = () => {
   const navigate = useNavigate();

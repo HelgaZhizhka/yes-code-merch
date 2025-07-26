@@ -1,12 +1,11 @@
 import { useCallback, useState } from 'react';
 
-import { PasswordInput } from '@shared/ui/password-input';
-
 import {
-  STRENGTH,
   getPasswordFeedback,
   getPasswordStrengthColor,
-} from './model/validation-schema';
+  STRENGTH,
+} from '@shared/lib/validators';
+import { PasswordInput } from '@shared/ui/password-input';
 
 interface PasswordFieldProps {
   readonly value: string;

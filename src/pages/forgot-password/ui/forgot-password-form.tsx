@@ -1,17 +1,16 @@
-import { useForgotPasswordForm } from '@pages/forgot-password/hooks';
-
 import { Button } from '@shared/ui/button';
 import { Form } from '@shared/ui/form';
+import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
 
-import { FormFieldWrapper } from '@/shared/ui/form-field-wrapper';
+import { useForgotPasswordForm } from '../hooks';
 
 export const ForgotPasswordForm = (): React.JSX.Element => {
-  const { form } = useForgotPasswordForm();
+  const { form, onSubmit, isPending } = useForgotPasswordForm();
 
   return (
     <Form {...form}>
-      <form className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormFieldWrapper control={form.control} name="email" label="Email">
           {(field) => (
             <Input
@@ -25,9 +24,9 @@ export const ForgotPasswordForm = (): React.JSX.Element => {
         <Button
           type="submit"
           className="w-full"
-          disabled={!form.formState.isValid}
+          disabled={isPending || !form.formState.isValid}
         >
-          Reset Password
+          {isPending ? 'Sending...' : 'Reset Password'}
         </Button>
       </form>
     </Form>

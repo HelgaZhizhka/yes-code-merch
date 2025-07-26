@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
 
 import { passwordSchema } from './model/validation-schema';
 
-import { PasswordField } from './';
+import { PasswordField } from '../password-field';
 
 const meta = {
   title: 'shared/ui/form/password-field',

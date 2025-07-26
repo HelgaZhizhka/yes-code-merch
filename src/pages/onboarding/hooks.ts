@@ -8,7 +8,7 @@ import { ONBOARDING_STEPS } from '@shared/config/routes';
 import { useCompleteRegistration } from '@shared/viewer/hooks';
 
 import { useFormStore } from './model';
-import { profileSchema, type ProfileFormType } from './model/validation-schema';
+import { profileSchema, type ProfileFormType } from './model/schema';
 
 const STEPS = [
   {
@@ -74,7 +74,7 @@ export const useFormStep = () => {
 
   const form = useForm<ProfileFormType>({
     resolver: zodResolver(profileSchema),
-    defaultValues: formData ?? defaultValues,
+    defaultValues: formData || defaultValues,
     mode: 'onChange',
     criteriaMode: 'all',
   });

@@ -1,7 +1,7 @@
 import type { Address } from '@shared/api/auth/interfaces';
 import { createAppStore } from '@shared/lib/create-app-store';
 
-import type { ProfileFormType } from './model/validation-schema';
+import type { ProfileFormType } from './model/schema';
 
 interface FormState {
   formData: ProfileFormType | null;

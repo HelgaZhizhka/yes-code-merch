@@ -14,6 +14,17 @@ export const STRENGTH = {
   HIGH: 'high',
 } as const;
 
+export const MIN_AGE = 1;
+export const MAX_AGE = 120;
+export const TODAY = new Date();
+
+export const VALIDATION_REGEX = {
+  namePattern: /^[a-zA-Z\s-]+$/,
+  phonePattern: /^\+[1-9]\d{1,14}$/,
+  streetNamePattern: /^[a-zA-Z\s\-.]+$/,
+  streetNumberPattern: /^\d+[a-zA-Z]?$/,
+};
+
 export type Strength = (typeof STRENGTH)[keyof typeof STRENGTH];
 
 export const STRENGTH_MESSAGES: Record<Strength, string> = {
@@ -89,16 +100,18 @@ export const getPasswordFeedback = (
   return { strength, message };
 };
 
-export const passwordSchema = z.object({
-  password: z
-    .string()
-    .trim()
-    .min(1, 'Password is required')
-    .min(8, 'Password must be at least 8 characters long')
-    .refine((password) => getPasswordStrength(password) !== 'low', {
-      message:
-        'Password is too weak. Include a mix of letters, numbers, and symbols.',
-    }),
+export const emailValidator = z.email({
+  pattern: z.regexes.html5Email,
+  message: 'Invalid email format',
 });
 
-export type PasswordType = z.infer<typeof passwordSchema>;
+export const passwordValidator = z
+  .string()
+  .trim()
+  .min(1, 'Password is required')
+  .min(8, 'Password must be at least 8 characters long');
+
+export const confirmPasswordValidator = z
+  .string()
+  .trim()
+  .min(1, 'Confirm password is required');

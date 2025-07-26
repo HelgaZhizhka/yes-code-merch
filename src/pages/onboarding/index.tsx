@@ -1,19 +1,11 @@
-import { Link, Outlet, useNavigate } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { Link, Outlet } from '@tanstack/react-router';
 
 import { ROUTES } from '@shared/config/routes';
 import { Loader } from '@shared/ui/loader';
-import { useViewerState } from '@shared/viewer/hooks';
+import { useAuthRedirect } from '@shared/viewer/hooks';
 
 export const Onboarding = (): React.JSX.Element => {
-  const navigate = useNavigate();
-  const { isLoading, isGuest } = useViewerState();
-
-  useEffect(() => {
-    if (isGuest) {
-      navigate({ to: ROUTES.LOGIN });
-    }
-  }, [isGuest, navigate]);
+  const { isLoading } = useAuthRedirect();
 
   if (isLoading) {
     return (
