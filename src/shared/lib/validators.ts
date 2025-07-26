@@ -1,6 +1,8 @@
 /* sonarjs-disable typescript:S2068 */
 import { z } from 'zod';
 
+import type { Address } from '@shared/api/auth/interfaces';
+
 export const PATTERNS = {
   digits: /\d/,
   lowercase: /[a-z]/,
@@ -115,3 +117,12 @@ export const confirmPasswordValidator = z
   .string()
   .trim()
   .min(1, 'Confirm password is required');
+
+export const defaultAddress: Address = {
+  country: '',
+  city: '',
+  streetName: '',
+  streetNumber: '',
+  postalCode: '',
+  isDefault: false,
+};

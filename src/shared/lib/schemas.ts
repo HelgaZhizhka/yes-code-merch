@@ -3,12 +3,17 @@ import PostalCodes from 'postal-codes-js';
 import { z } from 'zod';
 
 import {
+  emailValidator,
   getPasswordStrength,
   MIN_AGE,
   passwordValidator,
   TODAY,
   VALIDATION_REGEX,
 } from './validators';
+
+export const emailSchema = z.object({
+  email: emailValidator,
+});
 
 export const newPasswordSchema = z
   .object({
@@ -115,6 +120,8 @@ export const profileSchema = z.object({
   title: z.string().optional(),
   company: z.string().optional(),
 });
+
+export type EmailFormType = z.infer<typeof emailSchema>;
 
 export type NewPasswordFormType = z.infer<typeof newPasswordSchema>;
 

@@ -2,25 +2,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { emailSchema, type EmailFormType } from '@shared/lib/schemas';
 import { useResetPassword } from '@shared/viewer';
-
-import {
-  type ForgotPasswordFormType,
-  forgotPasswordSchema,
-} from './model/schema';
 
 export const useForgotPasswordForm = () => {
   const { mutate: resetPassword, isPending } = useResetPassword();
 
-  const form = useForm<ForgotPasswordFormType>({
-    resolver: zodResolver(forgotPasswordSchema),
+  const form = useForm<EmailFormType>({
+    resolver: zodResolver(emailSchema),
     defaultValues: {
       email: '',
     },
     mode: 'onChange',
   });
 
-  const onSubmit = (data: ForgotPasswordFormType) => {
+  const onSubmit = (data: EmailFormType) => {
     resetPassword(data, {
       onError: (error) => {
         toast.error(error.message);
