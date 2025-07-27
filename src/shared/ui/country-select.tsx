@@ -36,14 +36,14 @@ export function CountrySelect({
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder={placeholder} />
-        <SelectContent>
-          {countries.map((country) => (
-            <SelectItem key={country.code} value={country.code}>
-              {country.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
       </SelectTrigger>
+      <SelectContent>
+        {countries.map((country) => (
+          <SelectItem key={country.code} value={country.code}>
+            {country.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
     </Select>
   );
 }

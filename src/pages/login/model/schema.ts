@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import { emailValidator, passwordValidator } from '@shared/lib/validators';
+import { emailSchema } from '@shared/lib/schemas';
+import { passwordValidator } from '@shared/lib/validators';
 
-export const loginSchema = z.object({
-  email: emailValidator,
+export const loginSchema = emailSchema.extend({
   password: passwordValidator,
 });
 

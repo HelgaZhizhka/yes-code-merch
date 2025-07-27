@@ -1,12 +1,12 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { Checkbox } from '@shared/ui/checkbox';
 import { CountrySelect } from '@shared/ui/country-select';
 import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
 
-interface AddressFormProps {
+export interface AddressFormProps {
   prefix: string;
   label: string;
 }
@@ -16,12 +16,13 @@ export const AddressForm = ({
   label,
 }: AddressFormProps): React.JSX.Element => {
   const { control } = useFormContext();
+  const country = useWatch({ control, name: `${prefix}.country` });
 
   return (
     <fieldset className="mb-6">
       <legend className="text-lg font-semibold mb-4">{label}</legend>
       <div className="grid gap-4">
-        <FormFieldWrapper control={control} name={`${prefix}.${0}.country`}>
+        <FormFieldWrapper control={control} name={`${prefix}.country`}>
           {(field) => (
             <CountrySelect
               name={field.name}
@@ -33,7 +34,7 @@ export const AddressForm = ({
         <div className="grid gap-4 md:grid-cols-2 items-start">
           <FormFieldWrapper
             control={control}
-            name={`${prefix}.${0}.city`}
+            name={`${prefix}.city`}
             label="City*"
           >
             {(field) => (
@@ -48,7 +49,7 @@ export const AddressForm = ({
 
           <FormFieldWrapper
             control={control}
-            name={`${prefix}.${0}.streetName`}
+            name={`${prefix}.streetName`}
             label="Street Name*"
           >
             {(field) => (
@@ -63,7 +64,7 @@ export const AddressForm = ({
 
           <FormFieldWrapper
             control={control}
-            name={`${prefix}.${0}.streetNumber`}
+            name={`${prefix}.streetNumber`}
             label="Street Number*"
           >
             {(field) => (
@@ -78,7 +79,7 @@ export const AddressForm = ({
 
           <FormFieldWrapper
             control={control}
-            name={`${prefix}.${0}.postalCode`}
+            name={`${prefix}.postalCode`}
             label="Postal Code*"
           >
             {(field) => (
@@ -86,6 +87,7 @@ export const AddressForm = ({
                 type="text"
                 placeholder="Postal Code"
                 autoComplete="postal-code"
+                disabled={!country}
                 {...field}
               />
             )}
@@ -94,7 +96,7 @@ export const AddressForm = ({
 
         <FormFieldWrapper
           control={control}
-          name={`${prefix}.${0}.isDefault`}
+          name={`${prefix}.isDefault`}
           label="Set as default"
           labelPosition="right"
         >

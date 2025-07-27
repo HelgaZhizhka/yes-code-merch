@@ -67,6 +67,7 @@ export const addressSchema = z
     if (!country || !postalCode) return;
 
     const result = PostalCodes.validate(country, postalCode);
+
     if (result !== true) {
       ctx.issues.push({
         code: 'invalid_format',

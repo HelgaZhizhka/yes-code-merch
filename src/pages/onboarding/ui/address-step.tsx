@@ -1,20 +1,21 @@
+import { AddressForm } from '@shared/ui/address-form';
 import { Button } from '@shared/ui/button';
 import { Checkbox } from '@shared/ui/checkbox';
 import { Form } from '@shared/ui/form';
 import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 
-import { AddressForm } from './address-form';
-
 import { useFormStep } from '../hooks';
 
 export const AddressStep = (): React.JSX.Element => {
   const { form, handleSubmit, handleBack, isPending } = useFormStep();
-  const useShippingAsBilling = form.watch('useShippingAsBilling', true);
+  const { watch } = form;
+  const useShippingAsBilling = watch('useShippingAsBilling', true);
+  const billingAddresses = watch('billingAddresses', []);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <AddressForm prefix="shippingAddresses" label="Shipping address" />
+        <AddressForm prefix="shippingAddresses.0" label="Shipping address" />
 
         <FormFieldWrapper
           control={form.control}
@@ -30,9 +31,11 @@ export const AddressStep = (): React.JSX.Element => {
           )}
         </FormFieldWrapper>
 
-        {!useShippingAsBilling && (
-          <AddressForm prefix="billingAddresses" label="Billing address" />
-        )}
+        {!useShippingAsBilling &&
+          Array.isArray(billingAddresses) &&
+          billingAddresses.length > 0 && (
+            <AddressForm prefix="billingAddresses.0" label="Billing address" />
+          )}
 
         <Button
           type="submit"

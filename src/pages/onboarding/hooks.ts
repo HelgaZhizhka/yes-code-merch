@@ -1,12 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 import { profileSchema, type ProfileFormType } from '@shared/lib/schemas';
 import { useCompleteRegistration } from '@shared/viewer/hooks';
+import { useViewerEmail } from '@shared/viewer/model';
+
+import { defaultAddress } from '@/shared/lib/validators';
 
 import { defaultAddressStep, defaultProfile, useFormStore } from './model';
 import {
@@ -14,8 +17,6 @@ import {
   viewerSchema,
   type AddressStepFormType,
 } from './model/schema';
-
-// TODO: 
 
 const STEPS = [
   {
@@ -47,6 +48,7 @@ const getStepIndexByKey = (key: StepKey): number => {
 export const useFormStep = () => {
   const navigate = useNavigate();
   const routerState = useRouterState();
+  const email = useViewerEmail();
   const { formData, setFormData, resetForm } = useFormStore();
   const { mutate: completeRegistration, isPending } = useCompleteRegistration();
 
@@ -61,13 +63,33 @@ export const useFormStep = () => {
     criteriaMode: 'all',
   });
 
+  const useShippingAsBilling = form.watch('useShippingAsBilling');
+
+  useEffect(() => {
+    const updateBillingAddress = async () => {
+      form.setValue(
+        'billingAddresses',
+        useShippingAsBilling ? [] : [defaultAddress]
+      );
+      await form.trigger('billingAddresses');
+    };
+
+    updateBillingAddress();
+  }, [useShippingAsBilling, form]);
+
   const handleSubmit = useCallback(() => {
     setFormData(currentStep.key, form.getValues());
 
-    const viewer = useFormStore.getState().getViewer();
+    if (!email) {
+      toast.error('Email is required');
+      return;
+    }
+
+    const viewer = useFormStore.getState().getViewer(email);
     const result = viewerSchema.safeParse(viewer);
 
     if (!result.success) {
+      toast.error(result.error.message);
       return;
     }
 
@@ -88,6 +110,7 @@ export const useFormStep = () => {
     completeRegistration,
     navigate,
     resetForm,
+    email,
   ]);
 
   const handleNextStep = useCallback(() => {

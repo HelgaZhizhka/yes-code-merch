@@ -1,7 +1,7 @@
 /* sonarjs-disable typescript:S2068 */
 import { z } from 'zod';
 
-import type { Address } from '@shared/api/auth/interfaces';
+import type { Address } from '@shared/api/countries/interfaces';
 
 export const PATTERNS = {
   digits: /\d/,

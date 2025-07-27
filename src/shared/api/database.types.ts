@@ -115,7 +115,7 @@ export type Database = {
           company: string | null;
           created_at: string;
           date_of_birth: string | null;
-          email: string | null;
+          email: string;
           first_name: string | null;
           last_name: string | null;
           phone: string | null;
@@ -127,7 +127,7 @@ export type Database = {
           company?: string | null;
           created_at?: string;
           date_of_birth?: string | null;
-          email?: string | null;
+          email?: string;
           first_name?: string | null;
           last_name?: string | null;
           phone?: string | null;
@@ -139,7 +139,7 @@ export type Database = {
           company?: string | null;
           created_at?: string;
           date_of_birth?: string | null;
-          email?: string | null;
+          email?: string;
           first_name?: string | null;
           last_name?: string | null;
           phone?: string | null;
@@ -155,50 +155,28 @@ export type Database = {
     };
     Functions: {
       complete_registration: {
-        Args:
-          | {
-              _title: string;
-              _first_name: string;
-              _last_name: string;
-              _phone: string;
-              _email: string;
-              _ship_country: string;
-              _ship_city: string;
-              _ship_street_name: string;
-              _ship_street_number: string;
-              _ship_postal: string;
-              _date_of_birth?: string;
-              _company?: string;
-              _ship_is_default?: boolean;
-              _use_ship_as_bill?: boolean;
-              _bill_country?: string;
-              _bill_city?: string;
-              _bill_street_name?: string;
-              _bill_street_number?: string;
-              _bill_postal?: string;
-              _bill_is_default?: boolean;
-            }
-          | {
-              _title: string;
-              _first_name: string;
-              _last_name: string;
-              _phone: string;
-              _ship_country: string;
-              _ship_city: string;
-              _ship_street_name: string;
-              _ship_street_number: string;
-              _ship_postal: string;
-              _date_of_birth?: string;
-              _company?: string;
-              _ship_is_default?: boolean;
-              _use_ship_as_bill?: boolean;
-              _bill_country?: string;
-              _bill_city?: string;
-              _bill_street_name?: string;
-              _bill_street_number?: string;
-              _bill_postal?: string;
-              _bill_is_default?: boolean;
-            };
+        Args: {
+          _title: string;
+          _first_name: string;
+          _last_name: string;
+          _phone: string;
+          _email: string;
+          _date_of_birth: string;
+          _company: string;
+          _ship_country: string;
+          _ship_city: string;
+          _ship_street_name: string;
+          _ship_street_number: string;
+          _ship_postal: string;
+          _ship_is_default: boolean;
+          _use_ship_as_bill: boolean;
+          _bill_country: string;
+          _bill_city: string;
+          _bill_street_name: string;
+          _bill_street_number: string;
+          _bill_postal: string;
+          _bill_is_default: boolean;
+        };
         Returns: undefined;
       };
     };

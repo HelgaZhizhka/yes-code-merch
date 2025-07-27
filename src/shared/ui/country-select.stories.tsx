@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 
-import { CountrySelect } from './country-select';
+import { useCountries } from '@shared/countries';
 
-import { useCountries } from '../countries';
+import { CountrySelect } from './country-select';
 
 const meta = {
   title: 'shared/ui/form/country-select',

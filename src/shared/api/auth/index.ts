@@ -64,13 +64,6 @@ export const signUp = async ({
     },
   });
 
-  console.log('SignUp Response:', {
-    user: data?.user,
-
-    session: data?.session,
-    error,
-  });
-
   if (error) {
     throw error;
   }

@@ -17,7 +17,7 @@ interface FormState {
     data: ProfileFormType | AddressStepFormType
   ): void;
   resetForm(): void;
-  getViewer(): Viewer;
+  getViewer(email: string | null): Viewer;
 }
 
 export const defaultProfile: ProfileFormType = {
@@ -31,7 +31,7 @@ export const defaultProfile: ProfileFormType = {
 
 export const defaultAddressStep: AddressStepFormType = {
   shippingAddresses: [defaultAddress],
-  billingAddresses: [defaultAddress],
+  billingAddresses: [],
   useShippingAsBilling: true,
 };
 
@@ -53,7 +53,7 @@ export const useFormStore = createAppStore<FormState>(
       }));
     },
     resetForm: () => set({ formData: {} }),
-    getViewer: () => {
+    getViewer: (email: string) => {
       const formData = get().formData;
       const profile = formData.profile ?? defaultProfile;
       const address = formData.address ?? defaultAddressStep;
@@ -64,6 +64,7 @@ export const useFormStore = createAppStore<FormState>(
         : (address.billingAddresses?.[0] ?? defaultAddress);
 
       return {
+        email,
         firstName: profile.firstName ?? '',
         lastName: profile.lastName ?? '',
         phone: profile.phone ?? '',
@@ -84,5 +85,3 @@ export const useFormStore = createAppStore<FormState>(
     useSessionStorage: true,
   }
 );
-
-export const useViewer = () => useFormStore((state) => state.getViewer());
