@@ -201,7 +201,7 @@
   }
 }
 
-/* sonar-disable css:S4659, css:S4670 */
+/* sonarignore:start */
 @supports selector(:active-view-transition-type(fade)) {
   html:active-view-transition-type(fade) {
     &::view-transition-old(fade-content) {
@@ -315,3 +315,5 @@
     opacity: 1;
   }
 }
+
+ /* sonarignore:end */
