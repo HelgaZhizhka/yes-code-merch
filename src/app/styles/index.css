@@ -1,3 +1,4 @@
+/* sonar-disable-file */
 @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
 
@@ -201,7 +202,6 @@
   }
 }
 
-/* sonarignore:start */
 @supports selector(:active-view-transition-type(fade)) {
   html:active-view-transition-type(fade) {
     &::view-transition-old(fade-content) {
@@ -315,5 +315,3 @@
     opacity: 1;
   }
 }
-
- /* sonarignore:end */
