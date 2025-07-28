@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useForm } from 'react-hook-form';
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import { z } from 'zod';
 
-import type { AddressFormType } from '@shared/lib/schemas';
+import { addressSchema, type AddressFormType } from '@shared/lib/schemas';
 import { defaultAddress } from '@shared/lib/validators';
+import { FormValidation } from '@shared/storybook/form-validation';
 import { AddressForm, type AddressFormProps } from '@shared/ui/address-form';
 import { Button } from '@shared/ui/button';
-import { Form } from '@shared/ui/form';
 
 const meta: Meta<typeof AddressForm> = {
   title: 'shared/ui/form/address',
@@ -15,45 +15,51 @@ const meta: Meta<typeof AddressForm> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    prefix: { control: 'text' },
-    label: { control: 'text' },
+    prefix: {
+      control: 'text',
+      description: 'Field name prefix for form fields',
+    },
+    label: {
+      control: 'text',
+      description: 'Legend text for the fieldset',
+    },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof AddressForm>;
 
-const onSubmit = (data: AddressFormType) => {
-  console.log('Form Data:', data);
+const onSubmit = (formData: Record<string, AddressFormType>) => {
+  const addressData = formData[Object.keys(formData)[0]];
+  console.log('Address Data:', addressData);
 };
 
-export const Default: Story = {
-  args: {
-    prefix: 'shippingAddress',
-    label: 'Shipping Address',
-  },
-  render: (args: AddressFormProps) => {
-    const methods = useForm<AddressFormType>({
-      defaultValues: defaultAddress,
-      mode: 'onChange',
-      criteriaMode: 'all',
-      shouldUnregister: true,
-    });
+const Template: StoryFn<AddressFormProps> = (args) => (
+  <FormValidation
+    schema={z.object({
+      [args.prefix]: addressSchema,
+    })}
+    initialValues={{ [args.prefix]: defaultAddress }}
+  >
+    {(methods) => (
+      <form
+        onSubmit={methods.handleSubmit(onSubmit)}
+        className="space-y-4 w-[450px]"
+      >
+        <AddressForm {...args} />
+        <Button type="submit">Submit</Button>
+      </form>
+    )}
+  </FormValidation>
+);
 
-    return (
-      <Form {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <AddressForm {...args} />
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
-    );
-  },
+export const ShippingAddress = Template.bind({});
+ShippingAddress.args = {
+  prefix: 'shippingAddress',
+  label: 'Shipping Address',
 };
 
-export const BillingAddress: Story = {
-  args: {
-    prefix: 'billingAddresses',
-    label: 'Billing Address',
-  },
+export const BillingAddress = Template.bind({});
+BillingAddress.args = {
+  prefix: 'billingAddress',
+  label: 'Billing Address',
 };
