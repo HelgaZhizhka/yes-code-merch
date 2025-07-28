@@ -122,7 +122,10 @@ export const useFormStep = () => {
       return;
     }
 
-    navigate({ to: nextStep.route });
+    navigate({
+      to: nextStep.route,
+      viewTransition: { types: ['slide-fade'] },
+    });
   }, [form, currentStepIndex, setFormData, navigate, currentStep]);
 
   const handleBack = useCallback(() => {
@@ -135,7 +138,10 @@ export const useFormStep = () => {
       return;
     }
 
-    navigate({ to: prevStep.route });
+    navigate({
+      to: prevStep.route,
+      viewTransition: { types: ['slide-fade'] },
+    });
   }, [form, currentStepIndex, setFormData, navigate, currentStep]);
 
   return {

@@ -24,7 +24,9 @@ export const Onboarding = (): React.JSX.Element => {
           profile information now. This will make future checkouts faster and
           allow us to serve you better.
         </p>
-        <Outlet />
+        <div className="[view-transition-name:slide-fade-content]">
+          <Outlet />
+        </div>
         <div className="text-center">
           <Link to={ROUTES.HOME} className="hover:underline">
             Skip to Shopping
