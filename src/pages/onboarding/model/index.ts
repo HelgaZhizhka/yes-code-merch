@@ -1,4 +1,4 @@
-import type { Viewer } from '@shared/api/auth/interfaces';
+import type { Viewer } from '@shared/api/auth';
 import { createAppStore } from '@shared/lib/create-app-store';
 import { type ProfileFormType } from '@shared/lib/schemas';
 import { defaultAddress } from '@shared/lib/validators';
