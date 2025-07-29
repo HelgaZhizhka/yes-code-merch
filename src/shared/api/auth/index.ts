@@ -2,11 +2,7 @@ import type { Session, User } from '@supabase/supabase-js';
 
 import type { Address } from '@shared/api/countries';
 import type { Database } from '@shared/api/database.types';
-import {
-  AuthErrorMessages,
-  supabase,
-  withErrorHandling,
-} from '@shared/api/supabase-client';
+import { supabase } from '@shared/api/supabase-client';
 import { config } from '@shared/config';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
@@ -30,14 +26,21 @@ export const RpcFunctions = {
   registration: 'complete_registration',
 } as const;
 
+export const AuthErrorMessages = {
+  REGISTRATION_FAILED: 'User registration failed',
+  ALREADY_REGISTERED: 'You are already registered. Please log in',
+  UPDATE_FAILED: 'User update failed',
+  NO_DATA: 'Returned no data',
+} as const;
+
 export const getSession = async (): Promise<Session | null> => {
   const {
     data: { session },
     error,
   } = await supabase.auth.getSession();
 
-  if (error || !session) {
-    throw error || AuthErrorMessages.NO_DATA;
+  if (error) {
+    throw error;
   }
 
   return session;
@@ -144,9 +147,14 @@ export const completeRegistration = async (
   viewer: Viewer
 ): Promise<CompleteRegistrationResult> => {
   const rpcArgs = mapViewerDataToRpcArgs(viewer);
-  const data = await withErrorHandling<CompleteRegistrationResult>(
-    supabase.rpc(RpcFunctions.registration, rpcArgs)
+  const { data, error } = await supabase.rpc(
+    RpcFunctions.registration,
+    rpcArgs
   );
+
+  if (error) {
+    throw error;
+  }
 
   return data;
 };
