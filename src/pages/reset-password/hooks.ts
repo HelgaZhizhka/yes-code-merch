@@ -3,19 +3,18 @@ import { useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import {
-  type ResetPasswordFormType,
-  resetPasswordSchema,
-} from '@pages/reset-password/model/validation-schema';
-
 import { ROUTES } from '@shared/config/routes';
+import {
+  newPasswordSchema,
+  type NewPasswordFormType,
+} from '@shared/lib/schemas';
 import { useUpdateUser } from '@shared/viewer';
 
 export const useResetPasswordForm = () => {
   const { mutate: updateUser, isPending } = useUpdateUser();
   const navigate = useNavigate();
-  const form = useForm<ResetPasswordFormType>({
-    resolver: zodResolver(resetPasswordSchema),
+  const form = useForm<NewPasswordFormType>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: {
       password: '',
       confirmPassword: '',
@@ -23,7 +22,7 @@ export const useResetPasswordForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = (data: ResetPasswordFormType) => {
+  const onSubmit = (data: NewPasswordFormType) => {
     updateUser(
       { password: data.password },
       {

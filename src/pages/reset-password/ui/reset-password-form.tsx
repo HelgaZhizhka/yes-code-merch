@@ -1,10 +1,10 @@
-import { useResetPasswordForm } from '@pages/reset-password/hooks';
-
 import { Button } from '@shared/ui/button';
 import { Form } from '@shared/ui/form';
 import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { PasswordField } from '@shared/ui/password-field';
 import { PasswordInput } from '@shared/ui/password-input';
+
+import { useResetPasswordForm } from '../hooks';
 
 export const ResetPasswordForm = (): React.JSX.Element => {
   const { form, onSubmit, isPending } = useResetPasswordForm();

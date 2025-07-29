@@ -1,3 +1,4 @@
+/* sonarjs-disable-all */
 @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
 
@@ -198,5 +199,119 @@
 
   :where(button, [role='button']):not([disabled]) {
     cursor: pointer;
+  }
+}
+
+@supports selector(:active-view-transition-type(fade)) {
+  html:active-view-transition-type(fade) {
+    &::view-transition-old(fade-content) {
+      animation: 150ms ease-out both fade-out;
+    }
+
+    &::view-transition-new(fade-content) {
+      animation: 150ms ease-out 150ms both fade-in;
+    }
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@supports selector(:active-view-transition-type(slide-fade)) {
+  html:active-view-transition-type(slide-fade) {
+    &::view-transition-old(slide-fade-content) {
+      animation: 200ms ease-out both fade-out;
+    }
+
+    &::view-transition-new(slide-fade-content) {
+      animation: 250ms ease-out 100ms both slide-fade-in;
+    }
+  }
+}
+
+@keyframes slide-fade-in {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@supports selector(:active-view-transition-type(slide-left)) {
+  html:active-view-transition-type(slide-left) {
+    &::view-transition-old(slide-content) {
+      animation: 300ms ease-out both slide-out-to-left;
+    }
+
+    &::view-transition-new(slide-content) {
+      animation: 300ms ease-out 100ms both slide-in-from-right;
+    }
+  }
+}
+
+@keyframes slide-out-to-left {
+  to {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(50%);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@supports selector(:active-view-transition-type(slide-right)) {
+  html:active-view-transition-type(slide-right) {
+    &::view-transition-old(slide-content) {
+      animation: 300ms ease-out both slide-out-to-right;
+    }
+
+    &::view-transition-new(slide-content) {
+      animation: 300ms ease-out 100ms both slide-in-from-left;
+    }
+  }
+}
+
+@keyframes slide-out-to-right {
+  to {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-left {
+  from {
+    transform: translateX(-30%);
+    opacity: 0.7;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
 }

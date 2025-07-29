@@ -8,6 +8,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import {
+  completeRegistration,
   getSession,
   login,
   logout,
@@ -15,15 +16,17 @@ import {
   resetPassword,
   signUp,
   updateUser,
+  type CompleteRegistrationResult,
+  type ResetPasswordResponse,
+  type Viewer,
 } from '@shared/api/auth';
 import type {
-  LoginDTO,
+  AuthCredentials,
   ResetPasswordDTO,
-  SignUpDTO,
   UpdateUserDTO,
-} from '@shared/api/auth/interfaces';
+} from '@shared/api/auth/types';
 import { ROUTES } from '@shared/config/routes';
-import type { AsyncAction } from '@shared/types';
+import type { AsyncVoidFunction } from '@shared/types';
 
 import {
   clearSession,
@@ -67,8 +70,12 @@ export const useInitViewer = (): void => {
   }, []);
 };
 
-export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
-  return useMutation<Session, Error, LoginDTO>({
+export const useLogin = (): UseMutationResult<
+  Session,
+  Error,
+  AuthCredentials
+> => {
+  return useMutation<Session, Error, AuthCredentials>({
     mutationFn: login,
     onSuccess: (session) => {
       setSession(session);
@@ -82,7 +89,7 @@ export const useLogin = (): UseMutationResult<Session, Error, LoginDTO> => {
   });
 };
 
-export const useLogout = (): AsyncAction => {
+export const useLogout = (): AsyncVoidFunction => {
   const queryClient = useQueryClient();
 
   return async () => {
@@ -92,8 +99,12 @@ export const useLogout = (): AsyncAction => {
   };
 };
 
-export const useRegistration = (): UseMutationResult<User, Error, SignUpDTO> =>
-  useMutation<User, Error, SignUpDTO>({
+export const useRegistration = (): UseMutationResult<
+  User,
+  Error,
+  AuthCredentials
+> =>
+  useMutation<User, Error, AuthCredentials>({
     mutationFn: signUp,
     onError: (error: unknown) => {
       if (error instanceof Error) {
@@ -104,11 +115,11 @@ export const useRegistration = (): UseMutationResult<User, Error, SignUpDTO> =>
   });
 
 export const useResetPassword = (): UseMutationResult<
-  object,
+  ResetPasswordResponse,
   Error,
   ResetPasswordDTO
 > => {
-  return useMutation<object, Error, ResetPasswordDTO>({
+  return useMutation<ResetPasswordResponse, Error, ResetPasswordDTO>({
     mutationFn: resetPassword,
     onError: (error: unknown) => {
       if (error instanceof Error) {
@@ -133,6 +144,21 @@ export const useUpdateUser = (): UseMutationResult<
     },
   });
 };
+
+export const useCompleteRegistration = (): UseMutationResult<
+  CompleteRegistrationResult,
+  Error,
+  Viewer
+> =>
+  useMutation<CompleteRegistrationResult, Error, Viewer>({
+    mutationFn: completeRegistration,
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        setError(error);
+        console.error('Registration failed:', error.message);
+      }
+    },
+  });
 
 export interface AuthProps {
   isLoading: boolean;

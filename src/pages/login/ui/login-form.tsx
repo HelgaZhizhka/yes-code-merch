@@ -13,14 +13,23 @@ export const LoginForm = (): React.JSX.Element => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormFieldWrapper control={form.control} name="email" label="Email">
-          {(field) => <Input type="email" placeholder="Email" {...field} />}
+          {(field) => (
+            <Input
+              type="email"
+              placeholder="Email"
+              autoComplete="email"
+              {...field}
+            />
+          )}
         </FormFieldWrapper>
         <FormFieldWrapper
           control={form.control}
           name="password"
           label="Password"
         >
-          {(field) => <PasswordInput {...field} />}
+          {(field) => (
+            <PasswordInput autoComplete="current-password" {...field} />
+          )}
         </FormFieldWrapper>
         <Button
           type="submit"

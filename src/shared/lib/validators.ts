@@ -1,6 +1,8 @@
 /* sonarjs-disable typescript:S2068 */
 import { z } from 'zod';
 
+import type { Address } from '@shared/api/countries';
+
 export const PATTERNS = {
   digits: /\d/,
   lowercase: /[a-z]/,
@@ -13,6 +15,17 @@ export const STRENGTH = {
   MEDIUM: 'medium',
   HIGH: 'high',
 } as const;
+
+export const MIN_AGE = 1;
+export const MAX_AGE = 120;
+export const TODAY = new Date();
+
+export const VALIDATION_REGEX = {
+  namePattern: /^[a-zA-Z\s-]+$/,
+  phonePattern: /^\+[1-9]\d{1,14}$/,
+  streetNamePattern: /^[a-zA-Z\s\-.]+$/,
+  streetNumberPattern: /^\d+[a-zA-Z]?$/,
+};
 
 export type Strength = (typeof STRENGTH)[keyof typeof STRENGTH];
 
@@ -72,33 +85,34 @@ export const getPasswordFeedback = (
     };
   }
 
-  let strength = getPasswordStrength(password);
+  const strength = getPasswordStrength(password);
 
-  const isTooShort = password.length < 8;
-
-  if (isTooShort && strength === STRENGTH.HIGH) {
-    strength = STRENGTH.MEDIUM;
-  }
-
-  let message = STRENGTH_MESSAGES[strength] ?? 'Unknown password strength';
-
-  if (isTooShort) {
-    message = `${message} (Password must be at least 8 characters)`;
-  }
+  const message = STRENGTH_MESSAGES[strength];
 
   return { strength, message };
 };
 
-export const passwordSchema = z.object({
-  password: z
-    .string()
-    .trim()
-    .min(1, 'Password is required')
-    .min(8, 'Password must be at least 8 characters long')
-    .refine((password) => getPasswordStrength(password) !== 'low', {
-      message:
-        'Password is too weak. Include a mix of letters, numbers, and symbols.',
-    }),
+export const emailValidator = z.email({
+  pattern: z.regexes.html5Email,
+  message: 'Invalid email format',
 });
 
-export type PasswordType = z.infer<typeof passwordSchema>;
+export const passwordValidator = z
+  .string()
+  .trim()
+  .min(1, 'Password is required')
+  .min(8, 'Password must be at least 8 characters long');
+
+export const confirmPasswordValidator = z
+  .string()
+  .trim()
+  .min(1, 'Confirm password is required');
+
+export const defaultAddress: Address = {
+  country: '',
+  city: '',
+  streetName: '',
+  streetNumber: '',
+  postalCode: '',
+  isDefault: false,
+};

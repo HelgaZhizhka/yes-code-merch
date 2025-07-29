@@ -20,11 +20,19 @@ interface FormFieldWrapperProps<
 > {
   readonly control: Control<TFieldValues>;
   readonly name: TName;
-  readonly label: string;
+  readonly label?: string;
+  readonly labelPosition?: 'top' | 'right';
   readonly children: (
     field: ControllerRenderProps<TFieldValues, TName>
   ) => React.ReactNode;
 }
+const getFormItemClassName = (
+  hasLabel: boolean,
+  position: 'top' | 'right'
+): string => {
+  if (!hasLabel) return '';
+  return position === 'right' ? 'flex flex-row items-center gap-2' : '';
+};
 
 export function FormFieldWrapper<
   TFieldValues extends FieldValues = FieldValues,
@@ -34,15 +42,37 @@ export function FormFieldWrapper<
   name,
   label,
   children,
+  labelPosition = 'top',
 }: FormFieldWrapperProps<TFieldValues, TName>): React.JSX.Element {
+  const renderFieldContent = (
+    field: ControllerRenderProps<TFieldValues, TName>
+  ): React.ReactNode => {
+    if (!label) return <FormControl>{children(field)}</FormControl>;
+
+    if (labelPosition === 'right') {
+      return (
+        <>
+          <FormControl>{children(field)}</FormControl>
+          <FormLabel className="mb-0">{label}</FormLabel>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <FormLabel>{label}</FormLabel>
+        <FormControl>{children(field)}</FormControl>
+      </>
+    );
+  };
+
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>{children(field)}</FormControl>
+        <FormItem className={getFormItemClassName(!!label, labelPosition)}>
+          {renderFieldContent(field)}
           <FormMessage />
         </FormItem>
       )}

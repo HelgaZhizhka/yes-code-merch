@@ -3,6 +3,6 @@ import React from 'react';
 
 import '../src/app/styles/index.css';
 
-export const withStyleDecorator: Decorator = (Story) => {
+export const withStyleDecorator: Decorator = (Story: React.FC) => {
   return <Story />;
 };

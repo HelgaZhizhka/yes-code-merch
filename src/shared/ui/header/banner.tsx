@@ -16,7 +16,7 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
           <Link
             to={ROUTES.CATEGORY}
             params={{ categoryId: category.toLowerCase() }}
-            className="underline"
+            className="hover:underline"
           >
             {category}
           </Link>{' '}
@@ -35,7 +35,7 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
               categoryId: 'clothes',
               subCategoryId: category.toLowerCase(),
             }}
-            className="underline"
+            className="hover:underline"
           >
             {category}
           </Link>{' '}
