@@ -1,4 +1,4 @@
-import type { Session, User } from '@supabase/supabase-js';
+import type { AuthError, Session, User } from '@supabase/supabase-js';
 
 import type { Address } from '@shared/api/countries';
 import type { Database } from '@shared/api/database.types';
@@ -22,14 +22,14 @@ export interface Viewer {
   company?: string;
 }
 
-export type ResetPasswordResponse<T = void> =
+export type ResetPasswordResponse =
   | {
-      data: T | null;
+      data: Record<string, never> | null;
       error: null;
     }
   | {
       data: null;
-      error: Error | string;
+      error: AuthError;
     };
 
 export const RpcFunctions = {
