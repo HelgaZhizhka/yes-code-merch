@@ -113,7 +113,7 @@ export const signUp = async ({
 
 export const resetPassword = async ({
   email,
-}: ResetPasswordDTO): Promise<void> => {
+}: ResetPasswordDTO): Promise<undefined> => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${config.HOST}${ROUTES.RESET}`,
   });

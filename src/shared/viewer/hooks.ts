@@ -17,8 +17,8 @@ import {
   signUp,
   updateUser,
   type CompleteRegistrationResult,
+  type Viewer,
 } from '@shared/api/auth';
-import type { Viewer } from '@shared/api/auth/interfaces';
 import type {
   AuthCredentials,
   ResetPasswordDTO,
@@ -114,11 +114,11 @@ export const useRegistration = (): UseMutationResult<
   });
 
 export const useResetPassword = (): UseMutationResult<
-  object,
+  undefined,
   Error,
   ResetPasswordDTO
 > => {
-  return useMutation<object, Error, ResetPasswordDTO>({
+  return useMutation<undefined, Error, ResetPasswordDTO>({
     mutationFn: resetPassword,
     onError: (error: unknown) => {
       if (error instanceof Error) {
