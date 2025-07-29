@@ -1,6 +1,6 @@
 import type { Database } from '@shared/api/database.types';
 
-import type { Viewer } from './interfaces';
+import type { Viewer } from './';
 
 export type RpcArgs =
   Database['public']['Functions']['complete_registration']['Args'];
