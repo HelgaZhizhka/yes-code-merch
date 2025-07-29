@@ -1,7 +1,7 @@
 /* sonarjs-disable typescript:S2068 */
 import { z } from 'zod';
 
-import type { Address } from '@shared/api/countries/interfaces';
+import type { Address } from '@shared/api/countries';
 
 export const PATTERNS = {
   digits: /\d/,
@@ -85,19 +85,9 @@ export const getPasswordFeedback = (
     };
   }
 
-  let strength = getPasswordStrength(password);
+  const strength = getPasswordStrength(password);
 
-  const isTooShort = password.length < 8;
-
-  if (isTooShort && strength === STRENGTH.HIGH) {
-    strength = STRENGTH.MEDIUM;
-  }
-
-  let message = STRENGTH_MESSAGES[strength] ?? 'Unknown password strength';
-
-  if (isTooShort) {
-    message = `${message}`;
-  }
+  const message = STRENGTH_MESSAGES[strength];
 
   return { strength, message };
 };

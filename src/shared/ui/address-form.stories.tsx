@@ -3,9 +3,10 @@ import { z } from 'zod';
 
 import { addressSchema, type AddressFormType } from '@shared/lib/schemas';
 import { defaultAddress } from '@shared/lib/validators';
-import { FormValidation } from '@shared/storybook/form-validation';
 import { AddressForm, type AddressFormProps } from '@shared/ui/address-form';
 import { Button } from '@shared/ui/button';
+
+import { FormValidation } from '.storybook/form-validation';
 
 const meta: Meta<typeof AddressForm> = {
   title: 'shared/ui/form/address',

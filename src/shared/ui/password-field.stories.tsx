@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { newPasswordSchema } from '@shared/lib/schemas';
-import { FormValidation } from '@shared/storybook/form-validation';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
 
 import { PasswordField } from './password-field';
+
+import { FormValidation } from '.storybook/form-validation';
 
 const meta = {
   title: 'shared/ui/form/password-field',

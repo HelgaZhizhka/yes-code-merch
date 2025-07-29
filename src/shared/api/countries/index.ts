@@ -2,6 +2,16 @@ export interface Country {
   code: string;
   name: string;
 }
+
+export interface Address {
+  country: string;
+  city: string;
+  streetName: string;
+  streetNumber: string;
+  postalCode: string;
+  isDefault: boolean;
+}
+
 export const getCountries = async (): Promise<Country[]> => {
   return [
     { code: 'AT', name: 'Austria' },
