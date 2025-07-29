@@ -17,6 +17,7 @@ import {
   signUp,
   updateUser,
   type CompleteRegistrationResult,
+  type ResetPasswordResponse,
   type Viewer,
 } from '@shared/api/auth';
 import type {
@@ -25,7 +26,7 @@ import type {
   UpdateUserDTO,
 } from '@shared/api/auth/types';
 import { ROUTES } from '@shared/config/routes';
-import type { AsyncAction } from '@shared/types';
+import type { AsyncVoidFunction } from '@shared/types';
 
 import {
   clearSession,
@@ -88,7 +89,7 @@ export const useLogin = (): UseMutationResult<
   });
 };
 
-export const useLogout = (): AsyncAction => {
+export const useLogout = (): AsyncVoidFunction => {
   const queryClient = useQueryClient();
 
   return async () => {
@@ -114,11 +115,11 @@ export const useRegistration = (): UseMutationResult<
   });
 
 export const useResetPassword = (): UseMutationResult<
-  undefined,
+  ResetPasswordResponse,
   Error,
   ResetPasswordDTO
 > => {
-  return useMutation<undefined, Error, ResetPasswordDTO>({
+  return useMutation<ResetPasswordResponse, Error, ResetPasswordDTO>({
     mutationFn: resetPassword,
     onError: (error: unknown) => {
       if (error instanceof Error) {

@@ -22,6 +22,16 @@ export interface Viewer {
   company?: string;
 }
 
+export type ResetPasswordResponse<T = void> =
+  | {
+      data: T | null;
+      error: null;
+    }
+  | {
+      data: null;
+      error: Error | string;
+    };
+
 export const RpcFunctions = {
   registration: 'complete_registration',
 } as const;
@@ -71,7 +81,7 @@ export const login = async ({
   });
 
   if (error || !session) {
-    throw error || AuthErrorMessages.NO_DATA;
+    throw error || new Error(AuthErrorMessages.NO_DATA);
   }
 
   return session;
@@ -101,7 +111,7 @@ export const signUp = async ({
   });
 
   if (error || !user) {
-    throw error || AuthErrorMessages.REGISTRATION_FAILED;
+    throw error || new Error(AuthErrorMessages.REGISTRATION_FAILED);
   }
 
   if (user && Array.isArray(user.identities) && user.identities.length === 0) {
@@ -113,7 +123,7 @@ export const signUp = async ({
 
 export const resetPassword = async ({
   email,
-}: ResetPasswordDTO): Promise<undefined> => {
+}: ResetPasswordDTO): Promise<ResetPasswordResponse> => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${config.HOST}${ROUTES.RESET}`,
   });
@@ -121,6 +131,8 @@ export const resetPassword = async ({
   if (error) {
     throw error;
   }
+
+  return { data: null, error: null };
 };
 
 export const updateUser = async ({
@@ -134,7 +146,7 @@ export const updateUser = async ({
   });
 
   if (error || !user) {
-    throw error || AuthErrorMessages.UPDATE_FAILED;
+    throw error || new Error(AuthErrorMessages.UPDATE_FAILED);
   }
 
   return user;
