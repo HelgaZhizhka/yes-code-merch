@@ -44,33 +44,31 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+const CountrySelectList = () => {
+  const countries = useCountries();
 
-export const AllCountries: Story = {
-  render: () => {
-    const countries = useCountries();
-    return (
-      <div className="space-y-2 w-[400px]">
-        {countries.map((country) => (
-          <div
-            key={country.code}
-            className="flex items-center gap-2 p-2 border rounded"
-          >
-            <Suspense fallback={<Spinner size="small" />}>
-              <CountrySelect
-                value={country.code}
-                onChange={fn()}
-                placeholder={`Select ${country.name}`}
-              />
-            </Suspense>
-          </div>
-        ))}
-      </div>
-    );
-  },
-  parameters: {
-    layout: 'padded',
-  },
+  return (
+    <div className="space-y-2 w-[400px]">
+      {countries.map((country) => (
+        <div
+          key={country.code}
+          className="flex items-center gap-2 p-2 border rounded"
+        >
+          <Suspense fallback={<Spinner size="small" />}>
+            <CountrySelect
+              value={country.code}
+              onChange={fn()}
+              placeholder={`Select ${country.name}`}
+            />
+          </Suspense>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export const Default: Story = {
+  render: () => <CountrySelectList />,
 };
 
 export const Disabled: Story = {
