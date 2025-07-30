@@ -89,7 +89,7 @@ export const useFormStep = () => {
     const result = viewerSchema.safeParse(viewer);
 
     if (!result.success) {
-      toast.error(result.error.message);
+      toast.error('You should fill all fields from previous steps');
       return;
     }
 

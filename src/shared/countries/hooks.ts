@@ -1,22 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getCountries, type Country } from '@shared/api/countries';
+import { getCountries } from '@shared/api/countries';
 
 export const useCountries = () => {
-  const [countries, setCountries] = useState<Country[]>([]);
-
-  useEffect(() => {
-    const loadCountries = async (): Promise<void> => {
-      try {
-        const data = await getCountries();
-        setCountries(data);
-      } catch (error) {
-        console.error('Failed to fetch countries:', error);
-      }
-    };
-
-    loadCountries();
-  }, []);
-
-  return countries;
+  const { data } = useSuspenseQuery({
+    queryKey: ['countries'],
+    queryFn: getCountries,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+  return data;
 };

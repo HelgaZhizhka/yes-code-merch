@@ -8,7 +8,7 @@ export const Loader = () => {
       aria-live="polite"
       aria-label="Loading content"
     >
-      <Spinner size="large" />
+      <Spinner className="text-violet" size="large" />
       <span className="sr-only">Loading...</span>
     </div>
   );
