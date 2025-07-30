@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Suspense } from 'react';
 import { fn } from 'storybook/test';
 
 import { useCountries } from '@shared/countries';
+import { Spinner } from '@shared/ui/spinner';
 
 import { CountrySelect } from './country-select';
 
@@ -54,11 +56,13 @@ export const AllCountries: Story = {
             key={country.code}
             className="flex items-center gap-2 p-2 border rounded"
           >
-            <CountrySelect
-              value={country.code}
-              onChange={fn()}
-              placeholder={`Select ${country.name}`}
-            />
+            <Suspense fallback={<Spinner size="small" />}>
+              <CountrySelect
+                value={country.code}
+                onChange={fn()}
+                placeholder={`Select ${country.name}`}
+              />
+            </Suspense>
           </div>
         ))}
       </div>

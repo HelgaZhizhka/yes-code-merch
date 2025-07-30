@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { Checkbox } from '@shared/ui/checkbox';
 import { CountrySelect } from '@shared/ui/country-select';
 import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
+import { Spinner } from '@shared/ui/spinner';
 
 export interface AddressFormProps {
   prefix: string;
@@ -24,11 +25,13 @@ export const AddressForm = ({
       <div className="grid gap-4">
         <FormFieldWrapper control={control} name={`${prefix}.country`}>
           {(field) => (
-            <CountrySelect
-              name={field.name}
-              value={field.value ?? ''}
-              onChange={field.onChange}
-            />
+            <Suspense fallback={<Spinner size="small" />}>
+              <CountrySelect
+                name={field.name}
+                value={field.value ?? ''}
+                onChange={field.onChange}
+              />
+            </Suspense>
           )}
         </FormFieldWrapper>
         <div className="grid gap-4 md:grid-cols-2 items-start">
