@@ -19,6 +19,7 @@ export const STRENGTH = {
 export const MIN_AGE = 1;
 export const MAX_AGE = 120;
 export const TODAY = new Date();
+const MIN_PASSWORD_LENGTH = 8;
 
 export const VALIDATION_REGEX = {
   namePattern: /^[a-zA-Z\s-]+$/,
@@ -85,7 +86,13 @@ export const getPasswordFeedback = (
     };
   }
 
-  const strength = getPasswordStrength(password);
+  let strength = getPasswordStrength(password);
+
+  const isTooShort = password.length < 8;
+
+  if (isTooShort && strength === STRENGTH.HIGH) {
+    strength = STRENGTH.MEDIUM;
+  }
 
   const message = STRENGTH_MESSAGES[strength];
 
@@ -101,7 +108,10 @@ export const passwordValidator = z
   .string()
   .trim()
   .min(1, 'Password is required')
-  .min(8, 'Password must be at least 8 characters long');
+  .min(
+    MIN_PASSWORD_LENGTH,
+    `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
+  );
 
 export const confirmPasswordValidator = z
   .string()
