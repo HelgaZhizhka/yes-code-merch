@@ -33,7 +33,7 @@ export const Footer = ({
           <nav className="flex flex-col gap-1">
             <Link
               to={ROUTES.ABOUT}
-              className="text-violet-foreground hover:text-primary-foreground"
+              className="text-violet-foreground hover:text-violet-accent-foreground"
             >
               About Us
             </Link>

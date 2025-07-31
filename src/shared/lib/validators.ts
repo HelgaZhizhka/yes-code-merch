@@ -40,10 +40,10 @@ export const STRENGTH_MESSAGES: Record<Strength, string> = {
 
 export const getPasswordStrengthColor = (strength: Strength): string => {
   const strengthColors: Record<Strength | 'default', string> = {
-    [STRENGTH.LOW]: 'bg-red-500',
-    [STRENGTH.MEDIUM]: 'bg-yellow-500',
-    [STRENGTH.HIGH]: 'bg-green-500',
-    default: 'bg-gray-200',
+    [STRENGTH.LOW]: 'bg-destructive',
+    [STRENGTH.MEDIUM]: 'bg-accent-medium',
+    [STRENGTH.HIGH]: 'bg-success',
+    default: 'bg-muted',
   };
 
   return strengthColors[strength] ?? strengthColors.default;

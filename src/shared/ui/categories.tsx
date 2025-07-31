@@ -27,7 +27,7 @@ const linkVariants = cva('transition-all', {
   variants: {
     variant: {
       header: 'text-secondary-foreground hover:text-primary',
-      footer: 'text-violet-foreground hover:text-primary-foreground',
+      footer: 'text-violet-foreground hover:text-violet-accent-foreground',
     },
   },
   defaultVariants: {

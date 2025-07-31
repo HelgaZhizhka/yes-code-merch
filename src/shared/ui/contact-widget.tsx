@@ -14,7 +14,7 @@ const linkVariants = cva('', {
   variants: {
     variant: {
       header: 'text-primary-foreground hover:text-primary-foreground',
-      footer: 'text-violet-foreground',
+      footer: 'text-violet-foreground hover:text-violet-accent-foreground',
     },
   },
   defaultVariants: {
