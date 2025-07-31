@@ -43,7 +43,7 @@ export const PasswordField = ({
         onFocus={handleFocus}
         onBlur={handleBlur}
         autoComplete="new-password"
-        className={error ? 'border-red-500' : ''}
+        className={error ? 'border-destructive' : ''}
         placeholder="Enter your password"
       />
 
@@ -51,16 +51,16 @@ export const PasswordField = ({
         <div className="space-y-2">
           <div className="flex gap-1 h-1">
             <div
-              className={`h-full w-1/3 ${strength === STRENGTH.LOW || strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.LOW) : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === STRENGTH.LOW || strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.LOW) : 'bg-muted'}`}
             ></div>
             <div
-              className={`h-full w-1/3 ${strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.MEDIUM) : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.MEDIUM) : 'bg-muted'}`}
             ></div>
             <div
-              className={`h-full w-1/3 ${strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.HIGH) : 'bg-gray-200'}`}
+              className={`h-full w-1/3 ${strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.HIGH) : 'bg-muted'}`}
             ></div>
           </div>
-          <p className="text-sm text-gray-600">{message}</p>
+          <p className="text-sm text-muted-foreground">{message}</p>
         </div>
       )}
     </div>
