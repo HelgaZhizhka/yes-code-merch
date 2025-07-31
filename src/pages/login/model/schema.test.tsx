@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { MockCredentials } from '@shared/config/test-config';
+import { ErrorMessages } from '@shared/lib/validators';
 
 import { loginSchema } from './schema';
 
@@ -25,8 +26,8 @@ describe('loginSchema', () => {
         (issue) => issue.path[0] === 'password'
       );
 
-      expect(emailError?.message).toBe('Invalid email format');
-      expect(passwordError?.message).toBe('Password is required');
+      expect(emailError?.message).toBe(ErrorMessages.emailInvalid);
+      expect(passwordError?.message).toBe(ErrorMessages.passwordRequired);
     }
   });
 
@@ -40,7 +41,7 @@ describe('loginSchema', () => {
       const emailError = result.error.issues.find(
         (issue) => issue.path[0] === 'email'
       );
-      expect(emailError?.message).toBe('Invalid email format');
+      expect(emailError?.message).toBe(ErrorMessages.emailInvalid);
     }
   });
 
@@ -54,9 +55,7 @@ describe('loginSchema', () => {
       const passwordError = result.error.issues.find(
         (issue) => issue.path[0] === 'password'
       );
-      expect(passwordError?.message).toBe(
-        'Password must be at least 8 characters long'
-      );
+      expect(passwordError?.message).toBe(ErrorMessages.passwordInvalid);
     }
   });
 });

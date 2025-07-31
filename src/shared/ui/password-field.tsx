@@ -51,7 +51,7 @@ export const PasswordField = ({
         <div className="space-y-2">
           <div className="flex gap-1 h-1">
             <div
-              className={`h-full w-1/3 ${strength === STRENGTH.LOW || strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.LOW) : 'bg-muted'}`}
+              className={`h-full w-1/3 ${strength === STRENGTH.WEEK || strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.WEEK) : 'bg-muted'}`}
             ></div>
             <div
               className={`h-full w-1/3 ${strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.MEDIUM) : 'bg-muted'}`}
