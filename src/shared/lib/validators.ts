@@ -16,7 +16,7 @@ export const STRENGTH = {
   HIGH: 'high',
 } as const;
 
-export const MIN_AGE = 1;
+export const MIN_AGE = 13;
 export const MAX_AGE = 120;
 export const TODAY = new Date();
 const MIN_PASSWORD_LENGTH = 8;

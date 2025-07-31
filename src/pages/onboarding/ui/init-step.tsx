@@ -2,6 +2,7 @@ import { Button } from '@shared/ui/button';
 import { Form } from '@shared/ui/form';
 import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
+import { InputDatepicker } from '@shared/ui/input-datepicker';
 
 import { useFormStep } from '../hooks';
 
@@ -48,11 +49,11 @@ export const InitStep = (): React.JSX.Element => {
             label="Date of Birth*"
           >
             {(field) => (
-              <Input
-                type="date"
+              <InputDatepicker
                 placeholder="Date of Birth"
-                autoComplete="bday"
-                {...field}
+                name="dateOfBirth"
+                value={field.value}
+                onChange={(value) => field.onChange(value)}
               />
             )}
           </FormFieldWrapper>
