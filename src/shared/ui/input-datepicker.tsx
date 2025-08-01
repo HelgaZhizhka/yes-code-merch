@@ -69,8 +69,6 @@ export const InputDatepicker = ({
           type="date"
           className={cn(
             className,
-            'cursor-pointer',
-            'disabled:cursor-not-allowed',
             '[-webkit-appearance:textfield] [&::-webkit-calendar-picker-indicator]:hidden'
           )}
           id={id}

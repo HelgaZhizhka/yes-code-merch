@@ -38,7 +38,7 @@ const Template = () => (
             }}
           />
           {methods.formState.errors.dateOfBirth && (
-            <p className="text-sm text-red-500">
+            <p className="text-sm text-destructive">
               {methods.formState.errors.dateOfBirth.message}
             </p>
           )}
