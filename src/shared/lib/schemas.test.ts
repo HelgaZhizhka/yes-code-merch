@@ -1,3 +1,4 @@
+/* sonarjs-disable typescript:S2068 */
 import { describe, expect, it } from 'vitest';
 
 import { MockCredentials } from '@shared/config/test-config';
