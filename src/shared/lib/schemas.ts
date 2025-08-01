@@ -4,9 +4,11 @@ import { z } from 'zod';
 
 import {
   emailValidator,
+  ErrorMessages,
   getPasswordStrength,
   MIN_AGE,
   passwordValidator,
+  STRENGTH,
   TODAY,
   VALIDATION_REGEX,
 } from './validators';
@@ -18,47 +20,43 @@ export const emailSchema = z.object({
 export const newPasswordSchema = z
   .object({
     password: passwordValidator.refine(
-      (password) => getPasswordStrength(password) !== 'low',
+      (password) => getPasswordStrength(password) !== STRENGTH.WEEK,
       {
-        message:
-          'Password is too weak. Include a mix of letters, numbers, and symbols.',
+        message: ErrorMessages.initialPassword,
       }
     ),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+    confirmPassword: z.string().min(1, ErrorMessages.confirmPasswordRequired),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: ErrorMessages.confirmPasswordMatch,
     path: ['confirmPassword'],
   });
 
 export const addressSchema = z
   .object({
-    country: z.string().trim().min(1, 'Country is required'),
+    country: z.string().trim().min(1, ErrorMessages.countryRequired),
     city: z
       .string()
       .trim()
-      .min(1, 'City is required')
-      .regex(
-        VALIDATION_REGEX.namePattern,
-        'City should not contain numbers or special characters'
-      ),
+      .min(1, ErrorMessages.cityRequired)
+      .regex(VALIDATION_REGEX.namePattern, ErrorMessages.cityInvalid),
     streetName: z
       .string()
       .trim()
-      .min(1, 'Street name is required')
+      .min(1, ErrorMessages.streetNameRequired)
       .regex(
         VALIDATION_REGEX.streetNamePattern,
-        'Street name should not contain numbers or special characters'
+        ErrorMessages.streetNameInvalid
       ),
     streetNumber: z
       .string()
       .trim()
-      .min(1, 'Street number is required')
+      .min(1, ErrorMessages.streetNumberRequired)
       .regex(
         VALIDATION_REGEX.streetNumberPattern,
-        'Street number should be in format XXX or XXXa'
+        ErrorMessages.streetNumberInvalid
       ),
-    postalCode: z.string().trim().min(1, 'Postal code is required'),
+    postalCode: z.string().trim().min(1, ErrorMessages.postalCodeRequired),
     isDefault: z.boolean(),
   })
   .check((ctx) => {
@@ -83,20 +81,14 @@ export const profileSchema = z.object({
   firstName: z
     .string()
     .trim()
-    .min(1, 'First name is required')
-    .regex(
-      VALIDATION_REGEX.namePattern,
-      'First name should not contain numbers or special characters'
-    ),
+    .min(1, ErrorMessages.firstNameRequired)
+    .regex(VALIDATION_REGEX.namePattern, ErrorMessages.firstNameInvalid),
 
   lastName: z
     .string()
     .trim()
-    .min(1, 'Last name is required')
-    .regex(
-      VALIDATION_REGEX.namePattern,
-      'Last name should not contain numbers or special characters'
-    ),
+    .min(1, ErrorMessages.lastNameRequired)
+    .regex(VALIDATION_REGEX.namePattern, ErrorMessages.lastNameInvalid),
 
   dateOfBirth: z.string().refine((date) => {
     const birthDate = new Date(date);
@@ -109,15 +101,12 @@ export const profileSchema = z.object({
         ? 1
         : 0);
     return age >= MIN_AGE;
-  }, `You must be at least ${MIN_AGE} years old to register`),
+  }, ErrorMessages.dateOfBirthInvalid),
 
   phone: z
     .string()
-    .min(1, 'Phone number is required')
-    .regex(
-      VALIDATION_REGEX.phonePattern,
-      'Please enter valid international phone number in format +XXXXXXXXX'
-    ),
+    .min(1, ErrorMessages.phoneRequired)
+    .regex(VALIDATION_REGEX.phonePattern, ErrorMessages.phoneInvalid),
   title: z.string().optional(),
   company: z.string().optional(),
 });
