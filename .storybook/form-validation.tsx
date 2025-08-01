@@ -10,7 +10,7 @@ import type { z } from 'zod';
 
 type AnyZodObject = z.ZodObject<z.ZodRawShape>;
 
-type FormValidationProps<TSchema extends AnyZodObject> = {
+export type FormValidationProps<TSchema extends AnyZodObject> = {
   schema: TSchema;
   initialValues?: Partial<z.infer<TSchema>>;
   children: (methods: UseFormReturn<z.infer<TSchema>>) => React.ReactNode;
