@@ -1,17 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 import { profileSchema, type ProfileFormType } from '@shared/lib/schemas';
+import { defaultAddress } from '@shared/lib/validators';
 import { useCompleteRegistration } from '@shared/viewer/hooks';
 import { useViewerEmail } from '@shared/viewer/model';
 
-import { defaultAddress } from '@/shared/lib/validators';
-
-import { defaultAddressStep, defaultProfile, useFormStore } from './model';
+import {
+  defaultAddressStep,
+  defaultProfile,
+  StepKey,
+  useFormStore,
+  type StepKeyType,
+} from './model';
 import {
   addresStepSchema,
   viewerSchema,
@@ -20,28 +25,26 @@ import {
 
 const STEPS = [
   {
-    key: 'profile',
+    key: StepKey[0],
     route: ONBOARDING_STEPS.INIT,
     schema: profileSchema,
     defaultValues: defaultProfile,
   },
   {
-    key: 'address',
+    key: StepKey[1],
     route: ONBOARDING_STEPS.ADDRESS,
     schema: addresStepSchema,
     defaultValues: defaultAddressStep,
   },
 ] as const;
 
-type StepKey = (typeof STEPS)[number]['key'];
-
-const getStepKeyFromUrl = (url: string): StepKey => {
+const getStepKeyFromUrl = (url: string): StepKeyType => {
   const currentPath = url.split('?')[0];
   const step = STEPS.find((s) => s.route === currentPath);
-  return step?.key ?? 'profile';
+  return step?.key ?? StepKey[0];
 };
 
-const getStepIndexByKey = (key: StepKey): number => {
+const getStepIndexByKey = (key: StepKeyType): number => {
   return STEPS.findIndex((s) => s.key === key);
 };
 
@@ -49,7 +52,13 @@ export const useFormStep = () => {
   const navigate = useNavigate();
   const routerState = useRouterState();
   const email = useViewerEmail();
-  const { formData, setFormData, resetForm } = useFormStore();
+  const {
+    formData,
+    useShippingAsBilling,
+    setUseShippingAsBilling,
+    setFormData,
+    resetForm,
+  } = useFormStore();
   const { mutate: completeRegistration, isPending } = useCompleteRegistration();
 
   const currentStepKey = getStepKeyFromUrl(routerState.location.pathname);
@@ -58,24 +67,10 @@ export const useFormStep = () => {
 
   const form = useForm<ProfileFormType | AddressStepFormType>({
     resolver: zodResolver(currentStep.schema),
-    defaultValues: formData?.[currentStep.key] ?? currentStep.defaultValues,
+    defaultValues: formData[currentStep.key] ?? currentStep.defaultValues,
     mode: 'onChange',
     criteriaMode: 'all',
   });
-
-  const useShippingAsBilling = form.watch('useShippingAsBilling');
-
-  useEffect(() => {
-    const updateBillingAddress = async () => {
-      form.setValue(
-        'billingAddresses',
-        useShippingAsBilling ? [] : [defaultAddress]
-      );
-      await form.trigger('billingAddresses');
-    };
-
-    updateBillingAddress();
-  }, [useShippingAsBilling, form]);
 
   const handleSubmit = useCallback(() => {
     setFormData(currentStep.key, form.getValues());
@@ -144,8 +139,25 @@ export const useFormStep = () => {
     });
   }, [form, currentStepIndex, setFormData, navigate, currentStep]);
 
+  const handleUseShippingAsBillingChange = useCallback(
+    (checked: boolean) => {
+      setUseShippingAsBilling(checked);
+
+      if (checked) {
+        form.setValue('billingAddresses', [defaultAddress]);
+        setFormData(StepKey[1], {
+          ...form.getValues(),
+          billingAddresses: [defaultAddress],
+        });
+      }
+    },
+    [form, setFormData, setUseShippingAsBilling]
+  );
+
   return {
     form,
+    useShippingAsBilling,
+    handleUseShippingAsBillingChange,
     handleNextStep,
     handleBack,
     currentStepKey,

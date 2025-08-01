@@ -7,10 +7,14 @@ import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { useFormStep } from '../hooks';
 
 export const AddressStep = (): React.JSX.Element => {
-  const { form, handleSubmit, handleBack, isPending } = useFormStep();
-  const { watch } = form;
-  const useShippingAsBilling = watch('useShippingAsBilling', true);
-  const billingAddresses = watch('billingAddresses', []);
+  const {
+    form,
+    handleSubmit,
+    handleBack,
+    isPending,
+    useShippingAsBilling,
+    handleUseShippingAsBillingChange,
+  } = useFormStep();
 
   return (
     <Form {...form}>
@@ -25,17 +29,18 @@ export const AddressStep = (): React.JSX.Element => {
         >
           {(field) => (
             <Checkbox
-              checked={field.value ?? true}
-              onCheckedChange={(checked) => field.onChange(checked)}
+              checked={useShippingAsBilling}
+              onCheckedChange={(checked) => {
+                field.onChange(checked);
+                handleUseShippingAsBillingChange(!!checked);
+              }}
             />
           )}
         </FormFieldWrapper>
 
-        {!useShippingAsBilling &&
-          Array.isArray(billingAddresses) &&
-          billingAddresses.length > 0 && (
-            <AddressForm prefix="billingAddresses.0" label="Billing address" />
-          )}
+        {!useShippingAsBilling && (
+          <AddressForm prefix="billingAddresses.0" label="Billing address" />
+        )}
 
         <Button
           type="submit"

@@ -58,6 +58,7 @@ export const useViewerStore = createAppStore<ViewerState>(
   }),
   {
     name: 'viewer',
+    enablePersist: true,
   }
 );
 

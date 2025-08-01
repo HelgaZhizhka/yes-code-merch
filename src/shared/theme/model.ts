@@ -15,6 +15,7 @@ export const useThemeStore = createAppStore<ThemeState>(
   }),
   {
     name: 'theme',
+    enablePersist: true,
   }
 );
 
