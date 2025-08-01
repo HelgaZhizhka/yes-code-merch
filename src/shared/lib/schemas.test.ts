@@ -1,4 +1,3 @@
-/* sonarjs-disable typescript:S2068 */
 import { describe, expect, it } from 'vitest';
 
 import { MockCredentials } from '@shared/config/test-config';
@@ -43,8 +42,8 @@ describe('newPasswordSchema', () => {
 
   it('should fail if password is too weak', () => {
     const invalidData = {
-      password: '12345',
-      confirmPassword: '12345',
+      password: '12345', //NOSONAR
+      confirmPassword: '12345', //NOSONAR
     };
 
     const result = newPasswordSchema.safeParse(invalidData);
@@ -82,7 +81,7 @@ describe('newPasswordSchema', () => {
   it("should fail if passwords don't match", () => {
     const invalidData = {
       password: MockCredentials.password,
-      confirmPassword: 'DifferentPass123!',
+      confirmPassword: 'DifferentPass123!', //NOSONAR
     };
     const result = newPasswordSchema.safeParse(invalidData);
     expect(result.success).toBe(false);

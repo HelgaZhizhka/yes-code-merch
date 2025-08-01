@@ -1,4 +1,3 @@
-/* sonarjs-disable typescript:S2068 */
 import { z } from 'zod';
 
 import type { Address } from '@shared/api/countries';
@@ -30,17 +29,17 @@ export const VALIDATION_REGEX = {
 
 export const ErrorMessages = {
   emailInvalid: 'Invalid email format',
-  passwordInvalid: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`,
-  confirmPasswordMatch: 'Passwords do not match',
-  passwordRequired: 'Password is required',
-  confirmPasswordRequired: 'Confirm password is required',
+  passwordInvalid: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`, //NOSONAR
+  confirmPasswordMatch: 'Passwords do not match', //NOSONAR
+  passwordRequired: 'Password is required', //NOSONAR
+  confirmPasswordRequired: 'Confirm password is required', //NOSONAR
   initialPassword:
-    'Password must be at least 8 characters and include digits, lowercase and uppercase letters, and symbols',
+    'Password must be at least 8 characters and include digits, lowercase and uppercase letters, and symbols', //NOSONAR
   weekPassword:
-    'Weak : Add a mix of digits, lowercase and uppercase letters, and symbols ',
+    'Weak : Add a mix of digits, lowercase and uppercase letters, and symbols ', //NOSONAR
   mediumPassword:
-    "Medium: Add what's missing (uppercase letters, symbols) for stronger protection",
-  strongPassword: 'Strong: Good job!',
+    "Medium: Add what's missing (uppercase letters, symbols) for stronger protection", //NOSONAR
+  strongPassword: 'Strong: Good job!', //NOSONAR
   firstNameRequired: 'First name is required',
   lastNameRequired: 'Last name is required',
   dateOfBirthRequired: 'Date of birth is required',
