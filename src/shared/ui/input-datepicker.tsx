@@ -1,6 +1,7 @@
 import { CalendarIcon } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
+import { cn } from '@shared/lib/utils';
 import { Button } from '@shared/ui/button';
 import { Calendar } from '@shared/ui/calendar';
 import { Input } from '@shared/ui/input';
@@ -17,6 +18,14 @@ interface InputDatepickerProps {
   readonly className?: string;
 }
 
+const formatDate = (date: Date | undefined) => {
+  if (!date) return '';
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const InputDatepicker = ({
   value,
   name,
@@ -31,9 +40,7 @@ export const InputDatepicker = ({
 
   const handleDateSelect = useCallback(
     (date: Date | undefined) => {
-      if (!date) return;
-      const formattedDate = date.toISOString().split('T')[0];
-      onChange(formattedDate);
+      onChange(formatDate(date));
       setOpen(false);
     },
     [onChange]
@@ -46,18 +53,26 @@ export const InputDatepicker = ({
     [onChange]
   );
 
-  const handleInputClick = useCallback(() => {
-    if (!disabled) {
-      setOpen(true);
-    }
-  }, [disabled]);
+  const handleInputKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'ArrowDown' && !disabled) {
+        setOpen(true);
+      }
+    },
+    [disabled]
+  );
 
   return (
     <div className="flex flex-col gap-3">
       <div className="relative flex gap-2">
         <Input
           type="date"
-          className={className}
+          className={cn(
+            className,
+            'cursor-pointer',
+            'disabled:cursor-not-allowed',
+            '[-webkit-appearance:textfield] [&::-webkit-calendar-picker-indicator]:hidden'
+          )}
           id={id}
           ref={ref}
           value={value ?? ''}
@@ -65,9 +80,8 @@ export const InputDatepicker = ({
           autoComplete="off"
           placeholder={placeholder}
           onChange={handleInputChange}
-          onClick={handleInputClick}
+          onKeyDown={handleInputKeyDown}
           disabled={disabled}
-          readOnly
         />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
