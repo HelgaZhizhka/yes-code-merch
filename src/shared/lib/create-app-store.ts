@@ -1,11 +1,4 @@
-/**
- * Creates a Zustand store with optional middleware: devtools, persist, immer.
- * Middleware are applied in the order: immer -> persist -> devtools.
- *
- * @param initializer - The base state creator function.
- * @param storageOptions - Configuration options for persistence and middleware.
- * @returns A Zustand store hook bound to the created store.
- */
+import type { Draft } from 'immer';
 import type { StateCreator, StoreApi, UseBoundStore } from 'zustand';
 import { create } from 'zustand';
 import type { PersistOptions, PersistStorage } from 'zustand/middleware';
@@ -23,13 +16,24 @@ export interface StorageOptions<T> {
   storage?: PersistStorage<T>;
   useSessionStorage?: boolean;
 }
+export type ImmerCompatibleSet<T> = (
+  updater: (state: Draft<T>) => void
+) => void;
 
-type Middleware<T> = (
-  creator: StateCreator<T, [], [], T>
-) => StateCreator<T, [], [], T>;
+type StoreInitializer<T> = StateCreator<T>;
+
+type StoreCreator<T> = StateCreator<T, [], [], T>;
+type ImmerStoreCreator<T> = StateCreator<T, [['zustand/immer', never]], []>;
+
+const toStoreCreator = <T>(creator: unknown): StoreCreator<T> => {
+  return creator as StoreCreator<T>;
+};
+const toImmerStoreCreator = <T>(creator: unknown): ImmerStoreCreator<T> => {
+  return creator as ImmerStoreCreator<T>;
+};
 
 export const createAppStore = <T>(
-  initializer: StateCreator<T, [], [], T>,
+  initializer: StoreInitializer<T>,
   storageOptions: StorageOptions<T>
 ): UseBoundStore<StoreApi<T>> => {
   const {
@@ -58,21 +62,15 @@ export const createAppStore = <T>(
     ...(partialize ? { partialize } : {}),
   });
 
-  const middlewares: Middleware<T>[] = [];
-
-  if (enableImmer) middlewares.push(immer as Middleware<T>);
-  if (enablePersist)
-    middlewares.push(
-      (sc) => persist(sc, getPersistConfig()) as StateCreator<T>
-    );
-
-  if (isDev && enableDevtools)
-    middlewares.push((sc) => devtools(sc, { name }) as StateCreator<T>);
-
-  const composed = middlewares.reduceRight(
-    (acc, middleware) => middleware(acc),
-    initializer
-  );
-
-  return create<T>(composed);
+  let storeCreator = toStoreCreator<T>(initializer);
+  if (enableImmer) {
+    storeCreator = toStoreCreator(immer(toImmerStoreCreator(storeCreator)));
+  }
+  if (enablePersist) {
+    storeCreator = toStoreCreator(persist(storeCreator, getPersistConfig()));
+  }
+  if (isDev && enableDevtools) {
+    storeCreator = toStoreCreator(devtools(storeCreator, { name }));
+  }
+  return create<T>()(storeCreator);
 };
