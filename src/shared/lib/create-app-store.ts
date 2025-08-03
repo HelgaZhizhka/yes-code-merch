@@ -13,7 +13,7 @@ export interface StorageOptions<T> {
   enableImmer?: boolean;
   skipHydration?: boolean;
   partialize?: (state: T) => Partial<T>;
-  storage?: PersistStorage<T>;
+  storage?: PersistStorage<Partial<T>>;
   useSessionStorage?: boolean;
 }
 export type ImmerCompatibleSet<T> = (
@@ -55,7 +55,7 @@ export const createAppStore = <T>(
     version,
     skipHydration,
     storage:
-      (storage as PersistStorage<Partial<T>> | undefined) ??
+      storage ??
       createJSONStorage(() =>
         useSessionStorage ? sessionStorage : localStorage
       ),

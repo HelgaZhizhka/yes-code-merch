@@ -145,13 +145,9 @@ export const useFormStep = () => {
 
       if (checked) {
         form.setValue('billingAddresses', [defaultAddress]);
-        setFormData(StepKey[1], {
-          ...form.getValues(),
-          billingAddresses: [defaultAddress],
-        });
       }
     },
-    [form, setFormData, setUseShippingAsBilling]
+    [form, setUseShippingAsBilling]
   );
 
   return {
