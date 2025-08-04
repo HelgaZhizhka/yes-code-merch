@@ -2,10 +2,11 @@ import React, { Suspense } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { Checkbox } from '@shared/ui/checkbox';
-import { CountrySelect } from '@shared/ui/country-select';
 import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
 import { Spinner } from '@shared/ui/spinner';
+
+import { CountryList } from '@/shared/ui/country-list';
 
 export interface AddressFormProps {
   prefix: string;
@@ -26,10 +27,11 @@ export const AddressForm = ({
         <FormFieldWrapper control={control} name={`${prefix}.country`}>
           {(field) => (
             <Suspense fallback={<Spinner size="small" />}>
-              <CountrySelect
+              <CountryList
                 name={field.name}
                 value={field.value ?? ''}
                 onChange={field.onChange}
+                placeholder="Select a country..."
               />
             </Suspense>
           )}
