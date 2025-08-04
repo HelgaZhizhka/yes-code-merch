@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { fn } from 'storybook/test';
 
 import { addressSchema } from '@shared/lib/schemas';
+import { Button } from '@shared/ui/button';
 import { Spinner } from '@shared/ui/spinner';
 
 import { CountryList } from './country-list';
@@ -48,6 +49,16 @@ const CountrySelectList = () => {
             <div className="text-sm">
               Selected: {methods.watch('country') || 'nothing selected'}
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                methods.reset({ country: '' });
+              }}
+              className="mt-2"
+            >
+              Reset
+            </Button>
             {methods.formState.errors.country && (
               <div className="text-sm text-destructive">
                 {methods.formState.errors.country.message}
