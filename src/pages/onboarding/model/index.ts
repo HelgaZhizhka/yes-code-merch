@@ -1,21 +1,28 @@
 import type { Viewer } from '@shared/api/auth';
-import { createAppStore } from '@shared/lib/create-app-store';
+import {
+  createAppStore,
+  type ImmerCompatibleSet,
+} from '@shared/lib/create-app-store';
 import { type ProfileFormType } from '@shared/lib/schemas';
 import { defaultAddress } from '@shared/lib/validators';
 
 import type { AddressStepFormType } from './schema';
 
-export type StepKey = 'profile' | 'address';
+export const StepKey = ['profile', 'address'] as const;
+
+export type StepKeyType = (typeof StepKey)[number];
 
 interface FormState {
   formData: {
-    profile?: ProfileFormType;
-    address?: AddressStepFormType;
+    profile: ProfileFormType;
+    address: AddressStepFormType;
   };
-  setFormData(
-    stepKey: StepKey,
-    data: ProfileFormType | AddressStepFormType
+  useShippingAsBilling: boolean;
+  setFormData<T extends keyof FormState['formData']>(
+    stepKey: T,
+    data: FormState['formData'][T]
   ): void;
+  setUseShippingAsBilling(value: boolean): void;
   resetForm(): void;
   getViewer(email: string | null): Viewer;
 }
@@ -31,32 +38,40 @@ export const defaultProfile: ProfileFormType = {
 
 export const defaultAddressStep: AddressStepFormType = {
   shippingAddresses: [defaultAddress],
-  billingAddresses: [],
+  billingAddresses: [defaultAddress],
   useShippingAsBilling: true,
 };
 
 export const useFormStore = createAppStore<FormState>(
-  (set, get) => ({
-    formData: {},
-    setFormData: (
-      stepKey: StepKey,
-      data: ProfileFormType | AddressStepFormType
-    ) => {
-      set((state: FormState) => ({
-        formData: {
-          ...state.formData,
-          [stepKey]: {
-            ...state.formData[stepKey],
-            ...data,
-          },
-        },
-      }));
+  (set: ImmerCompatibleSet<FormState>, get) => ({
+    formData: {
+      profile: defaultProfile,
+      address: defaultAddressStep,
     },
-    resetForm: () => set({ formData: {} }),
+    useShippingAsBilling: true,
+    setUseShippingAsBilling(value: boolean) {
+      set((state: FormState) => {
+        state.useShippingAsBilling = value;
+      });
+    },
+    setFormData<T extends keyof FormState['formData']>(
+      stepKey: T,
+      data: FormState['formData'][T]
+    ) {
+      set((state: FormState) => {
+        state.formData[stepKey] = data;
+      });
+    },
+    resetForm: () =>
+      set((state: FormState) => {
+        state.formData.profile = defaultProfile;
+        state.formData.address = defaultAddressStep;
+        state.useShippingAsBilling = true;
+      }),
     getViewer: (email: string) => {
       const formData = get().formData;
-      const profile = formData.profile ?? defaultProfile;
-      const address = formData.address ?? defaultAddressStep;
+      const profile = formData?.profile ?? defaultProfile;
+      const address = formData?.address ?? defaultAddressStep;
 
       const shippingAddress = address.shippingAddresses[0] ?? defaultAddress;
       const billingAddress = address.useShippingAsBilling
@@ -79,9 +94,12 @@ export const useFormStore = createAppStore<FormState>(
   }),
   {
     name: 'onboarding-form-storage',
+    enablePersist: true,
     partialize: (state: FormState) => ({
       formData: state.formData,
+      useShippingAsBilling: state.useShippingAsBilling,
     }),
     useSessionStorage: true,
+    enableImmer: true,
   }
 );

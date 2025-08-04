@@ -3,7 +3,6 @@ import { createRootRoute, createRouter } from '@tanstack/react-router';
 import { ErrorPage } from '@pages/error';
 
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
-import { Loader } from '@shared/ui/loader';
 
 import {
   aboutRoute,
@@ -67,7 +66,6 @@ export const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
-  defaultPendingComponent: Loader,
 });
 
 declare module '@tanstack/react-router' {
