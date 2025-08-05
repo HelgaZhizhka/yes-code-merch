@@ -17,7 +17,12 @@ import {
   onboardingLayoutRoute,
   pathlessLayoutRoute,
   productRoute,
-  profileRoute,
+  profileAddAddressRoute,
+  profileChangePasswordRoute,
+  profileEditAddressRoute,
+  profileEditPersonalRoute,
+  profileLayoutRoute,
+  profileOverviewRoute,
   registrationFormRoute,
   registrationLayoutRoute,
   registrationSuccessRoute,
@@ -32,6 +37,7 @@ const rootRoute = createRootRoute({
 const layoutRoute = pathlessLayoutRoute(rootRoute);
 const registrationLayout = registrationLayoutRoute(layoutRoute);
 const onboardingLayout = onboardingLayoutRoute(layoutRoute);
+const profileLayout = profileLayoutRoute(layoutRoute);
 
 const routeTree = rootRoute.addChildren([
   layoutRoute.addChildren([
@@ -48,7 +54,13 @@ const routeTree = rootRoute.addChildren([
       onboardingInitStepRoute(onboardingLayout),
       onboardingAddressStepRoute(onboardingLayout),
     ]),
-    profileRoute(layoutRoute),
+    profileLayout.addChildren([
+      profileOverviewRoute(profileLayout),
+      profileEditPersonalRoute(profileLayout),
+      profileChangePasswordRoute(profileLayout),
+      profileAddAddressRoute(profileLayout),
+      profileEditAddressRoute(profileLayout),
+    ]),
     categoryRoute(layoutRoute),
     subCategoryRoute(layoutRoute),
     productRoute(layoutRoute),

@@ -8,19 +8,24 @@ import { ForgotPassword } from '@pages/forgot-password';
 import { Home } from '@pages/home';
 import { Login } from '@pages/login';
 import { NotFound } from '@pages/not-found';
+import { Onboarding } from '@pages/onboarding/index';
 import { AddressStep } from '@pages/onboarding/ui/address-step';
 import { InitStep } from '@pages/onboarding/ui/init-step';
 import { Product } from '@pages/product';
 import { Profile } from '@pages/profile';
+import { AddAddress } from '@pages/profile/ui/add-address';
+import { ChangePassword } from '@pages/profile/ui/change-password';
+import { EditAddress } from '@pages/profile/ui/edit-address';
+import { EditPersonal } from '@pages/profile/ui/edit-personal';
+import { Overview } from '@pages/profile/ui/overview';
 import { Registration } from '@pages/registration';
 import { RegistrationForm } from '@pages/registration/ui/registration-form';
+import { RegistrationSuccess } from '@pages/registration/ui/registration-success';
 import { ResetPassword } from '@pages/reset-password';
 
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
-import { Onboarding } from '@/pages/onboarding/index';
-import { RegistrationSuccess } from '@/pages/registration/ui/registration-success';
 
 import { authGuard } from './auth-guard';
 
@@ -144,12 +149,47 @@ export const productRoute = (parentRoute: FlexibleRouteType) =>
     component: Product,
   });
 
-export const profileRoute = (parentRoute: FlexibleRouteType) =>
+export const profileLayoutRoute = (parentRoute: FlexibleRouteType) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    id: 'profile-layout',
+    beforeLoad: authGuard({ requireAuth: true, redirectTo: ROUTES.LOGIN }),
+    component: Profile,
+  });
+
+export const profileOverviewRoute = (parentRoute: AnyRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.PROFILE,
-    beforeLoad: authGuard({ requireAuth: true, redirectTo: ROUTES.LOGIN }),
-    component: Profile,
+    component: Overview,
+  });
+
+export const profileEditPersonalRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.PROFILE_PERSONAL,
+    component: EditPersonal,
+  });
+
+export const profileChangePasswordRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.PROFILE_SECRET,
+    component: ChangePassword,
+  });
+
+export const profileAddAddressRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.PROFILE_ADD_ADDRESS,
+    component: AddAddress,
+  });
+
+export const profileEditAddressRoute = (parentRoute: AnyRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: ROUTES.PROFILE_EDIT_ADDRESS,
+    component: EditAddress,
   });
 
 export const notFoundRoute = (parentRoute: RootRoute) =>

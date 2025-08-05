@@ -114,11 +114,11 @@ export type Database = {
         Row: {
           company: string | null;
           created_at: string;
-          date_of_birth: string | null;
+          date_of_birth: string;
           email: string;
-          first_name: string | null;
-          last_name: string | null;
-          phone: string | null;
+          first_name: string;
+          last_name: string;
+          phone: string;
           title: string | null;
           updated_at: string;
           user_id: string;
@@ -126,11 +126,11 @@ export type Database = {
         Insert: {
           company?: string | null;
           created_at?: string;
-          date_of_birth?: string | null;
+          date_of_birth: string;
           email?: string;
-          first_name?: string | null;
-          last_name?: string | null;
-          phone?: string | null;
+          first_name: string;
+          last_name: string;
+          phone: string;
           title?: string | null;
           updated_at?: string;
           user_id: string;
@@ -138,11 +138,11 @@ export type Database = {
         Update: {
           company?: string | null;
           created_at?: string;
-          date_of_birth?: string | null;
+          date_of_birth?: string;
           email?: string;
-          first_name?: string | null;
-          last_name?: string | null;
-          phone?: string | null;
+          first_name?: string;
+          last_name?: string;
+          phone?: string;
           title?: string | null;
           updated_at?: string;
           user_id?: string;
@@ -177,6 +177,10 @@ export type Database = {
           _bill_postal: string;
           _bill_is_default: boolean;
         };
+        Returns: undefined;
+      };
+      set_default_address: {
+        Args: { user_id: string; address_id: string; address_type: string };
         Returns: undefined;
       };
     };
