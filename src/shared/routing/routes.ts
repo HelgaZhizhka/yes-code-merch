@@ -12,6 +12,11 @@ import { AddressStep } from '@pages/onboarding/ui/address-step';
 import { InitStep } from '@pages/onboarding/ui/init-step';
 import { Product } from '@pages/product';
 import { Profile } from '@pages/profile';
+import { ProfileAddAddress } from '@pages/profile/ui/add-address';
+import { ProfileChangePassword } from '@pages/profile/ui/change-password';
+import { ProfileEditAddress } from '@pages/profile/ui/edit-address';
+import { ProfileEditPersonal } from '@pages/profile/ui/edit-personal';
+import { ProfileOverview } from '@pages/profile/ui/overview';
 import { Registration } from '@pages/registration';
 import { RegistrationForm } from '@pages/registration/ui/registration-form';
 import { ResetPassword } from '@pages/reset-password';
@@ -20,11 +25,6 @@ import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
 import { Onboarding } from '@/pages/onboarding/index';
-import { ProfileAddAddress } from '@/pages/profile/ui/add-address';
-import { ProfileChangePassword } from '@/pages/profile/ui/change-password';
-import { ProfileEditAddress } from '@/pages/profile/ui/edit-address';
-import { ProfileEditPersonal } from '@/pages/profile/ui/edit-personal';
-import { ProfileOverview } from '@/pages/profile/ui/overview';
 import { RegistrationSuccess } from '@/pages/registration/ui/registration-success';
 
 import { authGuard } from './auth-guard';
