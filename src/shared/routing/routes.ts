@@ -181,14 +181,14 @@ export const profileChangePasswordRoute = (parentRoute: AnyRoute) =>
 export const profileAddAddressRoute = (parentRoute: AnyRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
-    path: ROUTES.PROFILE_NEW_ADDRESS,
+    path: ROUTES.PROFILE_ADD_ADDRESS,
     component: AddAddress,
   });
 
 export const profileEditAddressRoute = (parentRoute: AnyRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
-    path: ROUTES.PROFILE_OLD_ADDRESS,
+    path: ROUTES.PROFILE_EDIT_ADDRESS,
     component: EditAddress,
   });
 
