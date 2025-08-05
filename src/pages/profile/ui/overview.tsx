@@ -9,8 +9,8 @@ export const Overview = (): React.JSX.Element => {
       <nav className="flex flex-col gap-2">
         <Link to={ROUTES.PROFILE_PERSONAL}>Edit Personal</Link>
         <Link to={ROUTES.PROFILE_SECRET}>Change Password</Link>
-        <Link to={ROUTES.PROFILE_NEW_ADDRESS}>Add Address</Link>
-        <Link to={ROUTES.PROFILE_OLD_ADDRESS} params={{ addressId: '123' }}>
+        <Link to={ROUTES.PROFILE_ADD_ADDRESS}>Add Address</Link>
+        <Link to={ROUTES.PROFILE_EDIT_ADDRESS} params={{ addressId: '123' }}>
           Edit Address
         </Link>
       </nav>
