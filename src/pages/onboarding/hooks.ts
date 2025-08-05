@@ -144,7 +144,11 @@ export const useFormStep = () => {
       setUseShippingAsBilling(checked);
 
       if (checked) {
+        form.setValue('billingAddresses', []);
+        form.trigger('shippingAddresses');
+      } else {
         form.setValue('billingAddresses', [defaultAddress]);
+        form.trigger('billingAddresses');
       }
     },
     [form, setUseShippingAsBilling]
