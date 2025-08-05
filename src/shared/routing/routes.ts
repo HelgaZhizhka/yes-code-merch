@@ -8,6 +8,7 @@ import { ForgotPassword } from '@pages/forgot-password';
 import { Home } from '@pages/home';
 import { Login } from '@pages/login';
 import { NotFound } from '@pages/not-found';
+import { Onboarding } from '@pages/onboarding/index';
 import { AddressStep } from '@pages/onboarding/ui/address-step';
 import { InitStep } from '@pages/onboarding/ui/init-step';
 import { Product } from '@pages/product';
@@ -19,13 +20,12 @@ import { ProfileEditPersonal } from '@pages/profile/ui/edit-personal';
 import { ProfileOverview } from '@pages/profile/ui/overview';
 import { Registration } from '@pages/registration';
 import { RegistrationForm } from '@pages/registration/ui/registration-form';
+import { RegistrationSuccess } from '@pages/registration/ui/registration-success';
 import { ResetPassword } from '@pages/reset-password';
 
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
-import { Onboarding } from '@/pages/onboarding/index';
-import { RegistrationSuccess } from '@/pages/registration/ui/registration-success';
 
 import { authGuard } from './auth-guard';
 
