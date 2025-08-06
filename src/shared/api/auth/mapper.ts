@@ -27,8 +27,8 @@ export const mapViewerDataToRpcArgs = (viewer: Viewer): RpcArgs => {
     _last_name: lastName,
     _phone: phone,
     _email: email,
+    _date_of_birth: dateOfBirth,
     _title: title ?? '',
-    _date_of_birth: dateOfBirth ?? '',
     _company: company ?? '',
 
     _ship_country: shipping?.country ?? '',

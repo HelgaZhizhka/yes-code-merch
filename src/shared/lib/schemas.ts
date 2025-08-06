@@ -57,7 +57,7 @@ export const addressSchema = z
         ErrorMessages.streetNumberInvalid
       ),
     postalCode: z.string().trim().min(1, ErrorMessages.postalCodeRequired),
-    isDefault: z.boolean(),
+    isDefault: z.boolean().optional(),
   })
   .check((ctx) => {
     const { country, postalCode } = ctx.value;

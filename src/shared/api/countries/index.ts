@@ -8,7 +8,7 @@ export interface Address {
   streetName: string;
   streetNumber: string;
   postalCode: string;
-  isDefault: boolean;
+  isDefault?: boolean;
 }
 
 export const getCountries = async (): Promise<Country[]> => {

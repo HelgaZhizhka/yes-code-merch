@@ -151,5 +151,5 @@ export const defaultAddress: Address = {
   streetName: '',
   streetNumber: '',
   postalCode: '',
-  isDefault: false,
+  // isDefault: false,
 };

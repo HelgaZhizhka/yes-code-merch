@@ -58,7 +58,7 @@ export const InitStep = (): React.JSX.Element => {
             )}
           </FormFieldWrapper>
 
-          <FormFieldWrapper control={form.control} name="phone" label="Phone">
+          <FormFieldWrapper control={form.control} name="phone" label="Phone*">
             {(field) => <Input type="tel" placeholder="Phone" {...field} />}
           </FormFieldWrapper>
 

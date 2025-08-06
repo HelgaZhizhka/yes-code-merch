@@ -16,8 +16,8 @@ export interface Viewer {
   phone: string;
   shippingAddresses: Address[];
   useShippingAsBilling: boolean;
-  billingAddresses: Address[];
   dateOfBirth: string;
+  billingAddresses?: Address[];
   title?: string;
   company?: string;
 }

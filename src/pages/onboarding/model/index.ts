@@ -38,7 +38,7 @@ export const defaultProfile: ProfileFormType = {
 
 export const defaultAddressStep: AddressStepFormType = {
   shippingAddresses: [defaultAddress],
-  billingAddresses: [defaultAddress],
+  billingAddresses: [],
   useShippingAsBilling: true,
 };
 
