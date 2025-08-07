@@ -18,7 +18,6 @@ import {
   updateUser,
   type CompleteRegistrationResult,
   type ResetPasswordResponse,
-  type Viewer,
 } from '@shared/api/auth';
 import type {
   AuthCredentials,
@@ -26,6 +25,7 @@ import type {
   UpdateUserDTO,
 } from '@shared/api/auth/types';
 import { ROUTES } from '@shared/config/routes';
+import { type Viewer } from '@shared/interfaces';
 import type { AsyncVoidFunction } from '@shared/types';
 
 import {

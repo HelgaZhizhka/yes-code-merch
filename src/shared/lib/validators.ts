@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { Address } from '@shared/api/countries';
+import type { Address } from '@shared/interfaces';
 
 export const PATTERNS = {
   digits: /\d/,

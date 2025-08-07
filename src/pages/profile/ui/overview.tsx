@@ -1,8 +1,14 @@
 import { Link } from '@tanstack/react-router';
 
+import { useCustomer } from '@pages/profile/hooks';
+
 import { ROUTES } from '@shared/config/routes';
 
 export const Overview = (): React.JSX.Element => {
+  const customer = useCustomer();
+
+  console.log(customer);
+
   return (
     <div>
       <h2 className="mb-6 text-center">Overview</h2>
