@@ -1,8 +1,9 @@
 import { supabase } from '@shared/api/supabase-client';
+import type { Viewer } from '@shared/interfaces';
 
-import { mapCustomer } from './mapper';
+import { mapCustomer, mapAddress } from './mapper';
 
-export const getCustomer = async (customerId: string) => {
+export const getCustomer = async (customerId: string): Promise<Viewer> => {
   const { data: customer } = await supabase
     .from('customers')
     .select('*')
@@ -10,5 +11,18 @@ export const getCustomer = async (customerId: string) => {
     .single()
     .throwOnError();
 
-  return mapCustomer(customer);
+  const { data: addresses } = await supabase
+    .from('addresses')
+    .select('*')
+    .eq('user_id', customerId)
+    .throwOnError();
+
+  const shippingAddresses = mapAddress(
+    addresses.filter((address) => address.is_shipping_address)
+  );
+  const billingAddresses = mapAddress(
+    addresses.filter((address) => address.is_billing_address)
+  );
+
+  return mapCustomer(customer, shippingAddresses, billingAddresses);
 };
