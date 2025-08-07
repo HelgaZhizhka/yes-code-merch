@@ -1,9 +1,9 @@
 import { supabase } from '@shared/api/supabase-client';
-import type { Viewer } from '@shared/interfaces';
+import type { Customer } from '@shared/interfaces';
 
 import { mapCustomer, mapAddress } from './mapper';
 
-export const getCustomer = async (customerId: string): Promise<Viewer> => {
+export const getCustomer = async (customerId: string): Promise<Customer> => {
   const { data: customer } = await supabase
     .from('customers')
     .select('*')

@@ -11,6 +11,8 @@ export interface Viewer {
   company?: string;
 }
 
+export type Customer = Omit<Viewer, 'useShippingAsBilling'>;
+
 export interface Address {
   country: string;
   city: string;
