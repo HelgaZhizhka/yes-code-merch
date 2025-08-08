@@ -1,17 +1,12 @@
-export interface Viewer {
+export interface PersonalData {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  shippingAddresses: Address[];
-  useShippingAsBilling: boolean;
   dateOfBirth: string;
-  billingAddresses?: Address[];
   title?: string;
   company?: string;
 }
-
-export type Customer = Omit<Viewer, 'useShippingAsBilling'>;
 
 export interface Address {
   country: string;
@@ -20,4 +15,15 @@ export interface Address {
   streetNumber: string;
   postalCode: string;
   isDefault?: boolean;
+}
+
+export interface Viewer extends PersonalData {
+  shippingAddresses: Address[];
+  billingAddresses?: Address[];
+  useShippingAsBilling: boolean;
+}
+
+export interface Customer extends PersonalData {
+  shippingAddresses: Address[];
+  billingAddresses?: Address[];
 }
