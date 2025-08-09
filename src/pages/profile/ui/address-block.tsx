@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { Pencil, Trash } from 'lucide-react';
 
 import { ROUTES } from '@shared/config/routes';
-import type { Address } from '@shared/interfaces';
+import type { AddressWithID } from '@shared/interfaces';
 import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
 import {
@@ -15,7 +15,7 @@ import {
 import { getLinkButtonClass } from '@shared/ui/link-button';
 
 type AddressBlockProps = {
-  addresses: Address[];
+  addresses: AddressWithID[];
   type: string;
 };
 
@@ -28,8 +28,8 @@ export const AddressBlock = ({ addresses, type }: AddressBlockProps) => {
           Add address +
         </Link>
       </div>
-      {addresses.map((address, i) => (
-        <Card key={i} className="bg-muted">
+      {addresses.map((address) => (
+        <Card key={address.id} className="bg-muted">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>
               {address.isDefault && <Badge variant="ghost">Default</Badge>}
@@ -37,7 +37,7 @@ export const AddressBlock = ({ addresses, type }: AddressBlockProps) => {
             <CardAction className="flex items-center gap-2">
               <Link
                 to={ROUTES.PROFILE_EDIT_ADDRESS}
-                params={{ addressId: '123' }}
+                params={{ addressId: address.id }}
                 className={getLinkButtonClass('ghost', 'icon')}
               >
                 <Pencil />

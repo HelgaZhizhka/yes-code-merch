@@ -1,14 +1,14 @@
 import type { Database } from '@shared/api/database.types';
 
-import type { Address, Customer } from '@/shared/interfaces';
+import type { AddressWithID, Customer } from '@/shared/interfaces';
 
 export type CustomerDTO = Database['public']['Tables']['customers']['Row'];
 export type AddressDTO = Database['public']['Tables']['addresses']['Row'];
 
 export const mapCustomer = (
   customer: CustomerDTO,
-  shippingAddresses: Address[],
-  billingAddresses: Address[]
+  shippingAddresses: AddressWithID[],
+  billingAddresses: AddressWithID[]
 ): Customer => ({
   firstName: customer.first_name,
   lastName: customer.last_name,
@@ -19,7 +19,7 @@ export const mapCustomer = (
   billingAddresses,
 });
 
-export const mapAddress = (address: AddressDTO[]): Address[] => {
+export const mapAddress = (address: AddressDTO[]): AddressWithID[] => {
   return address.map((address) => ({
     id: address.id,
     country: address.country,

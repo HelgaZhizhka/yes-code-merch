@@ -17,6 +17,10 @@ export interface Address {
   isDefault?: boolean;
 }
 
+export interface AddressWithID extends Address {
+  id: string;
+}
+
 export interface Viewer extends PersonalData {
   shippingAddresses: Address[];
   billingAddresses?: Address[];
@@ -24,6 +28,6 @@ export interface Viewer extends PersonalData {
 }
 
 export interface Customer extends PersonalData {
-  shippingAddresses: Address[];
-  billingAddresses?: Address[];
+  shippingAddresses: AddressWithID[];
+  billingAddresses?: AddressWithID[];
 }
