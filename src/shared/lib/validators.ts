@@ -146,7 +146,6 @@ export const confirmPasswordValidator = z
   .min(1, ErrorMessages.confirmPasswordRequired);
 
 export const defaultAddress: Address = {
-  id: '',
   country: '',
   city: '',
   streetName: '',

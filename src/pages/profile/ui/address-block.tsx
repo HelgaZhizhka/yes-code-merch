@@ -28,8 +28,8 @@ export const AddressBlock = ({ addresses, type }: AddressBlockProps) => {
           Add address +
         </Link>
       </div>
-      {addresses.map((address) => (
-        <Card key={address.id} className="bg-muted">
+      {addresses.map((address, i) => (
+        <Card key={i} className="bg-muted">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>
               {address.isDefault && <Badge variant="ghost">Default</Badge>}
@@ -37,7 +37,7 @@ export const AddressBlock = ({ addresses, type }: AddressBlockProps) => {
             <CardAction className="flex items-center gap-2">
               <Link
                 to={ROUTES.PROFILE_EDIT_ADDRESS}
-                params={{ addressId: address.id }}
+                params={{ addressId: '123' }}
                 className={getLinkButtonClass('ghost', 'icon')}
               >
                 <Pencil />
