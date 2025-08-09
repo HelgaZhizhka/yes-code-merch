@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { getCustomer } from '@shared/api/customer';
 import { useViewerId } from '@shared/viewer';
@@ -6,11 +6,9 @@ import { useViewerId } from '@shared/viewer';
 export const useCustomer = () => {
   const customerId = useViewerId();
 
-  if (!customerId) throw new Error('No customer id');
-
-  const { data } = useSuspenseQuery({
-    queryKey: ['customer'],
-    queryFn: () => getCustomer(customerId),
+  return useQuery({
+    queryKey: ['customer', customerId],
+    queryFn: () => getCustomer(customerId as string),
+    enabled: !!customerId,
   });
-  return data;
 };

@@ -2,8 +2,22 @@ import { useCustomer } from '@pages/profile/hooks';
 import { AddressBlock } from '@pages/profile/ui/address-block';
 import { PersonalBlock } from '@pages/profile/ui/personal-block';
 
+import { Loader } from '@shared/ui/loader';
+
 export const Overview = () => {
-  const customer = useCustomer();
+  const { data: customer, isLoading } = useCustomer();
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!customer) {
+    return null;
+  }
 
   const addressBlocks = [
     {
