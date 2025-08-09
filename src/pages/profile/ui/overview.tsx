@@ -17,7 +17,7 @@ export const Overview = () => {
   ];
 
   return (
-    <div className="space-y-6 w-full max-w-lg mx-auto p-4">
+    <div className="space-y-6 w-full max-w-xl mx-auto p-4">
       <PersonalBlock
         firstName={customer.firstName}
         lastName={customer.lastName}

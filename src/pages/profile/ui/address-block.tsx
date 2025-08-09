@@ -28,8 +28,8 @@ export const AddressBlock = ({ addresses, type }: AddressBlockProps) => {
           Add address +
         </Link>
       </div>
-      {addresses.map((address, i) => (
-        <Card key={i}>
+      {addresses.map((address) => (
+        <Card key={address.id} className="bg-muted">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>
               {address.isDefault && <Badge variant="ghost">Default</Badge>}

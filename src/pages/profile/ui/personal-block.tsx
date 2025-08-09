@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { Pencil } from 'lucide-react';
 
 import { ROUTES } from '@shared/config/routes';
+import { Avatar, AvatarFallback } from '@shared/ui//avatar';
 import { getLinkButtonClass } from '@shared/ui/link-button';
 
 type PerosnalBlockProps = {
@@ -17,11 +18,19 @@ export const PersonalBlock = ({
 }: PerosnalBlockProps) => {
   return (
     <div className="flex items-center justify-between gap-4">
-      <div className="flex flex-col gap-4">
-        <h2>
-          {firstName} {lastName}
-        </h2>
-        <p className="text-base text-muted-foreground">{email}</p>
+      <div className="flex flex-row gap-4 justify-center items-center">
+        <Avatar>
+          <AvatarFallback>
+            {firstName[0]}
+            {lastName[0]}
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col gap-4">
+          <h2>
+            {firstName} {lastName}
+          </h2>
+          <p className="text-base text-muted-foreground">{email}</p>
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         <Link
