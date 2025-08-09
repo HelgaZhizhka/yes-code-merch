@@ -48,9 +48,10 @@ export const AddressBlock = ({ addresses, type }: AddressBlockProps) => {
             </CardAction>
           </CardHeader>
           <CardContent>
-            <p>
-              {address.streetName} {address.streetNumber}, {address.city},{' '}
-              {address.country}, {address.postalCode}
+            <p className="text-lg">
+              {address.streetName} {address.streetNumber}
+              <br />
+              {address.city} {address.country}, {address.postalCode}
             </p>
           </CardContent>
         </Card>
