@@ -25,7 +25,7 @@ export const PersonalBlock = ({
             {lastName[0]}
           </AvatarFallback>
         </Avatar>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <h2>
             {firstName} {lastName}
           </h2>
