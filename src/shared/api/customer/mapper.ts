@@ -21,6 +21,7 @@ export const mapCustomer = (
 
 export const mapAddress = (address: AddressDTO[]): Address[] => {
   return address.map((address) => ({
+    id: address.id,
     country: address.country,
     city: address.city,
     streetName: address.street_name ?? '',
