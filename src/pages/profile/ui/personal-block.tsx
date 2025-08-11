@@ -2,34 +2,31 @@ import { Link } from '@tanstack/react-router';
 import { Pencil } from 'lucide-react';
 
 import { ROUTES } from '@shared/config/routes';
+import { useCustomer } from '@shared/customer';
 import { Avatar, AvatarFallback } from '@shared/ui//avatar';
 import { getLinkButtonClass } from '@shared/ui/link-button';
 
 type PerosnalBlockProps = {
-  firstName: string;
-  lastName: string;
-  email: string;
+  customerId: string;
 };
 
-export const PersonalBlock = ({
-  firstName,
-  lastName,
-  email,
-}: PerosnalBlockProps) => {
+export const PersonalBlock = ({ customerId }: PerosnalBlockProps) => {
+  const customer = useCustomer(customerId);
+
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-row gap-4 justify-center items-center">
         <Avatar>
           <AvatarFallback>
-            {firstName[0]}
-            {lastName[0]}
+            {customer.firstName[0]}
+            {customer.lastName[0]}
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col gap-2">
           <h2>
-            {firstName} {lastName}
+            {customer.firstName} {customer.lastName}
           </h2>
-          <p className="text-base text-muted-foreground">{email}</p>
+          <p className="text-base text-muted-foreground">{customer.email}</p>
         </div>
       </div>
       <div className="flex flex-col gap-2">

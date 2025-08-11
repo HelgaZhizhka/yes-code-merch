@@ -1,61 +1,30 @@
-import { Link } from '@tanstack/react-router';
-import { Pencil, Trash } from 'lucide-react';
+import { useCustomer } from '@shared/customer';
 
-import { ROUTES } from '@shared/config/routes';
-import type { AddressWithID } from '@shared/interfaces';
-import { Badge } from '@shared/ui/badge';
-import { Button } from '@shared/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardAction,
-} from '@shared/ui/card';
-import { getLinkButtonClass } from '@shared/ui/link-button';
+import { AddressList } from '@/pages/profile/ui/address-list';
 
 type AddressBlockProps = {
-  addresses: AddressWithID[];
-  type: string;
+  customerId: string;
 };
 
-export const AddressBlock = ({ addresses, type }: AddressBlockProps) => {
+export const AddressBlock = ({ customerId }: AddressBlockProps) => {
+  const customer = useCustomer(customerId);
+
+  const addressBlocks = [
+    {
+      addresses: customer.shippingAddresses,
+      type: 'Shipping',
+    },
+    {
+      addresses: customer.billingAddresses ?? [],
+      type: 'Billing',
+    },
+  ];
+
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <p className="text-xl font-bold">{type} address:</p>
-        <Link to={ROUTES.PROFILE_ADD_ADDRESS} className="hover:underline">
-          Add address +
-        </Link>
-      </div>
-      {addresses.map((address) => (
-        <Card key={address.id} className="bg-muted">
-          <CardHeader className="flex items-center justify-between">
-            <CardTitle>
-              {address.isDefault && <Badge variant="ghost">Default</Badge>}
-            </CardTitle>
-            <CardAction className="flex items-center gap-2">
-              <Link
-                to={ROUTES.PROFILE_EDIT_ADDRESS}
-                params={{ addressId: address.id }}
-                className={getLinkButtonClass('ghost', 'icon')}
-              >
-                <Pencil />
-              </Link>
-              <Button size="icon" variant="ghost" aria-label="Delete">
-                <Trash />
-              </Button>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <p className="text-lg">
-              {address.streetName} {address.streetNumber}
-              <br />
-              {address.city} {address.country}, {address.postalCode}
-            </p>
-          </CardContent>
-        </Card>
+    <>
+      {addressBlocks.map(({ addresses, type }) => (
+        <AddressList key={type} addresses={addresses} type={type} />
       ))}
-    </div>
+    </>
   );
 };
