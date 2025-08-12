@@ -1,23 +1,20 @@
-import { useCustomer } from '@shared/customer';
+import type { AddressListProps } from '@pages/profile/interfaces';
+import { AddressList } from '@pages/profile/ui/address-list';
 
-import { AddressList } from '@/pages/profile/ui/address-list';
+import type { Customer } from '@shared/interfaces';
 
-type AddressBlockProps = {
-  customerId: string;
-};
+interface AddressBlockProps {
+  shippingAddresses: Customer['shippingAddresses'];
+  billingAddresses: Customer['billingAddresses'];
+}
 
-export const AddressBlock = ({ customerId }: AddressBlockProps) => {
-  const customer = useCustomer(customerId);
-
-  const addressBlocks = [
-    {
-      addresses: customer.shippingAddresses,
-      type: 'Shipping',
-    },
-    {
-      addresses: customer.billingAddresses ?? [],
-      type: 'Billing',
-    },
+export const AddressBlock = ({
+  shippingAddresses,
+  billingAddresses,
+}: AddressBlockProps) => {
+  const addressBlocks: AddressListProps[] = [
+    { addresses: shippingAddresses, type: 'Shipping' },
+    { addresses: billingAddresses ?? [], type: 'Billing' },
   ];
 
   return (

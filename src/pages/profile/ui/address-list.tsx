@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router';
 import { Pencil, Trash } from 'lucide-react';
 
+import type { AddressListProps } from '@pages/profile/interfaces';
+
 import { ROUTES } from '@shared/config/routes';
-import type { AddressWithID } from '@shared/interfaces';
 import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
 import {
@@ -13,11 +14,6 @@ import {
   CardAction,
 } from '@shared/ui/card';
 import { getLinkButtonClass } from '@shared/ui/link-button';
-
-type AddressListProps = {
-  addresses: AddressWithID[];
-  type: string;
-};
 
 export const AddressList = ({ addresses, type }: AddressListProps) => {
   return (
