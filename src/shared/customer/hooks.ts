@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { getCustomer } from '@shared/api/customer';
 import type { Customer } from '@shared/interfaces';
 
-export const useCustomer = (): {
+export const useGetCustomer = (): {
   data: Customer | null;
 } => {
   const { data } = useSuspenseQuery<Customer | null>({

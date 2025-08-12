@@ -1,11 +1,11 @@
-import { useProfileForm } from '@pages/profile/hooks';
 import { AddressBlock } from '@pages/profile/ui/address-block';
 import { PersonalBlock } from '@pages/profile/ui/personal-block';
 
+import { useGetCustomer } from '@shared/customer';
 import { useViewerEmail } from '@shared/viewer';
 
 export const Overview = () => {
-  const customer = useProfileForm();
+  const { data: customer } = useGetCustomer();
   const email = useViewerEmail() ?? '';
 
   const personalData = {
