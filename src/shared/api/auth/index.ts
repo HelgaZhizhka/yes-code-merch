@@ -1,26 +1,14 @@
 import type { AuthError, Session, User } from '@supabase/supabase-js';
 
-import type { Address } from '@shared/api/countries';
 import type { Database } from '@shared/api/database.types';
 import { supabase } from '@shared/api/supabase-client';
 import { config } from '@shared/config';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
+import type { Viewer } from '@/shared/interfaces';
+
 import { mapViewerDataToRpcArgs } from './mapper';
 import type { AuthCredentials, ResetPasswordDTO, UpdateUserDTO } from './types';
-
-export interface Viewer {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  shippingAddresses: Address[];
-  useShippingAsBilling: boolean;
-  dateOfBirth: string;
-  billingAddresses?: Address[];
-  title?: string;
-  company?: string;
-}
 
 export type ResetPasswordResponse =
   | {

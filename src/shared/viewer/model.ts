@@ -78,3 +78,6 @@ export const useError = () => useViewerStore((state) => state.error);
 
 export const useViewerEmail = () =>
   useViewerStore((state) => state.session?.user?.email);
+
+export const useViewerId = () =>
+  useViewerStore((state) => state.session?.user?.id);

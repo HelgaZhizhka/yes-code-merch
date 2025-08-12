@@ -1,4 +1,4 @@
-import type { Viewer } from '@shared/api/auth';
+import type { Viewer } from '@shared/interfaces';
 import {
   createAppStore,
   type ImmerCompatibleSet,

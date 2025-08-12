@@ -1,19 +1,28 @@
-import { Link } from '@tanstack/react-router';
+import { useProfileForm } from '@pages/profile/hooks';
+import { AddressBlock } from '@pages/profile/ui/address-block';
+import { PersonalBlock } from '@pages/profile/ui/personal-block';
 
-import { ROUTES } from '@shared/config/routes';
+import { useViewerEmail } from '@shared/viewer';
 
-export const Overview = (): React.JSX.Element => {
+export const Overview = () => {
+  const customer = useProfileForm();
+  const email = useViewerEmail() ?? '';
+
+  const personalData = {
+    firstName: customer ? customer.firstName : '',
+    lastName: customer ? customer.lastName : '',
+    email: customer ? customer.email : email,
+  };
+
+  const addressesData = {
+    shippingAddresses: customer ? customer.shippingAddresses : [],
+    billingAddresses: customer ? customer.billingAddresses : [],
+  };
+
   return (
-    <div>
-      <h2 className="mb-6 text-center">Overview</h2>
-      <nav className="flex flex-col gap-2">
-        <Link to={ROUTES.PROFILE_PERSONAL}>Edit Personal</Link>
-        <Link to={ROUTES.PROFILE_SECRET}>Change Password</Link>
-        <Link to={ROUTES.PROFILE_ADD_ADDRESS}>Add Address</Link>
-        <Link to={ROUTES.PROFILE_EDIT_ADDRESS} params={{ addressId: '123' }}>
-          Edit Address
-        </Link>
-      </nav>
+    <div className="space-y-6 w-full max-w-xl mx-auto p-6">
+      <PersonalBlock {...personalData} />
+      <AddressBlock {...addressesData} />
     </div>
   );
 };
