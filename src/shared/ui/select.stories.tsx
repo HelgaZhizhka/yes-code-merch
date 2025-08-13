@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { useCountries } from '@shared/countries';
+import { useCountries } from '@shared/api';
 
 import {
   Select,
