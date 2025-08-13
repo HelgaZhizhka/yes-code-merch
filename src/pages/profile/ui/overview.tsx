@@ -1,7 +1,7 @@
 import { AddressBlock } from '@pages/profile/ui/address-block';
 import { PersonalBlock } from '@pages/profile/ui/personal-block';
 
-import { useGetCustomer } from '@shared/customer';
+import { useGetCustomer } from '@shared/api';
 import { useViewerEmail } from '@shared/viewer';
 
 export const Overview = () => {

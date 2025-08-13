@@ -1,7 +1,7 @@
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 
-import { useCountries } from '@shared/countries/hooks';
+import { useCountries } from '@shared/api';
 import { cn } from '@shared/lib/utils';
 import { Button } from '@shared/ui/button';
 import {
