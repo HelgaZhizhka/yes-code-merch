@@ -1,6 +1,5 @@
 import type { Database } from '@shared/api/database.types';
-import { supabase } from '@shared/api/supabase-client';
-import { RpcFunctions } from '@shared/config';
+import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 import type { CustomerAddresses, CustomerData } from '@shared/interfaces';
 
 import {

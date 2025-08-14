@@ -33,7 +33,3 @@ export const mapSetDefaultAddress = (
   _address_id: addressId,
   _address_type: addressType,
 });
-
-export const mapClearDefaultAddress = (addressType: AddressType) => ({
-  _address_type: addressType,
-});
