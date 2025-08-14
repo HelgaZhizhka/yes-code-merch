@@ -21,11 +21,13 @@ export const ErrorFallback: React.FC<{
         Error loading profile data
       </h2>
       <p className="text-foreground mb-6 text-center">{error.message}</p>
-      <Button variant="outline" onClick={resetErrorBoundary}>
+      <Button variant="outline" onClick={resetErrorBoundary} className="w-full">
         Retry
       </Button>
       or
-      <Button onClick={() => navigate({ to: ROUTES.HOME })}>Go to Home</Button>
+      <Button onClick={() => navigate({ to: ROUTES.HOME })} className="w-full">
+        Go to Home
+      </Button>
     </div>
   );
 };
