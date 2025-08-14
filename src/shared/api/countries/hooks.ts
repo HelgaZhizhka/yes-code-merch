@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getCountries } from '@shared/api/countries';
+import { getCountries } from './';
 
 export const useCountries = () => {
   const { data } = useSuspenseQuery({

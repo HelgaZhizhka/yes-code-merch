@@ -7,7 +7,7 @@ export type Json =
   | Json[];
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: '12.2.3 (519615d)';
@@ -154,33 +154,37 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      clear_default_address: {
+        Args: { _address_type: string };
+        Returns: undefined;
+      };
       complete_registration: {
         Args: {
-          _title: string;
+          _bill_city: string;
+          _bill_country: string;
+          _bill_is_default: boolean;
+          _bill_postal: string;
+          _bill_street_name: string;
+          _bill_street_number: string;
+          _company: string;
+          _date_of_birth: string;
+          _email: string;
           _first_name: string;
           _last_name: string;
           _phone: string;
-          _email: string;
-          _date_of_birth: string;
-          _company: string;
-          _ship_country: string;
           _ship_city: string;
+          _ship_country: string;
+          _ship_is_default: boolean;
+          _ship_postal: string;
           _ship_street_name: string;
           _ship_street_number: string;
-          _ship_postal: string;
-          _ship_is_default: boolean;
+          _title: string;
           _use_ship_as_bill: boolean;
-          _bill_country: string;
-          _bill_city: string;
-          _bill_street_name: string;
-          _bill_street_number: string;
-          _bill_postal: string;
-          _bill_is_default: boolean;
         };
         Returns: undefined;
       };
       set_default_address: {
-        Args: { user_id: string; address_id: string; address_type: string };
+        Args: { _address_id: string; _address_type: string };
         Returns: undefined;
       };
     };

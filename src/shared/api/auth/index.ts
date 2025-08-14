@@ -2,7 +2,7 @@ import type { AuthError, Session, User } from '@supabase/supabase-js';
 
 import type { Database } from '@shared/api/database.types';
 import { supabase } from '@shared/api/supabase-client';
-import { config } from '@shared/config';
+import { config, RpcFunctions } from '@shared/config';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
 import type { Viewer } from '@/shared/interfaces';
@@ -19,10 +19,6 @@ export type ResetPasswordResponse =
       data: null;
       error: AuthError;
     };
-
-export const RpcFunctions = {
-  registration: 'complete_registration',
-} as const;
 
 export const AuthErrorMessages = {
   REGISTRATION_FAILED: 'User registration failed',

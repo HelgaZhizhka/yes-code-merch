@@ -8,18 +8,22 @@ import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
-  CardAction,
 } from '@shared/ui/card';
 import { getLinkButtonClass } from '@shared/ui/link-button';
 
-export const AddressList = ({ addresses, type }: AddressListProps) => {
+import { useSetDefaultProfileAddress } from '../hooks';
+
+export const AddressList = ({ addresses, addressType }: AddressListProps) => {
+  const { handleSetAddressDefault, isPending } = useSetDefaultProfileAddress();
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <p className="text-xl font-bold">{type} address:</p>
+        <p className="text-xl font-bold capitalize">{addressType} address:</p>
         <Link to={ROUTES.PROFILE_ADD_ADDRESS} className="hover:underline">
           Add address +
         </Link>
@@ -28,7 +32,22 @@ export const AddressList = ({ addresses, type }: AddressListProps) => {
         <Card key={address.id} className="bg-muted">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>
-              {address.isDefault && <Badge variant="ghost">Default</Badge>}
+              {address.isDefault ? (
+                <Badge variant="ghost" className="transition-all">
+                  Default
+                </Badge>
+              ) : (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={isPending}
+                  onClick={() =>
+                    handleSetAddressDefault(address.id, addressType)
+                  }
+                >
+                  Set as default
+                </Button>
+              )}
             </CardTitle>
             <CardAction className="flex items-center gap-2">
               <Link
