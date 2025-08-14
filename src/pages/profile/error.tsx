@@ -20,7 +20,7 @@ export const ErrorFallback: React.FC<{
       <h2 className="text-xl font-bold mb-2 text-center text-destructive">
         Error loading profile data
       </h2>
-      <p className="text-gray-700 mb-6 text-center">{error.message}</p>
+      <p className="text-foreground mb-6 text-center">{error.message}</p>
       <Button variant="outline" onClick={resetErrorBoundary}>
         Retry
       </Button>
