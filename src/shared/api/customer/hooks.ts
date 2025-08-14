@@ -3,11 +3,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { getCustomer } from '@shared/api/customer';
 import type { Customer } from '@shared/interfaces';
 
-export const useCustomer = (): {
+export const useGetCustomer = (): {
   data: Customer | null;
-  error: Error | null;
 } => {
-  const { data, error } = useSuspenseQuery<Customer | null, Error, Customer>({
+  const { data } = useSuspenseQuery<Customer | null>({
     queryKey: ['customer'],
     queryFn: getCustomer,
     staleTime: Infinity,
@@ -15,5 +14,5 @@ export const useCustomer = (): {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
-  return { data, error };
+  return { data };
 };
