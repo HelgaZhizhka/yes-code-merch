@@ -16,11 +16,16 @@ import {
   type SetDefaultAddressResult,
 } from './';
 
+const queryKey = {
+  customerData: ['customerData'],
+  customerAddresses: ['customerAddresses'],
+};
+
 export const useGetCustomer = (): {
   data: CustomerData | null;
 } => {
   const { data } = useSuspenseQuery<CustomerData | null>({
-    queryKey: ['customerData'],
+    queryKey: queryKey.customerData,
     queryFn: getCustomer,
     staleTime: Infinity,
     refetchOnMount: false,
@@ -34,7 +39,7 @@ export const useGetCustomerAddress = (): {
   data: CustomerAddresses | null;
 } => {
   const { data } = useSuspenseQuery<CustomerAddresses>({
-    queryKey: ['customerAddresses'],
+    queryKey: queryKey.customerAddresses,
     queryFn: getCustomerAddress,
     staleTime: Infinity,
     refetchOnMount: false,
@@ -64,7 +69,7 @@ export const useSetDefaultAddress = (): UseMutationResult<
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['customerAddresses'] });
+      queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
     },
   });
 };
