@@ -1,4 +1,4 @@
-export interface PersonalData {
+export interface CustomerData {
   firstName: string;
   lastName: string;
   email: string;
@@ -21,13 +21,13 @@ export interface AddressWithID extends Address {
   id: string;
 }
 
-export interface Viewer extends PersonalData {
+export interface Viewer extends CustomerData {
   shippingAddresses: Address[];
   billingAddresses?: Address[];
   useShippingAsBilling: boolean;
 }
 
-export interface Customer extends PersonalData {
+export interface CustomerAddresses {
   shippingAddresses: AddressWithID[];
   billingAddresses?: AddressWithID[];
 }
