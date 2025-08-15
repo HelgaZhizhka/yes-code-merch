@@ -1,3 +1,6 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from '@tanstack/react-router';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
@@ -6,7 +9,12 @@ import {
   useSetDefaultAddress,
   type AddressType,
 } from '@shared/api';
-import { useViewerEmail } from '@shared/viewer';
+import { ROUTES } from '@shared/config/routes';
+import {
+  newPasswordSchema,
+  type NewPasswordFormType,
+} from '@shared/lib/schemas';
+import { useUpdateUser, useViewerEmail } from '@shared/viewer';
 
 export const useGetProfileData = () => {
   const { data: customer } = useGetCustomer();
@@ -45,4 +53,32 @@ export const useSetDefaultProfileAddress = () => {
   };
 
   return { handleSetAddressDefault, isPending };
+};
+
+export const useChangePasswordForm = () => {
+  const { mutate: updateUser, isPending } = useUpdateUser();
+  const navigate = useNavigate();
+  const form = useForm<NewPasswordFormType>({
+    resolver: zodResolver(newPasswordSchema),
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    },
+    mode: 'onChange',
+  });
+
+  const onSubmit = (data: NewPasswordFormType) => {
+    updateUser(
+      { password: data.password },
+      {
+        onSuccess: () => {
+          toast.success('Password changed successfully');
+          navigate({ to: ROUTES.PROFILE });
+        },
+        onError: (error) => toast.error(error.message),
+      }
+    );
+  };
+
+  return { form, onSubmit, isPending };
 };
