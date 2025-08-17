@@ -12,7 +12,9 @@ import {
 import { ROUTES } from '@shared/config/routes';
 import {
   newPasswordSchema,
+  profileSchema,
   type NewPasswordFormType,
+  type ProfileFormType,
 } from '@shared/lib/schemas';
 import { useUpdateUser, useViewerEmail } from '@shared/viewer';
 
@@ -78,6 +80,30 @@ export const useChangePasswordForm = () => {
         onError: (error) => toast.error(error.message),
       }
     );
+  };
+
+  return { form, onSubmit, isPending };
+};
+
+export const useEditPersonalForm = () => {
+  const { data: customer } = useGetCustomer();
+  const { isPending } = useUpdateUser();
+
+  const form = useForm<ProfileFormType>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      firstName: customer?.firstName ?? '',
+      lastName: customer?.lastName ?? '',
+      dateOfBirth: customer?.dateOfBirth ?? '',
+      phone: customer?.phone ?? '',
+      title: customer?.title ?? '',
+      company: customer?.company ?? '',
+    },
+    mode: 'onChange',
+  });
+
+  const onSubmit = (data: ProfileFormType) => {
+    console.log(data);
   };
 
   return { form, onSubmit, isPending };
