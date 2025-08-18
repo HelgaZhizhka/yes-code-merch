@@ -13,7 +13,7 @@ export const EditPersonal = (): React.JSX.Element => {
       <Link to={ROUTES.PROFILE} className={getLinkButtonClass('ghost', 'icon')}>
         <ArrowLeft className="w-4 h-4" />
       </Link>
-      <h2 className="mb-6 text-center">Change Password</h2>
+      <h2 className="mb-6 text-center">Edit Profile</h2>
       <EditPersonalForm />
     </div>
   );

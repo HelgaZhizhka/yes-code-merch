@@ -17,6 +17,10 @@ export interface Address {
   isDefault?: boolean;
 }
 
+export interface CustomerDataWithID extends CustomerData {
+  id: string;
+}
+
 export interface AddressWithID extends Address {
   id: string;
 }

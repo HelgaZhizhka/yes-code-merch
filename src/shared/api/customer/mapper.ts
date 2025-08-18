@@ -1,12 +1,13 @@
 import type { Database } from '@shared/api/database.types';
 
-import type { AddressWithID, CustomerData } from '@/shared/interfaces';
+import type { AddressWithID, CustomerDataWithID } from '@/shared/interfaces';
 
 export type AddressType = 'shipping' | 'billing';
 export type CustomerDTO = Database['public']['Tables']['customers']['Row'];
 export type AddressDTO = Database['public']['Tables']['addresses']['Row'];
 
-export const mapCustomer = (customer: CustomerDTO): CustomerData => ({
+export const mapCustomer = (customer: CustomerDTO): CustomerDataWithID => ({
+  id: customer.user_id,
   firstName: customer.first_name,
   lastName: customer.last_name,
   email: customer.email,

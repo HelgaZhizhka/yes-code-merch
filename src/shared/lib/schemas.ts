@@ -111,10 +111,16 @@ export const profileSchema = z.object({
   company: z.string().optional(),
 });
 
+export const personalSchema = profileSchema.extend({
+  email: emailValidator,
+});
+
 export type EmailFormType = z.infer<typeof emailSchema>;
 
 export type NewPasswordFormType = z.infer<typeof newPasswordSchema>;
 
 export type ProfileFormType = z.infer<typeof profileSchema>;
+
+export type PersonalFormType = z.infer<typeof personalSchema>;
 
 export type AddressFormType = z.infer<typeof addressSchema>;

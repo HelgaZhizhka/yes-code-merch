@@ -5,7 +5,7 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
-import type { CustomerAddresses, CustomerData } from '@shared/interfaces';
+import type { CustomerAddresses, CustomerDataWithID } from '@shared/interfaces';
 
 import type { AddressType } from './mapper';
 
@@ -13,6 +13,7 @@ import {
   getCustomer,
   getCustomerAddress,
   setDefaultAddress,
+  updateCustomer,
   type SetDefaultAddressResult,
 } from './';
 
@@ -22,9 +23,9 @@ const queryKey = {
 };
 
 export const useGetCustomer = (): {
-  data: CustomerData | null;
+  data: CustomerDataWithID | null;
 } => {
-  const { data } = useSuspenseQuery<CustomerData | null>({
+  const { data } = useSuspenseQuery<CustomerDataWithID | null>({
     queryKey: queryKey.customerData,
     queryFn: getCustomer,
     staleTime: Infinity,
@@ -70,6 +71,26 @@ export const useSetDefaultAddress = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
+    },
+  });
+};
+
+export const useUpdateCustomer = (): UseMutationResult<
+  CustomerDataWithID | null,
+  Error,
+  CustomerDataWithID
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<CustomerDataWithID | null, Error, CustomerDataWithID>({
+    mutationFn: (data: CustomerDataWithID) => updateCustomer(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.customerData });
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Updating customer failed:', error.message);
+      }
     },
   });
 };

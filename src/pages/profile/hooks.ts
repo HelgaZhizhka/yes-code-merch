@@ -7,14 +7,15 @@ import {
   useGetCustomer,
   useGetCustomerAddress,
   useSetDefaultAddress,
+  useUpdateCustomer,
   type AddressType,
 } from '@shared/api';
 import { ROUTES } from '@shared/config/routes';
 import {
   newPasswordSchema,
-  profileSchema,
+  personalSchema,
   type NewPasswordFormType,
-  type ProfileFormType,
+  type PersonalFormType,
 } from '@shared/lib/schemas';
 import { useUpdateUser, useViewerEmail } from '@shared/viewer';
 
@@ -87,23 +88,32 @@ export const useChangePasswordForm = () => {
 
 export const useEditPersonalForm = () => {
   const { data: customer } = useGetCustomer();
-  const { isPending } = useUpdateUser();
+  const navigate = useNavigate();
+  const { mutate: updateCustomer, isPending } = useUpdateCustomer();
 
-  const form = useForm<ProfileFormType>({
-    resolver: zodResolver(profileSchema),
+  const form = useForm<PersonalFormType>({
+    resolver: zodResolver(personalSchema),
     defaultValues: {
+      email: customer?.email ?? '',
       firstName: customer?.firstName ?? '',
       lastName: customer?.lastName ?? '',
       dateOfBirth: customer?.dateOfBirth ?? '',
       phone: customer?.phone ?? '',
-      title: customer?.title ?? '',
-      company: customer?.company ?? '',
     },
     mode: 'onChange',
   });
 
-  const onSubmit = (data: ProfileFormType) => {
-    console.log(data);
+  const onSubmit = (data: PersonalFormType) => {
+    updateCustomer(
+      { id: customer?.id ?? '', ...data },
+      {
+        onSuccess: () => {
+          toast.success('Personal data changed successfully');
+          navigate({ to: ROUTES.PROFILE });
+        },
+        onError: (error) => toast.error(error.message),
+      }
+    );
   };
 
   return { form, onSubmit, isPending };
