@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
 import type { CustomerData } from '@shared/interfaces';
@@ -107,5 +108,11 @@ export const PersonalFormFields = <T extends FieldValues>({
       </FormFieldWrapper>
     ),
   };
-  return <>{include.map((fieldName) => fields[fieldName])}</>;
+  return (
+    <>
+      {include.map((fieldName) => (
+        <React.Fragment key={fieldName}>{fields[fieldName]}</React.Fragment>
+      ))}
+    </>
+  );
 };
