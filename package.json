@@ -2,6 +2,7 @@
   "name": "yes-code-merch",
   "version": "0.1.0",
   "description": "A modern web application built with React, Tailwind CSS, and Vite.",
+  "packageManager": "pnpm@10.15.0",
   "private": true,
   "type": "module",
   "repository": {
@@ -11,8 +12,8 @@
   "scripts": {
     "dev": "vite --port 3000 --open",
     "start": "vite --port 3000 --open",
-    "build": "vite build && tsc",
-    "serve": "vite preview",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
     "scan:dev": "pnpm run dev & pnpx react-scan@latest localhost:3000",
     "test": "vitest run --config vitest.unit.config.ts",
     "test:coverage": "vitest run --coverage --config vitest.unit.config.ts",
