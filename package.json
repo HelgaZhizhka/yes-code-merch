@@ -2,6 +2,7 @@
   "name": "yes-code-merch",
   "version": "0.1.0",
   "description": "A modern web application built with React, Tailwind CSS, and Vite.",
+  "packageManager": "pnpm@10.15.0",
   "private": true,
   "type": "module",
   "repository": {
