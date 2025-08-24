@@ -1,4 +1,4 @@
-name: Deploy Brello to PROD
+name: Deploy to PROD
 
 on:
   push:
