@@ -18,11 +18,9 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
-      sourcemap: true, // always generate source maps for easier debugging
-      minify: isStaging ? false : 'esbuild', // disable minification in staging, enable in production
-      rollupOptions: {
-        // additional rollup options if needed
-      },
+      sourcemap: isStaging,
+      minify: isStaging ? false : 'esbuild',
+      rollupOptions: {},
     },
     define: {
       __STAGING__: JSON.stringify(isStaging),
