@@ -39,7 +39,6 @@ The project uses **two Supabase projects**:
   - After testing, create a pull request from `develop` to `main`.
   - After merging to `main`, CI/CD applies migrations to the production Supabase project and deploys the frontend to the production Netlify site.
 
-
 ## Important
 
 - **Always record all database changes only through migrations!** Do not change staging/production manually via UI.
