@@ -15,7 +15,7 @@
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "scan:dev": "pnpm run dev & pnpx react-scan@latest localhost:3000",
-    "test": "vitest run --config vitest.unit.config.ts",
+    "test": "vitest run --mode test --config vitest.unit.config.ts",
     "test:coverage": "vitest run --coverage --config vitest.unit.config.ts",
     "test:storybook": "vitest run --config vitest.storybook.config.ts",
     "lint": "cross-env NODE_OPTIONS=--no-warnings eslint . --report-unused-disable-directives",
