@@ -3,6 +3,7 @@
 ## Architecture
 
 The project uses **two Supabase projects**:
+
 - **Staging** — for development and testing (branch `develop`)
 - **Production** — for the live environment (branch `main`)
 
@@ -18,9 +19,11 @@ The project uses **two Supabase projects**:
    make supabase.start
    ```
 2. Make all database changes (tables, functions, policies) through migrations:
+
    ```
    make supabase.migrations.new name=migration_name
    ```
+
    or directly via Supabase CLI.
 
 3. Apply migrations locally:
@@ -31,6 +34,7 @@ The project uses **two Supabase projects**:
 ## Working with Migrations and Deployment
 
 - **Staging**:
+
   - Push all changes to the `develop` branch.
   - After merging or pull request to `develop`, CI/CD automatically applies migrations to the staging Supabase project and deploys the frontend to the staging Netlify site.
   - Check the results on the staging site and in Supabase Studio.
