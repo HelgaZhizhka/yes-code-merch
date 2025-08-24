@@ -12,8 +12,8 @@
   "scripts": {
     "dev": "vite --port 3000 --open",
     "start": "vite --port 3000 --open",
-    "build": "vite build && tsc",
-    "serve": "vite preview",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
     "scan:dev": "pnpm run dev & pnpx react-scan@latest localhost:3000",
     "test": "vitest run --config vitest.unit.config.ts",
     "test:coverage": "vitest run --coverage --config vitest.unit.config.ts",

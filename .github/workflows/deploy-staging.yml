@@ -32,7 +32,7 @@ jobs:
         run: pnpm install
 
       - name: Build project
-        run: pnpm build -- --mode staging
+        run: pnpm build -- --mode staging && pnpm run typecheck
         env:
           NODE_ENV: development
 
@@ -41,3 +41,4 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAGING_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
