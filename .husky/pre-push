@@ -1,0 +1,2 @@
+pnpm vitest run --config vitest.unit.config.ts
+pnpm vitest run --config vitest.storybook.config.ts
