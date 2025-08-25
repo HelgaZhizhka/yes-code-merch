@@ -32,7 +32,7 @@ jobs:
         run: pnpm install
 
       - name: Build project
-        run: pnpm build -- --mode production && pnpm run typecheck
+        run: pnpm run build && pnpm run typecheck
         env:
           NODE_ENV: production
 
