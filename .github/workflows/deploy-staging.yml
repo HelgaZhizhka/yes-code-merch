@@ -36,9 +36,6 @@ jobs:
         env:
           NODE_ENV: development
 
-      - name: List dist/assets contents
-        run: ls -l dist/assets
-
       - name: Publish to Netlify Staging
         run: npx netlify deploy --prod --dir=dist --message="Deploy from ${{ github.event.head_commit.message }}"
         env:
