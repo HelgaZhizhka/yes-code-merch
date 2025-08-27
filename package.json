@@ -14,7 +14,6 @@
     "start": "vite --port 3000 --open",
     "build": "tsc --noEmit && vite build",
     "build:staging": "tsc --noEmit && vite build --mode staging",
-    "typecheck": "tsc --noEmit",
     "scan:dev": "pnpm run dev & pnpx react-scan@latest localhost:3000",
     "test": "vitest run --mode test --config vitest.unit.config.ts",
     "test:coverage": "vitest run --coverage --config vitest.unit.config.ts",
