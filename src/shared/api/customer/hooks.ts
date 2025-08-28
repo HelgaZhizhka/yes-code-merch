@@ -14,6 +14,7 @@ import type {
 import type { AddressType } from './mapper';
 
 import {
+  deleteCustomerAddress,
   getCustomer,
   getCustomerAddress,
   setDefaultAddress,
@@ -116,6 +117,26 @@ export const useUpdateCustomerAddress = (): UseMutationResult<
       if (error instanceof Error) {
         console.error('Updating address failed:', error.message);
       }
+    },
+  });
+};
+
+export const useDeleteCustomerAddress = (): UseMutationResult<
+  boolean,
+  Error,
+  string
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<boolean, Error, string>({
+    mutationFn: (addressId) => deleteCustomerAddress(addressId),
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Deleting address failed:', error.message);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
     },
   });
 };

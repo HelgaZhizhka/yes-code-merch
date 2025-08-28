@@ -113,3 +113,11 @@ export const updateCustomerAddress = async (
 
   return mapAddress([addresses])[0];
 };
+
+export const deleteCustomerAddress = async (
+  addressId: string
+): Promise<boolean> => {
+  await supabase.from('addresses').delete().eq('id', addressId).throwOnError();
+
+  return true;
+};

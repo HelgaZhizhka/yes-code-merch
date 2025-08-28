@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
+  useDeleteCustomerAddress,
   useGetCustomer,
   useGetCustomerAddress,
   useSetDefaultAddress,
@@ -160,4 +161,22 @@ export const useEditAddressForm = () => {
   };
 
   return { form, onSubmit, isPending };
+};
+
+export const useDeleteProfileAddress = () => {
+  const { mutate: deleteAddress, isPending: isDeleting } =
+    useDeleteCustomerAddress();
+
+  const handleDeleteProfileAddress = (addressId: string) => {
+    deleteAddress(addressId, {
+      onSuccess: () => {
+        toast.success('Address deleted successfully');
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
+  };
+
+  return { handleDeleteProfileAddress, isDeleting };
 };
