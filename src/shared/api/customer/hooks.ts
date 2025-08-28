@@ -5,7 +5,11 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
-import type { CustomerAddresses, CustomerDataWithID } from '@shared/interfaces';
+import type {
+  AddressWithID,
+  CustomerAddresses,
+  CustomerDataWithID,
+} from '@shared/interfaces';
 
 import type { AddressType } from './mapper';
 
@@ -14,6 +18,7 @@ import {
   getCustomerAddress,
   setDefaultAddress,
   updateCustomer,
+  updateCustomerAddress,
   type SetDefaultAddressResult,
 } from './';
 
@@ -90,6 +95,26 @@ export const useUpdateCustomer = (): UseMutationResult<
     onError: (error: unknown) => {
       if (error instanceof Error) {
         console.error('Updating customer failed:', error.message);
+      }
+    },
+  });
+};
+
+export const useUpdateCustomerAddress = (): UseMutationResult<
+  AddressWithID | null,
+  Error,
+  AddressWithID
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<AddressWithID | null, Error, AddressWithID>({
+    mutationFn: (data: AddressWithID) => updateCustomerAddress(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Updating address failed:', error.message);
       }
     },
   });
