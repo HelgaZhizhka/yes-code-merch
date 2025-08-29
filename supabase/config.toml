@@ -85,6 +85,15 @@ port = 54324
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+[auth.email.smtp]
+enabled = false
+host = "smtp.sendgrid.net"
+port = 587
+user = "apikey"
+pass = "env(SENDGRID_API_KEY)"
+admin_email = "admin@email.com"
+sender_name = "Admin"
+
 [storage]
 enabled = true
 # The maximum file size allowed (e.g. "5MB", "500KB").

@@ -1,6 +1,11 @@
 import type { Database } from '@shared/api/database.types';
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
-import type { CustomerAddresses, CustomerDataWithID } from '@shared/interfaces';
+import type {
+  Address,
+  AddressWithID,
+  CustomerAddresses,
+  CustomerDataWithID,
+} from '@shared/interfaces';
 
 import {
   mapAddress,
@@ -84,4 +89,63 @@ export const updateCustomer = async (
   }
 
   return mapCustomer(customer);
+};
+
+export const updateCustomerAddress = async (
+  data: AddressWithID
+): Promise<AddressWithID | null> => {
+  const { data: addresses } = await supabase
+    .from('addresses')
+    .update({
+      country: data.country,
+      city: data.city,
+      street_name: data.streetName,
+      street_number: data.streetNumber,
+      postal_code: data.postalCode,
+    })
+    .eq('id', data.id)
+    .select('*')
+    .maybeSingle()
+    .throwOnError();
+
+  if (!addresses) {
+    return null;
+  }
+
+  return mapAddress([addresses])[0];
+};
+
+export const deleteCustomerAddress = async (
+  addressId: string
+): Promise<boolean> => {
+  await supabase.from('addresses').delete().eq('id', addressId).throwOnError();
+
+  return true;
+};
+
+export const addCustomerAddress = async ({
+  data,
+  addressType,
+}: {
+  data: Address;
+  addressType: AddressType;
+}): Promise<AddressWithID | null> => {
+  const { data: addresses } = await supabase
+    .from('addresses')
+    .insert({
+      country: data.country,
+      city: data.city,
+      street_name: data.streetName,
+      street_number: data.streetNumber,
+      postal_code: data.postalCode,
+      is_shipping_address: addressType === 'shipping',
+      is_billing_address: addressType === 'billing',
+    })
+    .select('*')
+    .maybeSingle()
+    .throwOnError();
+
+  if (!addresses) return null;
+
+  return mapAddress([addresses])[0];
 };

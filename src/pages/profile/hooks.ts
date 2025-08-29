@@ -1,19 +1,24 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
+  useAddCustomerAddress,
+  useDeleteCustomerAddress,
   useGetCustomer,
   useGetCustomerAddress,
   useSetDefaultAddress,
   useUpdateCustomer,
+  useUpdateCustomerAddress,
   type AddressType,
 } from '@shared/api';
 import { ROUTES } from '@shared/config/routes';
 import {
+  addressSchema,
   newPasswordSchema,
   personalSchema,
+  type AddressFormType,
   type NewPasswordFormType,
   type PersonalFormType,
 } from '@shared/lib/schemas';
@@ -109,6 +114,98 @@ export const useEditPersonalForm = () => {
       {
         onSuccess: () => {
           toast.success('Personal data changed successfully');
+          navigate({ to: ROUTES.PROFILE });
+        },
+        onError: (error) => toast.error(error.message),
+      }
+    );
+  };
+
+  return { form, onSubmit, isPending };
+};
+
+export const useEditAddressForm = () => {
+  const { addressId } = useParams({ strict: false });
+  const { data: addresses } = useGetCustomerAddress();
+  const navigate = useNavigate();
+  const { mutate: updateCustomerAddress, isPending } =
+    useUpdateCustomerAddress();
+
+  const currentAddress =
+    addresses?.shippingAddresses.find((address) => address.id === addressId) ||
+    addresses?.billingAddresses?.find((address) => address.id === addressId) ||
+    null;
+
+  const form = useForm<AddressFormType>({
+    resolver: zodResolver(addressSchema),
+    defaultValues: {
+      country: currentAddress?.country ?? '',
+      city: currentAddress?.city ?? '',
+      streetName: currentAddress?.streetName ?? '',
+      streetNumber: currentAddress?.streetNumber ?? '',
+      postalCode: currentAddress?.postalCode ?? '',
+    },
+    mode: 'onChange',
+  });
+
+  const onSubmit = (data: AddressFormType) => {
+    updateCustomerAddress(
+      { id: addressId, ...data },
+      {
+        onSuccess: () => {
+          toast.success('Address updated successfully');
+          navigate({ to: ROUTES.PROFILE });
+        },
+        onError: (error) => toast.error(error.message),
+      }
+    );
+  };
+
+  return { form, onSubmit, isPending };
+};
+
+export const useDeleteProfileAddress = () => {
+  const { mutate: deleteAddress, isPending: isDeleting } =
+    useDeleteCustomerAddress();
+
+  const handleDeleteProfileAddress = (addressId: string) => {
+    deleteAddress(addressId, {
+      onSuccess: () => {
+        toast.success('Address deleted successfully');
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
+  };
+
+  return { handleDeleteProfileAddress, isDeleting };
+};
+
+export const useAddAddressForm = () => {
+  const navigate = useNavigate();
+  const search = useSearch({ strict: false });
+  const addressType = search.type as AddressType;
+  const { mutate: addCustomerAddress, isPending } = useAddCustomerAddress();
+
+  const form = useForm<AddressFormType>({
+    resolver: zodResolver(addressSchema),
+    defaultValues: {
+      country: '',
+      city: '',
+      streetName: '',
+      streetNumber: '',
+      postalCode: '',
+    },
+    mode: 'onChange',
+  });
+
+  const onSubmit = (data: AddressFormType) => {
+    addCustomerAddress(
+      { data, addressType },
+      {
+        onSuccess: () => {
+          toast.success('Address added successfully');
           navigate({ to: ROUTES.PROFILE });
         },
         onError: (error) => toast.error(error.message),

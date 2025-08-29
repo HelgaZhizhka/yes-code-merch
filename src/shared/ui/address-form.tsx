@@ -9,13 +9,15 @@ import { Spinner } from '@shared/ui/spinner';
 import { CountryList } from '@/shared/ui/country-list';
 
 export interface AddressFormProps {
-  prefix: string;
-  label: string;
+  prefix?: string;
+  label?: string;
+  showDefaultCheckbox?: boolean;
 }
 
 export const AddressForm = ({
-  prefix,
-  label,
+  prefix = '',
+  label = '',
+  showDefaultCheckbox = true,
 }: AddressFormProps): React.JSX.Element => {
   const { control } = useFormContext();
   const country = useWatch({ control, name: `${prefix}.country` });
@@ -99,19 +101,21 @@ export const AddressForm = ({
           </FormFieldWrapper>
         </div>
 
-        <FormFieldWrapper
-          control={control}
-          name={`${prefix}.isDefault`}
-          label="Set as default"
-          labelPosition="right"
-        >
-          {(field) => (
-            <Checkbox
-              checked={field.value ?? false}
-              onCheckedChange={(checked) => field.onChange(checked)}
-            />
-          )}
-        </FormFieldWrapper>
+        {showDefaultCheckbox && (
+          <FormFieldWrapper
+            control={control}
+            name={`${prefix}.isDefault`}
+            label="Set as default"
+            labelPosition="right"
+          >
+            {(field) => (
+              <Checkbox
+                checked={field.value ?? false}
+                onCheckedChange={(checked) => field.onChange(checked)}
+              />
+            )}
+          </FormFieldWrapper>
+        )}
       </div>
     </fieldset>
   );

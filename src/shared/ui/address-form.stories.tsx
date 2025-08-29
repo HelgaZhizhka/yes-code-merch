@@ -37,9 +37,9 @@ const onSubmit = (formData: Record<string, AddressFormType>) => {
 const Template: StoryFn<AddressFormProps> = (args) => (
   <FormValidation
     schema={z.object({
-      [args.prefix]: addressSchema,
+      [args.prefix as string]: addressSchema,
     })}
-    initialValues={{ [args.prefix]: defaultAddress }}
+    initialValues={{ [args.prefix as string]: defaultAddress }}
   >
     {(methods) => (
       <form

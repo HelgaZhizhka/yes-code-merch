@@ -5,15 +5,23 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
-import type { CustomerAddresses, CustomerDataWithID } from '@shared/interfaces';
+import type {
+  Address,
+  AddressWithID,
+  CustomerAddresses,
+  CustomerDataWithID,
+} from '@shared/interfaces';
 
 import type { AddressType } from './mapper';
 
 import {
+  addCustomerAddress,
+  deleteCustomerAddress,
   getCustomer,
   getCustomerAddress,
   setDefaultAddress,
   updateCustomer,
+  updateCustomerAddress,
   type SetDefaultAddressResult,
 } from './';
 
@@ -43,7 +51,7 @@ export const useGetCustomerAddress = (): {
     queryKey: queryKey.customerAddresses,
     queryFn: getCustomerAddress,
     staleTime: Infinity,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
@@ -90,6 +98,71 @@ export const useUpdateCustomer = (): UseMutationResult<
     onError: (error: unknown) => {
       if (error instanceof Error) {
         console.error('Updating customer failed:', error.message);
+      }
+    },
+  });
+};
+
+export const useUpdateCustomerAddress = (): UseMutationResult<
+  AddressWithID | null,
+  Error,
+  AddressWithID
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<AddressWithID | null, Error, AddressWithID>({
+    mutationFn: (data: AddressWithID) => updateCustomerAddress(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Updating address failed:', error.message);
+      }
+    },
+  });
+};
+
+export const useDeleteCustomerAddress = (): UseMutationResult<
+  boolean,
+  Error,
+  string
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<boolean, Error, string>({
+    mutationFn: (addressId) => deleteCustomerAddress(addressId),
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Deleting address failed:', error.message);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
+    },
+  });
+};
+
+export const useAddCustomerAddress = (): UseMutationResult<
+  AddressWithID | null,
+  Error,
+  { data: Address; addressType: AddressType }
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    AddressWithID | null,
+    Error,
+    { data: Address; addressType: AddressType }
+  >({
+    mutationFn: ({ data, addressType }) =>
+      addCustomerAddress({ data, addressType }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Adding address failed:', error.message);
       }
     },
   });
