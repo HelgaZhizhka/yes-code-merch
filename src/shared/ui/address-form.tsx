@@ -9,13 +9,13 @@ import { Spinner } from '@shared/ui/spinner';
 import { CountryList } from '@/shared/ui/country-list';
 
 export interface AddressFormProps {
-  prefix: string;
+  prefix?: string;
   label?: string;
   showDefaultCheckbox?: boolean;
 }
 
 export const AddressForm = ({
-  prefix,
+  prefix = '',
   label = '',
   showDefaultCheckbox = true,
 }: AddressFormProps): React.JSX.Element => {
