@@ -1,6 +1,7 @@
 import type { Database } from '@shared/api/database.types';
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 import type {
+  Address,
   AddressWithID,
   CustomerAddresses,
   CustomerDataWithID,
@@ -120,4 +121,32 @@ export const deleteCustomerAddress = async (
   await supabase.from('addresses').delete().eq('id', addressId).throwOnError();
 
   return true;
+};
+
+export const addCustomerAddress = async ({
+  data,
+  addressType,
+}: {
+  data: Address;
+  addressType: AddressType;
+}): Promise<AddressWithID | null> => {
+  const { data: addresses } = await supabase
+    .from('addresses')
+    .insert({
+      country: data.country,
+      city: data.city,
+      street_name: data.streetName,
+      street_number: data.streetNumber,
+      postal_code: data.postalCode,
+      is_shipping_address: addressType === 'shipping',
+      is_billing_address: addressType === 'billing',
+    })
+    .select('*')
+    .maybeSingle()
+    .throwOnError();
+
+  if (!addresses) return null;
+  console.log(addresses);
+
+  return mapAddress([addresses])[0];
 };

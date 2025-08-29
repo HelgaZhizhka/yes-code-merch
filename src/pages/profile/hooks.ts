@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate, useParams } from '@tanstack/react-router';
+import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
+  useAddCustomerAddress,
   useDeleteCustomerAddress,
   useGetCustomer,
   useGetCustomerAddress,
@@ -131,8 +132,8 @@ export const useEditAddressForm = () => {
     useUpdateCustomerAddress();
 
   const currentAddress =
-    addresses?.shippingAddresses.find((a) => a.id === addressId) ||
-    addresses?.billingAddresses?.find((a) => a.id === addressId) ||
+    addresses?.shippingAddresses.find((address) => address.id === addressId) ||
+    addresses?.billingAddresses?.find((address) => address.id === addressId) ||
     null;
 
   const form = useForm<AddressFormType>({
@@ -179,4 +180,38 @@ export const useDeleteProfileAddress = () => {
   };
 
   return { handleDeleteProfileAddress, isDeleting };
+};
+
+export const useAddAddressForm = () => {
+  const navigate = useNavigate();
+  const search = useSearch({ strict: false });
+  const addressType = search.type as AddressType;
+  const { mutate: addCustomerAddress, isPending } = useAddCustomerAddress();
+
+  const form = useForm<AddressFormType>({
+    resolver: zodResolver(addressSchema),
+    defaultValues: {
+      country: '',
+      city: '',
+      streetName: '',
+      streetNumber: '',
+      postalCode: '',
+    },
+    mode: 'onChange',
+  });
+
+  const onSubmit = (data: AddressFormType) => {
+    addCustomerAddress(
+      { data, addressType },
+      {
+        onSuccess: () => {
+          toast.success('Address added successfully');
+          navigate({ to: ROUTES.PROFILE });
+        },
+        onError: (error) => toast.error(error.message),
+      }
+    );
+  };
+
+  return { form, onSubmit, isPending };
 };

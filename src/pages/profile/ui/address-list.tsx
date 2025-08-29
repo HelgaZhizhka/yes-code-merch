@@ -37,7 +37,11 @@ export const AddressList = ({ addresses, addressType }: AddressListProps) => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <p className="text-xl font-bold capitalize">{addressType} address:</p>
-        <Link to={ROUTES.PROFILE_ADD_ADDRESS} className="hover:underline">
+        <Link
+          to={ROUTES.PROFILE_ADD_ADDRESS}
+          search={{ type: addressType }}
+          className="hover:underline"
+        >
           Add address +
         </Link>
       </div>
@@ -72,17 +76,19 @@ export const AddressList = ({ addresses, addressType }: AddressListProps) => {
                   <Pencil />
                 </Link>
                 <Tooltip>
-                  <TooltipTrigger>
-                    <DialogTrigger asChild>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        aria-label="Delete"
-                        disabled={address.isDefault}
-                      >
-                        <Trash />
-                      </Button>
-                    </DialogTrigger>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <DialogTrigger asChild>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Delete"
+                          disabled={address.isDefault}
+                        >
+                          <Trash />
+                        </Button>
+                      </DialogTrigger>
+                    </span>
                   </TooltipTrigger>
                   {address.isDefault && (
                     <TooltipContent>

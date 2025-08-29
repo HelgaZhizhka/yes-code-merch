@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query';
 
 import type {
+  Address,
   AddressWithID,
   CustomerAddresses,
   CustomerDataWithID,
@@ -14,6 +15,7 @@ import type {
 import type { AddressType } from './mapper';
 
 import {
+  addCustomerAddress,
   deleteCustomerAddress,
   getCustomer,
   getCustomerAddress,
@@ -49,7 +51,7 @@ export const useGetCustomerAddress = (): {
     queryKey: queryKey.customerAddresses,
     queryFn: getCustomerAddress,
     staleTime: Infinity,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
@@ -137,6 +139,31 @@ export const useDeleteCustomerAddress = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
+    },
+  });
+};
+
+export const useAddCustomerAddress = (): UseMutationResult<
+  AddressWithID | null,
+  Error,
+  { data: Address; addressType: AddressType }
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    AddressWithID | null,
+    Error,
+    { data: Address; addressType: AddressType }
+  >({
+    mutationFn: ({ data, addressType }) =>
+      addCustomerAddress({ data, addressType }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.customerAddresses });
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Adding address failed:', error.message);
+      }
     },
   });
 };
