@@ -146,7 +146,6 @@ export const addCustomerAddress = async ({
     .throwOnError();
 
   if (!addresses) return null;
-  console.log(addresses);
 
   return mapAddress([addresses])[0];
 };
