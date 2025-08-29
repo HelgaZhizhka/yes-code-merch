@@ -10,7 +10,7 @@ export const AddAddressForm = (): React.JSX.Element => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <AddressForm prefix="" showDefaultCheckbox={false} />
+        <AddressForm showDefaultCheckbox={false} />
 
         <Button
           type="submit"
