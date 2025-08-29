@@ -2,8 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 
 import { ROUTES } from '@shared/config/routes';
-
-import { getLinkButtonClass } from '@/shared/ui/link-button';
+import { getLinkButtonClass } from '@shared/ui/link-button';
 
 import { EditAddressForm } from './edit-address-form';
 

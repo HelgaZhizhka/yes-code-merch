@@ -13,8 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@shared/ui/card';
-import { getLinkButtonClass } from '@shared/ui/link-button';
-
 import {
   Dialog,
   DialogClose,
@@ -24,8 +22,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/shared/ui/dialog';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
+} from '@shared/ui/dialog';
+import { getLinkButtonClass } from '@shared/ui/link-button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@shared/ui/tooltip';
 
 import { useDeleteProfileAddress, useSetDefaultProfileAddress } from '../hooks';
 

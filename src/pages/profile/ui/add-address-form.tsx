@@ -1,7 +1,6 @@
+import { AddressForm } from '@shared/ui/address-form';
 import { Button } from '@shared/ui/button';
 import { Form } from '@shared/ui/form';
-
-import { AddressForm } from '@/shared/ui/address-form';
 
 import { useAddAddressForm } from '../hooks';
 
