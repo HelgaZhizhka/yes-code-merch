@@ -76,6 +76,9 @@ export const useChangePasswordForm = () => {
       {
         onSuccess: () => {
           toast.success('Password changed successfully');
+          toast.info(
+            'Your password has been changed. Please use the new password to log in.'
+          );
           navigate({ to: ROUTES.PROFILE });
         },
         onError: (error) => toast.error(error.message),
@@ -109,6 +112,11 @@ export const useEditPersonalForm = () => {
       {
         onSuccess: () => {
           toast.success('Personal data changed successfully');
+          if (customer?.email && customer?.email !== data.email) {
+            toast.info(
+              'Your email has been changed. Please use the new email to log in.'
+            );
+          }
           navigate({ to: ROUTES.PROFILE });
         },
         onError: (error) => toast.error(error.message),
