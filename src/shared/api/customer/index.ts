@@ -1,4 +1,4 @@
-import type { Database } from '@shared/api/database.types';
+import type { Public } from '@shared/api/supabase-client';
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 import type {
   Address,
@@ -45,7 +45,7 @@ export const getCustomerAddress = async (): Promise<CustomerAddresses> => {
 };
 
 export type SetDefaultAddressResult =
-  Database['public']['Functions']['set_default_address']['Returns'];
+  Public['Functions']['set_default_address']['Returns'];
 
 export const setDefaultAddress = async ({
   addressId,

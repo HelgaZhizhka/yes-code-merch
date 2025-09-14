@@ -1,10 +1,10 @@
-import type { Database } from '@shared/api/database.types';
+import type { Public } from '@shared/api/supabase-client';
 
 import type { AddressWithID, CustomerDataWithID } from '@/shared/interfaces';
 
 export type AddressType = 'shipping' | 'billing';
-export type CustomerDTO = Database['public']['Tables']['customers']['Row'];
-export type AddressDTO = Database['public']['Tables']['addresses']['Row'];
+export type CustomerDTO = Public['Tables']['customers']['Row'];
+export type AddressDTO = Public['Tables']['addresses']['Row'];
 
 export const mapCustomer = (customer: CustomerDTO): CustomerDataWithID => ({
   id: customer.user_id,

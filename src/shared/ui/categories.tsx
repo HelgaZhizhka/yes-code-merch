@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { cva } from 'class-variance-authority';
 import type React from 'react';
 
-import { useCategories } from '@shared/categories/hooks';
+import { useRootCategories } from '@shared/categories/hooks';
 import { ROUTES } from '@shared/config/routes';
 import { cn } from '@shared/lib/utils';
 import { LayoutView, type LayoutViewType } from '@shared/types';
@@ -38,7 +38,7 @@ const linkVariants = cva('transition-all', {
 export const Categories = ({
   variant = LayoutView.HEADER,
 }: CategoriesProps): React.JSX.Element => {
-  const categories = useCategories();
+  const categories = useRootCategories();
 
   return (
     <ul className={cn(containerVariants({ variant }))}>
