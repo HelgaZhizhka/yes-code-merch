@@ -1,6 +1,6 @@
 import type { AuthError, Session, User } from '@supabase/supabase-js';
 
-import type { Database } from '@shared/api/database.types';
+import type { Public } from '@shared/api/supabase-client';
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 import { config } from '@shared/config';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
@@ -137,7 +137,7 @@ export const updateUser = async ({
 };
 
 export type CompleteRegistrationResult =
-  Database['public']['Functions']['complete_registration']['Returns'];
+  Public['Functions']['complete_registration']['Returns'];
 
 export const completeRegistration = async (
   viewer: Viewer

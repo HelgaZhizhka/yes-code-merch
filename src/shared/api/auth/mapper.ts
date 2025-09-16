@@ -1,8 +1,7 @@
-import type { Database } from '@shared/api/database.types';
+import type { Public } from '@shared/api/supabase-client';
 import type { Viewer } from '@shared/interfaces';
 
-export type RpcArgs =
-  Database['public']['Functions']['complete_registration']['Args'];
+export type RpcArgs = Public['Functions']['complete_registration']['Args'];
 
 export const mapViewerDataToRpcArgs = (viewer: Viewer): RpcArgs => {
   const {

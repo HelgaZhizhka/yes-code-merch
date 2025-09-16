@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 
-import { getCategories, type Category } from '@shared/api/categories';
+import { getRootCategories, type Category } from '@shared/api/categories';
 
-export const useCategories = () => {
+export const useRootCategories = () => {
+  // Tanstack Query hook for categories
+
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const loadCategories = async (): Promise<void> => {
       try {
-        const data = await getCategories();
-        setCategories(data);
+        const data = await getRootCategories();
+        if (data) {
+          setCategories(data);
+        }
       } catch (error) {
         console.error('Failed to fetch categories:', error);
       }
