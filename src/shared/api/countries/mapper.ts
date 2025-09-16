@@ -5,8 +5,8 @@ export interface Country {
   name: string;
 }
 
-export type ContryRow = Public['Tables']['countries']['Row'];
-export const mapCountry = (country: ContryRow[]): Country[] => {
+export type CountryRow = Public['Tables']['countries']['Row'];
+export const mapCountry = (country: CountryRow[]): Country[] => {
   return country.map((country) => ({
     code: country.iso_code,
     name: country.name,
