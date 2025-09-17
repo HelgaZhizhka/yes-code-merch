@@ -72,7 +72,9 @@ export const Header = ({
         </div>
       </div>
       <div className="bg-dark-background h-17 flex items-center pl-11 pr-11 justify-between">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={<div className="text-secondary-foreground">Loading...</div>}
+        >
           <Categories />
         </Suspense>
         <ThemeSwitcher />
