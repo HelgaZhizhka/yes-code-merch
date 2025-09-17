@@ -38,11 +38,11 @@ const linkVariants = cva('transition-all', {
 export const Categories = ({
   variant = LayoutView.HEADER,
 }: CategoriesProps): React.JSX.Element | null => {
-  const categories = useRootCategories();
+  const { data: categories } = useRootCategories();
 
   return (
     <ul className={cn(containerVariants({ variant }))}>
-      {categories.map((category) => {
+      {categories?.map((category) => {
         const { name, slug } = category;
         return (
           <li key={name}>

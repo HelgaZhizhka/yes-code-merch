@@ -1,10 +1,11 @@
-import type { Public } from '@shared/api/supabase-client';
 import { supabase } from '@shared/api/supabase-client';
 
-export type Category = Public['Tables']['categories']['Row'];
+import type { Category } from '@/shared/interfaces';
 
-export async function getRootCategories() {
-  const { data } = await supabase
+import { mapCategories } from './mapper';
+
+export const getRootCategories = async (): Promise<Category[] | null> => {
+  const { data: categories } = await supabase
     .from('categories')
     .select('*')
     .is('parent_id', null)
@@ -12,9 +13,9 @@ export async function getRootCategories() {
     .order('name', { ascending: true })
     .throwOnError();
 
-  if (!data) {
+  if (!categories) {
     return null;
   }
 
-  return data as Category[];
-}
+  return mapCategories(categories);
+};

@@ -35,3 +35,11 @@ export interface CustomerAddresses {
   shippingAddresses: AddressWithID[];
   billingAddresses?: AddressWithID[];
 }
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  parentId: string | null;
+  orderHint: string;
+}
