@@ -1,8 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { getRootCategories } from '@shared/api/categories';
-
-import type { Category } from '@/shared/interfaces';
+import type { Category } from '@shared/interfaces';
 
 const queryKey = {
   rootCategories: ['rootCategories'],

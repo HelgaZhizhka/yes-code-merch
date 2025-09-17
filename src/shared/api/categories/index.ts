@@ -1,6 +1,5 @@
 import { supabase } from '@shared/api/supabase-client';
-
-import type { Category } from '@/shared/interfaces';
+import type { Category } from '@shared/interfaces';
 
 import { mapCategories } from './mapper';
 

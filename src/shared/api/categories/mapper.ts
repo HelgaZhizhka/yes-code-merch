@@ -1,6 +1,5 @@
 import type { Public } from '@shared/api/supabase-client';
-
-import type { Category } from '@/shared/interfaces';
+import type { Category } from '@shared/interfaces';
 
 export type CategoryDTO = Public['Tables']['categories']['Row'];
 
