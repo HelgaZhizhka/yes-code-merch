@@ -26,8 +26,10 @@ const containerVariants = cva('', {
 const linkVariants = cva('transition-all', {
   variants: {
     variant: {
-      header: 'text-secondary-foreground hover:text-primary',
-      footer: 'text-violet-foreground hover:text-violet-accent-foreground',
+      header:
+        'text-secondary-foreground hover:text-primary data-[active=true]:text-primary',
+      footer:
+        'text-violet-foreground hover:text-violet-accent-foreground data-[active=true]:text-violet-accent-foreground',
     },
   },
   defaultVariants: {
@@ -38,18 +40,21 @@ const linkVariants = cva('transition-all', {
 export const Categories = ({
   variant = LayoutView.HEADER,
 }: CategoriesProps): React.JSX.Element | null => {
-  const categories = useRootCategories();
+  const { data: categories } = useRootCategories();
 
   return (
     <ul className={cn(containerVariants({ variant }))}>
       {categories.map((category) => {
-        const { name, slug } = category;
+        const { id, name, slug } = category;
         return (
-          <li key={name}>
+          <li key={id}>
             <Link
               to={ROUTES.CATEGORY}
               params={{ categoryId: slug }}
               className={cn(linkVariants({ variant }))}
+              activeProps={{
+                'data-active': true,
+              }}
             >
               {name}
             </Link>

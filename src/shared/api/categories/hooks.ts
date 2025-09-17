@@ -1,26 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getRootCategories, type Category } from '@shared/api/categories';
+import { getRootCategories } from '@shared/api/categories';
+import type { Category } from '@shared/interfaces';
 
-export const useRootCategories = () => {
-  // Tanstack Query hook for categories
+const queryKey = {
+  rootCategories: ['rootCategories'],
+};
 
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    const loadCategories = async (): Promise<void> => {
-      try {
-        const data = await getRootCategories();
-        if (data) {
-          setCategories(data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch categories:', error);
-      }
-    };
-
-    loadCategories();
-  }, []);
-
-  return categories;
+export const useRootCategories = (): {
+  data: Category[];
+} => {
+  const { data } = useSuspenseQuery<Category[]>({
+    queryKey: queryKey.rootCategories,
+    queryFn: getRootCategories,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: 24 * 60 * 60 * 1000,
+    gcTime: 7 * 24 * 60 * 60 * 1000,
+    retry: 1,
+  });
+  return { data };
 };
