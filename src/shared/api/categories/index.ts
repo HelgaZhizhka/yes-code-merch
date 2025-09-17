@@ -3,7 +3,7 @@ import type { Category } from '@shared/interfaces';
 
 import { mapCategories } from './mapper';
 
-export const getRootCategories = async (): Promise<Category[] | null> => {
+export const getRootCategories = async (): Promise<Category[]> => {
   const { data: categories } = await supabase
     .from('categories')
     .select('*')
@@ -12,9 +12,5 @@ export const getRootCategories = async (): Promise<Category[] | null> => {
     .order('name', { ascending: true })
     .throwOnError();
 
-  if (!categories) {
-    return null;
-  }
-
-  return mapCategories(categories);
+  return mapCategories(categories ?? []);
 };

@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Mail, MessageCircle, Phone } from 'lucide-react';
+import { Suspense } from 'react';
 
 import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
@@ -49,7 +50,9 @@ export const Footer = ({
         </div>
         <div className="hidden md:block">
           <h5 className="font-bold mb-2">Categories</h5>
-          <Categories variant={LayoutView.FOOTER} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Categories variant={LayoutView.FOOTER} />
+          </Suspense>
         </div>
 
         <div>
