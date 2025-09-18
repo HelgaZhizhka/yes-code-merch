@@ -5,4 +5,5 @@ export const LayoutView = {
 } as const;
 
 export type LayoutViewType = (typeof LayoutView)[keyof typeof LayoutView];
+export type AuthLayoutViewType = Extract<LayoutViewType, 'header' | 'footer'>;
 export type AsyncVoidFunction = () => Promise<void>;
