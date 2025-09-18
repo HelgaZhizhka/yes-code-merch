@@ -1,13 +1,13 @@
 import { cva } from 'class-variance-authority';
 
 import { cn } from '@shared/lib/utils';
-import { LayoutView, type LayoutViewType } from '@shared/types';
+import { LayoutView, type AuthLayoutViewType } from '@shared/types';
 
 interface PhoneWidgetProps {
   icon: React.JSX.Element;
   label: string;
   href?: string;
-  variant?: LayoutViewType;
+  variant?: AuthLayoutViewType;
 }
 
 const linkVariants = cva('', {
