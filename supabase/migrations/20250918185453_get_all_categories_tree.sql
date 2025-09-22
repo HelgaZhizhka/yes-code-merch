@@ -37,7 +37,6 @@ AS $$
 
     UNION ALL
 
-    -- рекурсия: все потомки
     SELECT
       ch.id, ch.name, ch.slug, ch.parent_id,
       r.depth + 1,
