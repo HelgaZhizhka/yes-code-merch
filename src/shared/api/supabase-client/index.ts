@@ -11,7 +11,8 @@ export const RpcFunctions = {
   registration: 'complete_registration',
   setDefaultAddress: 'set_default_address',
   clearDefaultAddress: 'clear_default_address',
-  getAllCategoriesTree: 'get_all_categories_tree',
+  getCategoriesTree: 'get_all_categories_tree',
+  getCategoryBreadcrumbPaths: 'get_category_breadcrumb_paths',
 } as const;
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY);

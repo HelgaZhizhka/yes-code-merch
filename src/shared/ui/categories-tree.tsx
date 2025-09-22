@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { cva } from 'class-variance-authority';
+import React, { useMemo } from 'react';
 
 import { useCategoriesTree } from '@shared/api/categories/hooks';
 import type { CategoryTree } from '@shared/api/categories/mapper';
@@ -19,50 +20,57 @@ const linkVariants = cva('transition-all', {
   defaultVariants: { variant: 'default' },
 });
 
-const Node = ({
-  node,
-  variant,
-  useFullPath,
-  pathPrefix = '',
-}: {
-  node: CategoryTree;
-  pathPrefix?: string;
-  variant?: CategoriesTreeProps['variant'];
-  useFullPath?: boolean;
-}) => {
-  const { slug, name } = node;
-  const fullPath = useFullPath
-    ? [pathPrefix, node.slug].filter(Boolean).join('/')
-    : node.slug;
+const Node = React.memo(
+  ({
+    node,
+    variant,
+    useFullPath,
+    pathPrefix = '',
+  }: {
+    node: CategoryTree;
+    pathPrefix?: string;
+    variant?: CategoriesTreeProps['variant'];
+    useFullPath?: boolean;
+  }) => {
+    const { slug, name } = node;
+    const fullPath = useMemo(
+      () => [pathPrefix, node.slug].filter(Boolean).join('/'),
+      [pathPrefix, node.slug]
+    );
 
-  return (
-    <li>
-      <Link
-        to={ROUTES.CATEGORY}
-        params={{ _splat: useFullPath ? fullPath : slug }}
-        preload="intent"
-        className={cn(linkVariants({ variant }))}
-        activeProps={{ 'data-active': true, 'aria-current': 'page' }}
-      >
-        {name}
-      </Link>
+    const pathToUse = useFullPath ? fullPath : slug;
 
-      {node.children.length > 0 && (
-        <ul>
-          {node.children.map((child) => (
-            <Node
-              key={child.id}
-              node={child}
-              pathPrefix={useFullPath ? fullPath : pathPrefix}
-              variant={variant}
-              useFullPath={useFullPath}
-            />
-          ))}
-        </ul>
-      )}
-    </li>
-  );
-};
+    return (
+      <li>
+        <Link
+          to={ROUTES.CATEGORY}
+          params={{ _splat: pathToUse }}
+          preload="intent"
+          className={cn(linkVariants({ variant }))}
+          activeProps={{ 'data-active': true, 'aria-current': 'page' }}
+        >
+          {name}
+        </Link>
+
+        {node.children.length > 0 && (
+          <ul>
+            {node.children.map((child) => (
+              <Node
+                key={child.id}
+                node={child}
+                pathPrefix={useFullPath ? fullPath : pathPrefix}
+                variant={variant}
+                useFullPath={useFullPath}
+              />
+            ))}
+          </ul>
+        )}
+      </li>
+    );
+  }
+);
+
+Node.displayName = 'CategoryNode';
 
 export const CategoriesTree = ({
   variant = 'default',

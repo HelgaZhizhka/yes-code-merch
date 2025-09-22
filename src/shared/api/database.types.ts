@@ -780,6 +780,14 @@ export type Database = {
           slug: string;
         }[];
       };
+      get_category_breadcrumb_paths: {
+        Args: { cat_slug: string };
+        Returns: {
+          is_current: boolean;
+          name: string;
+          path: string;
+        }[];
+      };
       get_category_subtree: {
         Args: { root_id: string };
         Returns: {
