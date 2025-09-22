@@ -42,7 +42,7 @@ export const mapCategoriesTree = (rows: CategoryTreeDTO[]): CategoryTree[] => {
   const categoryMap = new Map<string, CategoryTree>();
   const rootCategories: CategoryTree[] = [];
 
-  rows.forEach((row) => {
+  for (const row of rows) {
     const category: CategoryTree = {
       id: row.id,
       name: row.name,
@@ -56,21 +56,22 @@ export const mapCategoriesTree = (rows: CategoryTreeDTO[]): CategoryTree[] => {
       children: [],
     };
     categoryMap.set(row.id, category);
-  });
+  }
 
-  rows.forEach((row) => {
+  for (const row of rows) {
     const category = categoryMap.get(row.id);
-    if (!category) return;
+    if (!category) continue;
 
     if (row.parent_id && categoryMap.has(row.parent_id)) {
       const parent = categoryMap.get(row.parent_id);
+
       if (parent) {
         parent.children.push(category);
       }
     } else {
       rootCategories.push(category);
     }
-  });
+  }
 
   return rootCategories;
 };
