@@ -143,14 +143,9 @@ export const completeRegistration = async (
   viewer: Viewer
 ): Promise<CompleteRegistrationResult> => {
   const rpcArgs = mapViewerDataToRpcArgs(viewer);
-  const { data, error } = await supabase.rpc(
-    RpcFunctions.registration,
-    rpcArgs
-  );
-
-  if (error) {
-    throw error;
-  }
+  const { data } = await supabase
+    .rpc(RpcFunctions.registration, rpcArgs)
+    .throwOnError();
 
   return data;
 };

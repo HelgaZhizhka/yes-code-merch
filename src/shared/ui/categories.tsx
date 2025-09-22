@@ -99,10 +99,12 @@ export const Categories = ({
             <li key={id}>
               <Link
                 to={ROUTES.CATEGORY}
-                params={{ categoryId: slug }}
+                preload="intent"
+                params={{ _splat: slug }}
                 className={cn(linkVariants({ variant }))}
                 activeProps={{
                   'data-active': true,
+                  'aria-current': 'page',
                 }}
               >
                 {variant === 'home' ? (

@@ -1,7 +1,11 @@
-import { supabase } from '@shared/api/supabase-client';
-import type { Category } from '@shared/interfaces';
+import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 
-import { mapCategories } from './mapper';
+import {
+  mapCategories,
+  mapCategoriesTree,
+  type Category,
+  type CategoryTree,
+} from './mapper';
 
 export const getRootCategories = async (): Promise<Category[]> => {
   const { data: categories } = await supabase
@@ -13,4 +17,12 @@ export const getRootCategories = async (): Promise<Category[]> => {
     .throwOnError();
 
   return mapCategories(categories ?? []);
+};
+
+export const getAllCategoriesTree = async (): Promise<CategoryTree[]> => {
+  const { data } = await supabase
+    .rpc(RpcFunctions.getAllCategoriesTree)
+    .throwOnError();
+
+  return mapCategoriesTree(data ?? []);
 };

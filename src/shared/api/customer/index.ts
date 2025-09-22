@@ -55,14 +55,9 @@ export const setDefaultAddress = async ({
   addressType: AddressType;
 }): Promise<SetDefaultAddressResult> => {
   const rpcArgs = mapSetDefaultAddress(addressId, addressType);
-  const { data, error } = await supabase.rpc(
-    RpcFunctions.setDefaultAddress,
-    rpcArgs
-  );
-
-  if (error) {
-    throw error;
-  }
+  const { data } = await supabase
+    .rpc(RpcFunctions.setDefaultAddress, rpcArgs)
+    .throwOnError();
 
   return data;
 };

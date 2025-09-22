@@ -135,13 +135,6 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
     component: Catalog,
   });
 
-export const subCategoryRoute = (parentRoute: FlexibleRouteType) =>
-  createRoute({
-    getParentRoute: () => parentRoute,
-    path: ROUTES.SUBCATEGORY,
-    component: Catalog,
-  });
-
 export const productRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,

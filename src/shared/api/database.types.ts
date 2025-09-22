@@ -7,11 +7,6 @@ export type Json =
   | Json[];
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: '13.0.5';
-  };
   public: {
     Tables: {
       addresses: {
@@ -737,6 +732,20 @@ export type Database = {
         };
         Returns: undefined;
       };
+      get_all_categories_tree: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          depth: number;
+          id: string;
+          name: string;
+          order_hint: string;
+          parent_id: string;
+          root_id: string;
+          root_name: string;
+          root_slug: string;
+          slug: string;
+        }[];
+      };
       get_catalog: {
         Args: {
           in_category?: string;
@@ -749,7 +758,9 @@ export type Database = {
         Returns: {
           created_at: string;
           currency: string;
+          final_price: number;
           image_url: string;
+          master_variant_id: string;
           name: string;
           price: number;
           product_attrs: Json;
@@ -810,18 +821,6 @@ export type Database = {
       };
       set_default_address: {
         Args: { _address_id: string; _address_type: string };
-        Returns: undefined;
-      };
-      upsert_variant_image: {
-        Args: {
-          p_alt?: string;
-          p_height?: number;
-          p_is_primary?: boolean;
-          p_sku: string;
-          p_sort?: number;
-          p_storage_path: string;
-          p_width?: number;
-        };
         Returns: undefined;
       };
     };

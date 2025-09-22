@@ -28,7 +28,7 @@ import {
 const queryKey = {
   customerData: ['customerData'],
   customerAddresses: ['customerAddresses'],
-};
+} as const;
 
 export const useGetCustomer = (): {
   data: CustomerDataWithID | null;
