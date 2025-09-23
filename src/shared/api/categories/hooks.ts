@@ -6,20 +6,30 @@ import {
   getRootCategories,
 } from '@shared/api/categories';
 
-import type { BreadcrumbItem, Category, CategoryTree } from './mapper';
+import {
+  mapCategories,
+  mapCategoriesTree,
+  mapCategoryBreadcrumbs,
+  type BreadcrumbItem,
+  type BreadcrumbItemDTO,
+  type Category,
+  type CategoryDTO,
+  type CategoryTree,
+  type CategoryTreeDTO,
+} from './mapper';
 
 const queryKey = {
   rootCategories: ['rootCategories'],
   categoriesTree: ['categoriesTree'],
-  breadcrumbs: ['breadcrumbs'],
 } as const;
 
 export const useRootCategories = (): {
   data: Category[];
 } => {
-  const { data } = useSuspenseQuery<Category[]>({
+  const { data } = useSuspenseQuery<CategoryDTO[], Error, Category[]>({
     queryKey: queryKey.rootCategories,
     queryFn: getRootCategories,
+    select: mapCategories,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -33,9 +43,10 @@ export const useRootCategories = (): {
 export const useCategoriesTree = (): {
   data: CategoryTree[];
 } => {
-  const { data } = useSuspenseQuery<CategoryTree[]>({
+  const { data } = useSuspenseQuery<CategoryTreeDTO[], Error, CategoryTree[]>({
     queryKey: queryKey.categoriesTree,
     queryFn: getCategoriesTree,
+    select: mapCategoriesTree,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -48,9 +59,10 @@ export const useCategoriesTree = (): {
 };
 
 export function useCategoryBreadcrumbPaths(slug: string) {
-  return useSuspenseQuery<BreadcrumbItem[]>({
-    queryKey: [...queryKey.breadcrumbs, slug],
+  return useSuspenseQuery<BreadcrumbItemDTO[], Error, BreadcrumbItem[]>({
+    queryKey: ['breadcrumbsPaths', slug],
     queryFn: () => getCategoryBreadcrumbPaths(slug),
+    select: mapCategoryBreadcrumbs,
     staleTime: 5 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
     refetchOnMount: false,

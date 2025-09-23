@@ -1,23 +1,10 @@
 import { redirect } from '@tanstack/react-router';
 
-import { ViewerStatus, type ViewerStatusType } from '@shared/viewer';
+import { ViewerStatus } from '@shared/viewer';
 
-export interface BeforeLoadContext {
-  preload?: boolean;
-  context?: {
-    status: ViewerStatusType;
-    queryClient?: unknown;
-  };
-  location?: {
-    pathname: string;
-    search: Record<string, unknown>;
-    searchStr: string;
-    state: unknown;
-    hash: string;
-  };
-}
+import type { BeforeLoadContext } from './interfaces';
 
-export interface AuthGuardProps {
+interface AuthGuardProps {
   requireAuth?: boolean;
   redirectTo: string;
 }

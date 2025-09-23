@@ -1,9 +1,9 @@
 import type { Public } from '@shared/api/supabase-client';
 
 export type CategoryDTO = Public['Tables']['categories']['Row'];
-type CategoryTreeDTO =
+export type CategoryTreeDTO =
   Public['Functions']['get_all_categories_tree']['Returns'][0];
-type BreadcrumbsDTO =
+export type BreadcrumbItemDTO =
   Public['Functions']['get_category_breadcrumb_paths']['Returns'][0];
 
 export interface Category {
@@ -28,7 +28,9 @@ export type BreadcrumbItem = {
   isCurrent: boolean;
 };
 
-export const mapCategories = (categories: CategoryDTO[]): Category[] => {
+export const mapCategories = (
+  categories: readonly CategoryDTO[]
+): Category[] => {
   return categories.map(({ id, name, slug, parent_id, order_hint }) => ({
     id,
     name,
@@ -38,7 +40,9 @@ export const mapCategories = (categories: CategoryDTO[]): Category[] => {
   }));
 };
 
-export const mapCategoriesTree = (rows: CategoryTreeDTO[]): CategoryTree[] => {
+export const mapCategoriesTree = (
+  rows: readonly CategoryTreeDTO[]
+): CategoryTree[] => {
   const categoryMap = new Map<string, CategoryTree>();
   const rootCategories: CategoryTree[] = [];
 
@@ -77,7 +81,7 @@ export const mapCategoriesTree = (rows: CategoryTreeDTO[]): CategoryTree[] => {
 };
 
 export const mapCategoryBreadcrumbs = (
-  rows: BreadcrumbsDTO[]
+  rows: readonly BreadcrumbItemDTO[]
 ): BreadcrumbItem[] => {
   return rows.map(({ path, name, is_current }) => ({
     path,

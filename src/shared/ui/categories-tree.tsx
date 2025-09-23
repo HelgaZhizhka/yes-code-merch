@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { cva } from 'class-variance-authority';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { useCategoriesTree } from '@shared/api/categories/hooks';
 import type { CategoryTree } from '@shared/api/categories/mapper';
@@ -33,11 +33,7 @@ const Node = React.memo(
     useFullPath?: boolean;
   }) => {
     const { slug, name } = node;
-    const fullPath = useMemo(
-      () => [pathPrefix, node.slug].filter(Boolean).join('/'),
-      [pathPrefix, node.slug]
-    );
-
+    const fullPath = [pathPrefix, slug].filter(Boolean).join('/');
     const pathToUse = useFullPath ? fullPath : slug;
 
     return (

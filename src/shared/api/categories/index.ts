@@ -1,16 +1,17 @@
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 
 import {
-  mapCategories,
-  mapCategoriesTree,
-  mapCategoryBreadcrumbs,
-  type BreadcrumbItem,
-  type Category,
+  // mapCategories,
+  // mapCategoriesTree,
+  // mapCategoryBreadcrumbs,
+  type BreadcrumbItemDTO,
   type CategoryDTO,
-  type CategoryTree,
+  // type Category,
+  // type CategoryTree,
+  type CategoryTreeDTO,
 } from './mapper';
 
-export const getRootCategories = async (): Promise<Category[]> => {
+export const getRootCategories = async (): Promise<CategoryDTO[]> => {
   const { data: categories } = await supabase
     .from('categories')
     .select('*')
@@ -19,36 +20,22 @@ export const getRootCategories = async (): Promise<Category[]> => {
     .order('name', { ascending: true })
     .throwOnError();
 
-  return mapCategories(categories ?? []);
+  return categories ?? [];
 };
 
-export const getCategoriesTree = async (): Promise<CategoryTree[]> => {
+export const getCategoriesTree = async (): Promise<CategoryTreeDTO[]> => {
   const { data } = await supabase
     .rpc(RpcFunctions.getCategoriesTree)
     .throwOnError();
-
-  return mapCategoriesTree(data ?? []);
-};
-
-export const getCategoryBySlug = async (
-  slug: string
-): Promise<CategoryDTO | null> => {
-  const { data } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('slug', slug)
-    .maybeSingle()
-    .throwOnError();
-
-  return data ?? null;
+  return data;
 };
 
 export const getCategoryBreadcrumbPaths = async (
   slug: string
-): Promise<BreadcrumbItem[]> => {
+): Promise<BreadcrumbItemDTO[]> => {
   const { data } = await supabase
     .rpc(RpcFunctions.getCategoryBreadcrumbPaths, { cat_slug: slug })
     .throwOnError();
 
-  return mapCategoryBreadcrumbs(data ?? []);
+  return data ?? [];
 };
