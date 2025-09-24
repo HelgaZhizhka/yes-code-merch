@@ -1,13 +1,8 @@
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 
 import {
-  // mapCategories,
-  // mapCategoriesTree,
-  // mapCategoryBreadcrumbs,
   type BreadcrumbItemDTO,
   type CategoryDTO,
-  // type Category,
-  // type CategoryTree,
   type CategoryTreeDTO,
 } from './mapper';
 

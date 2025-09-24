@@ -23,12 +23,12 @@ import { RegistrationForm } from '@pages/registration/ui/registration-form';
 import { RegistrationSuccess } from '@pages/registration/ui/registration-success';
 import { ResetPassword } from '@pages/reset-password';
 
-import { getCategoryBreadcrumbPaths } from '@shared/api/categories';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
 
 import { authGuard } from './auth-guard';
+import { loadCategoryPageData } from './data-loaders';
 import type { AppRouterContext } from './interfaces';
 
 type FlexibleRouteType =
@@ -134,7 +134,7 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.CATEGORY,
-    loader: ({
+    loader: async ({
       params,
       context,
     }: {
@@ -147,11 +147,7 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
 
       if (!slug) return null;
 
-      return queryClient.ensureQueryData({
-        queryKey: ['breadcrumbsPaths', slug],
-        queryFn: () => getCategoryBreadcrumbPaths(slug),
-        staleTime: 5 * 60 * 1000,
-      });
+      return await loadCategoryPageData(queryClient, slug);
     },
     component: Catalog,
   });
