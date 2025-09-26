@@ -4,7 +4,11 @@ import { cva } from 'class-variance-authority';
 import icon from '@shared/assets/subtract.svg';
 import { ROUTES } from '@shared/config/routes';
 
-type BannerProps = { category: string; variant?: 'default' | 'mobile' };
+type BannerProps = {
+  category: string;
+  variant?: 'default' | 'mobile';
+  onClick?: () => void;
+};
 
 const bannerVariants = cva('transition-all', {
   variants: {
@@ -19,7 +23,7 @@ const bannerVariants = cva('transition-all', {
   },
 });
 
-const BannerText = ({ category }: BannerProps): React.JSX.Element => {
+const BannerText = ({ category, onClick }: BannerProps): React.JSX.Element => {
   let Text: React.JSX.Element = <>Discounts are coming!</>;
 
   switch (category) {
@@ -31,6 +35,7 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
             to={ROUTES.CATEGORY}
             params={{ _splat: category.toLowerCase() }}
             className="hover:underline"
+            onClick={onClick}
           >
             {category}
           </Link>{' '}
@@ -49,6 +54,7 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
               _splat: category.toLowerCase(),
             }}
             className="hover:underline"
+            onClick={onClick}
           >
             {category}
           </Link>{' '}
@@ -68,11 +74,12 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
 export const Banner = ({
   category,
   variant,
+  onClick,
 }: BannerProps): React.JSX.Element => {
   return (
     <div className={bannerVariants({ variant })}>
       <img src={icon} width={28} height={28} alt="discount icon" />
-      <BannerText category={category} />
+      <BannerText category={category} onClick={onClick} />
     </div>
   );
 };

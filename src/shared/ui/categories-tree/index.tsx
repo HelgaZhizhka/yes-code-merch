@@ -12,6 +12,7 @@ type CategoriesTreeProps = {
   variant?: 'default' | 'mobile' | 'sidebar';
   className?: string;
   useFullPath?: boolean;
+  onClick?: () => void;
 };
 
 const linkVariants = cva('transition-all', {
@@ -31,11 +32,13 @@ const Node = React.memo(
     variant,
     useFullPath,
     pathPrefix = '',
+    onClick,
   }: {
     node: CategoryTree;
     pathPrefix?: string;
     variant?: CategoriesTreeProps['variant'];
     useFullPath?: boolean;
+    onClick?: () => void;
   }) => {
     const { slug, name } = node;
     const fullPath = [pathPrefix, slug].filter(Boolean).join('/');
@@ -52,6 +55,7 @@ const Node = React.memo(
             preload="intent"
             className={cn(linkVariants({ variant }))}
             activeProps={{ 'data-active': true, 'aria-current': 'page' }}
+            onClick={onClick}
           >
             {name}
           </Link>
@@ -76,6 +80,7 @@ const Node = React.memo(
                 pathPrefix={useFullPath ? fullPath : pathPrefix}
                 variant={variant}
                 useFullPath={useFullPath}
+                onClick={onClick}
               />
             ))}
           </ul>
@@ -91,6 +96,7 @@ export const CategoriesTree = ({
   variant = 'default',
   className,
   useFullPath = true,
+  onClick,
 }: CategoriesTreeProps) => {
   const { data } = useCategoriesTree();
   return (
@@ -102,6 +108,7 @@ export const CategoriesTree = ({
             node={root}
             variant={variant}
             useFullPath={useFullPath}
+            onClick={onClick}
           />
         ))}
       </ul>

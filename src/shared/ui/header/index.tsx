@@ -1,7 +1,7 @@
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Link } from '@tanstack/react-router';
 import { Menu, Phone, ShoppingCart } from 'lucide-react';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 
 import logo from '@shared/assets/header-logo-sprite.svg';
 import { SaleCategoryName } from '@shared/config';
@@ -34,6 +34,8 @@ export const Header = ({
   isError,
   onLogout,
 }: HeaderProps): React.JSX.Element => {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
   return (
     <header className="flex flex-col">
       <div className="flex justify-between items-center gap-25 p-5 pl-11 pr-11">
@@ -83,7 +85,7 @@ export const Header = ({
       </div>
       <div className="bg-dark-background h-17 flex items-center pl-11 pr-11 justify-between">
         <div className="sm:hidden flex items-center">
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger>
               <Menu className="w-9 h-9 text-secondary-foreground" />
             </SheetTrigger>
@@ -96,11 +98,22 @@ export const Header = ({
               </SheetHeader>
               <div className="flex-1 overflow-y-auto flex flex-col gap-4">
                 <Suspense
-                  fallback={<div className="text-primary">Loading...</div>}
+                  fallback={
+                    <div className="text-2xl text-primary-foreground">
+                      Loading...
+                    </div>
+                  }
                 >
-                  <CategoriesTree variant="mobile" />
+                  <CategoriesTree
+                    variant="mobile"
+                    onClick={() => setIsSheetOpen(false)}
+                  />
                 </Suspense>
-                <Link className="text-2xl" to={ROUTES.ABOUT}>
+                <Link
+                  className="text-2xl"
+                  to={ROUTES.ABOUT}
+                  onClick={() => setIsSheetOpen(false)}
+                >
                   About Us
                 </Link>
                 <div className="flex items-center text-2xl gap-2">
@@ -111,7 +124,11 @@ export const Header = ({
                   />
                 </div>
                 <div className="mt-10">
-                  <Banner category={SaleCategoryName} variant="mobile" />
+                  <Banner
+                    category={SaleCategoryName}
+                    variant="mobile"
+                    onClick={() => setIsSheetOpen(false)}
+                  />
                 </div>
               </div>
             </SheetContent>
