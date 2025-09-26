@@ -27,7 +27,6 @@ import {
   registrationLayoutRoute,
   registrationSuccessRoute,
   resetPasswordRoute,
-  subCategoryRoute,
 } from './routes';
 
 const rootRoute = createRootRoute({
@@ -62,7 +61,6 @@ const routeTree = rootRoute.addChildren([
       profileEditAddressRoute(profileLayout),
     ]),
     categoryRoute(layoutRoute),
-    subCategoryRoute(layoutRoute),
     productRoute(layoutRoute),
     cartRoute(layoutRoute),
   ]),

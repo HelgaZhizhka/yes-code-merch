@@ -43,7 +43,7 @@ with cat_src(key, slug, name, description, order_hint, meta_title, meta_descript
     ('shorts',     'shorts',     'Shorts',      null, '0.06', null, null, null, 'clothes'),
     ('office',     'office',     'Office',      null, '0.09', null, null, null, null),
     ('accessories','accessories','Accessories', null, '0.04', null, null, null, 'office'),
-    ('clothes',    'clothes',    'Clothes',     null, '0.09', null, null, null, null),
+    ('clothes',    'clothes',    'Clothes',     null, '0.08', null, null, null, null),
     ('shoppers',   'shoppers',   'Shoppers',    null, '0.06', null, null, null, 'bags')
 )
 insert into categories(name, slug, description, order_hint, meta_title, meta_description, meta_keywords)

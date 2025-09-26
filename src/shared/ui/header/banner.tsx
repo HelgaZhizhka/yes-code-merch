@@ -15,7 +15,7 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
           Free shipping on all{' '}
           <Link
             to={ROUTES.CATEGORY}
-            params={{ categoryId: category.toLowerCase() }}
+            params={{ _splat: category.toLowerCase() }}
             className="hover:underline"
           >
             {category}
@@ -30,10 +30,9 @@ const BannerText = ({ category }: BannerProps): React.JSX.Element => {
         <>
           Discount on all{' '}
           <Link
-            to={ROUTES.SUBCATEGORY}
+            to={ROUTES.CATEGORY}
             params={{
-              categoryId: 'clothes',
-              subCategoryId: category.toLowerCase(),
+              _splat: category.toLowerCase(),
             }}
             className="hover:underline"
           >

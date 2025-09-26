@@ -1,9 +1,12 @@
-import { supabase } from '@shared/api/supabase-client';
-import type { Category } from '@shared/interfaces';
+import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 
-import { mapCategories } from './mapper';
+import {
+  type BreadcrumbItemDTO,
+  type CategoryDTO,
+  type CategoryTreeDTO,
+} from './mapper';
 
-export const getRootCategories = async (): Promise<Category[]> => {
+export const getRootCategories = async (): Promise<CategoryDTO[]> => {
   const { data: categories } = await supabase
     .from('categories')
     .select('*')
@@ -12,5 +15,22 @@ export const getRootCategories = async (): Promise<Category[]> => {
     .order('name', { ascending: true })
     .throwOnError();
 
-  return mapCategories(categories ?? []);
+  return categories ?? [];
+};
+
+export const getCategoriesTree = async (): Promise<CategoryTreeDTO[]> => {
+  const { data } = await supabase
+    .rpc(RpcFunctions.getCategoriesTree)
+    .throwOnError();
+  return data;
+};
+
+export const getCategoryBreadcrumbPaths = async (
+  slug: string
+): Promise<BreadcrumbItemDTO[]> => {
+  const { data } = await supabase
+    .rpc(RpcFunctions.getCategoryBreadcrumbPaths, { cat_slug: slug })
+    .throwOnError();
+
+  return data ?? [];
 };
