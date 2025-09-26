@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { cva } from 'class-variance-authority';
-import React from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
 
 import { useCategoriesTree } from '@shared/api/categories/hooks';
 import type { CategoryTree } from '@shared/api/categories/mapper';
@@ -15,7 +16,11 @@ type CategoriesTreeProps = {
 
 const linkVariants = cva('transition-all', {
   variants: {
-    variant: { default: '', mobile: '', sidebar: '' },
+    variant: {
+      default: '',
+      mobile: 'text-2xl text-primary-foreground',
+      sidebar: '',
+    },
   },
   defaultVariants: { variant: 'default' },
 });
@@ -36,20 +41,34 @@ const Node = React.memo(
     const fullPath = [pathPrefix, slug].filter(Boolean).join('/');
     const pathToUse = useFullPath ? fullPath : slug;
 
+    const [open, setOpen] = useState(false);
+
     return (
       <li>
-        <Link
-          to={ROUTES.CATEGORY}
-          params={{ _splat: pathToUse }}
-          preload="intent"
-          className={cn(linkVariants({ variant }))}
-          activeProps={{ 'data-active': true, 'aria-current': 'page' }}
-        >
-          {name}
-        </Link>
+        <div className="flex items-center gap-1">
+          <Link
+            to={ROUTES.CATEGORY}
+            params={{ _splat: pathToUse }}
+            preload="intent"
+            className={cn(linkVariants({ variant }))}
+            activeProps={{ 'data-active': true, 'aria-current': 'page' }}
+          >
+            {name}
+          </Link>
 
-        {node.children.length > 0 && (
-          <ul>
+          {node.children.length > 0 && (
+            <button onClick={() => setOpen(!open)} aria-label={'Dropdown menu'}>
+              {open ? (
+                <ChevronDown className="w-6 h-6" />
+              ) : (
+                <ChevronRight className="w-6 h-6" />
+              )}
+            </button>
+          )}
+        </div>
+
+        {node.children.length > 0 && open && (
+          <ul className="flex flex-col pl-5 gap-2 mt-2">
             {node.children.map((child) => (
               <Node
                 key={child.id}
@@ -76,7 +95,7 @@ export const CategoriesTree = ({
   const { data } = useCategoriesTree();
   return (
     <nav className={className} aria-label="All categories">
-      <ul>
+      <ul className="flex flex-col gap-4">
         {data.map((root) => (
           <Node
             key={root.id}
