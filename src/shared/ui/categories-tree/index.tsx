@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { cva } from 'class-variance-authority';
-import { ChevronDown, ChevronRight } from 'lucide-react';
-import React, { useState } from 'react';
+import { ChevronRight } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 import { useCategoriesTree } from '@shared/api/categories/hooks';
 import type { CategoryTree } from '@shared/api/categories/mapper';
@@ -12,7 +12,6 @@ type CategoriesTreeProps = {
   variant?: 'default' | 'mobile' | 'sidebar';
   className?: string;
   useFullPath?: boolean;
-  onClick?: () => void;
 };
 
 const linkVariants = cva('transition-all', {
@@ -32,19 +31,21 @@ const Node = React.memo(
     variant,
     useFullPath,
     pathPrefix = '',
-    onClick,
+    expandedNodes,
+    onToggle,
   }: {
     node: CategoryTree;
     pathPrefix?: string;
     variant?: CategoriesTreeProps['variant'];
     useFullPath?: boolean;
-    onClick?: () => void;
+    expandedNodes: Set<string>;
+    onToggle: (id: string) => void;
   }) => {
     const { slug, name } = node;
     const fullPath = [pathPrefix, slug].filter(Boolean).join('/');
     const pathToUse = useFullPath ? fullPath : slug;
 
-    const [open, setOpen] = useState(false);
+    const isOpen = expandedNodes.has(node.id);
 
     return (
       <li>
@@ -55,23 +56,21 @@ const Node = React.memo(
             preload="intent"
             className={cn(linkVariants({ variant }))}
             activeProps={{ 'data-active': true, 'aria-current': 'page' }}
-            onClick={onClick}
           >
             {name}
           </Link>
 
           {node.children.length > 0 && (
-            <button onClick={() => setOpen(!open)} aria-label={'Dropdown menu'}>
-              {open ? (
-                <ChevronDown className="w-6 h-6" />
-              ) : (
-                <ChevronRight className="w-6 h-6" />
-              )}
+            <button
+              onClick={() => onToggle(node.id)}
+              aria-label={'Dropdown menu'}
+            >
+              <ChevronRight className={cn('w-6 h-6', isOpen && 'rotate-90')} />
             </button>
           )}
         </div>
 
-        {node.children.length > 0 && open && (
+        {node.children.length > 0 && isOpen && (
           <ul className="flex flex-col pl-5 gap-2 mt-2">
             {node.children.map((child) => (
               <Node
@@ -80,7 +79,8 @@ const Node = React.memo(
                 pathPrefix={useFullPath ? fullPath : pathPrefix}
                 variant={variant}
                 useFullPath={useFullPath}
-                onClick={onClick}
+                expandedNodes={expandedNodes}
+                onToggle={onToggle}
               />
             ))}
           </ul>
@@ -96,9 +96,22 @@ export const CategoriesTree = ({
   variant = 'default',
   className,
   useFullPath = true,
-  onClick,
 }: CategoriesTreeProps) => {
   const { data } = useCategoriesTree();
+  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
+
+  const toggleNode = useCallback((id: string) => {
+    setExpandedNodes((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  }, []);
+
   return (
     <nav className={className} aria-label="All categories">
       <ul className="flex flex-col gap-4">
@@ -108,7 +121,8 @@ export const CategoriesTree = ({
             node={root}
             variant={variant}
             useFullPath={useFullPath}
-            onClick={onClick}
+            expandedNodes={expandedNodes}
+            onToggle={toggleNode}
           />
         ))}
       </ul>

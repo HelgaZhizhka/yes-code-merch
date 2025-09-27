@@ -1,27 +1,19 @@
-import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Link } from '@tanstack/react-router';
-import { Menu, Phone, ShoppingCart } from 'lucide-react';
-import { Suspense, useState } from 'react';
+import { Phone, ShoppingCart } from 'lucide-react';
+import { Suspense } from 'react';
 
 import logo from '@shared/assets/header-logo-sprite.svg';
 import { SaleCategoryName } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
 import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
-import { CategoriesTree } from '@shared/ui/categories-tree';
 import { ContactWidget } from '@shared/ui/contact-widget';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@shared/ui/sheet';
 import { ThemeSwitcher } from '@shared/ui/theme-switcher';
 import type { AuthProps } from '@shared/viewer';
 
 import { Banner } from './banner';
+
+import { MobileMenu } from '../mobile-menu/mobile-menu';
 
 interface HeaderProps extends AuthProps {
   onLogout(): Promise<void>;
@@ -34,8 +26,6 @@ export const Header = ({
   isError,
   onLogout,
 }: HeaderProps): React.JSX.Element => {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-
   return (
     <header className="flex flex-col">
       <div className="flex justify-between items-center gap-25 p-5 pl-11 pr-11">
@@ -85,54 +75,7 @@ export const Header = ({
       </div>
       <div className="bg-dark-background h-17 flex items-center pl-11 pr-11 justify-between">
         <div className="sm:hidden flex items-center">
-          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <SheetTrigger>
-              <Menu className="w-9 h-9 text-secondary-foreground" />
-            </SheetTrigger>
-            <SheetContent side="left" className="w-screen h-screen p-5">
-              <SheetHeader>
-                <VisuallyHidden.Root>
-                  <SheetTitle>Navigation menu</SheetTitle>
-                  <SheetDescription>Navigation menu</SheetDescription>
-                </VisuallyHidden.Root>
-              </SheetHeader>
-              <div className="flex-1 overflow-y-auto flex flex-col gap-4">
-                <Suspense
-                  fallback={
-                    <div className="text-2xl text-primary-foreground">
-                      Loading...
-                    </div>
-                  }
-                >
-                  <CategoriesTree
-                    variant="mobile"
-                    onClick={() => setIsSheetOpen(false)}
-                  />
-                </Suspense>
-                <Link
-                  className="text-2xl"
-                  to={ROUTES.ABOUT}
-                  onClick={() => setIsSheetOpen(false)}
-                >
-                  About Us
-                </Link>
-                <div className="flex items-center text-2xl gap-2">
-                  <ContactWidget
-                    icon={<Phone className="h-8" />}
-                    label="(+971) 58 8284186"
-                    href="tel:971588284186"
-                  />
-                </div>
-                <div className="mt-10">
-                  <Banner
-                    category={SaleCategoryName}
-                    variant="mobile"
-                    onClick={() => setIsSheetOpen(false)}
-                  />
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <MobileMenu />
         </div>
         <div className="hidden sm:block">
           <Suspense
