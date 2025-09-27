@@ -13,7 +13,7 @@ import type { AuthProps } from '@shared/viewer';
 
 import { Banner } from './banner';
 
-import { MobileMenu } from '../mobile-menu/mobile-menu';
+import { MobileMenu } from '../mobile-menu';
 
 interface HeaderProps extends AuthProps {
   onLogout(): Promise<void>;
