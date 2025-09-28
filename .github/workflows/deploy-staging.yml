@@ -12,8 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      build_dir: ${{ steps.set_outputs.outputs.build_dir }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -36,32 +35,12 @@ jobs:
         run: pnpm run build:staging
         env:
           NODE_ENV: production
-
-      - name: Set build output dir
-        id: set_outputs
-        run: echo "build_dir=dist" >> $GITHUB_OUTPUT
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-dist
-          path: dist
-
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-dist
-          path: .
-
+      
       - name: Install Netlify CLI
-        run: npm i -g netlify-cli@23.7.3
+        run:  npm install -g netlify-cli@23.7.3
 
-      - name: Deploy to Netlify Staging
-        run: netlify deploy --prod --dir=dist --message="Deploy from ${{ github.event.head_commit.message }}"
+      - name: Publish to Netlify Staging
+        run: netlify deploy --dir=dist --message="Deploy from ${{ github.event.head_commit.message }}"
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAGING_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
