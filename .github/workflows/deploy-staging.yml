@@ -58,7 +58,7 @@ jobs:
           path: dist
 
       - name: Install Netlify CLI
-        run: npm install -g netlify-cli
+        run: npm i -g netlify-cli@23.7.3
 
       - name: Deploy to Netlify Staging
         run: netlify deploy --prod --dir=dist --message="Deploy from ${{ github.event.head_commit.message }}"
