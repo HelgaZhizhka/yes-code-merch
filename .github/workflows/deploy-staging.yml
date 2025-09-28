@@ -55,7 +55,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-dist
-          path: dist
+          path: .
 
       - name: Install Netlify CLI
         run: npm i -g netlify-cli@23.7.3
