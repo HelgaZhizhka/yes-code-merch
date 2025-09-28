@@ -53,7 +53,7 @@ const Node = React.memo(
           <Link
             to={ROUTES.CATEGORY}
             params={{ _splat: pathToUse }}
-            preload="intent"
+            preload={variant === 'mobile' ? false : 'intent'}
             className={cn(linkVariants({ variant }))}
             activeProps={{ 'data-active': true, 'aria-current': 'page' }}
           >

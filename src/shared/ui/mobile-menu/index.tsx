@@ -25,10 +25,8 @@ export const MobileMenu = (): React.JSX.Element => {
   const location = useLocation();
 
   useEffect(() => {
-    if (isOpen) {
-      closeMenu();
-    }
-  }, [location.pathname]);
+    closeMenu();
+  }, [location.pathname, closeMenu]);
 
   return (
     <Sheet
