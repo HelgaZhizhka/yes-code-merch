@@ -22,7 +22,7 @@ const bannerVariants = cva('transition-all', {
   },
 });
 
-const BannerText = ({ category }: BannerProps): React.JSX.Element => {
+const BannerText = ({ category }: { category: string }): React.JSX.Element => {
   let Text: React.JSX.Element = <>Discounts are coming!</>;
 
   switch (category) {
