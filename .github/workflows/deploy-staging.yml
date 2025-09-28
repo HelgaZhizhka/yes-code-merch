@@ -40,7 +40,7 @@ jobs:
         run:  npm install -g netlify-cli@23.7.3
 
       - name: Publish to Netlify Staging
-        run: netlify deploy --dir=dist --message="Deploy from ${{ github.event.head_commit.message }}"
+        run: netlify deploy --prod --dir=dist --message="Deploy from ${{ github.event.head_commit.message }}"
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAGING_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
