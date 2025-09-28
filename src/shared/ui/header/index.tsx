@@ -13,6 +13,8 @@ import type { AuthProps } from '@shared/viewer';
 
 import { Banner } from './banner';
 
+import { MobileMenu } from '../mobile-menu';
+
 interface HeaderProps extends AuthProps {
   onLogout(): Promise<void>;
 }
@@ -72,11 +74,18 @@ export const Header = ({
         </div>
       </div>
       <div className="bg-dark-background h-17 flex items-center pl-11 pr-11 justify-between">
-        <Suspense
-          fallback={<div className="text-secondary-foreground">Loading...</div>}
-        >
-          <Categories />
-        </Suspense>
+        <div className="sm:hidden flex items-center">
+          <MobileMenu />
+        </div>
+        <div className="hidden sm:block">
+          <Suspense
+            fallback={
+              <div className="text-secondary-foreground">Loading...</div>
+            }
+          >
+            <Categories />
+          </Suspense>
+        </div>
         <ThemeSwitcher />
       </div>
     </header>
