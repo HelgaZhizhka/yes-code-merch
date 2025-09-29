@@ -10,15 +10,17 @@ export const Breadcrumbs = ({ splat }: { splat: string }) => {
 
   return (
     <nav aria-label="Breadcrumb">
-      <ol>
+      <ol className="flex items-center gap-2">
         <li>
           <Link to={ROUTES.HOME}>Home</Link>
         </li>
         {items.map((item) => (
           <li
             key={item.path}
+            className="flex items-center gap-2"
             aria-current={item.isCurrent ? 'page' : undefined}
           >
+            <span>/</span>
             {item.isCurrent ? (
               <span>{item.name}</span>
             ) : (
