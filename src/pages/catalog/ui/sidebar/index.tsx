@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { CategoriesTree } from '@/shared/ui/categories-tree';
+import { CategoriesTree } from '@shared/ui/categories-tree';
 
 export const SideBar = (): React.JSX.Element => {
   return (
