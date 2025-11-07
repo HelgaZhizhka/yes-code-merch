@@ -7,11 +7,6 @@ export interface Address {
   streetNumber: string;
   postalCode: string;
   isDefault?: boolean;
-  firstName?: string | null;
-  lastName?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  title?: string | null;
 }
 
 export interface AddressWithId extends Address {
