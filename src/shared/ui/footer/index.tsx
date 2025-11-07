@@ -2,13 +2,13 @@ import { Link } from '@tanstack/react-router';
 import { Mail, MessageCircle, Phone } from 'lucide-react';
 import { Suspense } from 'react';
 
+import type { AuthProps } from '@shared/api';
 import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
 import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
-import type { AuthProps } from '@shared/viewer';
 
 interface FooterProps extends AuthProps {
   onLogout(): Promise<void>;

@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { useCreateAddress, useUpdateCustomer } from '@shared/api';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 import { profileSchema, type ProfileFormType } from '@shared/lib/schemas';
 import { defaultAddress } from '@shared/lib/validators';
-import { useCompleteRegistration } from '@shared/viewer/hooks';
 import { useViewerEmail } from '@shared/viewer/model';
 
 import {
@@ -17,11 +17,7 @@ import {
   useFormStore,
   type StepKeyType,
 } from './model';
-import {
-  addresStepSchema,
-  viewerSchema,
-  type AddressStepFormType,
-} from './model/schema';
+import { addressStepSchema, type AddressStepFormType } from './model/schema';
 
 const STEPS = [
   {
@@ -33,7 +29,7 @@ const STEPS = [
   {
     key: StepKey[1],
     route: ONBOARDING_STEPS.ADDRESS,
-    schema: addresStepSchema,
+    schema: addressStepSchema,
     defaultValues: defaultAddressStep,
   },
 ] as const;
@@ -59,7 +55,9 @@ export const useFormStep = () => {
     setFormData,
     resetForm,
   } = useFormStore();
-  const { mutate: completeRegistration, isPending } = useCompleteRegistration();
+  const { mutateAsync: createAddress } = useCreateAddress();
+  const { mutateAsync: updateCustomer } = useUpdateCustomer();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentStepKey = getStepKeyFromUrl(routerState.location.pathname);
   const currentStepIndex = getStepIndexByKey(currentStepKey);
@@ -72,40 +70,71 @@ export const useFormStep = () => {
     criteriaMode: 'all',
   });
 
-  const handleSubmit = useCallback(() => {
-    setFormData(currentStep.key, form.getValues());
-
+  const handleSubmit = useCallback(async () => {
     if (!email) {
       toast.error('Email is required');
       return;
     }
 
-    const viewer = useFormStore.getState().getViewer(email);
-    const result = viewerSchema.safeParse(viewer);
-
-    if (!result.success) {
-      toast.error('You should fill all fields from previous steps');
+    if (isSubmitting) {
       return;
     }
 
-    completeRegistration(viewer, {
-      onError: (error) => {
-        toast.error(error.message);
-      },
-      onSuccess: () => {
-        toast.success('Registration completed successfully');
-        resetForm();
-        navigate({ to: ROUTES.HOME });
-      },
-    });
+    setFormData(currentStep.key, form.getValues());
+
+    let customerData;
+    let shippingPayload;
+    let billingPayload;
+
+    try {
+      customerData = useFormStore.getState().getCustomerData(email);
+      shippingPayload = useFormStore.getState().getShippingAddressPayload();
+      billingPayload = useFormStore.getState().getBillingAddressPayload();
+    } catch {
+      toast.error('Please complete all required fields');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await updateCustomer(customerData);
+      toast.success('Profile created!');
+
+      await createAddress(shippingPayload);
+      toast.success('Shipping address saved!');
+
+      if (billingPayload) {
+        await createAddress(billingPayload);
+        toast.success('Billing address saved!');
+      }
+
+      toast.success('🎉 Registration completed successfully!');
+      resetForm();
+
+      navigate({
+        to: ROUTES.HOME,
+        viewTransition: { types: ['slide-fade'] },
+      });
+    } catch (error) {
+      console.error('Registration failed:', error);
+
+      if (error instanceof Error) {
+        toast.error('Registration could not be completed. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   }, [
     form,
     setFormData,
     currentStep,
-    completeRegistration,
+    updateCustomer,
     navigate,
     resetForm,
     email,
+    createAddress,
+    isSubmitting,
   ]);
 
   const handleNextStep = useCallback(() => {
@@ -162,6 +191,6 @@ export const useFormStep = () => {
     handleBack,
     currentStepKey,
     handleSubmit,
-    isPending,
+    isSubmitting,
   };
 };

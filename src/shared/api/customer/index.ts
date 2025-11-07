@@ -1,146 +1,34 @@
-import type { Public } from '@shared/api/supabase-client';
-import { RpcFunctions, supabase } from '@shared/api/supabase-client';
-import type {
-  Address,
-  AddressWithID,
-  CustomerAddresses,
-  CustomerDataWithID,
-} from '@shared/interfaces';
+import type { CustomerData, CustomerDataWithId } from '@shared/api';
+import { supabase } from '@shared/api/supabase-client';
 
-import {
-  mapAddress,
-  mapCustomer,
-  mapSetDefaultAddress,
-  type AddressType,
-} from './mapper';
+import { mapCustomerFromDB, mapCustomerToDB } from './mapper';
 
-export const getCustomer = async (): Promise<CustomerDataWithID | null> => {
+import { getCurrentUser } from '../helpers';
+
+export const getCustomer = async (): Promise<CustomerDataWithId | null> => {
   const { data: customer } = await supabase
     .from('customers')
     .select('*')
     .maybeSingle()
     .throwOnError();
 
-  if (!customer) {
-    return null;
-  }
-
-  return mapCustomer(customer);
-};
-
-export const getCustomerAddress = async (): Promise<CustomerAddresses> => {
-  const { data: addresses } = await supabase
-    .from('addresses')
-    .select('*')
-    .throwOnError();
-
-  const shippingAddresses = mapAddress(
-    addresses.filter((address) => address.is_shipping_address)
-  );
-  const billingAddresses = mapAddress(
-    addresses.filter((address) => address.is_billing_address)
-  );
-
-  return { shippingAddresses, billingAddresses };
-};
-
-export type SetDefaultAddressResult =
-  Public['Functions']['set_default_address']['Returns'];
-
-export const setDefaultAddress = async ({
-  addressId,
-  addressType,
-}: {
-  addressId: string;
-  addressType: AddressType;
-}): Promise<SetDefaultAddressResult> => {
-  const rpcArgs = mapSetDefaultAddress(addressId, addressType);
-  const { data } = await supabase
-    .rpc(RpcFunctions.setDefaultAddress, rpcArgs)
-    .throwOnError();
-
-  return data;
+  return customer ? mapCustomerFromDB(customer) : null;
 };
 
 export const updateCustomer = async (
-  data: CustomerDataWithID
-): Promise<CustomerDataWithID | null> => {
+  data: CustomerData
+): Promise<CustomerData | null> => {
+  const user = await getCurrentUser();
+  const dbData = mapCustomerToDB({ ...data, id: user.id });
+
   const { data: customer } = await supabase
     .from('customers')
-    .update({
-      email: data.email,
-      first_name: data.firstName,
-      last_name: data.lastName,
-      date_of_birth: data.dateOfBirth,
-      phone: data.phone,
-    })
-    .eq('user_id', data.id)
-    .select('*')
-    .maybeSingle()
-    .throwOnError();
-
-  if (!customer) {
-    return null;
-  }
-
-  return mapCustomer(customer);
-};
-
-export const updateCustomerAddress = async (
-  data: AddressWithID
-): Promise<AddressWithID | null> => {
-  const { data: addresses } = await supabase
-    .from('addresses')
-    .update({
-      country: data.country,
-      city: data.city,
-      street_name: data.streetName,
-      street_number: data.streetNumber,
-      postal_code: data.postalCode,
-    })
-    .eq('id', data.id)
-    .select('*')
-    .maybeSingle()
-    .throwOnError();
-
-  if (!addresses) {
-    return null;
-  }
-
-  return mapAddress([addresses])[0];
-};
-
-export const deleteCustomerAddress = async (
-  addressId: string
-): Promise<boolean> => {
-  await supabase.from('addresses').delete().eq('id', addressId).throwOnError();
-
-  return true;
-};
-
-export const addCustomerAddress = async ({
-  data,
-  addressType,
-}: {
-  data: Address;
-  addressType: AddressType;
-}): Promise<AddressWithID | null> => {
-  const { data: addresses } = await supabase
-    .from('addresses')
-    .insert({
-      country: data.country,
-      city: data.city,
-      street_name: data.streetName,
-      street_number: data.streetNumber,
-      postal_code: data.postalCode,
-      is_shipping_address: addressType === 'shipping',
-      is_billing_address: addressType === 'billing',
+    .upsert(dbData, {
+      onConflict: 'user_id',
     })
     .select('*')
-    .maybeSingle()
+    .single()
     .throwOnError();
 
-  if (!addresses) return null;
-
-  return mapAddress([addresses])[0];
+  return mapCustomerFromDB(customer);
 };

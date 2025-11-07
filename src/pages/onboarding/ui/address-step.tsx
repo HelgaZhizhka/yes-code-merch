@@ -11,7 +11,7 @@ export const AddressStep = (): React.JSX.Element => {
     form,
     handleSubmit,
     handleBack,
-    isPending,
+    isSubmitting,
     useShippingAsBilling,
     handleUseShippingAsBillingChange,
   } = useFormStep();
@@ -45,9 +45,11 @@ export const AddressStep = (): React.JSX.Element => {
         <Button
           type="submit"
           className="w-full"
-          disabled={!form.formState.isValid || isPending}
+          disabled={!form.formState.isValid || isSubmitting}
         >
-          {isPending ? 'Saving...' : 'Save'}
+          {isSubmitting
+            ? 'Completing registration...'
+            : 'Complete Registration'}
         </Button>
 
         <Button

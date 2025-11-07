@@ -1,8 +1,8 @@
 import { cva } from 'class-variance-authority';
 
+import type { AuthProps } from '@shared/api';
 import { cn } from '@shared/lib/utils';
 import { LayoutView, type AuthLayoutViewType } from '@shared/types';
-import type { AuthProps } from '@shared/viewer';
 
 import { AuthLinks } from './auth-links';
 import { LogoutButton } from './logout-button';

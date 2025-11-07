@@ -1,24 +1,17 @@
-import type { AuthError, Session, User } from '@supabase/supabase-js';
+import type { Session, User } from '@supabase/supabase-js';
 
-import type { Public } from '@shared/api/supabase-client';
-import { RpcFunctions, supabase } from '@shared/api/supabase-client';
+import type {
+  AuthCredentials,
+  ChangePasswordDTO,
+  ResetPasswordDTO,
+  ResetPasswordResponse,
+  UpdateUserDTO,
+} from '@shared/api';
+import { supabase } from '@shared/api/supabase-client';
 import { config } from '@shared/config';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
-import type { Viewer } from '@/shared/interfaces';
-
-import { mapViewerDataToRpcArgs } from './mapper';
-import type { AuthCredentials, ResetPasswordDTO, UpdateUserDTO } from './types';
-
-export type ResetPasswordResponse =
-  | {
-      data: Record<string, never> | null;
-      error: null;
-    }
-  | {
-      data: null;
-      error: AuthError;
-    };
+import { getCurrentUser } from '../helpers';
 
 export const AuthErrorMessages = {
   REGISTRATION_FAILED: 'User registration failed',
@@ -136,16 +129,35 @@ export const updateUser = async ({
   return user;
 };
 
-export type CompleteRegistrationResult =
-  Public['Functions']['complete_registration']['Returns'];
+export const changePassword = async ({
+  currentPassword,
+  newPassword,
+}: ChangePasswordDTO): Promise<User> => {
+  const currentUser = await getCurrentUser();
 
-export const completeRegistration = async (
-  viewer: Viewer
-): Promise<CompleteRegistrationResult> => {
-  const rpcArgs = mapViewerDataToRpcArgs(viewer);
-  const { data } = await supabase
-    .rpc(RpcFunctions.registration, rpcArgs)
-    .throwOnError();
+  if (!currentUser.email) {
+    throw new Error('User email not found');
+  }
 
-  return data;
+  const { error: reauthError } = await supabase.auth.signInWithPassword({
+    email: currentUser.email,
+    password: currentPassword,
+  });
+
+  if (reauthError) {
+    throw new Error('Current password is incorrect');
+  }
+
+  const {
+    data: { user },
+    error: updateError,
+  } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  if (updateError || !user) {
+    throw updateError || new Error('Failed to update password');
+  }
+
+  return user;
 };

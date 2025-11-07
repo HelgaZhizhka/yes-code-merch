@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { Address } from '@shared/interfaces';
+import type { Address } from '@shared/api';
 
 export const PATTERNS = {
   digits: /\d/,
@@ -33,6 +33,8 @@ export const ErrorMessages = {
   confirmPasswordMatch: 'Passwords do not match', //NOSONAR
   passwordRequired: 'Password is required', //NOSONAR
   confirmPasswordRequired: 'Confirm password is required', //NOSONAR
+  currentPasswordRequired: 'Current password is required', //NOSONAR
+  newPasswordMatch: 'New password must be different from current password', //NOSONAR
   initialPassword:
     'Password must be at least 8 characters and include digits, lowercase and uppercase letters, and symbols', //NOSONAR
   weekPassword:
@@ -151,5 +153,5 @@ export const defaultAddress: Address = {
   streetName: '',
   streetNumber: '',
   postalCode: '',
-  // isDefault: false,
+  isDefault: false,
 };

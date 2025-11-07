@@ -1,11 +1,5 @@
-import type { Public } from '@shared/api/supabase-client';
+import type { Country, CountryRow } from '@shared/api';
 
-export interface Country {
-  code: string;
-  name: string;
-}
-
-export type CountryRow = Public['Tables']['countries']['Row'];
 export const mapCountry = (country: CountryRow[]): Country[] => {
   return country.map((country) => ({
     code: country.iso_code,

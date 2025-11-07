@@ -1,6 +1,7 @@
+import type { Country } from '@shared/api';
 import { supabase } from '@shared/api/supabase-client';
 
-import { mapCountry, type Country } from './mapper';
+import { mapCountry } from './mapper';
 
 export const getCountries = async (): Promise<Country[]> => {
   const { data } = await supabase

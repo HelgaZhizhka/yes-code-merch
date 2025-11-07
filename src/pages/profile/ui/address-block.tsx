@@ -1,12 +1,11 @@
-import type { AddressListProps } from '@pages/profile/interfaces';
 import { AddressList } from '@pages/profile/ui/address-list';
 
-import type { CustomerAddresses } from '@shared/interfaces';
+import type { Addresses, AddressListProps } from '@shared/api';
 
 export const AddressBlock = ({
   shippingAddresses,
   billingAddresses,
-}: CustomerAddresses) => {
+}: Addresses) => {
   const addressBlocks: AddressListProps[] = [
     { addresses: shippingAddresses, addressType: 'shipping' },
     { addresses: billingAddresses ?? [], addressType: 'billing' },

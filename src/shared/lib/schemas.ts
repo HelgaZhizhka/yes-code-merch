@@ -32,6 +32,26 @@ export const newPasswordSchema = z
     path: ['confirmPassword'],
   });
 
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(6, ErrorMessages.currentPasswordRequired),
+    newPassword: passwordValidator.refine(
+      (password) => getPasswordStrength(password) !== STRENGTH.WEEK,
+      {
+        message: ErrorMessages.initialPassword,
+      }
+    ),
+    confirmPassword: z.string().min(1, ErrorMessages.confirmPasswordRequired),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: ErrorMessages.confirmPasswordMatch,
+    path: ['confirmPassword'],
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: ErrorMessages.newPasswordMatch,
+    path: ['newPassword'],
+  });
+
 export const addressSchema = z
   .object({
     country: z.string().trim().min(1, ErrorMessages.countryRequired),
@@ -118,6 +138,8 @@ export const personalSchema = profileSchema.extend({
 export type EmailFormType = z.infer<typeof emailSchema>;
 
 export type NewPasswordFormType = z.infer<typeof newPasswordSchema>;
+
+export type ChangePasswordFormType = z.infer<typeof changePasswordSchema>;
 
 export type ProfileFormType = z.infer<typeof profileSchema>;
 

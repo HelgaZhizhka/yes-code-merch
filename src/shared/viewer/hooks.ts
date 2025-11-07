@@ -7,8 +7,16 @@ import {
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
+import type {
+  AuthCredentials,
+  AuthProps,
+  ChangePasswordDTO,
+  ResetPasswordDTO,
+  ResetPasswordResponse,
+  UpdateUserDTO,
+} from '@shared/api';
 import {
-  completeRegistration,
+  changePassword,
   getSession,
   login,
   logout,
@@ -16,16 +24,8 @@ import {
   resetPassword,
   signUp,
   updateUser,
-  type CompleteRegistrationResult,
-  type ResetPasswordResponse,
 } from '@shared/api/auth';
-import type {
-  AuthCredentials,
-  ResetPasswordDTO,
-  UpdateUserDTO,
-} from '@shared/api/auth/types';
 import { ROUTES } from '@shared/config/routes';
-import { type Viewer } from '@shared/interfaces';
 import type { AsyncVoidFunction } from '@shared/types';
 
 import {
@@ -130,6 +130,21 @@ export const useResetPassword = (): UseMutationResult<
   });
 };
 
+export const useChangePassword = (): UseMutationResult<
+  User,
+  Error,
+  ChangePasswordDTO
+> => {
+  return useMutation<User, Error, ChangePasswordDTO>({
+    mutationFn: changePassword,
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Password change failed:', error.message);
+      }
+    },
+  });
+};
+
 export const useUpdateUser = (): UseMutationResult<
   User,
   Error,
@@ -144,29 +159,6 @@ export const useUpdateUser = (): UseMutationResult<
     },
   });
 };
-
-export const useCompleteRegistration = (): UseMutationResult<
-  CompleteRegistrationResult,
-  Error,
-  Viewer
-> =>
-  useMutation<CompleteRegistrationResult, Error, Viewer>({
-    mutationFn: completeRegistration,
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        setError(error);
-        console.error('Registration failed:', error.message);
-      }
-    },
-  });
-
-export interface AuthProps {
-  isLoading: boolean;
-  isGuest: boolean;
-  isAuthenticated: boolean;
-  isError: boolean;
-  error?: Error | null;
-}
 
 export const useViewerState = (): AuthProps => {
   const status = useStatus();

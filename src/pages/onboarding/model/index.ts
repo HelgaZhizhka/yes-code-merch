@@ -1,4 +1,4 @@
-import type { Viewer } from '@shared/interfaces';
+import type { Address, AddressType, CustomerData } from '@shared/api';
 import {
   createAppStore,
   type ImmerCompatibleSet,
@@ -24,7 +24,15 @@ interface FormState {
   ): void;
   setUseShippingAsBilling(value: boolean): void;
   resetForm(): void;
-  getViewer(email: string | null): Viewer;
+  getCustomerData(email: string | null): CustomerData;
+  getShippingAddressPayload(): {
+    address: Address;
+    addressType: AddressType;
+  };
+  getBillingAddressPayload(): {
+    address: Address;
+    addressType: AddressType;
+  } | null;
 }
 
 export const defaultProfile: ProfileFormType = {
@@ -68,27 +76,43 @@ export const useFormStore = createAppStore<FormState>(
         state.formData.address = defaultAddressStep;
         state.useShippingAsBilling = true;
       }),
-    getViewer: (email: string) => {
+    getCustomerData: (email: string) => {
       const formData = get().formData;
       const profile = formData?.profile ?? defaultProfile;
-      const address = formData?.address ?? defaultAddressStep;
-
-      const shippingAddress = address.shippingAddresses[0] ?? defaultAddress;
-      const billingAddress = address.useShippingAsBilling
-        ? shippingAddress
-        : (address.billingAddresses?.[0] ?? defaultAddress);
 
       return {
         email,
-        firstName: profile.firstName ?? '',
-        lastName: profile.lastName ?? '',
-        phone: profile.phone ?? '',
-        dateOfBirth: profile.dateOfBirth ?? '',
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        phone: profile.phone,
+        dateOfBirth: profile.dateOfBirth,
         title: profile.title,
         company: profile.company,
-        shippingAddresses: [shippingAddress],
-        billingAddresses: [billingAddress],
-        useShippingAsBilling: address.useShippingAsBilling ?? true,
+      };
+    },
+    getShippingAddressPayload: () => {
+      const formData = get().formData?.address;
+      const address = formData?.shippingAddresses[0] ?? defaultAddress;
+
+      return {
+        address,
+        addressType: 'shipping',
+      };
+    },
+    getBillingAddressPayload: () => {
+      const { formData, useShippingAsBilling } = get();
+
+      if (useShippingAsBilling) {
+        return null;
+      }
+
+      const address = formData?.address;
+
+      const billingAddress = address?.billingAddresses?.[0] ?? defaultAddress;
+
+      return {
+        address: billingAddress,
+        addressType: 'billing',
       };
     },
   }),

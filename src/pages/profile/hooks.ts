@@ -4,29 +4,30 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
-  useAddCustomerAddress,
-  useDeleteCustomerAddress,
+  useCreateAddress,
+  useDeleteAddress,
+  useGetAddressess,
   useGetCustomer,
-  useGetCustomerAddress,
   useSetDefaultAddress,
+  useUpdateAddress,
   useUpdateCustomer,
-  useUpdateCustomerAddress,
   type AddressType,
 } from '@shared/api';
 import { ROUTES } from '@shared/config/routes';
 import {
   addressSchema,
-  newPasswordSchema,
+  changePasswordSchema,
   personalSchema,
   type AddressFormType,
-  type NewPasswordFormType,
+  type ChangePasswordFormType,
   type PersonalFormType,
 } from '@shared/lib/schemas';
-import { useUpdateUser, useViewerEmail } from '@shared/viewer';
+
+import { useChangePassword, useViewerEmail } from '@/shared/viewer';
 
 export const useGetProfileData = () => {
   const { data: customer } = useGetCustomer();
-  const { data: addresses } = useGetCustomerAddress();
+  const { data: addresses } = useGetAddressess();
   const email = useViewerEmail() ?? '';
 
   const personalData = {
@@ -64,29 +65,40 @@ export const useSetDefaultProfileAddress = () => {
 };
 
 export const useChangePasswordForm = () => {
-  const { mutate: updateUser, isPending } = useUpdateUser();
+  const { mutate: changePassword, isPending } = useChangePassword();
   const navigate = useNavigate();
-  const form = useForm<NewPasswordFormType>({
-    resolver: zodResolver(newPasswordSchema),
+  const form = useForm<ChangePasswordFormType>({
+    resolver: zodResolver(changePasswordSchema),
     defaultValues: {
-      password: '',
+      currentPassword: '',
+      newPassword: '',
       confirmPassword: '',
     },
     mode: 'onChange',
   });
 
-  const onSubmit = (data: NewPasswordFormType) => {
-    updateUser(
-      { password: data.password },
+  const onSubmit = (data: ChangePasswordFormType) => {
+    changePassword(
+      {
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      },
       {
         onSuccess: () => {
           toast.success('Password changed successfully');
-          toast.info(
-            'Your password has been changed. Please use the new password to log in.'
-          );
+          form.reset();
           navigate({ to: ROUTES.PROFILE });
         },
-        onError: (error) => toast.error(error.message),
+        onError: (error) => {
+          if (error.message.includes('incorrect')) {
+            form.setError('currentPassword', {
+              message: 'Current password is incorrect',
+            });
+            toast.error(error.message);
+          } else {
+            toast.error(error.message);
+          }
+        },
       }
     );
   };
@@ -113,7 +125,7 @@ export const useEditPersonalForm = () => {
 
   const onSubmit = (data: PersonalFormType) => {
     updateCustomer(
-      { id: customer?.id ?? '', ...data },
+      { ...data },
       {
         onSuccess: () => {
           toast.success('Personal data changed successfully');
@@ -134,11 +146,9 @@ export const useEditPersonalForm = () => {
 
 export const useEditAddressForm = () => {
   const { addressId } = useParams({ strict: false });
-  const { data: addresses } = useGetCustomerAddress();
+  const { data: addresses } = useGetAddressess();
   const navigate = useNavigate();
-  const { mutate: updateCustomerAddress, isPending } =
-    useUpdateCustomerAddress();
-
+  const { mutate: updateAddress, isPending } = useUpdateAddress();
   const currentAddress =
     addresses?.shippingAddresses.find((address) => address.id === addressId) ||
     addresses?.billingAddresses?.find((address) => address.id === addressId) ||
@@ -157,8 +167,8 @@ export const useEditAddressForm = () => {
   });
 
   const onSubmit = (data: AddressFormType) => {
-    updateCustomerAddress(
-      { id: addressId, ...data },
+    updateAddress(
+      { address: { ...data, id: addressId }, addressType: 'shipping' },
       {
         onSuccess: () => {
           toast.success('Address updated successfully');
@@ -173,9 +183,7 @@ export const useEditAddressForm = () => {
 };
 
 export const useDeleteProfileAddress = () => {
-  const { mutate: deleteAddress, isPending: isDeleting } =
-    useDeleteCustomerAddress();
-
+  const { mutate: deleteAddress, isPending } = useDeleteAddress();
   const handleDeleteProfileAddress = (addressId: string) => {
     deleteAddress(addressId, {
       onSuccess: () => {
@@ -187,14 +195,14 @@ export const useDeleteProfileAddress = () => {
     });
   };
 
-  return { handleDeleteProfileAddress, isDeleting };
+  return { handleDeleteProfileAddress, isPending };
 };
 
 export const useAddAddressForm = () => {
   const navigate = useNavigate();
   const search = useSearch({ strict: false });
   const addressType = search.type as AddressType;
-  const { mutate: addCustomerAddress, isPending } = useAddCustomerAddress();
+  const { mutate: createAddress, isPending } = useCreateAddress();
 
   const form = useForm<AddressFormType>({
     resolver: zodResolver(addressSchema),
@@ -208,9 +216,9 @@ export const useAddAddressForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = (data: AddressFormType) => {
-    addCustomerAddress(
-      { data, addressType },
+  const onSubmit = (address: AddressFormType) => {
+    createAddress(
+      { address, addressType },
       {
         onSuccess: () => {
           toast.success('Address added successfully');

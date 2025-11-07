@@ -1,27 +1,26 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import type {
+  // BreadcrumbItem,
+  // BreadcrumbItemDTO,
+  Category,
+  CategoryDTO,
+  CategoryTree,
+  CategoryTreeDTO,
+} from '@shared/api';
 import {
   getCategoriesTree,
-  getCategoryBreadcrumbPaths,
+  // getCategoryBreadcrumbPaths,
   getRootCategories,
 } from '@shared/api/categories';
 
 import {
   mapCategories,
   mapCategoriesTree,
-  mapCategoryBreadcrumbs,
-  type BreadcrumbItem,
-  type BreadcrumbItemDTO,
-  type Category,
-  type CategoryDTO,
-  type CategoryTree,
-  type CategoryTreeDTO,
+  // mapCategoryBreadcrumbs,
 } from './mapper';
 
-const queryKey = {
-  rootCategories: ['rootCategories'],
-  categoriesTree: ['categoriesTree'],
-} as const;
+import { queryKey } from '../constants';
 
 export const useRootCategories = (): {
   data: Category[];
@@ -58,16 +57,16 @@ export const useCategoriesTree = (): {
   return { data };
 };
 
-export function useCategoryBreadcrumbPaths(slug: string) {
-  return useSuspenseQuery<BreadcrumbItemDTO[], Error, BreadcrumbItem[]>({
-    queryKey: ['breadcrumbsPaths', slug],
-    queryFn: () => getCategoryBreadcrumbPaths(slug),
-    select: mapCategoryBreadcrumbs,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    retry: 1,
-  });
-}
+// export function useCategoryBreadcrumbPaths(slug: string) {
+//   return useSuspenseQuery<BreadcrumbItemDTO[], Error, BreadcrumbItem[]>({
+//     queryKey: ['breadcrumbsPaths', slug],
+//     queryFn: () => getCategoryBreadcrumbPaths(slug),
+//     select: mapCategoryBreadcrumbs,
+//     staleTime: 5 * 60 * 1000,
+//     gcTime: 60 * 60 * 1000,
+//     refetchOnMount: false,
+//     refetchOnWindowFocus: false,
+//     refetchOnReconnect: false,
+//     retry: 1,
+//   });
+// }

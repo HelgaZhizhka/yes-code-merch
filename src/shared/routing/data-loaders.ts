@@ -1,6 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query';
 
-import { getCategoryBreadcrumbPaths } from '@shared/api/categories';
+// import { getCategoryBreadcrumbPaths } from '@shared/api/categories';
 
 export interface CategoryPageData {
   breadcrumbs: unknown;
@@ -12,7 +12,7 @@ export const loadCategoryPageData = async (
 ): Promise<CategoryPageData> => {
   const breadcrumbs = await queryClient.ensureQueryData({
     queryKey: ['breadcrumbsPaths', slug],
-    queryFn: () => getCategoryBreadcrumbPaths(slug),
+    // queryFn: () => getCategoryBreadcrumbPaths(slug),
   });
 
   return {

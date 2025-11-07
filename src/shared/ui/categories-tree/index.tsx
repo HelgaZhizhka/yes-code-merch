@@ -3,8 +3,8 @@ import { cva } from 'class-variance-authority';
 import { ChevronRight } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 
+import type { CategoryTree } from '@shared/api';
 import { useCategoriesTree } from '@shared/api/categories/hooks';
-import type { CategoryTree } from '@shared/api/categories/mapper';
 import { ROUTES } from '@shared/config/routes';
 import { cn } from '@shared/lib/utils';
 
