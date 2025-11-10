@@ -1,11 +1,11 @@
 import type {
-  Category,
-  CategoryTree,
   BreadcrumbItem,
   BreadcrumbItemDTO,
+  Category,
   CategoryDTO,
+  CategoryTree,
   CategoryTreeDTO,
-} from '@shared/api';
+} from './types';
 
 export const mapCategories = (
   categories: readonly CategoryDTO[]

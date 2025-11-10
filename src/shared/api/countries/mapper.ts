@@ -1,4 +1,4 @@
-import type { Country, CountryRow } from '@shared/api';
+import type { Country, CountryRow } from './types';
 
 export const mapCountry = (country: CountryRow[]): Country[] => {
   return country.map((country) => ({

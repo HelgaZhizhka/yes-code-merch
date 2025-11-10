@@ -1,16 +1,16 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { mapCategories, mapCategoriesTree } from './mapper';
 import type {
   Category,
   CategoryDTO,
   CategoryTree,
   CategoryTreeDTO,
-} from '@shared/api';
-import { getCategoriesTree, getRootCategories } from '@shared/api/categories';
-
-import { mapCategories, mapCategoriesTree } from './mapper';
+} from './types';
 
 import { queryKey } from '../constants';
+
+import { getCategoriesTree, getRootCategories } from './';
 
 export const useRootCategories = (): {
   data: Category[];
