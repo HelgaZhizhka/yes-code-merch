@@ -73,4 +73,24 @@ Example of Full FSD structure.
 2. Feature = working with multipleentities
 3. Pages-first approach
 4. YAGNI: do not open the API without assurance.
-5. Zero coupling + highconnection
+5. Zero Coupling + High Cohesion
+Zero Coupling - Slices should NOT depend on each other. Single slice is independent and self-sufficient. 
+High Cohesion - All the code associated with the slice should be inside this slice.
+
+```
+// All address logic in one place
+entities/address/
+├── api/
+│   ├── index.ts          API functions
+│   ├── hooks.ts          Hooks addresses
+│   ├── types.ts          Types addresses
+│   └── mapper.ts         Mappers addresses
+├── lib/
+│   ├── schema.ts         Validation addresses
+│   └── utils.ts          Utilities addresses
+└── ui/
+    ├── address-card/     UI addresses
+    └── address-form/     Forms addresses
+
+// All that is needed to work with addresses - INSIDE!
+```
