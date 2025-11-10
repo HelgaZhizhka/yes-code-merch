@@ -4,10 +4,14 @@ import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { useCreateAddress, useUpdateCustomer } from '@shared/api';
+import { defaultAddress, useCreateAddress } from '@entities/address';
+import {
+  profileSchema,
+  useUpdateCustomer,
+  type ProfileFormType,
+} from '@entities/customer';
+
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
-import { profileSchema, type ProfileFormType } from '@shared/lib/schemas';
-import { defaultAddress } from '@shared/lib/validators';
 import { useViewerEmail } from '@shared/viewer/model';
 
 import {

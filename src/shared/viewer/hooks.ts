@@ -1,30 +1,28 @@
 import type { Session, User } from '@supabase/supabase-js';
 import {
   useMutation,
-  useQueryClient,
   type UseMutationResult,
+  useQueryClient,
 } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
-import type {
-  AuthCredentials,
-  AuthProps,
-  ChangePasswordDTO,
-  ResetPasswordDTO,
-  ResetPasswordResponse,
-  UpdateUserDTO,
-} from '@shared/api';
 import {
-  changePassword,
   getSession,
   login,
   logout,
-  onAuthStateChange,
-  resetPassword,
   signUp,
   updateUser,
-} from '@shared/api/auth';
+  onAuthStateChange,
+  changePassword,
+  resetPassword,
+  type AuthCredentials,
+  type AuthProps,
+  type ResetPasswordDTO,
+  type ResetPasswordResponse,
+  type UpdateUserDTO,
+  type ChangePasswordDTO,
+} from '@shared/api';
 import { ROUTES } from '@shared/config/routes';
 import type { AsyncVoidFunction } from '@shared/types';
 

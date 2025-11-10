@@ -1,6 +1,6 @@
 import { AddressList } from '@pages/profile/ui/address-list';
 
-import type { Addresses, AddressListProps } from '@shared/api';
+import type { Addresses, AddressListProps } from '@entities/address';
 
 export const AddressBlock = ({
   shippingAddresses,

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { addressSchema } from '@shared/lib/schemas';
+import { addressSchema } from '@entities/address';
 
 export const addressStepSchema = z.object({
   shippingAddresses: z.array(addressSchema),

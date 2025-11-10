@@ -1,4 +1,5 @@
-import { AddressForm } from '@shared/ui/address-form';
+import { AddressForm } from '@entities/address';
+
 import { Button } from '@shared/ui/button';
 import { Checkbox } from '@shared/ui/checkbox';
 import { Form } from '@shared/ui/form';

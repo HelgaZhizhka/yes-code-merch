@@ -5,11 +5,13 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
-import type { CustomerData, CustomerDataWithId } from '@shared/api';
-
-import { queryKey } from '../constants';
+import type { CustomerData, CustomerDataWithId } from './types';
 
 import { getCustomer, updateCustomer } from './';
+
+export const queryKey = {
+  customerData: ['customerData'],
+} as const;
 
 export const useGetCustomer = (): {
   data: CustomerDataWithId | null;

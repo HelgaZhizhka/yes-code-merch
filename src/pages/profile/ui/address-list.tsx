@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { Pencil, Trash } from 'lucide-react';
 
-import type { AddressListProps } from '@shared/api';
+import type { AddressListProps } from '@entities/address';
+
 import { ROUTES } from '@shared/config/routes';
 import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';

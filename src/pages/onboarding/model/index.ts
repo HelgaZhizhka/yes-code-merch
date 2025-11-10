@@ -1,10 +1,11 @@
-import type { Address, AddressType, CustomerData } from '@shared/api';
+import type { Address, AddressType } from '@entities/address';
+import { defaultAddress } from '@entities/address';
+import type { CustomerData, ProfileFormType } from '@entities/customer';
+
 import {
   createAppStore,
   type ImmerCompatibleSet,
 } from '@shared/lib/create-app-store';
-import { type ProfileFormType } from '@shared/lib/schemas';
-import { defaultAddress } from '@shared/lib/validators';
 
 import type { AddressStepFormType } from './schema';
 

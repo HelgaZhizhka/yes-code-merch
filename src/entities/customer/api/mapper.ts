@@ -2,7 +2,7 @@ import type {
   CustomerDataWithId,
   CustomerInsertDTO,
   CustomerRowDTO,
-} from '@shared/api';
+} from './types';
 
 export const mapCustomerFromDB = (row: CustomerRowDTO): CustomerDataWithId => ({
   firstName: row.first_name,

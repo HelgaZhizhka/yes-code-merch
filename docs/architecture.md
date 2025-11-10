@@ -14,9 +14,9 @@ Example of Full FSD structure.
     ├── pages/                  # Layer: pages (router)
     |   ├── {some-page}/        #     Slice: (example: Product page)
     |   |   ├── api/            #         Segment: API logic (api instances,requests, ...)
-    |   |   ├── lib/            #         Segment: Infrastructure logic (helpers/utils)
-    |   |   ├── model/          #         Segment: Business logic
-    |   |   └── ui/             #         Segment: UI logic
+    |   |   ├── lib/            #         Segment: Infrastructure logic (helpers/utils/schema)
+    |   |   ├── model/          #         Segment: Business logic (state management, tests...)
+    |   |   └── ui/             #         Segment: UI logic (components, stories...)
     |                           #
     ├── widgets/                # Layer: reusable UI components
     |   ├── {some-widget}/      #     Slice: (example: Sidebar widget)
@@ -35,17 +35,17 @@ Example of Full FSD structure.
     ├── entities/               # Layer: reusable entities
     |   ├── {some-entity}/      #    Slice: (example: Product entity)
     |   |   ├── api/            #         Segment: API logic (api instances, requests, ...)
-    |   |   ├── lib/            #         Segment: Infrastructure logic (helpers/utils)
+    |   |   ├── lib/            #         Segment: Infrastructure logic (helpers/utils/schema)
     |   |   ├── model/          #         Segment: Business logic  ( state management, tests...)
-    |   |   └── ui/             #         Segment: UI logic
+    |   |   └── ui/             #         Segment: UI logic (components, stories...)
     |   ...                     #
     |                           #
     ├── shared/                 # Layer: reusable shared logic
     |   ├── api/                #         Segment: API logic (supabase api client, ...)
     |   ├── model/              #         Segment: Business logic ( global store ...)
     |   ├── config/             #         Segment: Configuration (env, constants, ...)
-    |   ├── lib/                #         Segment: Infrastructure logic (helpers/utils)
-    |   └── ui/                 #         Segment: UI logic
+    |   ├── lib/                #         Segment: Infrastructure logic (helpers/utils/schema)
+    |   └── ui/                 #         Segment: UI logic (components, stories...)
     ├── styles/                 # Layer: global styles
     |   ├── global.css          #         Segment: Global styles
     |   ├── tailwind.config.js  #         Segment: Tailwind CSS configuration
@@ -66,3 +66,11 @@ Example of Full FSD structure.
 ```
 
 ![image info](fsd.png)
+
+### Recommendations :
+
+1. Widget = composition of several features
+2. Feature = working with multipleentities
+3. Pages-first approach
+4. YAGNI: do not open the API without assurance.
+5. Zero coupling + highconnection

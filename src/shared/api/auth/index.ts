@@ -1,15 +1,16 @@
 import type { Session, User } from '@supabase/supabase-js';
 
+import { supabase } from '@shared/api/supabase-client';
+import { config } from '@shared/config';
+import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
+
 import type {
   AuthCredentials,
   ChangePasswordDTO,
   ResetPasswordDTO,
   ResetPasswordResponse,
   UpdateUserDTO,
-} from '@shared/api';
-import { supabase } from '@shared/api/supabase-client';
-import { config } from '@shared/config';
-import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
+} from './types';
 
 import { getCurrentUser } from '../helpers';
 

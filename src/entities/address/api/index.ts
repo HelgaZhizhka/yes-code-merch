@@ -1,14 +1,8 @@
-import type {
-  Address,
-  Addresses,
-  AddressType,
-  AddressWithId,
-} from '@shared/api';
+import { getCurrentUser } from '@shared/api/helpers';
 import { supabase } from '@shared/api/supabase-client';
 
 import { mapAddressFromDB, mapAddressToDB } from './mapper';
-
-import { getCurrentUser } from '../helpers';
+import type { Address, Addresses, AddressType, AddressWithId } from './types';
 
 export const getAddresses = async (): Promise<Addresses> => {
   const { data: addresses } = await supabase

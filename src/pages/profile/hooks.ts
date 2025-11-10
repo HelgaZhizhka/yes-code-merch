@@ -4,26 +4,28 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
+  addressSchema,
   useCreateAddress,
   useDeleteAddress,
   useGetAddressess,
-  useGetCustomer,
   useSetDefaultAddress,
   useUpdateAddress,
-  useUpdateCustomer,
+  type AddressFormType,
   type AddressType,
-} from '@shared/api';
+} from '@entities/address';
+import {
+  personalSchema,
+  useGetCustomer,
+  useUpdateCustomer,
+  type PersonalFormType,
+} from '@entities/customer';
+
 import { ROUTES } from '@shared/config/routes';
 import {
-  addressSchema,
   changePasswordSchema,
-  personalSchema,
-  type AddressFormType,
   type ChangePasswordFormType,
-  type PersonalFormType,
 } from '@shared/lib/schemas';
-
-import { useChangePassword, useViewerEmail } from '@/shared/viewer';
+import { useChangePassword, useViewerEmail } from '@shared/viewer';
 
 export const useGetProfileData = () => {
   const { data: customer } = useGetCustomer();

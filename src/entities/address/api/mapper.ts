@@ -4,7 +4,7 @@ import type {
   AddressRowDTO,
   AddressType,
   AddressWithId,
-} from '@shared/api';
+} from './types';
 
 export const mapAddressToDB = (
   address: Address,

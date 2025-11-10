@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
-import type { Address } from '@shared/api';
+export const MIN_AGE = 13;
+export const TODAY = new Date();
 
 export const PATTERNS = {
   digits: /\d/,
@@ -15,9 +16,6 @@ export const STRENGTH = {
   HIGH: 'high',
 } as const;
 
-export const MIN_AGE = 13;
-export const MAX_AGE = 120;
-export const TODAY = new Date();
 export const MIN_PASSWORD_LENGTH = 8;
 
 export const VALIDATION_REGEX = {
@@ -147,11 +145,15 @@ export const confirmPasswordValidator = z
   .trim()
   .min(1, ErrorMessages.confirmPasswordRequired);
 
-export const defaultAddress: Address = {
-  country: '',
-  city: '',
-  streetName: '',
-  streetNumber: '',
-  postalCode: '',
-  isDefault: false,
+export const isValidAge = (dateString: string): boolean => {
+  const birthDate = new Date(dateString);
+  const age =
+    TODAY.getFullYear() -
+    birthDate.getFullYear() -
+    (TODAY.getMonth() < birthDate.getMonth() ||
+    (TODAY.getMonth() === birthDate.getMonth() &&
+      TODAY.getDate() < birthDate.getDate())
+      ? 1
+      : 0);
+  return age >= MIN_AGE;
 };

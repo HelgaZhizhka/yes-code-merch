@@ -1,9 +1,8 @@
-import type { CustomerData, CustomerDataWithId } from '@shared/api';
+import { getCurrentUser } from '@shared/api/helpers';
 import { supabase } from '@shared/api/supabase-client';
 
 import { mapCustomerFromDB, mapCustomerToDB } from './mapper';
-
-import { getCurrentUser } from '../helpers';
+import type { CustomerData, CustomerDataWithId } from './types';
 
 export const getCustomer = async (): Promise<CustomerDataWithId | null> => {
   const { data: customer } = await supabase

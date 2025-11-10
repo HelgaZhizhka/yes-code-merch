@@ -5,14 +5,7 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
-import type {
-  Address,
-  AddressType,
-  AddressWithId,
-  Addresses,
-} from '@shared/api';
-
-import { queryKey } from '../constants';
+import type { Address, AddressType, AddressWithId, Addresses } from './types';
 
 import {
   createAddress,
@@ -20,7 +13,11 @@ import {
   getAddresses,
   setDefaultAddress,
   updateAddress,
-} from '.';
+} from './';
+
+export const queryKey = {
+  addresses: ['addresses'],
+} as const;
 
 export const useGetAddressess = (): {
   data: Addresses | null;

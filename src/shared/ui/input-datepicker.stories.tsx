@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { profileSchema } from '@shared/lib/schemas';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
 
 import { InputDatepicker } from './input-datepicker';
 
 import { FormValidation } from '.storybook/form-validation';
+import { storybookSchemas } from '.storybook/schemas';
 
 const meta = {
   title: 'shared/ui/form/input-datepicker',
@@ -19,12 +19,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const schema = profileSchema.pick({
-  dateOfBirth: true,
-});
-
 const Template = () => (
-  <FormValidation schema={schema} initialValues={{ dateOfBirth: '' }}>
+  <FormValidation
+    schema={storybookSchemas.dateOfBirth}
+    initialValues={{ dateOfBirth: '' }}
+  >
     {(methods) => (
       <Card className="w-[350px]">
         <CardHeader>

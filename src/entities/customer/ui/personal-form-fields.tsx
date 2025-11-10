@@ -1,10 +1,11 @@
 import React from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
-import type { CustomerData } from '@shared/api';
 import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
 import { InputDatepicker } from '@shared/ui/input-datepicker';
+
+import type { CustomerData } from '../api/types';
 
 interface PersonalFormFieldsProps<T extends FieldValues> {
   control: Control<T>;

@@ -1,10 +1,15 @@
 import type { Meta, StoryFn } from '@storybook/react-vite';
 import { z } from 'zod';
 
-import { addressSchema, type AddressFormType } from '@shared/lib/schemas';
-import { defaultAddress } from '@shared/lib/validators';
-import { AddressForm, type AddressFormProps } from '@shared/ui/address-form';
 import { Button } from '@shared/ui/button';
+
+import { AddressForm, type AddressFormProps } from './address-form';
+
+import {
+  addressSchema,
+  defaultAddress,
+  type AddressFormType,
+} from '../lib/schema';
 
 import { FormValidation } from '.storybook/form-validation';
 
