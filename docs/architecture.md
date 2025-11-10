@@ -74,8 +74,8 @@ Example of Full FSD structure.
 3. Pages-first approach
 4. YAGNI: do not open the API without assurance.
 5. Zero Coupling + High Cohesion
-Zero Coupling - Slices should NOT depend on each other. Single slice is independent and self-sufficient. 
-High Cohesion - All the code associated with the slice should be inside this slice.
+   Zero Coupling - Slices should NOT depend on each other. Single slice is independent and self-sufficient.
+   High Cohesion - All the code associated with the slice should be inside this slice.
 
 ```
 // All address logic in one place
