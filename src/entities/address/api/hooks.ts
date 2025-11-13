@@ -26,7 +26,7 @@ export const useGetAddressess = (): {
     queryKey: queryKey.addresses,
     queryFn: getAddresses,
     staleTime: Infinity,
-    refetchOnMount: true,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
