@@ -1,7 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
+import { getCategoryBreadcrumbPaths } from './helpers';
 import { mapCategories, mapCategoriesTree } from './mapper';
 import type {
+  BreadcrumbItem,
   Category,
   CategoryRowDTO,
   CategoryTree,
@@ -45,4 +48,16 @@ export const useCategoriesTree = (): {
   });
 
   return { data };
+};
+
+export const useBreadcrumbs = (categoryPath?: string): BreadcrumbItem[] => {
+  const { data: tree } = useCategoriesTree();
+
+  return useMemo(() => {
+    if (!categoryPath || !tree) return [];
+
+    const segments = categoryPath.split('/').filter(Boolean);
+    const targetSlug = segments.at(-1) ?? '';
+    return getCategoryBreadcrumbPaths(tree, targetSlug);
+  }, [categoryPath, tree]);
 };
