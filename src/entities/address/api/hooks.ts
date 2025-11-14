@@ -5,7 +5,14 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
-import type { Address, AddressType, AddressWithId, Addresses } from './types';
+import { mapAddressesFromDB } from './mapper';
+import type {
+  Address,
+  Addresses,
+  AddressRowDTO,
+  AddressType,
+  AddressWithId,
+} from './types';
 
 import {
   createAddress,
@@ -20,16 +27,18 @@ export const queryKey = {
 } as const;
 
 export const useGetAddressess = (): {
-  data: Addresses | null;
+  data: Addresses;
 } => {
-  const { data } = useSuspenseQuery<Addresses>({
+  const { data } = useSuspenseQuery<AddressRowDTO[], Error, Addresses>({
     queryKey: queryKey.addresses,
     queryFn: getAddresses,
+    select: mapAddressesFromDB,
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
+
   return { data };
 };
 

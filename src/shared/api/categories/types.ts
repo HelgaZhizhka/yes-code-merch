@@ -1,10 +1,8 @@
 import type { Public } from '@shared/api/supabase-client';
 
-export type CategoryDTO = Public['Tables']['categories']['Row'];
+export type CategoryRowDTO = Public['Tables']['categories']['Row'];
 export type CategoryTreeDTO =
   Public['Functions']['get_all_categories_tree']['Returns'][0];
-export type BreadcrumbItemDTO =
-  Public['Functions']['get_category_breadcrumb_paths']['Returns'][0];
 
 export interface Category {
   id: string;

@@ -4,6 +4,7 @@ import type {
   AddressRowDTO,
   AddressType,
   AddressWithId,
+  Addresses,
 } from './types';
 
 export const mapAddressToDB = (
@@ -33,4 +34,18 @@ export const mapAddressFromDB = (address: AddressRowDTO[]): AddressWithId[] => {
     postalCode: address.postal_code,
     isDefault: address.is_default_shipping || address.is_default_billing,
   }));
+};
+
+export const mapAddressesFromDB = (
+  rows: readonly AddressRowDTO[]
+): Addresses => {
+  const shippingAddresses = mapAddressFromDB(
+    rows.filter((address) => address.is_shipping_address)
+  );
+
+  const billingAddresses = mapAddressFromDB(
+    rows.filter((address) => address.is_billing_address)
+  );
+
+  return { shippingAddresses, billingAddresses };
 };

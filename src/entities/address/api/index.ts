@@ -2,24 +2,20 @@ import { getCurrentUser } from '@shared/api/helpers';
 import { supabase } from '@shared/api/supabase-client';
 
 import { mapAddressFromDB, mapAddressToDB } from './mapper';
-import type { Address, Addresses, AddressType, AddressWithId } from './types';
+import type {
+  Address,
+  AddressRowDTO,
+  AddressType,
+  AddressWithId,
+} from './types';
 
-export const getAddresses = async (): Promise<Addresses> => {
+export const getAddresses = async (): Promise<AddressRowDTO[]> => {
   const { data: addresses } = await supabase
     .from('addresses')
     .select('*')
     .throwOnError();
 
-  const rows = addresses ?? [];
-
-  const shippingAddresses = mapAddressFromDB(
-    rows.filter((address) => address.is_shipping_address)
-  );
-  const billingAddresses = mapAddressFromDB(
-    rows.filter((address) => address.is_billing_address)
-  );
-
-  return { shippingAddresses, billingAddresses };
+  return addresses ?? [];
 };
 
 export const setDefaultAddress = async ({

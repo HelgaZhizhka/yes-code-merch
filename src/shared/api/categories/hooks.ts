@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { mapCategories, mapCategoriesTree } from './mapper';
 import type {
   Category,
-  CategoryDTO,
+  CategoryRowDTO,
   CategoryTree,
   CategoryTreeDTO,
 } from './types';
@@ -15,7 +15,7 @@ import { getCategoriesTree, getRootCategories } from './';
 export const useRootCategories = (): {
   data: Category[];
 } => {
-  const { data } = useSuspenseQuery<CategoryDTO[], Error, Category[]>({
+  const { data } = useSuspenseQuery<CategoryRowDTO[], Error, Category[]>({
     queryKey: queryKey.rootCategories,
     queryFn: getRootCategories,
     select: mapCategories,

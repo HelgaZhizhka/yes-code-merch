@@ -5,4 +5,4 @@ export interface Country {
   name: string;
 }
 
-export type CountryRow = Public['Tables']['countries']['Row'];
+export type CountryRowDTO = Public['Tables']['countries']['Row'];

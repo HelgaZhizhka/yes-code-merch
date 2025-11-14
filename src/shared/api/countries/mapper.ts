@@ -1,7 +1,7 @@
-import type { Country, CountryRow } from './types';
+import type { Country, CountryRowDTO } from './types';
 
-export const mapCountry = (country: CountryRow[]): Country[] => {
-  return country.map((country) => ({
+export const mapCountry = (countries: readonly CountryRowDTO[]): Country[] => {
+  return countries.map((country) => ({
     code: country.iso_code,
     name: country.name,
   }));

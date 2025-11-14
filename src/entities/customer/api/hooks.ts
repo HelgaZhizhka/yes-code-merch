@@ -5,7 +5,8 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
-import type { CustomerData, CustomerDataWithId } from './types';
+import { mapCustomerFromDB } from './mapper';
+import type { CustomerData, CustomerDataWithId, CustomerRowDTO } from './types';
 
 import { getCustomer, updateCustomer } from './';
 
@@ -16,14 +17,20 @@ export const queryKey = {
 export const useGetCustomer = (): {
   data: CustomerDataWithId | null;
 } => {
-  const { data } = useSuspenseQuery<CustomerDataWithId | null>({
+  const { data } = useSuspenseQuery<
+    CustomerRowDTO | null,
+    Error,
+    CustomerDataWithId | null
+  >({
     queryKey: queryKey.customerData,
     queryFn: getCustomer,
+    select: (customer) => (customer ? mapCustomerFromDB(customer) : null),
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
+
   return { data };
 };
 

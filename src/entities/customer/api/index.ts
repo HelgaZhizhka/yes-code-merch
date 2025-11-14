@@ -2,16 +2,16 @@ import { getCurrentUser } from '@shared/api/helpers';
 import { supabase } from '@shared/api/supabase-client';
 
 import { mapCustomerFromDB, mapCustomerToDB } from './mapper';
-import type { CustomerData, CustomerDataWithId } from './types';
+import type { CustomerData, CustomerRowDTO } from './types';
 
-export const getCustomer = async (): Promise<CustomerDataWithId | null> => {
+export const getCustomer = async (): Promise<CustomerRowDTO | null> => {
   const { data: customer } = await supabase
     .from('customers')
     .select('*')
     .maybeSingle()
     .throwOnError();
 
-  return customer ? mapCustomerFromDB(customer) : null;
+  return customer ?? null;
 };
 
 export const updateCustomer = async (
