@@ -24,35 +24,27 @@ interface ProductQueryResult {
   product_discounts?: ProductDiscountRowDTO[];
 }
 
-/**
- * Map raw product query result to CatalogProduct domain model
- */
 export function mapToCatalogProduct(
   raw: ProductQueryResult
 ): CatalogProduct | null {
-  // Get master variant
   const masterVariant = raw.product_variants?.[0];
   if (!masterVariant) return null;
 
-  // Get primary image
   const primaryImage =
     masterVariant.product_images?.find((img) => img.is_primary) ||
     masterVariant.product_images?.sort(
       (a, b) => a.sort_order - b.sort_order
     )[0];
 
-  // Get active discount
   const activeDiscount = getActiveDiscount(
     raw.product_discounts || [],
     masterVariant.id,
     raw.id
   );
 
-  // Calculate prices
   const originalPrice = masterVariant.price;
   const finalPrice = calculateFinalPrice(originalPrice, activeDiscount);
 
-  // Map discount info if exists
   const discountInfo: DiscountInfo | null = activeDiscount
     ? {
         id: activeDiscount.id,

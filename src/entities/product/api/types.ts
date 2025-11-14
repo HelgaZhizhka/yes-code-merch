@@ -1,13 +1,11 @@
 import type { Public } from '@shared/api/supabase-client';
 
-// Database row types
 export type ProductRowDTO = Public['Tables']['products']['Row'];
 export type ProductVariantRowDTO = Public['Tables']['product_variants']['Row'];
 export type ProductImageRowDTO = Public['Tables']['product_images']['Row'];
 export type ProductDiscountRowDTO =
   Public['Tables']['product_discounts']['Row'];
 
-// Discount info for catalog
 export interface DiscountInfo {
   id: string;
   discountType: 'percent' | 'amount';
@@ -15,7 +13,6 @@ export interface DiscountInfo {
   priority: number;
 }
 
-// Catalog product (for PLP - Product List Page)
 export interface CatalogProduct {
   productId: string;
   name: string;
@@ -32,7 +29,6 @@ export interface CatalogProduct {
   discountInfo: DiscountInfo | null;
 }
 
-// Query parameters for catalog
 export interface GetCatalogParams {
   categoryId?: string;
   search?: string;
@@ -42,7 +38,6 @@ export interface GetCatalogParams {
   sortDir?: 'asc' | 'desc';
 }
 
-// Pagination info
 export interface PaginationInfo {
   page: number;
   pageSize: number;
@@ -50,7 +45,6 @@ export interface PaginationInfo {
   totalPages: number;
 }
 
-// Catalog response
 export interface CatalogResponse {
   products: CatalogProduct[];
   pagination: PaginationInfo;

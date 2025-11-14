@@ -3,10 +3,6 @@ import { supabase } from '@shared/api/supabase-client';
 import { mapToCatalogProduct } from './mapper';
 import type { CatalogResponse, GetCatalogParams } from './types';
 
-/**
- * Get catalog products with filtering, sorting, and pagination
- * Uses nested queries to fetch variants, images, and discounts in a single request
- */
 export async function getCatalogProducts(
   params: GetCatalogParams = {}
 ): Promise<CatalogResponse> {
@@ -19,7 +15,6 @@ export async function getCatalogProducts(
     sortDir = 'asc',
   } = params;
 
-  // Build base query with nested relations
   let query = supabase
     .from('products')
     .select(
@@ -60,7 +55,6 @@ export async function getCatalogProducts(
     .eq('is_published', true)
     .eq('product_variants.is_master', true);
 
-  // Filter by category through join table
   if (categoryId) {
     query = query
       .select(
@@ -104,32 +98,24 @@ export async function getCatalogProducts(
       .eq('product_categories.category_id', categoryId);
   }
 
-  // Search by name
   if (search) {
     query = query.ilike('name', `%${search}%`);
   }
-
-  // Sorting (client-side for price-based sorting)
   if (sortBy !== 'price' && sortBy !== 'finalPrice') {
     query = query.order(sortBy, { ascending: sortDir === 'asc' });
   }
 
-  // Pagination
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
   query = query.range(from, to);
-
-  // Execute query
   const { data, error, count } = await query;
 
   if (error) throw error;
 
-  // Map raw data to domain models
   const products = (data || [])
     .map(mapToCatalogProduct)
     .filter((p): p is NonNullable<typeof p> => p !== null);
 
-  // Sort by price on client if needed
   if (sortBy === 'price') {
     products.sort((a, b) => {
       const diff = a.originalPrice - b.originalPrice;

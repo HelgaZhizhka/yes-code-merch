@@ -77,6 +77,7 @@ async function loadProducts() {
 Get a list of products for the catalog.
 
 **Parameters:**
+
 - `categoryId?: string` - Filter by category
 - `search?: string` - Search by name
 - `page?: number` - Page number (default: 1)
@@ -85,6 +86,7 @@ Get a list of products for the catalog.
 - `sortDir?: 'asc' | 'desc'` - Sort direction
 
 **Returns:**
+
 ```typescript
 {
   products: CatalogProduct[];
@@ -107,8 +109,8 @@ interface CatalogProduct {
   description: string | null;
   masterVariantId: string;
   sku: string;
-  originalPrice: number;    // Price without discount
-  finalPrice: number;       // Price with discount applied
+  originalPrice: number; // Price without discount
+  finalPrice: number; // Price with discount applied
   currency: string;
   stock: number;
   primaryImageUrl: string | null;
@@ -124,7 +126,8 @@ Uses Supabase **nested queries** without RPC functions:
 ```typescript
 supabase
   .from('products')
-  .select(`
+  .select(
+    `
     id, name, slug, description,
     product_variants!inner(
       id, sku, price, currency, stock,
@@ -134,7 +137,8 @@ supabase
       id, discount_type, discount_value, priority,
       valid_from, valid_to, is_active
     )
-  `)
+  `
+  )
   .eq('is_published', true)
   .eq('product_variants.is_master', true);
 ```
@@ -201,10 +205,7 @@ const activeDiscount = getActiveDiscount(
 Calculates final price with discount applied.
 
 ```typescript
-const finalPrice = calculateFinalPrice(
-  masterVariant.price,
-  activeDiscount
-);
+const finalPrice = calculateFinalPrice(masterVariant.price, activeDiscount);
 ```
 
 ## Integration Examples
