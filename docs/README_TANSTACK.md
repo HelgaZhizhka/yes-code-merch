@@ -619,11 +619,7 @@ import {
 } from '@tanstack/react-query';
 
 import { mapCustomerFromDB } from './mapper';
-import type {
-  CustomerData,
-  CustomerDataWithId,
-  CustomerRowDTO,
-} from './types';
+import type { CustomerData, CustomerDataWithId, CustomerRowDTO } from './types';
 
 import { getCustomer, updateCustomer } from './';
 
@@ -771,6 +767,7 @@ export const useGetAddressess = (): {
 In this project we follow these rules:
 
 - Use **`select`** for:
+
   - DTO -> domain mapping.
   - Reshaping data for UI (projections, filtering, combining fields), when it does not depend on component props.
   - Ensuring all components that use the same query share the same domain representation.

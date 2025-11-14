@@ -1,8 +1,8 @@
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 
-import type { CategoryDTO, CategoryTreeDTO } from './types';
+import type { CategoryRowDTO, CategoryTreeDTO } from './types';
 
-export const getRootCategories = async (): Promise<CategoryDTO[]> => {
+export const getRootCategories = async (): Promise<CategoryRowDTO[]> => {
   const { data: categories } = await supabase
     .from('categories')
     .select('*')

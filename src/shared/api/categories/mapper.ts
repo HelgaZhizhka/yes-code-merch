@@ -1,14 +1,12 @@
 import type {
-  BreadcrumbItem,
-  BreadcrumbItemDTO,
   Category,
-  CategoryDTO,
+  CategoryRowDTO,
   CategoryTree,
   CategoryTreeDTO,
 } from './types';
 
 export const mapCategories = (
-  categories: readonly CategoryDTO[]
+  categories: readonly CategoryRowDTO[]
 ): Category[] => {
   return categories.map(({ id, name, slug, parent_id, order_hint }) => ({
     id,
@@ -57,14 +55,4 @@ export const mapCategoriesTree = (
   }
 
   return rootCategories;
-};
-
-export const mapCategoryBreadcrumbs = (
-  rows: readonly BreadcrumbItemDTO[]
-): BreadcrumbItem[] => {
-  return rows.map(({ path, name, is_current }) => ({
-    path,
-    name,
-    isCurrent: is_current,
-  }));
 };
