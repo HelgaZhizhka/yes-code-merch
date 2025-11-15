@@ -123,9 +123,7 @@ export interface BreadcrumbItem {
 
 ```typescript
 // mapper.ts
-export const mapCategories = (
-  categories: readonly CategoryDTO[]
-): Category[] =>
+export const mapCategories = (categories: readonly CategoryDTO[]): Category[] =>
   categories.map(({ id, name, slug, parent_id, order_hint }) => ({
     id,
     name,
@@ -208,8 +206,6 @@ export const getCategoriesTree = async (): Promise<CategoryTreeDTO[]> => {
 
   return data ?? [];
 };
-
-
 ```
 
 ### React Query Hooks & Breadcrumbs

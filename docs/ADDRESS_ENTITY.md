@@ -252,11 +252,7 @@ export const updateAddress = async (
 };
 
 export const deleteAddress = async (addressId: string): Promise<boolean> => {
-  await supabase
-    .from('addresses')
-    .delete()
-    .eq('id', addressId)
-    .throwOnError();
+  await supabase.from('addresses').delete().eq('id', addressId).throwOnError();
 
   return true;
 };
