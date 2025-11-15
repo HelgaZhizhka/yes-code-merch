@@ -34,7 +34,7 @@ export const useGetAddressess = (): {
     queryFn: getAddresses,
     select: mapAddressesFromDB,
     staleTime: Infinity,
-    refetchOnMount: true,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
