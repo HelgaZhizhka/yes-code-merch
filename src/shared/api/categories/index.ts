@@ -1,12 +1,8 @@
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
 
-import {
-  type BreadcrumbItemDTO,
-  type CategoryDTO,
-  type CategoryTreeDTO,
-} from './mapper';
+import type { CategoryRowDTO, CategoryTreeDTO } from './types';
 
-export const getRootCategories = async (): Promise<CategoryDTO[]> => {
+export const getRootCategories = async (): Promise<CategoryRowDTO[]> => {
   const { data: categories } = await supabase
     .from('categories')
     .select('*')
@@ -23,14 +19,4 @@ export const getCategoriesTree = async (): Promise<CategoryTreeDTO[]> => {
     .rpc(RpcFunctions.getCategoriesTree)
     .throwOnError();
   return data;
-};
-
-export const getCategoryBreadcrumbPaths = async (
-  slug: string
-): Promise<BreadcrumbItemDTO[]> => {
-  const { data } = await supabase
-    .rpc(RpcFunctions.getCategoryBreadcrumbPaths, { cat_slug: slug })
-    .throwOnError();
-
-  return data ?? [];
 };

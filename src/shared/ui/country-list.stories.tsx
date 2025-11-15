@@ -2,13 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Suspense } from 'react';
 import { fn } from 'storybook/test';
 
-import { addressSchema } from '@shared/lib/schemas';
 import { Button } from '@shared/ui/button';
 import { Spinner } from '@shared/ui/spinner';
 
 import { CountryList } from './country-list';
 
 import { FormValidation } from '.storybook/form-validation';
+import { storybookSchemas } from '.storybook/schemas';
 
 const meta = {
   title: 'shared/ui/form/country-list',
@@ -29,13 +29,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const schema = addressSchema.pick({
-  country: true,
-});
-
 const CountrySelectList = () => {
   return (
-    <FormValidation schema={schema} initialValues={{ country: '' }}>
+    <FormValidation
+      schema={storybookSchemas.country}
+      initialValues={{ country: '' }}
+    >
       {(methods) => (
         <div className="space-y-2 w-[400px]">
           <Suspense fallback={<Spinner size="small" />}>

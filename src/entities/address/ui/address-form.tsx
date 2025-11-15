@@ -2,11 +2,10 @@ import React, { Suspense } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { Checkbox } from '@shared/ui/checkbox';
+import { CountryList } from '@shared/ui/country-list';
 import { FormFieldWrapper } from '@shared/ui/form-field-wrapper';
 import { Input } from '@shared/ui/input';
 import { Spinner } from '@shared/ui/spinner';
-
-import { CountryList } from '@/shared/ui/country-list';
 
 export interface AddressFormProps {
   prefix?: string;

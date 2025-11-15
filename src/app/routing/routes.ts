@@ -28,8 +28,6 @@ import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 import { Layout } from '@/layouts';
 
 import { authGuard } from './auth-guard';
-import { loadCategoryPageData } from './data-loaders';
-import type { AppRouterContext } from './interfaces';
 
 type FlexibleRouteType =
   | RootRoute
@@ -134,21 +132,6 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
     path: ROUTES.CATEGORY,
-    loader: async ({
-      params,
-      context,
-    }: {
-      params: { _splat?: string };
-      context: AppRouterContext;
-    }) => {
-      const { queryClient } = context;
-      const splat = params._splat ?? '';
-      const slug = splat.split('/').at(-1) ?? '';
-
-      if (!slug) return null;
-
-      return await loadCategoryPageData(queryClient, slug);
-    },
     component: Catalog,
   });
 

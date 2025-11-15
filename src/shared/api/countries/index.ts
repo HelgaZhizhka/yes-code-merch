@@ -1,13 +1,13 @@
 import { supabase } from '@shared/api/supabase-client';
 
-import { mapCountry, type Country } from './mapper';
+import type { CountryRowDTO } from './types';
 
-export const getCountries = async (): Promise<Country[]> => {
+export const getCountries = async (): Promise<CountryRowDTO[]> => {
   const { data } = await supabase
     .from('countries')
     .select('iso_code, name, region')
     .order('name', { ascending: true })
     .throwOnError();
 
-  return mapCountry(data);
+  return data ?? [];
 };

@@ -1,10 +1,11 @@
-import type { Viewer } from '@shared/interfaces';
+import type { Address, AddressType } from '@entities/address';
+import { defaultAddress } from '@entities/address';
+import type { CustomerData, ProfileFormType } from '@entities/customer';
+
 import {
   createAppStore,
   type ImmerCompatibleSet,
 } from '@shared/lib/create-app-store';
-import { type ProfileFormType } from '@shared/lib/schemas';
-import { defaultAddress } from '@shared/lib/validators';
 
 import type { AddressStepFormType } from './schema';
 
@@ -17,14 +18,22 @@ interface FormState {
     profile: ProfileFormType;
     address: AddressStepFormType;
   };
-  useShippingAsBilling: boolean;
+  isShippingAsBilling: boolean;
   setFormData<T extends keyof FormState['formData']>(
     stepKey: T,
     data: FormState['formData'][T]
   ): void;
-  setUseShippingAsBilling(value: boolean): void;
+  setIsShippingAsBilling(value: boolean): void;
   resetForm(): void;
-  getViewer(email: string | null): Viewer;
+  getCustomerData(email: string | null): CustomerData;
+  getShippingAddressPayload(): {
+    address: Address;
+    addressType: AddressType;
+  };
+  getBillingAddressPayload(): {
+    address: Address;
+    addressType: AddressType;
+  } | null;
 }
 
 export const defaultProfile: ProfileFormType = {
@@ -39,7 +48,7 @@ export const defaultProfile: ProfileFormType = {
 export const defaultAddressStep: AddressStepFormType = {
   shippingAddresses: [defaultAddress],
   billingAddresses: [],
-  useShippingAsBilling: true,
+  isShippingAsBilling: true,
 };
 
 export const useFormStore = createAppStore<FormState>(
@@ -48,10 +57,10 @@ export const useFormStore = createAppStore<FormState>(
       profile: defaultProfile,
       address: defaultAddressStep,
     },
-    useShippingAsBilling: true,
-    setUseShippingAsBilling(value: boolean) {
+    isShippingAsBilling: true,
+    setIsShippingAsBilling(value: boolean) {
       set((state: FormState) => {
-        state.useShippingAsBilling = value;
+        state.isShippingAsBilling = value;
       });
     },
     setFormData<T extends keyof FormState['formData']>(
@@ -66,29 +75,51 @@ export const useFormStore = createAppStore<FormState>(
       set((state: FormState) => {
         state.formData.profile = defaultProfile;
         state.formData.address = defaultAddressStep;
-        state.useShippingAsBilling = true;
+        state.isShippingAsBilling = true;
       }),
-    getViewer: (email: string) => {
+    getCustomerData: (email: string) => {
       const formData = get().formData;
       const profile = formData?.profile ?? defaultProfile;
-      const address = formData?.address ?? defaultAddressStep;
-
-      const shippingAddress = address.shippingAddresses[0] ?? defaultAddress;
-      const billingAddress = address.useShippingAsBilling
-        ? shippingAddress
-        : (address.billingAddresses?.[0] ?? defaultAddress);
 
       return {
         email,
-        firstName: profile.firstName ?? '',
-        lastName: profile.lastName ?? '',
-        phone: profile.phone ?? '',
-        dateOfBirth: profile.dateOfBirth ?? '',
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        phone: profile.phone,
+        dateOfBirth: profile.dateOfBirth,
         title: profile.title,
         company: profile.company,
-        shippingAddresses: [shippingAddress],
-        billingAddresses: [billingAddress],
-        useShippingAsBilling: address.useShippingAsBilling ?? true,
+      };
+    },
+    getShippingAddressPayload: () => {
+      const formData = get().formData?.address;
+      const address = formData?.shippingAddresses[0] ?? defaultAddress;
+
+      return {
+        address,
+        addressType: 'shipping',
+      };
+    },
+    getBillingAddressPayload: () => {
+      const { formData, isShippingAsBilling } = get();
+      const addressStep = formData?.address;
+
+      if (isShippingAsBilling) {
+        const shippingAddress =
+          addressStep?.shippingAddresses?.[0] ?? defaultAddress;
+
+        return {
+          address: shippingAddress,
+          addressType: 'billing',
+        };
+      }
+
+      const billingAddress =
+        addressStep?.billingAddresses?.[0] ?? defaultAddress;
+
+      return {
+        address: billingAddress,
+        addressType: 'billing',
       };
     },
   }),
@@ -97,7 +128,7 @@ export const useFormStore = createAppStore<FormState>(
     enablePersist: true,
     partialize: (state: FormState) => ({
       formData: state.formData,
-      useShippingAsBilling: state.useShippingAsBilling,
+      isShippingAsBilling: state.isShippingAsBilling,
     }),
     useSessionStorage: true,
     enableImmer: true,

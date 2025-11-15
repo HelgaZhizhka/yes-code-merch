@@ -1,31 +1,29 @@
 import type { Session, User } from '@supabase/supabase-js';
 import {
   useMutation,
-  useQueryClient,
   type UseMutationResult,
+  useQueryClient,
 } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import {
-  completeRegistration,
   getSession,
   login,
   logout,
-  onAuthStateChange,
-  resetPassword,
   signUp,
   updateUser,
-  type CompleteRegistrationResult,
+  onAuthStateChange,
+  changePassword,
+  resetPassword,
+  type AuthCredentials,
+  type AuthProps,
+  type ResetPasswordDTO,
   type ResetPasswordResponse,
-} from '@shared/api/auth';
-import type {
-  AuthCredentials,
-  ResetPasswordDTO,
-  UpdateUserDTO,
-} from '@shared/api/auth/types';
+  type UpdateUserDTO,
+  type ChangePasswordDTO,
+} from '@shared/api';
 import { ROUTES } from '@shared/config/routes';
-import { type Viewer } from '@shared/interfaces';
 import type { AsyncVoidFunction } from '@shared/types';
 
 import {
@@ -130,6 +128,21 @@ export const useResetPassword = (): UseMutationResult<
   });
 };
 
+export const useChangePassword = (): UseMutationResult<
+  User,
+  Error,
+  ChangePasswordDTO
+> => {
+  return useMutation<User, Error, ChangePasswordDTO>({
+    mutationFn: changePassword,
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Password change failed:', error.message);
+      }
+    },
+  });
+};
+
 export const useUpdateUser = (): UseMutationResult<
   User,
   Error,
@@ -144,29 +157,6 @@ export const useUpdateUser = (): UseMutationResult<
     },
   });
 };
-
-export const useCompleteRegistration = (): UseMutationResult<
-  CompleteRegistrationResult,
-  Error,
-  Viewer
-> =>
-  useMutation<CompleteRegistrationResult, Error, Viewer>({
-    mutationFn: completeRegistration,
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        setError(error);
-        console.error('Registration failed:', error.message);
-      }
-    },
-  });
-
-export interface AuthProps {
-  isLoading: boolean;
-  isGuest: boolean;
-  isAuthenticated: boolean;
-  isError: boolean;
-  error?: Error | null;
-}
 
 export const useViewerState = (): AuthProps => {
   const status = useStatus();

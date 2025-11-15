@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
-import { LayoutView } from '@/shared/types';
-import { Categories } from '@/shared/ui/categories';
+import { LayoutView } from '@shared/types';
+import { Categories } from '@shared/ui/categories';
 
 export const Home = () => {
   return (

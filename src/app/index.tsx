@@ -1,10 +1,11 @@
 import { RouterProvider } from '@tanstack/react-router';
 
+import { router } from '@app/routing';
+
 import {
   getContext as getQueryContext,
   TanStackQueryProvider,
 } from '@shared/api/tanstack-query';
-import { router } from '@shared/routing';
 import { Loader } from '@shared/ui/loader';
 
 import { useAppInit } from './hooks';

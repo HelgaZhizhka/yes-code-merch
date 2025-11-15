@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { Pencil, Trash } from 'lucide-react';
 
-import type { AddressListProps } from '@pages/profile/interfaces';
+import type { AddressListProps } from '@entities/address';
 
 import { ROUTES } from '@shared/config/routes';
 import { Badge } from '@shared/ui/badge';
@@ -30,7 +30,8 @@ import { useDeleteProfileAddress, useSetDefaultProfileAddress } from '../hooks';
 
 export const AddressList = ({ addresses, addressType }: AddressListProps) => {
   const { handleSetAddressDefault, isPending } = useSetDefaultProfileAddress();
-  const { handleDeleteProfileAddress, isDeleting } = useDeleteProfileAddress();
+  const { handleDeleteProfileAddress, isPending: isDeleting } =
+    useDeleteProfileAddress();
 
   return (
     <div className="space-y-4">

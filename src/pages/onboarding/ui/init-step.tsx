@@ -1,6 +1,7 @@
+import { PersonalFormFields } from '@entities/customer';
+
 import { Button } from '@shared/ui/button';
 import { Form } from '@shared/ui/form';
-import { PersonalFormFields } from '@shared/ui/personal-form-fields';
 
 import { useFormStep } from '../hooks';
 

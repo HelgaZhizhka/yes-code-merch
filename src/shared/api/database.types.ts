@@ -7,6 +7,11 @@ export type Json =
   | Json[];
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: '13.0.5';
+  };
   public: {
     Tables: {
       addresses: {
@@ -263,25 +268,11 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'coupons_product_id_fkey';
-            columns: ['product_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['product_id'];
-          },
-          {
             foreignKeyName: 'coupons_variant_id_fkey';
             columns: ['variant_id'];
             isOneToOne: false;
             referencedRelation: 'product_variants';
             referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'coupons_variant_id_fkey';
-            columns: ['variant_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['master_variant_id'];
           },
         ];
       };
@@ -358,13 +349,6 @@ export type Database = {
             referencedRelation: 'products';
             referencedColumns: ['id'];
           },
-          {
-            foreignKeyName: 'product_attributes_product_id_fkey';
-            columns: ['product_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['product_id'];
-          },
         ];
       };
       product_categories: {
@@ -394,13 +378,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'products';
             referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'product_categories_product_id_fkey';
-            columns: ['product_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['product_id'];
           },
         ];
       };
@@ -459,25 +436,11 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'product_discounts_product_id_fkey';
-            columns: ['product_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['product_id'];
-          },
-          {
             foreignKeyName: 'product_discounts_variant_id_fkey';
             columns: ['variant_id'];
             isOneToOne: false;
             referencedRelation: 'product_variants';
             referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'product_discounts_variant_id_fkey';
-            columns: ['variant_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['master_variant_id'];
           },
         ];
       };
@@ -522,13 +485,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'product_variants';
             referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'product_images_variant_id_fkey';
-            columns: ['variant_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['master_variant_id'];
           },
         ];
       };
@@ -584,13 +540,6 @@ export type Database = {
             referencedRelation: 'product_variants';
             referencedColumns: ['id'];
           },
-          {
-            foreignKeyName: 'product_variant_attributes_variant_id_fkey';
-            columns: ['variant_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['master_variant_id'];
-          },
         ];
       };
       product_variants: {
@@ -634,13 +583,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'products';
             referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'product_variants_product_id_fkey';
-            columns: ['product_id'];
-            isOneToOne: false;
-            referencedRelation: 'v_plp_products';
-            referencedColumns: ['product_id'];
           },
         ];
       };
@@ -687,53 +629,11 @@ export type Database = {
       };
     };
     Views: {
-      v_plp_products: {
-        Row: {
-          currency: string | null;
-          is_published: boolean | null;
-          master_price: number | null;
-          master_sku: string | null;
-          master_variant_id: string | null;
-          name: string | null;
-          primary_image_url: string | null;
-          product_id: string | null;
-          slug: string | null;
-        };
-        Relationships: [];
-      };
+      [_ in never]: never;
     };
     Functions: {
-      clear_default_address: {
-        Args: { _address_type: string };
-        Returns: undefined;
-      };
-      complete_registration: {
-        Args: {
-          _bill_city: string;
-          _bill_country: string;
-          _bill_is_default: boolean;
-          _bill_postal: string;
-          _bill_street_name: string;
-          _bill_street_number: string;
-          _company: string;
-          _date_of_birth: string;
-          _email: string;
-          _first_name: string;
-          _last_name: string;
-          _phone: string;
-          _ship_city: string;
-          _ship_country: string;
-          _ship_is_default: boolean;
-          _ship_postal: string;
-          _ship_street_name: string;
-          _ship_street_number: string;
-          _title: string;
-          _use_ship_as_bill: boolean;
-        };
-        Returns: undefined;
-      };
       get_all_categories_tree: {
-        Args: Record<PropertyKey, never>;
+        Args: never;
         Returns: {
           depth: number;
           id: string;
@@ -746,89 +646,16 @@ export type Database = {
           slug: string;
         }[];
       };
-      get_catalog: {
+      upsert_variant_image: {
         Args: {
-          in_category?: string;
-          page?: number;
-          page_size?: number;
-          q?: string;
-          sort_by?: string;
-          sort_dir?: string;
+          p_alt?: string;
+          p_height?: number;
+          p_is_primary?: boolean;
+          p_sku: string;
+          p_sort?: number;
+          p_storage_path: string;
+          p_width?: number;
         };
-        Returns: {
-          created_at: string;
-          currency: string;
-          final_price: number;
-          image_url: string;
-          master_variant_id: string;
-          name: string;
-          price: number;
-          product_attrs: Json;
-          product_id: string;
-          sku: string;
-          slug: string;
-          stock: number;
-        }[];
-      };
-      get_category_ancestors: {
-        Args: { cat_id: string };
-        Returns: {
-          depth: number;
-          id: string;
-          name: string;
-          parent_id: string;
-          slug: string;
-        }[];
-      };
-      get_category_breadcrumb_paths: {
-        Args: { cat_slug: string };
-        Returns: {
-          is_current: boolean;
-          name: string;
-          path: string;
-        }[];
-      };
-      get_category_subtree: {
-        Args: { root_id: string };
-        Returns: {
-          depth: number;
-          id: string;
-          name: string;
-          parent_id: string;
-          slug: string;
-        }[];
-      };
-      get_effective_variant_price: {
-        Args: { p_variant_id: string };
-        Returns: {
-          applied_discount_id: string;
-          final_price: number;
-          original_price: number;
-          variant_id: string;
-        }[];
-      };
-      list_products_by_category: {
-        Args: {
-          p_category_id: string;
-          p_limit?: number;
-          p_offset?: number;
-          p_sort_by?: string;
-          p_sort_dir?: string;
-        };
-        Returns: {
-          currency: string | null;
-          is_published: boolean | null;
-          master_price: number | null;
-          master_sku: string | null;
-          master_variant_id: string | null;
-          name: string | null;
-          primary_image_url: string | null;
-          product_id: string | null;
-          slug: string | null;
-        }[];
-      };
-      set_default_address: {
-        Args: { _address_id: string; _address_type: string };
         Returns: undefined;
       };
     };
