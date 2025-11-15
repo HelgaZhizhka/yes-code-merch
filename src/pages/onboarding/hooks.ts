@@ -54,8 +54,8 @@ export const useFormStep = () => {
   const email = useViewerEmail();
   const {
     formData,
-    useShippingAsBilling,
-    setUseShippingAsBilling,
+    isShippingAsBilling,
+    setIsShippingAsBilling,
     setFormData,
     resetForm,
   } = useFormStore();
@@ -108,7 +108,7 @@ export const useFormStep = () => {
       await createAddress(shippingPayload);
       toast.success('Shipping address saved!');
 
-      if (billingPayload) {
+      if (billingPayload !== null) {
         await createAddress(billingPayload);
         toast.success('Billing address saved!');
       }
@@ -174,7 +174,7 @@ export const useFormStep = () => {
 
   const handleUseShippingAsBillingChange = useCallback(
     (checked: boolean) => {
-      setUseShippingAsBilling(checked);
+      setIsShippingAsBilling(checked);
 
       if (checked) {
         form.setValue('billingAddresses', []);
@@ -184,12 +184,12 @@ export const useFormStep = () => {
         form.trigger('billingAddresses');
       }
     },
-    [form, setUseShippingAsBilling]
+    [form, setIsShippingAsBilling]
   );
 
   return {
     form,
-    useShippingAsBilling,
+    isShippingAsBilling,
     handleUseShippingAsBillingChange,
     handleNextStep,
     handleBack,

@@ -13,7 +13,7 @@ export const AddressStep = (): React.JSX.Element => {
     handleSubmit,
     handleBack,
     isSubmitting,
-    useShippingAsBilling,
+    isShippingAsBilling,
     handleUseShippingAsBillingChange,
   } = useFormStep();
 
@@ -24,13 +24,13 @@ export const AddressStep = (): React.JSX.Element => {
 
         <FormFieldWrapper
           control={form.control}
-          name="useShippingAsBilling"
+          name="isShippingAsBilling"
           label="Use shipping address as billing"
           labelPosition="right"
         >
           {(field) => (
             <Checkbox
-              checked={useShippingAsBilling}
+              checked={isShippingAsBilling}
               onCheckedChange={(checked) => {
                 field.onChange(checked);
                 handleUseShippingAsBillingChange(!!checked);
@@ -39,7 +39,7 @@ export const AddressStep = (): React.JSX.Element => {
           )}
         </FormFieldWrapper>
 
-        {!useShippingAsBilling && (
+        {!isShippingAsBilling && (
           <AddressForm prefix="billingAddresses.0" label="Billing address" />
         )}
 

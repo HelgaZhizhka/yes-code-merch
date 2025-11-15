@@ -18,12 +18,12 @@ interface FormState {
     profile: ProfileFormType;
     address: AddressStepFormType;
   };
-  useShippingAsBilling: boolean;
+  isShippingAsBilling: boolean;
   setFormData<T extends keyof FormState['formData']>(
     stepKey: T,
     data: FormState['formData'][T]
   ): void;
-  setUseShippingAsBilling(value: boolean): void;
+  setIsShippingAsBilling(value: boolean): void;
   resetForm(): void;
   getCustomerData(email: string | null): CustomerData;
   getShippingAddressPayload(): {
@@ -48,7 +48,7 @@ export const defaultProfile: ProfileFormType = {
 export const defaultAddressStep: AddressStepFormType = {
   shippingAddresses: [defaultAddress],
   billingAddresses: [],
-  useShippingAsBilling: true,
+  isShippingAsBilling: true,
 };
 
 export const useFormStore = createAppStore<FormState>(
@@ -57,10 +57,10 @@ export const useFormStore = createAppStore<FormState>(
       profile: defaultProfile,
       address: defaultAddressStep,
     },
-    useShippingAsBilling: true,
-    setUseShippingAsBilling(value: boolean) {
+    isShippingAsBilling: true,
+    setIsShippingAsBilling(value: boolean) {
       set((state: FormState) => {
-        state.useShippingAsBilling = value;
+        state.isShippingAsBilling = value;
       });
     },
     setFormData<T extends keyof FormState['formData']>(
@@ -75,7 +75,7 @@ export const useFormStore = createAppStore<FormState>(
       set((state: FormState) => {
         state.formData.profile = defaultProfile;
         state.formData.address = defaultAddressStep;
-        state.useShippingAsBilling = true;
+        state.isShippingAsBilling = true;
       }),
     getCustomerData: (email: string) => {
       const formData = get().formData;
@@ -101,15 +101,21 @@ export const useFormStore = createAppStore<FormState>(
       };
     },
     getBillingAddressPayload: () => {
-      const { formData, useShippingAsBilling } = get();
+      const { formData, isShippingAsBilling } = get();
+      const addressStep = formData?.address;
 
-      if (useShippingAsBilling) {
-        return null;
+      if (isShippingAsBilling) {
+        const shippingAddress =
+          addressStep?.shippingAddresses?.[0] ?? defaultAddress;
+
+        return {
+          address: shippingAddress,
+          addressType: 'billing',
+        };
       }
 
-      const address = formData?.address;
-
-      const billingAddress = address?.billingAddresses?.[0] ?? defaultAddress;
+      const billingAddress =
+        addressStep?.billingAddresses?.[0] ?? defaultAddress;
 
       return {
         address: billingAddress,
@@ -122,7 +128,7 @@ export const useFormStore = createAppStore<FormState>(
     enablePersist: true,
     partialize: (state: FormState) => ({
       formData: state.formData,
-      useShippingAsBilling: state.useShippingAsBilling,
+      isShippingAsBilling: state.isShippingAsBilling,
     }),
     useSessionStorage: true,
     enableImmer: true,
