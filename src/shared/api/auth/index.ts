@@ -154,7 +154,7 @@ export const changePassword = async ({
     error: updateError,
   } = await supabase.auth.updateUser({
     password: newPassword,
-  }); // ? updateUser
+  });
 
   if (updateError || !user) {
     throw updateError || new Error('Failed to update password');

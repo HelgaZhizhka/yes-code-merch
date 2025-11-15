@@ -17,7 +17,7 @@ export const getCustomer = async (): Promise<CustomerRowDTO | null> => {
 export const updateCustomer = async (
   data: CustomerData
 ): Promise<CustomerData | null> => {
-  const user = await getCurrentUser(); // ?
+  const user = await getCurrentUser();
   const dbData = mapCustomerToDB({ ...data, id: user.id });
 
   const { data: customer } = await supabase
