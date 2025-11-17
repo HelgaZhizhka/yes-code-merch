@@ -368,6 +368,420 @@ export default App;
 
 You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
 
+## Project Data Fetching Pattern (TanStack Query + Supabase)
+
+In this project we use a consistent pattern for all data fetching with TanStack Query and Supabase. The main idea is:
+
+- Supabase layer returns **DTO types** (raw database rows).
+- Query hooks transform DTOs into **domain models** using the `select` option.
+- UI components consume only domain models, never raw DTOs.
+
+### 1. Terminology
+
+- **DTO (Data Transfer Object)** – the shape returned by Supabase, usually inferred from `Public['Tables'][...]['Row']`.
+- **Domain model** – the shape used in UI and business logic (e.g. `Category`, `CustomerData`, `Address`).
+- **Mapper** – pure functions that convert `DTO -> Domain model`.
+
+### 2. Supabase layer (`index.ts`)
+
+Rules:
+
+- Supabase functions **always return DTO types** (or arrays of DTOs).
+- They do not know anything about UI/domain-specific transformations.
+
+Example (`categories`):
+
+```ts
+// src/shared/api/categories/index.ts
+import { RpcFunctions, supabase } from '@shared/api/supabase-client';
+
+import type { CategoryDTO, CategoryTreeDTO } from './types';
+
+export const getRootCategories = async (): Promise<CategoryDTO[]> => {
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('*')
+    .is('parent_id', null)
+    .order('order_hint', { ascending: true })
+    .order('name', { ascending: true })
+    .throwOnError();
+
+  return categories ?? [];
+};
+
+export const getCategoriesTree = async (): Promise<CategoryTreeDTO[]> => {
+  const { data } = await supabase
+    .rpc(RpcFunctions.getCategoriesTree)
+    .throwOnError();
+
+  return data ?? [];
+};
+```
+
+### 3. Mappers (`mapper.ts`)
+
+Rules:
+
+- Mappers are **pure functions**.
+- They accept only DTOs and return domain models.
+- They live next to the Supabase/Query hooks for a specific entity.
+
+Example (`categories`):
+
+```ts
+// src/shared/api/categories/mapper.ts
+import type {
+  Category,
+  CategoryDTO,
+  CategoryTree,
+  CategoryTreeDTO,
+} from './types';
+
+export const mapCategories = (
+  categories: readonly CategoryDTO[]
+): Category[] => {
+  return categories.map(({ id, name, slug, parent_id, order_hint }) => ({
+    id,
+    name,
+    slug,
+    parentId: parent_id,
+    orderHint: order_hint,
+  }));
+};
+
+export const mapCategoriesTree = (
+  rows: readonly CategoryTreeDTO[]
+): CategoryTree[] => {
+  // ...build tree structure from flat DTOs
+};
+```
+
+### 4. Query hooks (`hooks.ts`) with `select`
+
+Rules:
+
+- `useQuery` / `useSuspenseQuery` are always typed as:
+
+  ```ts
+  useSuspenseQuery<TQueryFnData, TError, TData>({ ... })
+  ```
+
+  where:
+
+  - `TQueryFnData` = DTO type returned by Supabase layer.
+  - `TData` = domain model type used in UI.
+
+- The `select` option is used to convert `TQueryFnData -> TData` using mappers.
+
+Example (`categories`):
+
+```ts
+// src/shared/api/categories/hooks.ts
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { mapCategories, mapCategoriesTree } from './mapper';
+import type {
+  Category,
+  CategoryDTO,
+  CategoryTree,
+  CategoryTreeDTO,
+} from './types';
+
+import { queryKey } from '../constants';
+
+import { getCategoriesTree, getRootCategories } from './';
+
+export const useRootCategories = (): { data: Category[] } => {
+  const { data } = useSuspenseQuery<CategoryDTO[], Error, Category[]>({
+    queryKey: queryKey.rootCategories,
+    queryFn: getRootCategories,
+    select: mapCategories,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: 24 * 60 * 60 * 1000,
+    gcTime: 7 * 24 * 60 * 60 * 1000,
+    retry: 1,
+  });
+
+  return { data };
+};
+
+export const useCategoriesTree = (): { data: CategoryTree[] } => {
+  const { data } = useSuspenseQuery<CategoryTreeDTO[], Error, CategoryTree[]>({
+    queryKey: queryKey.categoriesTree,
+    queryFn: getCategoriesTree,
+    select: mapCategoriesTree,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: 24 * 60 * 60 * 1000,
+    gcTime: 7 * 24 * 60 * 60 * 1000,
+    retry: 1,
+  });
+
+  return { data };
+};
+```
+
+### 5. Concrete examples from the project
+
+#### 5.1 Countries
+
+```ts
+// Supabase layer: DTO
+// src/shared/api/countries/index.ts
+import { supabase } from '@shared/api/supabase-client';
+
+import type { CountryDTO } from './types';
+
+export const getCountries = async (): Promise<CountryDTO[]> => {
+  const { data } = await supabase
+    .from('countries')
+    .select('iso_code, name, region')
+    .order('name', { ascending: true })
+    .throwOnError();
+
+  return data ?? [];
+};
+```
+
+```ts
+// Mapper: DTO -> domain
+// src/shared/api/countries/mapper.ts
+import type { Country, CountryDTO } from './types';
+
+export const mapCountry = (countries: readonly CountryDTO[]): Country[] => {
+  return countries.map((country) => ({
+    code: country.iso_code,
+    name: country.name,
+  }));
+};
+```
+
+```ts
+// Query hook: uses select
+// src/shared/api/countries/hooks.ts
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { mapCountry } from './mapper';
+import type { Country, CountryDTO } from './types';
+
+import { queryKey } from '../constants';
+
+import { getCountries } from './';
+
+export const useCountries = (): Country[] => {
+  const { data } = useSuspenseQuery<CountryDTO[], Error, Country[]>({
+    queryKey: queryKey.countries,
+    queryFn: getCountries,
+    select: mapCountry,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  return data;
+};
+```
+
+#### 5.2 Customer
+
+```ts
+// Supabase layer: DTO
+// src/entities/customer/api/index.ts
+import { getCurrentUser } from '@shared/api/helpers';
+import { supabase } from '@shared/api/supabase-client';
+
+import { mapCustomerFromDB, mapCustomerToDB } from './mapper';
+import type { CustomerData, CustomerRowDTO } from './types';
+
+export const getCustomer = async (): Promise<CustomerRowDTO | null> => {
+  const { data: customer } = await supabase
+    .from('customers')
+    .select('*')
+    .maybeSingle()
+    .throwOnError();
+
+  return customer ?? null;
+};
+```
+
+```ts
+// Query hook: DTO -> domain via select
+// src/entities/customer/api/hooks.ts
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+  type UseMutationResult,
+} from '@tanstack/react-query';
+
+import { mapCustomerFromDB } from './mapper';
+import type { CustomerData, CustomerDataWithId, CustomerRowDTO } from './types';
+
+import { getCustomer, updateCustomer } from './';
+
+export const queryKey = {
+  customerData: ['customerData'],
+} as const;
+
+export const useGetCustomer = (): {
+  data: CustomerDataWithId | null;
+} => {
+  const { data } = useSuspenseQuery<
+    CustomerRowDTO | null,
+    Error,
+    CustomerDataWithId | null
+  >({
+    queryKey: queryKey.customerData,
+    queryFn: getCustomer,
+    select: (customer) => (customer ? mapCustomerFromDB(customer) : null),
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  return { data };
+};
+```
+
+#### 5.3 Addresses
+
+```ts
+// Supabase layer: DTO
+// src/entities/address/api/index.ts
+import { getCurrentUser } from '@shared/api/helpers';
+import { supabase } from '@shared/api/supabase-client';
+
+import { mapAddressFromDB, mapAddressToDB } from './mapper';
+import type {
+  Address,
+  AddressRowDTO,
+  Addresses,
+  AddressType,
+  AddressWithId,
+} from './types';
+
+export const getAddresses = async (): Promise<AddressRowDTO[]> => {
+  const { data: addresses } = await supabase
+    .from('addresses')
+    .select('*')
+    .throwOnError();
+
+  return addresses ?? [];
+};
+```
+
+```ts
+// Mapper: DTO[] -> domain aggregate
+// src/entities/address/api/mapper.ts
+import type {
+  Address,
+  AddressInsertDTO,
+  AddressRowDTO,
+  AddressType,
+  AddressWithId,
+  Addresses,
+} from './types';
+
+export const mapAddressFromDB = (address: AddressRowDTO[]): AddressWithId[] => {
+  return address.map((address) => ({
+    id: address.id,
+    country: address.country,
+    city: address.city,
+    streetName: address.street_name ?? '',
+    streetNumber: address.street_number ?? '',
+    postalCode: address.postal_code,
+    isDefault: address.is_default_shipping || address.is_default_billing,
+  }));
+};
+
+export const mapAddressesFromDB = (
+  rows: readonly AddressRowDTO[]
+): Addresses => {
+  const shippingAddresses = mapAddressFromDB(
+    rows.filter((address) => address.is_shipping_address)
+  );
+
+  const billingAddresses = mapAddressFromDB(
+    rows.filter((address) => address.is_billing_address)
+  );
+
+  return { shippingAddresses, billingAddresses };
+};
+```
+
+```ts
+// Query hook: uses select
+// src/entities/address/api/hooks.ts
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+  type UseMutationResult,
+} from '@tanstack/react-query';
+
+import type {
+  Address,
+  AddressRowDTO,
+  Addresses,
+  AddressType,
+  AddressWithId,
+} from './types';
+
+import {
+  createAddress,
+  deleteAddress,
+  getAddresses,
+  setDefaultAddress,
+  updateAddress,
+} from './';
+import { mapAddressesFromDB } from './mapper';
+
+export const queryKey = {
+  addresses: ['addresses'],
+} as const;
+
+export const useGetAddressess = (): {
+  data: Addresses;
+} => {
+  const { data } = useSuspenseQuery<AddressRowDTO[], Error, Addresses>({
+    queryKey: queryKey.addresses,
+    queryFn: getAddresses,
+    select: mapAddressesFromDB,
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  return { data };
+};
+```
+
+### 6. When to use `select` vs. mapping in `queryFn`
+
+In this project we follow these rules:
+
+- Use **`select`** for:
+
+  - DTO -> domain mapping.
+  - Reshaping data for UI (projections, filtering, combining fields), when it does not depend on component props.
+  - Ensuring all components that use the same query share the same domain representation.
+
+- Use **mapping inside `queryFn`** only when:
+  - You are transforming data for a mutation and want the function to return a ready-to-use domain object immediately.
+  - The result is not widely shared across different views.
+
+By following these rules, we keep:
+
+- The Supabase layer focused on data access only.
+- Query hooks responsible for shaping data for the UI.
+- UI components simple and free from low-level mapping logic.
+
 ## State Management
 
 Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.

@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { Phone, ShoppingCart } from 'lucide-react';
+import { Suspense } from 'react';
 
+import type { AuthProps } from '@shared/api';
 import logo from '@shared/assets/header-logo-sprite.svg';
 import { SaleCategoryName } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
@@ -8,9 +10,10 @@ import { AuthMenu } from '@shared/ui/auth-menu';
 import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import { ThemeSwitcher } from '@shared/ui/theme-switcher';
-import type { AuthProps } from '@shared/viewer';
 
 import { Banner } from './banner';
+
+import { MobileMenu } from '../mobile-menu';
 
 interface HeaderProps extends AuthProps {
   onLogout(): Promise<void>;
@@ -71,7 +74,18 @@ export const Header = ({
         </div>
       </div>
       <div className="bg-dark-background h-17 flex items-center pl-11 pr-11 justify-between">
-        <Categories />
+        <div className="sm:hidden flex items-center">
+          <MobileMenu />
+        </div>
+        <div className="hidden sm:block">
+          <Suspense
+            fallback={
+              <div className="text-secondary-foreground">Loading...</div>
+            }
+          >
+            <Categories />
+          </Suspense>
+        </div>
         <ThemeSwitcher />
       </div>
     </header>

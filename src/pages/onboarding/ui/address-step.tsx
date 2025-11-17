@@ -1,4 +1,5 @@
-import { AddressForm } from '@shared/ui/address-form';
+import { AddressForm } from '@entities/address';
+
 import { Button } from '@shared/ui/button';
 import { Checkbox } from '@shared/ui/checkbox';
 import { Form } from '@shared/ui/form';
@@ -11,8 +12,8 @@ export const AddressStep = (): React.JSX.Element => {
     form,
     handleSubmit,
     handleBack,
-    isPending,
-    useShippingAsBilling,
+    isSubmitting,
+    isShippingAsBilling,
     handleUseShippingAsBillingChange,
   } = useFormStep();
 
@@ -23,13 +24,13 @@ export const AddressStep = (): React.JSX.Element => {
 
         <FormFieldWrapper
           control={form.control}
-          name="useShippingAsBilling"
+          name="isShippingAsBilling"
           label="Use shipping address as billing"
           labelPosition="right"
         >
           {(field) => (
             <Checkbox
-              checked={useShippingAsBilling}
+              checked={isShippingAsBilling}
               onCheckedChange={(checked) => {
                 field.onChange(checked);
                 handleUseShippingAsBillingChange(!!checked);
@@ -38,16 +39,18 @@ export const AddressStep = (): React.JSX.Element => {
           )}
         </FormFieldWrapper>
 
-        {!useShippingAsBilling && (
+        {!isShippingAsBilling && (
           <AddressForm prefix="billingAddresses.0" label="Billing address" />
         )}
 
         <Button
           type="submit"
           className="w-full"
-          disabled={!form.formState.isValid || isPending}
+          disabled={!form.formState.isValid || isSubmitting}
         >
-          {isPending ? 'Saving...' : 'Save'}
+          {isSubmitting
+            ? 'Completing registration...'
+            : 'Complete Registration'}
         </Button>
 
         <Button

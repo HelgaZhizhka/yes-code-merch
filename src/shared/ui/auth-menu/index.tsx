@@ -1,8 +1,8 @@
 import { cva } from 'class-variance-authority';
 
+import type { AuthProps } from '@shared/api';
 import { cn } from '@shared/lib/utils';
-import { LayoutView, type LayoutViewType } from '@shared/types';
-import type { AuthProps } from '@shared/viewer';
+import { LayoutView, type AuthLayoutViewType } from '@shared/types';
 
 import { AuthLinks } from './auth-links';
 import { LogoutButton } from './logout-button';
@@ -10,7 +10,7 @@ import { ProfileLink } from './profile-link';
 import { Separator } from './separator';
 
 interface AuthMenuProps extends AuthProps {
-  variant?: LayoutViewType;
+  variant?: AuthLayoutViewType;
   onLogout: () => Promise<void>;
 }
 

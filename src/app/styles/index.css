@@ -204,6 +204,14 @@
   :where(button, [role='button']):not([disabled]) {
     cursor: pointer;
   }
+
+  .shadow-block {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .shadow-block:hover {
+    box-shadow: 0 0 16px 0 var(--shadow-color);
+  }
 }
 
 @supports selector(:active-view-transition-type(fade)) {

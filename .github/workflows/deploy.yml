@@ -20,7 +20,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.15.0
+          version: 10.20.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -36,8 +36,11 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli@23.7.3
+
       - name: Publish to Netlify
-        run: npx netlify deploy --prod --dir=dist --message="Deploy from ${{ github.event.head_commit.message }}"
+        run: netlify deploy --prod --dir=dist --message="Deploy from ${{ github.event.head_commit.message }}"
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

@@ -2,8 +2,9 @@ import { useNavigate } from '@tanstack/react-router';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 
+import { router } from '@app/routing';
+
 import { ROUTES } from '@shared/config/routes';
-import { router } from '@shared/routing';
 import { useLogout, useViewerState } from '@shared/viewer';
 
 export const useAuth = () => {
