@@ -1,15 +1,11 @@
-// API
 export { getCatalogProducts } from './api';
 export { useProducts, productKeys } from './api/hooks';
 
-// Types
 export type {
   CatalogProduct,
-  CatalogResponse,
   GetCatalogParams,
-  PaginationInfo,
-  DiscountInfo,
+  ProductDiscountDTO,
+  AppliedDiscount,
 } from './api/types';
 
-// Utils
-export { calculateFinalPrice, getActiveDiscount } from './lib/calculate-price';
+export { ProductCard, ProductList } from './ui';

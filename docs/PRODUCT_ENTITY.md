@@ -7,68 +7,25 @@ Product entity for working with catalog products.
 ```
 entities/product/
   ├── api/                     # API layer
-  │   ├── types.ts            # TypeScript types (DTO, domain models)
+  │   ├── types.ts            # TypeScript types (DTOs, domain models)
   │   ├── index.ts            # API functions (getCatalogProducts)
   │   ├── mapper.ts           # DTO -> Domain mapping
-  │   └── hooks.ts            # React Query hooks
-  ├── lib/                    # Utilities
-  │   └── calculate-price.ts  # Price calculation with discounts
+  │   └── hooks.ts            # React Query hooks (useProducts)
+  ├── ui/                     # UI components
+  │   ├── product-card.tsx    # Single product card component
+  │   ├── product-list.tsx    # Product grid/list component
+  │   └── index.ts            # Public exports
   └── index.ts                # Public API
-```
-
-## Usage
-
-### React Query Hook
-
-```typescript
-import { useProducts } from 'entities/product';
-
-function CatalogPage() {
-  const { data, isLoading } = useProducts({
-    categoryId: 'uuid',
-    page: 1,
-    pageSize: 24,
-    sortBy: 'finalPrice',
-    sortDir: 'asc',
-  });
-
-  if (isLoading) return <Loader />;
-
-  return (
-    <div>
-      {data?.products.map((product) => (
-        <ProductCard key={product.productId} product={product} />
-      ))}
-    </div>
-  );
-}
-```
-
-### Direct API Call
-
-```typescript
-import { getCatalogProducts } from 'entities/product';
-
-async function loadProducts() {
-  const { products, pagination } = await getCatalogProducts({
-    search: 'hoodie',
-    page: 1,
-    pageSize: 12,
-  });
-
-  console.log(`Loaded ${products.length} of ${pagination.total}`);
-}
 ```
 
 ## Features
 
 - ✅ **Nested queries** - single request fetches all data (variants, images, discounts)
-- ✅ **Category filtering** - through join table `product_categories`
-- ✅ **Discount calculation** - automatic price calculation with discounts
-- ✅ **Discount priority** - variant-level > product-level
-- ✅ **Pagination** - built-in support
-- ✅ **Search** - by product name
-- ✅ **Sorting** - by price, name, date
+- ✅ **Category filtering** - supports parent categories (includes all children) and leaf categories
+- ✅ **Hierarchical filtering** - automatically includes child categories when filtering by parent
+- ✅ **Suspense integration** - automatic loading states with React Suspense
+- ✅ **Error boundaries** - centralized error handling at page level
+- ✅ **UI components** - ready-to-use ProductCard and ProductList components
 
 ## API
 
@@ -78,46 +35,52 @@ Get a list of products for the catalog.
 
 **Parameters:**
 
-- `categoryId?: string` - Filter by category
-- `search?: string` - Search by name
-- `page?: number` - Page number (default: 1)
-- `pageSize?: number` - Page size (default: 24)
-- `sortBy?: 'price' | 'finalPrice' | 'name' | 'created_at'` - Sort field
-- `sortDir?: 'asc' | 'desc'` - Sort direction
+```typescript
+interface GetCatalogParams {
+  categoryIds: string[]; // Array of category IDs (parent + children)
+}
+```
+
+**Example:**
+
+```typescript
+// Parent category - includes all children
+const products = await getCatalogProducts({
+  categoryIds: ['parent-id', 'child1-id', 'child2-id'],
+});
+
+// Leaf category - single category only
+const products = await getCatalogProducts({
+  categoryIds: ['child-id'],
+});
+```
 
 **Returns:**
 
 ```typescript
-{
-  products: CatalogProduct[];
-  pagination: {
-    page: number;
-    pageSize: number;
-    total: number;
-    totalPages: number;
-  };
-}
+CatalogProduct[] // Array of products
 ```
 
 ### `CatalogProduct` Type
 
+Domain model for catalog products (clean camelCase format):
+
 ```typescript
 interface CatalogProduct {
-  productId: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  masterVariantId: string;
-  sku: string;
-  originalPrice: number; // Price without discount
-  finalPrice: number; // Price with discount applied
-  currency: string;
-  stock: number;
-  primaryImageUrl: string | null;
-  hasDiscount: boolean;
-  discountInfo: DiscountInfo | null;
+  productId: string; // Product ID
+  name: string; // Product name
+  slug: string; // URL-friendly slug
+  description: string | null; // Product description
+  masterVariantId: string; // Master variant ID
+  sku: string; // Stock keeping unit
+  originalPrice: number; // Price in smallest currency unit (cents)
+  currency: string; // Currency code (e.g., "USD")
+  stock: number; // Available stock quantity
+  primaryImageUrl: string | null; // URL of primary product image
 }
 ```
+
+**Note:** This is a **domain model** mapped from `ProductDTO` (database DTO in snake_case).
 
 ## Query Architecture
 
@@ -135,12 +98,16 @@ supabase
     ),
     product_discounts(
       id, discount_type, discount_value, priority,
-      valid_from, valid_to, is_active
+      valid_from, valid_to, is_active, variant_id, product_id
+    ),
+    product_categories!inner(
+      category_id
     )
   `
   )
   .eq('is_published', true)
-  .eq('product_variants.is_master', true);
+  .eq('product_variants.is_master', true)
+  .in('product_categories.category_id', categoryIds); // Filter by array of IDs
 ```
 
 ### Benefits of this approach:
@@ -149,158 +116,292 @@ supabase
 2. **No RPC functions** - pure Supabase queries through foreign keys
 3. **Type-safe** - full TypeScript support from generated types
 4. **Efficient** - Supabase handles joins internally
-5. **Category filtering** - works through `product_categories` join table
+5. **Hierarchical filtering** - parent categories automatically include children
+6. **Category filtering** - uses `.in()` for multiple category IDs through `product_categories` join table
 
-## Discount Calculation Logic
+## Type System Architecture
 
-Discount calculation follows these rules:
+The product entity uses a layered type system following the project's DTO → Domain Model pattern:
 
-1. **Filtering** - only active discounts with valid dates
-2. **Priority** - variant-level discounts take precedence over product-level
-3. **Priority field** - sorted by `priority` field (higher = more important)
-4. **Discount types**:
-   - `percent` - percentage discount (e.g., 20%)
-   - `amount` - fixed amount discount (e.g., 5 EUR)
+### Layer 1: Database DTOs (from Supabase)
 
-### Calculation formulas:
+Auto-generated types from database schema (snake_case):
 
 ```typescript
-// Percentage discount: 20% off
-finalPrice = originalPrice * (1 - 20/100) = originalPrice * 0.8
-
-// Fixed amount: 5 EUR off
-finalPrice = max(0, originalPrice - 5)
+type ProductRowDTO = Public['Tables']['products']['Row'];
+type ProductVariantRowDTO = Public['Tables']['product_variants']['Row'];
+type ProductImageRowDTO = Public['Tables']['product_images']['Row'];
+type ProductDiscountRowDTO = Public['Tables']['product_discounts']['Row'];
 ```
 
-### Example:
+### Layer 2: Nested Query DTOs
+
+Types for complex nested query results (snake_case):
 
 ```typescript
-Product: Hoodie
-Original price: 50 EUR
+interface ProductDTO {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  product_variants: ProductVariantDTO[];
+  product_discounts?: ProductDiscountDTO[];
+  product_categories: ProductCategoryDTO[];
+}
 
-Discounts available:
-1. Product-level: 10% off (priority: 0)
-2. Variant-level: 15% off (priority: 5)
+interface ProductVariantDTO {
+  id: string;
+  sku: string;
+  price: number;
+  currency: string;
+  stock: number;
+  is_master: boolean;
+  product_images?: ProductImageDTO[];
+}
 
-Selected: Variant-level (higher priority + more specific)
-Final price: 50 * (1 - 15/100) = 42.50 EUR
-```
-
-## Price Utilities
-
-### `getActiveDiscount(discounts, variantId, productId)`
-
-Finds the active discount with highest priority for a variant or product.
-
-```typescript
-const activeDiscount = getActiveDiscount(
-  product.product_discounts,
-  masterVariant.id,
-  product.id
-);
-```
-
-### `calculateFinalPrice(originalPrice, discount)`
-
-Calculates final price with discount applied.
-
-```typescript
-const finalPrice = calculateFinalPrice(masterVariant.price, activeDiscount);
-```
-
-## Integration Examples
-
-### Catalog Page with Filtering
-
-```typescript
-import { useProducts } from 'entities/product';
-import { useSearchParams } from '@tanstack/react-router';
-
-function CatalogPage() {
-  const [searchParams] = useSearchParams();
-
-  const { data, isLoading, error } = useProducts({
-    categoryId: searchParams.category,
-    search: searchParams.q,
-    page: Number(searchParams.page) || 1,
-    sortBy: searchParams.sort || 'created_at',
-    sortDir: searchParams.dir || 'desc',
-  });
-
-  if (error) return <ErrorMessage error={error} />;
-  if (isLoading) return <CatalogSkeleton />;
-
-  return (
-    <div>
-      <ProductGrid products={data.products} />
-      <Pagination {...data.pagination} />
-    </div>
-  );
+interface ProductImageDTO {
+  url: string;
+  alt: string | null;
+  is_primary: boolean;
+  sort_order: number;
 }
 ```
 
-### Product Card Component
+### Layer 3: Domain Models
+
+Clean camelCase models for business logic:
 
 ```typescript
-import type { CatalogProduct } from 'entities/product';
-
-interface ProductCardProps {
-  product: CatalogProduct;
-}
-
-function ProductCard({ product }: ProductCardProps) {
-  return (
-    <div>
-      <img src={product.primaryImageUrl} alt={product.name} />
-      <h3>{product.name}</h3>
-      <div>
-        {product.hasDiscount && (
-          <span className="line-through">
-            {product.originalPrice} {product.currency}
-          </span>
-        )}
-        <span className="font-bold">
-          {product.finalPrice} {product.currency}
-        </span>
-      </div>
-      {product.hasDiscount && (
-        <Badge>
-          {product.discountInfo?.discountType === 'percent'
-            ? `-${product.discountInfo.discountValue}%`
-            : `-${product.discountInfo?.discountValue} ${product.currency}`}
-        </Badge>
-      )}
-    </div>
-  );
+interface CatalogProduct {
+  productId: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  masterVariantId: string;
+  sku: string;
+  originalPrice: number;
+  currency: string;
+  stock: number;
+  primaryImageUrl: string | null;
 }
 ```
 
-## Testing
+### Mapper Function
 
-The implementation was tested with real database queries:
+The `mapToCatalogProducts()` function transforms DTOs into domain models:
 
 ```typescript
-✅ Full nested query structure works
-✅ Total products: 90
-✅ Has variants: true
-✅ Has images: true
-✅ Has discounts: true
-✅ Category filtering works
+export const mapToCatalogProducts = (
+  products: readonly ProductDTO[]
+): CatalogProduct[] => {
+  return products
+    .map((raw) => {
+      const masterVariant = raw.product_variants?.[0];
+      if (!masterVariant) return null;
+      const primaryImage =
+        masterVariant.product_images?.find((img) => img.is_primary) ||
+        masterVariant.product_images?.toSorted(
+          (a, b) => a.sort_order - b.sort_order
+        )[0];
+
+      return {
+        productId: raw.id,
+        name: raw.name,
+        slug: raw.slug,
+        description: raw.description,
+        masterVariantId: masterVariant.id,
+        sku: masterVariant.sku,
+        originalPrice: masterVariant.price,
+        currency: masterVariant.currency,
+        stock: masterVariant.stock,
+        primaryImageUrl: primaryImage?.url
+          ? getStorageUrl(primaryImage.url)
+          : null,
+      };
+    })
+    .filter(isNotNull);
+};
 ```
+
+**Mapper responsibilities:**
+
+- ✅ Flattens nested master variant data
+- ✅ Selects primary image (or first by sort order)
+- ✅ Converts snake_case to camelCase
+- ✅ Filters out products without master variant
+- ✅ Converts storage paths to full URLs
 
 ## Performance Considerations
 
-1. **Pagination** - limits data transferred (default 24 per page)
-2. **Selective fields** - only necessary fields are fetched
-3. **Index usage** - queries use `is_published` and `is_master` indexes
-4. **Single query** - no N+1 problem with nested queries
-5. **Client-side sorting** - for price-based sorts (unavoidable with nested data)
+1. **Selective fields** - only necessary fields are fetched
+2. **Index usage** - queries use `is_published` and `is_master` indexes
+3. **Single query** - no N+1 problem with nested queries
+4. **Smart caching** - React Query caches each category combination separately
+5. **Hierarchical optimization** - parent categories filter by multiple IDs in one query
 
-## Future Improvements
+## React Query Hooks Implementation
 
-- [ ] Add product detail page API (`getProductBySlug`)
-- [ ] Add UI components (`ProductCard`, `ProductPrice`)
-- [ ] Add related products functionality
-- [ ] Add product comparison
-- [ ] Add wishlist integration
-- [ ] Add reviews/ratings integration
+### `useProducts` Hook
+
+Uses `useSuspenseQuery` for automatic Suspense and ErrorBoundary integration:
+
+```typescript
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { getCatalogProducts } from './index';
+import { mapToCatalogProducts } from './mapper';
+
+export const useProducts = (params: GetCatalogParams) => {
+  return useSuspenseQuery<ProductDTO[], Error, CatalogProduct[]>({
+    queryKey: productKeys.catalog(params),
+    queryFn: () => getCatalogProducts(params), // Returns ProductDTO[]
+    select: mapToCatalogProducts, // Maps to CatalogProduct[]
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 7 * 24 * 60 * 60 * 1000, // 7 days
+    retry: 1,
+  });
+};
+```
+
+**Type parameters:**
+
+- `ProductDTO[]` - type returned from `queryFn`
+- `Error` - error type
+- `CatalogProduct[]` - final type after `select` transformation
+
+**Key differences from `useQuery`:**
+
+- ✅ No `isLoading` state - handled by Suspense
+- ✅ No `error` state - handled by ErrorBoundary
+- ✅ `data` is never undefined - guaranteed by Suspense
+- ✅ Throws errors automatically - caught by ErrorBoundary
+- ✅ Suspends during loading - shows Suspense fallback
+
+## React Query Keys
+
+```typescript
+export const productKeys = {
+  all: ['products'], // All product queries
+  catalog: (
+    params: GetCatalogParams // Specific catalog
+  ) => ['products', 'catalog', params],
+};
+```
+
+**Cache invalidation examples:**
+
+```typescript
+// Invalidate all catalogs
+queryClient.invalidateQueries({ queryKey: ['products', 'catalog'] });
+
+// Invalidate specific catalog
+queryClient.invalidateQueries({
+  queryKey: productKeys.catalog({ categoryIds: ['id'] }),
+});
+
+// Invalidate everything related to products
+queryClient.invalidateQueries({ queryKey: productKeys.all });
+```
+
+## UI Components
+
+The product entity provides ready-to-use UI components for displaying products.
+
+### `ProductCard`
+
+Displays a single product with image and name.
+
+**Props:**
+
+```typescript
+interface ProductCardProps {
+  product: CatalogProduct;
+}
+```
+
+**Usage:**
+
+```typescript
+import { ProductCard } from '@entities/product';
+
+<ProductCard product={product} />
+```
+
+**Features:**
+
+- Displays product image with lazy loading
+- Falls back to placeholder image if no image available
+- Shows product name
+- Optimized image loading with `loading="lazy"` and `decoding="async"`
+
+### `ProductList`
+
+Displays a grid/list of products using ProductCard.
+
+**Props:**
+
+```typescript
+interface ProductListProps {
+  products: CatalogProduct[];
+}
+```
+
+**Usage:**
+
+```typescript
+import { ProductList } from '@entities/product';
+
+<ProductList products={products} />
+```
+
+**Features:**
+
+- Responsive flex layout with gap
+- Shows "No products found" when list is empty
+- Automatically maps products to ProductCard components
+- Uses `productId` as key for React reconciliation
+
+## Usage Example
+
+Complete example with Suspense and ErrorBoundary:
+
+```typescript
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useProducts, ProductList } from '@entities/product';
+
+const CatalogContent = ({ categoryIds }: { categoryIds: string[] }) => {
+  const { data: products } = useProducts({ categoryIds });
+  return <ProductList products={products} />;
+};
+
+const CatalogPage = ({ categoryIds }: { categoryIds: string[] }) => {
+  return (
+    <ErrorBoundary fallback={<div>Error loading products</div>}>
+      <Suspense fallback={<div>Loading products...</div>}>
+        <CatalogContent categoryIds={categoryIds} />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
+```
+
+## Public API
+
+The entity exports the following public API through `index.ts`:
+
+```typescript
+// API functions
+export { getCatalogProducts } from './api';
+
+// React Query hooks
+export { useProducts, productKeys } from './api/hooks';
+
+// Types
+export type { CatalogProduct, GetCatalogParams } from './api/types';
+
+// UI Components
+export { ProductCard, ProductList } from './ui';
+```

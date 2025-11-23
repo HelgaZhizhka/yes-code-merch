@@ -15,9 +15,8 @@ Figma design: [Yes Code Merch Store](https://www.figma.com/design/a5X7CFN20TD3To
 - **Feature-Sliced Design**: A modular architecture that promotes separation of concerns and reusability.
 - **Responsive Design**: A mobile-first approach to ensure a seamless experience across devices.
 - **Accessibility**: Adherence to WCAG 2.1 standards for improved accessibility.
-- **SEO Optimization**: Server-side rendering (SSR) for better search engine visibility.
 - **React**: A JavaScript library for building user interfaces.
-- **Tan Stack**: A set of libraries for building data-rich applications with React with SSR and SSG capabilities.
+- **Tan Stack**: A set of libraries for building data-rich applications with React.
 - **Zustand**: A small, fast, and scalable bearbones state-management solution.
 - **Supabase**: An open-source Firebase alternative for authentication and database.
 - **TypeScript**: A superset of JavaScript that adds static types.
@@ -43,11 +42,11 @@ Figma design: [Yes Code Merch Store](https://www.figma.com/design/a5X7CFN20TD3To
 
 1. Clone the repository:
    ```bash
-    git clone https://github.com/YesCode/yes-code-merch-store.git
+    git clone git@github.com:HelgaZhizhka/yes-code-merch.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd yes-code-merch-store
+   cd yes-code-merch
    ```
 3. Install dependencies:
    ```bash

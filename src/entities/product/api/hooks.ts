@@ -1,20 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import type { GetCatalogParams } from './types';
+import { mapToCatalogProducts } from './mapper';
+import type { CatalogProduct, GetCatalogParams, ProductDTO } from './types';
 
 import { getCatalogProducts } from './index';
 
-export function useProducts(params: GetCatalogParams = {}) {
-  return useQuery({
-    queryKey: ['products', 'catalog', params],
-    queryFn: () => getCatalogProducts(params),
-    staleTime: 1000 * 60 * 5,
-  });
-}
-
 export const productKeys = {
-  all: ['products'] as const,
-  catalog: (params?: GetCatalogParams) =>
-    [...productKeys.all, 'catalog', params] as const,
-  detail: (slug: string) => [...productKeys.all, 'detail', slug] as const,
+  all: ['products'],
+  catalog: (params: GetCatalogParams) =>
+    ['products', 'catalog', params] as const,
+} as const;
+
+export const useProducts = (params: GetCatalogParams) => {
+  return useSuspenseQuery<ProductDTO[], Error, CatalogProduct[]>({
+    queryKey: productKeys.catalog(params),
+    queryFn: () => getCatalogProducts(params),
+    select: mapToCatalogProducts,
+    staleTime: 1000 * 60 * 5,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 7 * 24 * 60 * 60 * 1000,
+    retry: 1,
+  });
 };
