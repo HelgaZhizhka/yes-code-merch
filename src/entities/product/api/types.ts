@@ -16,25 +16,26 @@ export interface ProductImageDTO {
 export interface ProductVariantDTO {
   id: string;
   sku: string;
-  price: number;
+  price: number; // Price in cents (e.g., 3000 = €30.00)
   currency: string;
   stock: number;
   is_master: boolean;
   product_images?: ProductImageDTO[];
 }
 
-export interface ProductDiscountDTO {
-  id: string;
-  name: string;
-  discount_type: string;
-  discount_value: number;
-  priority: number;
-  valid_from: string | null;
-  valid_to: string | null;
-  is_active: boolean;
-  variant_id: string | null;
-  product_id: string | null;
-}
+export type ProductDiscountDTO = Pick<
+  ProductDiscountRowDTO,
+  | 'id'
+  | 'name'
+  | 'discount_type'
+  | 'discount_value'
+  | 'priority'
+  | 'valid_from'
+  | 'valid_to'
+  | 'is_active'
+  | 'variant_id'
+  | 'product_id'
+>;
 
 export interface AppliedDiscount {
   id: string;
@@ -42,6 +43,12 @@ export interface AppliedDiscount {
   type: 'percent' | 'amount';
   value: number;
   validUntil?: Date;
+}
+
+export interface ProductImages {
+  large: string | null;
+  medium: string | null;
+  small: string | null;
 }
 
 export interface ProductCategoryDTO {
@@ -65,6 +72,7 @@ export interface CatalogProduct {
   description: string | null;
   masterVariantId: string;
   sku: string;
+  stock: number;
   originalPrice: number;
   finalPrice: number;
   currency: string;
@@ -72,10 +80,11 @@ export interface CatalogProduct {
   discountAmount?: number;
   discountPercentage?: number;
   appliedDiscount?: AppliedDiscount;
-  stock: number;
-  primaryImageUrl: string | null;
+  images: ProductImages | null;
 }
 
-export interface GetCatalogParams {
+export interface CatalogParams {
   categoryIds: string[];
 }
+
+export type ImageSize = 'large' | 'medium' | 'small';

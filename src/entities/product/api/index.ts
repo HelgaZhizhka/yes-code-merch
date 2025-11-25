@@ -1,9 +1,9 @@
 import { supabase } from '@shared/api/supabase-client';
 
-import type { GetCatalogParams, ProductDTO } from './types';
+import type { CatalogParams, ProductDTO } from './types';
 
 export const getCatalogProducts = async (
-  params: GetCatalogParams
+  params: CatalogParams
 ): Promise<ProductDTO[]> => {
   const { categoryIds } = params;
 

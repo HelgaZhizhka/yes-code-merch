@@ -23,9 +23,12 @@ entities/product/
 - ✅ **Nested queries** - single request fetches all data (variants, images, discounts)
 - ✅ **Category filtering** - supports parent categories (includes all children) and leaf categories
 - ✅ **Hierarchical filtering** - automatically includes child categories when filtering by parent
+- ✅ **Multi-size images** - three sizes (120px, 384px, 600px) selected by minimum sort_order
+- ✅ **Price in cents** - integer storage (3000 = €30.00) for precision and performance
 - ✅ **Suspense integration** - automatic loading states with React Suspense
 - ✅ **Error boundaries** - centralized error handling at page level
 - ✅ **UI components** - ready-to-use ProductCard and ProductList components
+- 🔜 **Discount system** - percentage and fixed-amount discounts (in progress)
 
 ## API
 
@@ -36,7 +39,7 @@ Get a list of products for the catalog.
 **Parameters:**
 
 ```typescript
-interface GetCatalogParams {
+interface CatalogParams {
   categoryIds: string[]; // Array of category IDs (parent + children)
 }
 ```
@@ -66,6 +69,12 @@ CatalogProduct[] // Array of products
 Domain model for catalog products (clean camelCase format):
 
 ```typescript
+interface ProductImages {
+  large: string | null; // 600px image URL
+  medium: string | null; // 384px image URL
+  small: string | null; // 120px image URL
+}
+
 interface CatalogProduct {
   productId: string; // Product ID
   name: string; // Product name
@@ -73,14 +82,26 @@ interface CatalogProduct {
   description: string | null; // Product description
   masterVariantId: string; // Master variant ID
   sku: string; // Stock keeping unit
-  originalPrice: number; // Price in smallest currency unit (cents)
-  currency: string; // Currency code (e.g., "USD")
+  originalPrice: number; // Price in cents (e.g., 3000 = €30.00)
+  currency: string; // Currency code (e.g., "EUR", "USD")
   stock: number; // Available stock quantity
-  primaryImageUrl: string | null; // URL of primary product image
+  images: ProductImages | null; // Product images in three sizes
 }
 ```
 
 **Note:** This is a **domain model** mapped from `ProductDTO` (database DTO in snake_case).
+
+> **⚠️ TODO:** Discount-related fields (`hasDiscount`, `finalPrice`, `discountAmount`, `discountPercentage`, `appliedDiscount`) will be added to this documentation after discount system implementation is complete.
+
+**Image handling:**
+- Three image sizes are stored for each product: `large` (600px), `medium` (384px), `small` (120px)
+- Size is determined by URL path segment (e.g., `/large/`, `/medium/`, `/small/`)
+- Image selection logic:
+  1. Find minimum `sort_order` value among all product images
+  2. Select all images with that minimum `sort_order` (typically 3 images - one per size)
+  3. For each size (`large`, `medium`, `small`), use the first matching image from the selected set
+- Each size URL is fully qualified (includes Supabase storage domain)
+- If no images exist for the product, `images` field will be `null`
 
 ## Query Architecture
 
@@ -172,6 +193,12 @@ interface ProductImageDTO {
 Clean camelCase models for business logic:
 
 ```typescript
+interface ProductImages {
+  large: string | null;
+  medium: string | null;
+  small: string | null;
+}
+
 interface CatalogProduct {
   productId: string;
   name: string;
@@ -182,7 +209,7 @@ interface CatalogProduct {
   originalPrice: number;
   currency: string;
   stock: number;
-  primaryImageUrl: string | null;
+  images: ProductImages | null;
 }
 ```
 
@@ -191,6 +218,36 @@ interface CatalogProduct {
 The `mapToCatalogProducts()` function transforms DTOs into domain models:
 
 ```typescript
+const extractImageSize = (url: string): 'large' | 'medium' | 'small' | null => {
+  if (url.includes('/large/')) return 'large';
+  if (url.includes('/medium/')) return 'medium';
+  if (url.includes('/small/')) return 'small';
+  return null;
+};
+
+const groupImagesBySizes = (
+  images: ProductImageDTO[] | undefined
+): ProductImages | null => {
+  if (!images || images.length === 0) return null;
+
+  // Find minimum sort_order value
+  const minSortOrder = Math.min(...images.map((img) => img.sort_order));
+
+  // Select all images with minimum sort_order
+  const targetImages = images.filter((img) => img.sort_order === minSortOrder);
+
+  // Group by size
+  const result: ProductImages = { large: null, medium: null, small: null };
+  for (const img of targetImages) {
+    const size = extractImageSize(img.url);
+    if (size && !result[size]) {
+      result[size] = getStorageUrl(img.url);
+    }
+  }
+
+  return result.large || result.medium || result.small ? result : null;
+};
+
 export const mapToCatalogProducts = (
   products: readonly ProductDTO[]
 ): CatalogProduct[] => {
@@ -198,11 +255,8 @@ export const mapToCatalogProducts = (
     .map((raw) => {
       const masterVariant = raw.product_variants?.[0];
       if (!masterVariant) return null;
-      const primaryImage =
-        masterVariant.product_images?.find((img) => img.is_primary) ||
-        masterVariant.product_images?.toSorted(
-          (a, b) => a.sort_order - b.sort_order
-        )[0];
+
+      const images = groupImagesBySizes(masterVariant.product_images);
 
       return {
         productId: raw.id,
@@ -214,9 +268,7 @@ export const mapToCatalogProducts = (
         originalPrice: masterVariant.price,
         currency: masterVariant.currency,
         stock: masterVariant.stock,
-        primaryImageUrl: primaryImage?.url
-          ? getStorageUrl(primaryImage.url)
-          : null,
+        images,
       };
     })
     .filter(isNotNull);
@@ -226,10 +278,15 @@ export const mapToCatalogProducts = (
 **Mapper responsibilities:**
 
 - ✅ Flattens nested master variant data
-- ✅ Selects primary image (or first by sort order)
+- ✅ Groups images by size (large/medium/small):
+  - Finds minimum `sort_order` value among all images
+  - Selects all images with that minimum `sort_order`
+  - For each size, selects first matching image from the selected set
 - ✅ Converts snake_case to camelCase
 - ✅ Filters out products without master variant
-- ✅ Converts storage paths to full URLs
+- ✅ Converts storage paths to full URLs (via `getStorageUrl()`)
+
+> **⚠️ TODO:** Discount calculation logic will be added to mapper after implementation is complete.
 
 ## Performance Considerations
 
@@ -332,6 +389,7 @@ import { ProductCard } from '@entities/product';
 **Features:**
 
 - Displays product image with lazy loading
+- Uses `medium` size (384px) for catalog cards, with fallback to placeholder
 - Falls back to placeholder image if no image available
 - Shows product name
 - Optimized image loading with `loading="lazy"` and `decoding="async"`
@@ -388,20 +446,10 @@ const CatalogPage = ({ categoryIds }: { categoryIds: string[] }) => {
 };
 ```
 
-## Public API
+## Image Size Selection Guide
 
-The entity exports the following public API through `index.ts`:
+Choose the appropriate image size based on the context:
 
-```typescript
-// API functions
-export { getCatalogProducts } from './api';
-
-// React Query hooks
-export { useProducts, productKeys } from './api/hooks';
-
-// Types
-export type { CatalogProduct, GetCatalogParams } from './api/types';
-
-// UI Components
-export { ProductCard, ProductList } from './ui';
-```
+- **`small` (120px)** - Thumbnails, mini previews, cart items
+- **`medium` (384px)** - Catalog cards, product lists, search results
+- **`large` (600px)** - Product detail pages, galleries, zoom previews

@@ -6,15 +6,15 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   const imageUrl =
-    product.primaryImageUrl || 'https://placehold.co/400x400?text=No+Image';
+    product.images?.medium || 'https://placehold.co/400x400?text=No+Image';
 
   return (
     <>
       <img
         src={imageUrl}
         alt={product.name}
-        width={400}
-        height={400}
+        width={380}
+        height={460}
         loading="lazy"
         decoding="async"
       />
