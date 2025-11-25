@@ -1,13 +1,12 @@
 # Техническое задание: Реализация системы скидок
 
->
 > На данном этапе реализуем **только процентные скидки** (`discount_type = 'percent'`).
 > Фиксированные скидки (`discount_type = 'amount'`) будут добавлены в следующей итерации.
->
 
 ## 📋 Описание задачи
 
 Необходимо реализовать полный цикл работы со скидками на продукты:
+
 - Фильтрацию активных скидок
 - Расчет финальной цены с учетом скидок
 - Выбор лучшей скидки при наличии нескольких
@@ -17,6 +16,7 @@
 ## 🎯 Цель
 
 Пользователь должен видеть на карточке товара:
+
 - Оригинальную цену (зачеркнутую, если есть скидка)
 - Финальную цену со скидкой
 - Бейдж с процентом скидки (например, "-20%")
@@ -30,19 +30,22 @@
 
 **✅ Процентная скидка** (`discount_type === 'percent'`) **Текущая реализация**
 **Пример:**
+
 - Цена: 5000 копеек
 - Скидка: 20%
-- Расчет: 5000 * (20 / 100) = 1000
+- Расчет: 5000 \* (20 / 100) = 1000
 - Результат: 1000 копеек
 
 **🔜 Фиксированная скидка** (`discount_type === 'amount'`) **TODO Later**
 
 **Пример (для будущей реализации):**
+
 - Цена: 5000 копеек
 - Скидка: 500 копеек
 - Результат: 500 копеек
 
 **Пример 2:**
+
 - Цена: 300 копеек
 - Скидка: 500 копеек
 - Результат: 300 копеек (не можем дать скидку больше цены!)
@@ -52,6 +55,7 @@
 **Что делает:** Фильтрует скидки по времени, оставляя только активные на текущий момент.
 
 **Входные данные:**
+
 ```typescript
 discounts: ProductDiscountDTO[]  // Все скидки из БД
 currentDate: Date                // Текущая дата (по умолчанию new Date())
@@ -64,19 +68,21 @@ currentDate: Date                // Текущая дата (по умолчан
 3. **valid_to** - дата окончания (может быть null)
 
 **Что вернуть:**
+
 ```typescript
-return discounts.filter(discount => {
+return discounts.filter((discount) => {
   // ... проверки выше
-  return true;  // Скидка активна
+  return true; // Скидка активна
 });
 ```
 
 **Пример использования:**
+
 ```typescript
 const allDiscounts = [
   { is_active: true, valid_from: '2025-11-01', valid_to: '2025-11-30' },
   { is_active: false, valid_from: null, valid_to: null },
-  { is_active: true, valid_from: null, valid_to: '2025-12-31' }
+  { is_active: true, valid_from: null, valid_to: '2025-12-31' },
 ];
 
 const active = getActiveDiscounts(allDiscounts, new Date('2025-11-20'));
@@ -88,9 +94,10 @@ const active = getActiveDiscounts(allDiscounts, new Date('2025-11-20'));
 **Что делает:** Калькулятор скидки. Рассчитывает сумму скидки в копейках.
 
 **Входные данные:**
+
 ```typescript
-discount: ProductDiscountDTO  // Объект скидки
-originalPrice: number         // Оригинальная цена в копейках
+discount: ProductDiscountDTO; // Объект скидки
+originalPrice: number; // Оригинальная цена в копейках
 ```
 
 ### 3️⃣ Функция `calculateFinalPrice()`
@@ -98,23 +105,25 @@ originalPrice: number         // Оригинальная цена в копей
 **Что делает:** Финальный чек. Рассчитывает финальную цену товара после применения скидки.
 
 **Входные данные:**
+
 ```typescript
-originalPrice: number              // Оригинальная цена
-discount: ProductDiscountDTO | null  // Скидка или null
+originalPrice: number; // Оригинальная цена
+discount: ProductDiscountDTO | null; // Скидка или null
 ```
 
 **Примеры:**
+
 ```typescript
 // Пример 1: Процентная скидка
-calculateFinalPrice(5000, { discount_type: 'percent', discount_value: 20 })
+calculateFinalPrice(5000, { discount_type: 'percent', discount_value: 20 });
 // → 4000 (5000 - 1000)
 
 // Пример 2: Фиксированная скидка
-calculateFinalPrice(5000, { discount_type: 'amount', discount_value: 500 })
+calculateFinalPrice(5000, { discount_type: 'amount', discount_value: 500 });
 // → 4500 (5000 - 500)
 
 // Пример 3: Нет скидки
-calculateFinalPrice(5000, null)
+calculateFinalPrice(5000, null);
 // → 5000
 ```
 
@@ -123,12 +132,14 @@ calculateFinalPrice(5000, null)
 **Что делает:** Выбирает лучшую скидку из массива активных скидок.
 
 **Входные данные:**
+
 ```typescript
 discounts: ProductDiscountDTO[]  // Активные скидки
 originalPrice: number            // Цена для расчета выгоды
 ```
 
 **Полный алгоритм:**
+
 ```
 1. Пустой массив? → null
 2. Сортируем по priority (DESC)
@@ -144,15 +155,15 @@ originalPrice: number            // Цена для расчета выгоды
 // Пример 1: Разные приоритеты
 const discounts = [
   { priority: 10, discount_type: 'percent', discount_value: 20 },
-  { priority: 5,  discount_type: 'percent', discount_value: 30 }
+  { priority: 5, discount_type: 'percent', discount_value: 30 },
 ];
 selectBestDiscount(discounts, 5000);
 // → Вернет первую (priority = 10 выше)
 
 // Пример 2: Одинаковые приоритеты
 const discounts = [
-  { priority: 10, discount_type: 'percent', discount_value: 20 },  // -1000
-  { priority: 10, discount_type: 'percent', discount_value: 30 }   // -1500
+  { priority: 10, discount_type: 'percent', discount_value: 20 }, // -1000
+  { priority: 10, discount_type: 'percent', discount_value: 30 }, // -1500
 ];
 selectBestDiscount(discounts, 5000);
 // → Вернет вторую (30% выгоднее чем 20%)
@@ -168,17 +179,19 @@ selectBestDiscount([], 5000);
 Объединяет все 4 функции выше и возвращает готовый результат.
 
 **Входные данные:**
+
 ```typescript
-product: ProductDTO  // Продукт из БД (с вариантами и скидками)
-variantId: string    // ID варианта для которого применяем скидки
+product: ProductDTO; // Продукт из БД (с вариантами и скидками)
+variantId: string; // ID варианта для которого применяем скидки
 ```
 
 **Что вернуть:**
+
 ```typescript
 interface DiscountCalculationResult {
-  finalPrice: number;                // Финальная цена
-  discountAmount: number;            // Сумма скидки
-  appliedDiscount: AppliedDiscount | null;  // Детали скидки
+  finalPrice: number; // Финальная цена
+  discountAmount: number; // Сумма скидки
+  appliedDiscount: AppliedDiscount | null; // Детали скидки
 }
 ```
 
@@ -192,7 +205,6 @@ interface DiscountCalculationResult {
 6. Рассчитать финальную цену
 7. Вернуть результат
 
-
 ## 🎨 Форматирование цен для отображения
 
 ### 1️⃣ Функция `formatPrice()`
@@ -200,9 +212,10 @@ interface DiscountCalculationResult {
 **Что делает:** Преобразует цену из копеек в красивую строку с валютой.
 
 **Входные данные:**
+
 ```typescript
-priceInCents: number  // Цена в копейках (5000)
-currency: string      // Код валюты ('EUR', 'USD', 'UAH')
+priceInCents: number; // Цена в копейках (5000)
+currency: string; // Код валюты ('EUR', 'USD', 'UAH')
 ```
 
 **Логика:**
@@ -210,11 +223,12 @@ currency: string      // Код валюты ('EUR', 'USD', 'UAH')
 **Шаг 2: Создать formatter через Intl.NumberFormat**
 **Шаг 3: Отформатировать и вернуть**
 **Примеры использования:**
+
 ```typescript
-formatPrice(5000, 'EUR')
+formatPrice(5000, 'EUR');
 // → "€50.00"
 
-formatPrice(0, 'EUR')
+formatPrice(0, 'EUR');
 // → "€0.00"
 ```
 
@@ -223,51 +237,59 @@ formatPrice(0, 'EUR')
 **Что делает:** Форматирует процент скидки для отображения в бейдже.
 
 **Входные данные:**
+
 ```typescript
-percentage: number  // Процент скидки (20.5)
+percentage: number; // Процент скидки (20.5)
 ```
+
 **Примеры:**
+
 ```typescript
-formatDiscountPercentage(20)
+formatDiscountPercentage(20);
 // → "-20%"
 
-formatDiscountPercentage(15.7)
+formatDiscountPercentage(15.7);
 // → "-16%"
 
-formatDiscountPercentage(33.3)
+formatDiscountPercentage(33.3);
 // → "-33%"
 ```
 
 ### Как это выглядит на карточке товара
 
-  ┌─────────────────────────────┐
-  │  [Фото товара]              │
-  │                             │
-  │  Shopper Bag Yeees Black    │
-  │                             │
-  │  €24.00  ← жирным шрифтом    │
-  │  €30.00  ← зачеркнуто       │
-  │                             │
-  │  [-20%]  ← красный бейдж    │
-  │  until Dec 31, 2025   │
-  └─────────────────────────────
+┌─────────────────────────────┐
+│ [Фото товара] │
+│ │
+│ Shopper Bag Yeees Black │
+│ │
+│ €24.00 ← жирным шрифтом │
+│ €30.00 ← зачеркнуто │
+│ │
+│ [-20%] ← красный бейдж │
+│ until Dec 31, 2025 │
+└─────────────────────────────
 
 ## 📋 Чеклист выполнения
+
 - [ ] Реализована `getActiveDiscounts()`
+
   - [ ] Проверяется `is_active`
   - [ ] Проверяется `valid_from`
   - [ ] Проверяется `valid_to`
 
 - [ ] Реализована `calculateDiscountAmount()`
+
   - [ ] Работает для `percent`
   - [ ] Округляет до целых
 
 - [ ] Реализована `calculateFinalPrice()`
+
   - [ ] Обрабатывает null
   - [ ] Вычитает скидку
   - [ ] Не дает отрицательную цену
 
 - [ ] Реализована `selectBestDiscount()`
+
   - [ ] Сортирует по priority
   - [ ] Выбирает максимальный priority
   - [ ] При равных priority - самую выгодную
@@ -280,7 +302,9 @@ formatDiscountPercentage(33.3)
   - [ ] Возвращает правильный результат
 
 ### Форматирование
+
 - [ ] Реализована `formatPrice()`
+
   - [ ] Делит на 100
   - [ ] Возвращает строку
 

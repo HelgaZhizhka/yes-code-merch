@@ -13,6 +13,7 @@ This migration seeds the database with test discount data for Phase 1 implementa
 **Category:** T-Shirt (`7ffd66c5-99c0-4f98-8b41-f2830acfd3b3`)
 
 **Details:**
+
 - Discount: 10%
 - Type: Percentage (`percent`)
 - Priority: 10
@@ -24,6 +25,7 @@ This migration seeds the database with test discount data for Phase 1 implementa
   - T-Shirt I Did It (variant 2)
 
 **Expected behavior:**
+
 - All T-shirt products should show 10% discount
 - No expiration date displayed
 - Always active
@@ -35,6 +37,7 @@ This migration seeds the database with test discount data for Phase 1 implementa
 **Category:** Shoppers (`d46711d1-d8c3-4f84-a5a4-347fbaac8458`)
 
 **Details:**
+
 - Discount: 20%
 - Type: Percentage (`percent`)
 - Priority: 15 (higher than T-Shirt discount)
@@ -49,6 +52,7 @@ This migration seeds the database with test discount data for Phase 1 implementa
   - (and 1 more)
 
 **Expected behavior:**
+
 - All Shopper Bag products should show 20% discount
 - Should display "Valid until Dec 31, 2025" or similar
 - Will automatically become inactive after 2025-12-31
@@ -60,6 +64,7 @@ This migration seeds the database with test discount data for Phase 1 implementa
 **Category:** T-Shirt (1 product only)
 
 **Details:**
+
 - Discount: 15%
 - Type: Percentage (`percent`)
 - Priority: 20 (highest priority, but inactive)
@@ -68,6 +73,7 @@ This migration seeds the database with test discount data for Phase 1 implementa
 - Applies to: One T-shirt product
 
 **Expected behavior:**
+
 - Should NOT be applied (filtered out by `getActiveDiscounts()`)
 - Used to test `is_active` filtering logic
 - Even though it has the highest priority, it should not appear
@@ -88,6 +94,7 @@ This migration seeds the database with test discount data for Phase 1 implementa
 ## Database Stats
 
 **Expected records after migration:**
+
 - T-Shirt discounts: 3 records (one per product)
 - Shopper discounts: 6 records (one per product)
 - Inactive discounts: 1 record

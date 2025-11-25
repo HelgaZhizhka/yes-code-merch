@@ -5,7 +5,12 @@ export {
   useSetDefaultAddress,
   useUpdateAddress,
 } from './api/hooks';
-export type { Address, AddressListProps, AddressType } from './api/types';
+export type {
+  Address,
+  Addresses,
+  AddressListProps,
+  AddressType,
+} from './api/types';
 export {
   addressSchema,
   defaultAddress,

@@ -94,6 +94,7 @@ interface CatalogProduct {
 > **⚠️ TODO:** Discount-related fields (`hasDiscount`, `finalPrice`, `discountAmount`, `discountPercentage`, `appliedDiscount`) will be added to this documentation after discount system implementation is complete.
 
 **Image handling:**
+
 - Three image sizes are stored for each product: `large` (600px), `medium` (384px), `small` (120px)
 - Size is determined by URL path segment (e.g., `/large/`, `/medium/`, `/small/`)
 - Image selection logic:

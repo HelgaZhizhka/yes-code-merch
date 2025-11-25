@@ -7,6 +7,7 @@ This directory contains seed data scripts for development and testing purposes.
 **Seed files are NOT applied automatically!** They must be run manually when needed.
 
 Unlike migrations in `supabase/migrations/`, seed data:
+
 - ❌ Does NOT run on `supabase db push`
 - ❌ Does NOT run on production deployments
 - ✅ Runs only when you explicitly execute them
@@ -14,9 +15,11 @@ Unlike migrations in `supabase/migrations/`, seed data:
 ## 📁 Available Seed Files
 
 ### `product_images.sql`
+
 Seeds product images for 3 products that have uploaded photos in Supabase Storage.
 
 **Products:**
+
 - Badge Wow That Is Cool White (bdg-10-white-master)
 - Hoodie Take a Junior White (hd-9-white-6980f3-master)
 - T-Shirt I Did It Blue (t-1-blue-7703ff-master)
@@ -24,9 +27,11 @@ Seeds product images for 3 products that have uploaded photos in Supabase Storag
 **Creates:** 9 records (3 products × 3 image sizes)
 
 ### `product_discounts.sql`
+
 Seeds test discount data for Phase 1 implementation (percentage discounts only).
 
 **Discounts:**
+
 1. T-Shirt Permanent Sale - 10% (permanent, all T-Shirt products)
 2. Shoppers New Year Sale - 20% (until 2025-12-31, all Shopper products)
 3. Inactive Test Discount - 15% (inactive, for testing)
@@ -36,12 +41,14 @@ Seeds test discount data for Phase 1 implementation (percentage discounts only).
 ## 🚀 How to Apply Seed Data
 
 ### Option 1: Apply all seeds at once
+
 ```bash
 # Run all seed files
 supabase db seed
 ```
 
 ### Option 2: Apply specific seed file
+
 ```bash
 # Navigate to project root
 cd /path/to/yes-code-merch
@@ -53,6 +60,7 @@ psql "$DATABASE_URL" < supabase/seed/product_discounts.sql
 ```
 
 ### Option 3: Using Supabase CLI with local database
+
 ```bash
 # Reset local database and apply seeds
 supabase db reset
@@ -62,6 +70,7 @@ supabase db seed --db-url "postgresql://..."
 ```
 
 ### Option 4: Manual execution via Supabase Dashboard
+
 1. Open Supabase Dashboard
 2. Go to SQL Editor
 3. Copy contents of seed file
@@ -72,17 +81,20 @@ supabase db seed --db-url "postgresql://..."
 All seed files are **idempotent** - they can be safely run multiple times.
 
 They use `ON CONFLICT DO UPDATE` clauses to:
+
 - Insert new records if they don't exist
 - Update existing records if they do exist
 
 ## 📝 Best Practices
 
 1. **Local Development:**
+
    - Run seeds after `supabase db reset`
    - Run seeds when setting up new dev environment
    - Re-run seeds when you need fresh test data
 
 2. **Staging/Production:**
+
    - ⚠️ Be careful! Only run seeds on clean databases
    - Never run seeds on production without approval
    - Consider creating separate seed files for different environments
