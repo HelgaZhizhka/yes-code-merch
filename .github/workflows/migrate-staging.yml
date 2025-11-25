@@ -31,5 +31,8 @@ jobs:
       - name: 📦 Link Supabase Project
         run: supabase link --project-ref $SUPABASE_PROJECT_ID
 
+      - name: 🩹 Repair migrations history
+        run: supabase migration repair --status reverted 20251123145249 20251124170709
+
       - name: 📦 Apply Migrations
         run: supabase db push
