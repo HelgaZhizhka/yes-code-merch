@@ -42,7 +42,7 @@ select
 from products p
 join product_categories pc on pc.product_id = p.id
 join categories c on c.id = pc.category_id
-where c.id = '7ffd66c5-99c0-4f98-8b41-f2830acfd3b3'  -- T-Shirt category
+where c.slug = 't-shirt'  -- T-Shirt category
   and p.is_published = true
 
 union all
@@ -65,7 +65,7 @@ select
 from products p
 join product_categories pc on pc.product_id = p.id
 join categories c on c.id = pc.category_id
-where c.id = 'd46711d1-d8c3-4f84-a5a4-347fbaac8458'  -- Shoppers category
+where c.slug = 'shoppers'  -- Shoppers category
   and p.is_published = true
 
 union all
@@ -90,7 +90,7 @@ from (
   from products p
   join product_categories pc on pc.product_id = p.id
   join categories c on c.id = pc.category_id
-  where c.id = '7ffd66c5-99c0-4f98-8b41-f2830acfd3b3'  -- T-Shirt category
+  where c.slug = 't-shirt'  -- T-Shirt category
     and p.is_published = true
   limit 1  -- Apply to only one T-shirt product for testing
 ) p
