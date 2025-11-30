@@ -8,116 +8,69 @@ Categories entity for catalog navigation, category trees and breadcrumbs.
 shared/api/categories/
   ├── types.ts        # DTO + domain types (Category, CategoryTree, BreadcrumbItem)
   ├── mapper.ts       # DTO -> Domain mapping (flat list, tree, breadcrumbs)
+  ├── helpers.ts      # Category utilities (getCategoryBySlug, getAllCategoryIds, breadcrumbs)
   ├── index.ts        # Supabase API (root categories, categories tree RPC)
-  └── hooks.ts        # React Query hooks (useRootCategories, useCategoriesTree, useBreadcrumbs)
+  └── hooks.ts        # React Query hooks (useCategoriesTree, useCategoryData)
 
 shared/ui/breadcrumbs.tsx   # Breadcrumbs UI component
 ```
 
-## Usage
-
-### Catalog Page with Breadcrumbs
-
-```typescript
-import { useParams } from '@tanstack/react-router';
-import { useBreadcrumbs } from '@shared/api';
-import { Breadcrumbs } from '@shared/ui/breadcrumbs';
-
-function CatalogPage() {
-  const { _splat } = useParams({ strict: false });
-  const breadcrumbs = useBreadcrumbs(_splat);
-
-  return (
-    <div>
-      <Breadcrumbs items={breadcrumbs} className="mb-4" />
-      <h1 className="text-2xl">Catalog Page</h1>
-      {/* catalog content */}
-    </div>
-  );
-}
-```
-
-### Category Navigation
-
-```typescript
-import { useRootCategories } from '@shared/api/categories/hooks';
-
-function CategoriesBar() {
-  const { data: categories } = useRootCategories();
-
-  return (
-    <nav>
-      {categories.map((category) => (
-        <CategoryLink key={category.id} category={category} />
-      ))}
-    </nav>
-  );
-}
-```
-
 ## Features
 
-- ✅ **Root categories** for top-level navigation.
-- ✅ **Full category tree** via Supabase RPC and client-side mapping.
-- ✅ **Breadcrumbs** derived from category tree and current route.
-- ✅ **Typed DTOs and domain models** for categories and breadcrumbs.
-- ✅ **React Query integration** with caching and `select` mappers.
+- ✅ **Root categories** for top-level navigation
+- ✅ **Full category tree** via Supabase RPC and client-side mapping
+- ✅ **Breadcrumbs** derived from category tree and current route
+- ✅ **Hierarchical category IDs** - collects parent + all children IDs
+- ✅ **Category lookup** by slug with path finding
+- ✅ **Universal hook** - `useCategoryData` returns everything in one call
+- ✅ **Typed DTOs and domain models** for categories and breadcrumbs
+- ✅ **React Query integration** with aggressive caching (24h/7d)
+- ✅ **Suspense integration** - automatic loading states with React Suspense
+- ✅ **Error boundaries** - centralized error handling at page level
 
 ## API
 
 ### Types
 
 ```typescript
-// DTOs from Supabase / RPC
-export interface CategoryDTO {
-  id: string;
-  name: string;
-  slug: string;
-  parent_id: string | null;
-  order_hint: number | null;
-}
+import type { Public } from '@shared/api/supabase-client';
 
-export interface CategoryTreeDTO {
-  id: string;
-  name: string;
-  slug: string;
-  parent_id: string | null;
-  order_hint: number | null;
-  depth: number;
-  root_id: string;
-  root_name: string;
-  root_slug: string;
-}
+// DTOs from Supabase database and RPC functions
+export type CategoryRowDTO = Public['Tables']['categories']['Row'];
+export type CategoryTreeDTO =
+  Public['Functions']['get_all_categories_tree']['Returns'][0];
 
-export interface BreadcrumbItemDTO {
-  path: string;
-  name: string;
-  is_current: boolean;
-}
-
-// Domain models
+// Domain models (camelCase)
 export interface Category {
   id: string;
   name: string;
   slug: string;
   parentId: string | null;
-  orderHint: number | null;
+  orderHint: string; // Stored as text in database for custom sorting
 }
 
-export interface CategoryTree extends Category {
+export type CategoryTree = Category & {
   depth: number;
   rootId: string;
   rootName: string;
   rootSlug: string;
   children: CategoryTree[];
-}
+};
 
-export interface BreadcrumbItem {
+export type BreadcrumbItem = {
   path: string;
   name: string;
   isCurrent: boolean;
-}
+};
 ```
+
+**Type Architecture:**
+
+- `CategoryRowDTO` - auto-generated from Supabase `categories` table (snake_case)
+- `CategoryTreeDTO` - auto-generated from RPC function return type (snake_case)
+- `Category` - domain model with camelCase fields
+- `CategoryTree` - extends `Category` with tree-specific fields
+- `BreadcrumbItem` - domain model for navigation breadcrumbs
 
 ### Mapping
 
@@ -170,24 +123,18 @@ export const mapCategoriesTree = (
 
   return rootCategories;
 };
-
-export const mapCategoryBreadcrumbs = (
-  rows: readonly BreadcrumbItemDTO[]
-): BreadcrumbItem[] =>
-  rows.map(({ path, name, is_current }) => ({
-    path,
-    name,
-    isCurrent: is_current,
-  }));
 ```
+
+**Note:** Breadcrumb items are created directly from the category tree structure using helper functions, so no separate mapper is needed.
 
 ### Supabase API
 
 ```typescript
 // index.ts
 import { RpcFunctions, supabase } from '@shared/api/supabase-client';
+import type { CategoryRowDTO, CategoryTreeDTO } from './types';
 
-export const getRootCategories = async (): Promise<CategoryDTO[]> => {
+export const getRootCategories = async (): Promise<CategoryRowDTO[]> => {
   const { data: categories } = await supabase
     .from('categories')
     .select('*')
@@ -208,20 +155,26 @@ export const getCategoriesTree = async (): Promise<CategoryTreeDTO[]> => {
 };
 ```
 
-### React Query Hooks & Breadcrumbs
+**Note:** These functions return DTOs (snake_case) which are then mapped to domain models (camelCase) via React Query's `select` option.
+
+### React Query Hooks
 
 ```typescript
 // hooks.ts
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { getRootCategories, getCategoriesTree } from './index';
+import { mapCategories, mapCategoriesTree } from './mapper';
+
 export const useRootCategories = (): { data: Category[] } => {
-  const { data } = useSuspenseQuery<CategoryDTO[], Error, Category[]>({
+  const { data } = useSuspenseQuery<CategoryRowDTO[], Error, Category[]>({
     queryKey: queryKey.rootCategories,
-    queryFn: getRootCategories,
-    select: mapCategories,
+    queryFn: getRootCategories, // Returns CategoryRowDTO[]
+    select: mapCategories, // Maps to Category[]
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    staleTime: 24 * 60 * 60 * 1000,
-    gcTime: 7 * 24 * 60 * 60 * 1000,
+    staleTime: 24 * 60 * 60 * 1000, // 24 hours
+    gcTime: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
   return { data };
@@ -230,42 +183,125 @@ export const useRootCategories = (): { data: Category[] } => {
 export const useCategoriesTree = (): { data: CategoryTree[] } => {
   const { data } = useSuspenseQuery<CategoryTreeDTO[], Error, CategoryTree[]>({
     queryKey: queryKey.categoriesTree,
-    queryFn: getCategoriesTree,
-    select: mapCategoriesTree,
+    queryFn: getCategoriesTree, // Returns CategoryTreeDTO[]
+    select: mapCategoriesTree, // Maps to CategoryTree[]
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    staleTime: 24 * 60 * 60 * 1000,
-    gcTime: 7 * 24 * 60 * 60 * 1000,
+    staleTime: 24 * 60 * 60 * 1000, // 24 hours
+    gcTime: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
   return { data };
 };
 
-export const useBreadcrumbs = (categoryPath?: string): BreadcrumbItem[] => {
+// Universal hook - returns all category data in one call
+export const useCategoryData = (categoryPath?: string) => {
   const { data: tree } = useCategoriesTree();
-  // breadcrumbs are derived on the client side from the loaded category tree and the current category path.
-  // The hook returns a ready-to-render array of BreadcrumbItem.
-  return computeBreadcrumbsFromTree(tree, categoryPath);
+
+  return useMemo(() => {
+    if (!categoryPath || !tree) {
+      return {
+        breadcrumbs: [],
+        category: null,
+        categoryId: null,
+        categoryIds: null,
+      };
+    }
+
+    const segments = categoryPath.split('/').filter(Boolean);
+    const targetSlug = segments.at(-1) ?? '';
+
+    const category = getCategoryBySlug(tree, targetSlug);
+    const breadcrumbs = getCategoryBreadcrumbPaths(tree, targetSlug);
+    const categoryId = category?.id ?? null;
+    const categoryIds = category ? getAllCategoryIds(category) : null;
+
+    return { breadcrumbs, category, categoryId, categoryIds };
+  }, [categoryPath, tree]);
 };
 ```
 
-## Flow: Categories & Breadcrumbs
+**Type flow:**
 
-### Root Categories
+- `queryFn` returns DTOs (snake_case from database)
+- `select` transforms DTOs to domain models (camelCase)
+- Final `data` is always in domain model format
 
-- `getRootCategories` fetches all top-level categories (`parent_id IS NULL`).
-- `useRootCategories` exposes them as domain `Category[]` via `select: mapCategories`.
-- Used in navigation components and category selection UIs.
+## Helper Functions
 
-### Category Tree
+### `getCategoryBySlug(tree, slug)`
 
-- `getCategoriesTree` calls a Supabase RPC to fetch a flattened tree structure.
-- `mapCategoriesTree` converts this structure into nested `CategoryTree[]` with `children` arrays.
-- `useCategoriesTree` provides the tree to UI components and breadcrumb logic.
+Finds a category in the tree by its slug.
 
-### Breadcrumbs
+```typescript
+const category = getCategoryBySlug(tree, 'mens-clothing');
+// Returns: CategoryTree | null
+```
 
-- `useBreadcrumbs` consumes the category tree and the current route path.
-- It builds a `BreadcrumbItem[]` representing the path from the root category to the current category.
-- The result is passed to the `Breadcrumbs` UI component for consistent navigation across catalog pages.
+### `getAllCategoryIds(category)`
+
+Collects the current category ID and all child category IDs recursively.
+
+```typescript
+const category = getCategoryBySlug(tree, 'clothing');
+const ids = getAllCategoryIds(category);
+// Returns: ['clothing-id', 'mens-id', 'womens-id', 'kids-id']
+```
+
+**Use case:** Filtering products by parent category (includes all children).
+
+### `getCategoryBreadcrumbPaths(tree, slug)`
+
+Builds breadcrumb items from root to target category.
+
+```typescript
+const breadcrumbs = getCategoryBreadcrumbPaths(tree, 'mens-t-shirts');
+// Returns: [
+//   { path: 'clothing', name: 'Clothing', isCurrent: false },
+//   { path: 'clothing/mens', name: 'Mens', isCurrent: false },
+//   { path: 'clothing/mens/t-shirts', name: 'T-Shirts', isCurrent: true }
+// ]
+```
+
+## Flow: Categories & Product Filtering
+
+### 1. Category Tree Loading
+
+- `getCategoriesTree` calls Supabase RPC to fetch flattened tree
+- `useCategoriesTree` caches it for 24 hours
+- All other hooks consume this cached tree
+
+### 2. Category Resolution
+
+- User navigates to `/category/clothing/mens`
+- `useCategoryData` finds category by slug
+- Collects `categoryIds`: `['clothing-id', 'mens-id', 'mens-tshirts-id', ...]`
+
+### 3. Product Filtering
+
+- `useProducts({ categoryIds })` fetches products using `useSuspenseQuery`
+- Query filters by `.in('product_categories.category_id', categoryIds)`
+- Products from parent + all children are shown
+- Loading state handled by Suspense, errors by ErrorBoundary
+
+### 4. Breadcrumbs
+
+- `getCategoryBreadcrumbPaths` builds path from tree
+- `Breadcrumbs` component renders navigation
+
+## Optimization
+
+**Single Query to Rule Them All:**
+
+React Query automatically deduplicates:
+
+- `useCategoryData` calls `useCategoriesTree()` ✅
+- Other components call `useCategoriesTree()` ✅
+- Result: **One HTTP request**, rest from cache!
+
+**Aggressive Caching:**
+
+- `staleTime: 24h` - categories rarely change
+- `gcTime: 7d` - keep in memory for a week
+- No refetch on mount/focus/reconnect

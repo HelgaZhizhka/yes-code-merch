@@ -3,16 +3,15 @@ import { useNavigate } from '@tanstack/react-router';
 import { ROUTES } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
 
-export const ErrorFallback: React.FC<{
+interface ErrorFallbackProps {
   error: Error;
   resetErrorBoundary: () => void;
-}> = ({
+}
+
+export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,
   resetErrorBoundary,
-}: {
-  error: Error;
-  resetErrorBoundary(): void;
-}) => {
+}: ErrorFallbackProps): React.JSX.Element => {
   const navigate = useNavigate();
 
   return (
