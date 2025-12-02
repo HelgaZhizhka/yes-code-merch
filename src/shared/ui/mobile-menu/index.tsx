@@ -3,6 +3,7 @@ import { Link, useLocation } from '@tanstack/react-router';
 import { Menu, Phone } from 'lucide-react';
 import { Suspense, useEffect } from 'react';
 
+import { useCategoriesTree } from '@shared/api';
 import { SaleCategoryName } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
 import { CategoriesTree } from '@shared/ui/categories-tree';
@@ -23,6 +24,7 @@ import { Banner } from '../header/banner';
 export const MobileMenu = (): React.JSX.Element => {
   const { isOpen, open: openMenu, close: closeMenu } = useMobileMenu();
   const location = useLocation();
+  const { data: categoryTree } = useCategoriesTree();
 
   useEffect(() => {
     closeMenu();
@@ -49,7 +51,7 @@ export const MobileMenu = (): React.JSX.Element => {
               <div className="text-2xl text-primary-foreground">Loading...</div>
             }
           >
-            <CategoriesTree variant="mobile" />
+            <CategoriesTree categoryTree={categoryTree} variant="mobile" />
           </Suspense>
           <Link className="text-2xl" to={ROUTES.ABOUT}>
             About Us
