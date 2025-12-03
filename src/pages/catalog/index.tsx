@@ -11,23 +11,23 @@ import { SideBar } from './ui/sidebar';
 
 export const Catalog = (): React.JSX.Element => {
   const { _splat } = useParams({ strict: false });
-  const { breadcrumbs, categoryIds } = useCategoryData(_splat);
+  const { breadcrumbs, categoryIds, tree } = useCategoryData(_splat);
 
   return (
     <div className="container mx-auto px-4 py-6">
       <Breadcrumbs items={breadcrumbs} className="mb-6" />
       <h1 className="mb-6 text-3xl font-bold">Catalog</h1>
 
-      <div className="flex gap-6">
-        <SideBar />
-        <div className="flex-1">
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<p>Loading...</p>}>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="flex gap-6">
+            <SideBar categoryTree={tree} />
+            <div className="flex-1">
               <CatalogList categoryIds={categoryIds} />
-            </Suspense>
-          </ErrorBoundary>
-        </div>
-      </div>
+            </div>
+          </div>
+        </ErrorBoundary>
+      </Suspense>
     </div>
   );
 };

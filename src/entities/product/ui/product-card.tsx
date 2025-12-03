@@ -9,7 +9,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     product.images?.medium || 'https://placehold.co/400x400?text=No+Image';
 
   return (
-    <>
+    <div className="max-w-xs w-full overflow-hidden">
       <img
         src={imageUrl}
         alt={product.name}
@@ -19,6 +19,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         decoding="async"
       />
       <h3>{product.name}</h3>
-    </>
+    </div>
   );
 };

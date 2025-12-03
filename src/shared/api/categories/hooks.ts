@@ -63,6 +63,7 @@ export const useCategoryData = (categoryPath?: string) => {
         category: null,
         categoryId: null,
         categoryIds: null,
+        tree: [],
       };
     }
 
@@ -74,6 +75,6 @@ export const useCategoryData = (categoryPath?: string) => {
     const categoryId = category?.id ?? null;
     const categoryIds = category ? getAllCategoryIds(category) : null;
 
-    return { breadcrumbs, category, categoryId, categoryIds };
+    return { breadcrumbs, category, categoryId, categoryIds, tree };
   }, [categoryPath, tree]);
 };
