@@ -1,3 +1,4 @@
+import { CartButton } from '@features/cart-button';
 import { Price } from '@features/price';
 
 import type { CatalogProduct } from '../api/types';
@@ -12,7 +13,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <div className="flex flex-col gap-4 max-w-xs w-full p-2">
-      <div className="w-full aspect-[3/4] overflow-hidden shadow-md">
+      <div className="w-full relative aspect-[3/4] overflow-hidden shadow-md">
         <img
           src={imageUrl}
           alt={product.name}
@@ -22,6 +23,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           loading="lazy"
           decoding="async"
         />
+        <CartButton variant="catalog" />
       </div>
       <h3 className="text-2xl font-bold">{product.name}</h3>
       {product.description && <p className="text-sm">{product.description}</p>}
