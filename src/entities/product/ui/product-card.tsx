@@ -1,5 +1,6 @@
-import { CartButton } from '@features/cart-button';
-import { Price } from '@features/price';
+import { AddToCart } from '@features/add-to-cart';
+
+import { Price } from '@shared/ui/price';
 
 import type { CatalogProduct } from '../api/types';
 
@@ -23,7 +24,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           loading="lazy"
           decoding="async"
         />
-        <CartButton variant="catalog" />
+        <AddToCart variant="catalog" />
       </div>
       <h3 className="text-2xl font-bold">{product.name}</h3>
       {product.description && <p className="text-sm">{product.description}</p>}
