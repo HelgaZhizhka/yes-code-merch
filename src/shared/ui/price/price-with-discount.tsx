@@ -1,3 +1,5 @@
+import { Price } from './price';
+
 interface PriceWithDiscountProps {
   value: number;
   currency?: string;
@@ -9,7 +11,7 @@ export const PriceWithDiscount = ({
 }: PriceWithDiscountProps) => {
   return (
     <div>
-      {(value / 100).toFixed(2)} {currency}
+      <Price value={value} currency={currency} />
     </div>
   );
 };
