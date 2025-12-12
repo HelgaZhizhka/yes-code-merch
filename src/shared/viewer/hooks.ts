@@ -1,29 +1,30 @@
 import type { Session, User } from '@supabase/supabase-js';
 import {
   useMutation,
-  type UseMutationResult,
   useQueryClient,
+  type UseMutationResult,
 } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import {
+  changePassword,
   getSession,
   login,
   logout,
+  onAuthStateChange,
+  resetPassword,
   signUp,
   updateUser,
-  onAuthStateChange,
-  changePassword,
-  resetPassword,
   type AuthCredentials,
   type AuthProps,
+  type ChangePasswordDTO,
   type ResetPasswordDTO,
   type ResetPasswordResponse,
   type UpdateUserDTO,
-  type ChangePasswordDTO,
 } from '@shared/api';
 import { ROUTES } from '@shared/config/routes';
+import { logger } from '@shared/lib/logger';
 import type { AsyncVoidFunction } from '@shared/types';
 
 import {
@@ -48,8 +49,8 @@ export const useInitViewer = (): void => {
         } else {
           clearSession();
         }
-      } catch (error) {
-        console.error('Error loading session:', error);
+      } catch (error: unknown) {
+        logger.error('Error loading session:', error);
 
         if (error instanceof Error) {
           setError(error);
@@ -79,9 +80,10 @@ export const useLogin = (): UseMutationResult<
       setSession(session);
     },
     onError: (error: unknown) => {
+      logger.error('Login failed:', error);
+
       if (error instanceof Error) {
         setError(error);
-        console.error('Login failed:', error.message);
       }
     },
   });
@@ -105,9 +107,10 @@ export const useRegistration = (): UseMutationResult<
   useMutation<User, Error, AuthCredentials>({
     mutationFn: signUp,
     onError: (error: unknown) => {
+      logger.error('Registration failed:', error);
+
       if (error instanceof Error) {
         setError(error);
-        console.error('Registration failed:', error.message);
       }
     },
   });
@@ -120,9 +123,10 @@ export const useResetPassword = (): UseMutationResult<
   return useMutation<ResetPasswordResponse, Error, ResetPasswordDTO>({
     mutationFn: resetPassword,
     onError: (error: unknown) => {
+      logger.error('Reset failed:', error);
+
       if (error instanceof Error) {
         setError(error);
-        console.error('Reset failed:', error.message);
       }
     },
   });
@@ -136,9 +140,7 @@ export const useChangePassword = (): UseMutationResult<
   return useMutation<User, Error, ChangePasswordDTO>({
     mutationFn: changePassword,
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        console.error('Password change failed:', error.message);
-      }
+      logger.error('Password change failed:', error);
     },
   });
 };
@@ -151,9 +153,7 @@ export const useUpdateUser = (): UseMutationResult<
   return useMutation<User, Error, UpdateUserDTO>({
     mutationFn: updateUser,
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        console.error('User update failed:', error.message);
-      }
+      logger.error('User update failed:', error);
     },
   });
 };

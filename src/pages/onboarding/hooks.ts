@@ -12,6 +12,7 @@ import {
 } from '@entities/customer';
 
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
+import { logger } from '@shared/lib/logger';
 import { useViewerEmail } from '@shared/viewer/model';
 
 import {
@@ -120,8 +121,8 @@ export const useFormStep = () => {
         to: ROUTES.HOME,
         viewTransition: { types: ['slide-fade'] },
       });
-    } catch (error) {
-      console.error('Registration failed:', error);
+    } catch (error: unknown) {
+      logger.error('Registration failed:', error);
 
       if (error instanceof Error) {
         toast.error('Registration could not be completed. Please try again.');
