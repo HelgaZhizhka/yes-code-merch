@@ -16,6 +16,8 @@ export const STRENGTH = {
   HIGH: 'high',
 } as const;
 
+export type StrengthLevel = (typeof STRENGTH)[keyof typeof STRENGTH];
+
 export const MIN_PASSWORD_LENGTH = 8;
 
 export const VALIDATION_REGEX = {

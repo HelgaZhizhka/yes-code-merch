@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 
+import type { StrengthLevel } from '@shared/lib/validators';
 import {
   getPasswordFeedback,
   getPasswordStrengthColor,
@@ -15,6 +16,13 @@ interface PasswordFieldProps {
   readonly ref?: React.RefObject<HTMLInputElement>;
   onChange(event: React.ChangeEvent<HTMLInputElement>): void;
 }
+
+const getBarColor = (
+  strength: StrengthLevel,
+  barLevel: StrengthLevel
+): string => {
+  return strength >= barLevel ? getPasswordStrengthColor(barLevel) : 'bg-muted';
+};
 
 export const PasswordField = ({
   value,
@@ -39,7 +47,7 @@ export const PasswordField = ({
         value={value}
         id={id}
         ref={ref}
-        onChange={(event) => onChange(event)}
+        onChange={onChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         autoComplete="new-password"
@@ -51,13 +59,13 @@ export const PasswordField = ({
         <div className="space-y-2">
           <div className="flex gap-1 h-1">
             <div
-              className={`h-full w-1/3 ${strength === STRENGTH.WEEK || strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.WEEK) : 'bg-muted'}`}
+              className={`h-full w-1/3 ${getBarColor(STRENGTH.WEEK, strength)}`}
             ></div>
             <div
-              className={`h-full w-1/3 ${strength === STRENGTH.MEDIUM || strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.MEDIUM) : 'bg-muted'}`}
+              className={`h-full w-1/3 ${getBarColor(STRENGTH.MEDIUM, strength)}`}
             ></div>
             <div
-              className={`h-full w-1/3 ${strength === STRENGTH.HIGH ? getPasswordStrengthColor(STRENGTH.HIGH) : 'bg-muted'}`}
+              className={`h-full w-1/3 ${getBarColor(STRENGTH.HIGH, strength)}`}
             ></div>
           </div>
           <p className="text-sm text-muted-foreground">{message}</p>
