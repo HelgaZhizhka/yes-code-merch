@@ -9,6 +9,11 @@ import { ErrorFallback } from './error';
 import { CatalogList } from './ui/catalog-list';
 import { SideBar } from './ui/sidebar';
 
+import { useBreadcrumbs } from '@shared/api';
+import { Breadcrumbs } from '@shared/ui/breadcrumbs';
+
+import { SideBar } from './ui/sidebar';
+
 export const Catalog = (): React.JSX.Element => {
   const { _splat } = useParams({ strict: false });
   const { breadcrumbs, categoryIds, tree } = useCategoryData(_splat);
