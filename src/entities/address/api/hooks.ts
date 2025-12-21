@@ -5,6 +5,8 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
+import { logger } from '@shared/lib/logger';
+
 import { mapAddressesFromDB } from './mapper';
 import type {
   Address,
@@ -57,9 +59,7 @@ export const useSetDefaultAddress = (): UseMutationResult<
     mutationFn: ({ addressId, addressType }) =>
       setDefaultAddress({ addressId, addressType }),
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        console.error('Setting default address failed:', error.message);
-      }
+      logger.error('Setting default address failed:', error);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.addresses });
@@ -85,9 +85,7 @@ export const useUpdateAddress = (): UseMutationResult<
       queryClient.invalidateQueries({ queryKey: queryKey.addresses });
     },
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        console.error('Updating address failed:', error.message);
-      }
+      logger.error('Updating address failed:', error);
     },
   });
 };
@@ -102,9 +100,7 @@ export const useDeleteAddress = (): UseMutationResult<
   return useMutation<boolean, Error, string>({
     mutationFn: (addressId) => deleteAddress(addressId),
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        console.error('Deleting address failed:', error.message);
-      }
+      logger.error('Deleting address failed:', error);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.addresses });
@@ -130,9 +126,7 @@ export const useCreateAddress = (): UseMutationResult<
       queryClient.invalidateQueries({ queryKey: queryKey.addresses });
     },
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        console.error('Adding address failed:', error.message);
-      }
+      logger.error('Adding address failed:', error);
     },
   });
 };

@@ -646,18 +646,6 @@ export type Database = {
           slug: string;
         }[];
       };
-      upsert_variant_image: {
-        Args: {
-          p_alt?: string;
-          p_height?: number;
-          p_is_primary?: boolean;
-          p_sku: string;
-          p_sort?: number;
-          p_storage_path: string;
-          p_width?: number;
-        };
-        Returns: undefined;
-      };
     };
     Enums: {
       [_ in never]: never;

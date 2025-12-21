@@ -1,11 +1,11 @@
-import { Suspense } from 'react';
-
 import { CategoriesTree } from '@shared/ui/categories-tree';
 
-export const SideBar = (): React.JSX.Element => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <CategoriesTree />
-    </Suspense>
-  );
+import type { CategoryTree } from '@/shared/api';
+
+interface SideBarProps {
+  categoryTree: CategoryTree[];
+}
+
+export const SideBar = ({ categoryTree }: SideBarProps): React.JSX.Element => {
+  return <CategoriesTree categoryTree={categoryTree} />;
 };

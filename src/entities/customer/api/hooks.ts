@@ -5,6 +5,8 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 
+import { logger } from '@shared/lib/logger';
+
 import { mapCustomerFromDB } from './mapper';
 import type { CustomerData, CustomerDataWithId, CustomerRowDTO } from './types';
 
@@ -47,9 +49,7 @@ export const useUpdateCustomer = (): UseMutationResult<
       queryClient.invalidateQueries({ queryKey: queryKey.customerData });
     },
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        console.error('Updating customer failed:', error.message);
-      }
+      logger.error('Updating customer failed:', error);
     },
   });
 };

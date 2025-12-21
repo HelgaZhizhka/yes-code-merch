@@ -6,7 +6,7 @@ import { ROUTES } from '@shared/config/routes';
 import { Avatar, AvatarFallback, AvatarImage } from '@shared/ui//avatar';
 import { getLinkButtonClass } from '@shared/ui/link-button';
 
-interface PerosnalBlockProps {
+interface PersonalBlockProps {
   firstName: string;
   lastName: string;
   email: string;
@@ -16,15 +16,15 @@ export const PersonalBlock = ({
   firstName,
   lastName,
   email,
-}: PerosnalBlockProps) => {
+}: PersonalBlockProps) => {
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-row gap-4 justify-center items-center">
         <Avatar>
           {firstName || lastName ? (
             <AvatarFallback>
-              {firstName[0]}
-              {lastName[0]}
+              {firstName?.[0] || ''}
+              {lastName?.[0] || ''}
             </AvatarFallback>
           ) : (
             <AvatarImage src={AvatarRaccoon} alt="Default avatar" />

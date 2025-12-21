@@ -1,10 +1,13 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { getCategoryBreadcrumbPaths } from './helpers';
+import {
+  getAllCategoryIds,
+  getCategoryBreadcrumbPaths,
+  getCategoryBySlug,
+} from './helpers';
 import { mapCategories, mapCategoriesTree } from './mapper';
 import type {
-  BreadcrumbItem,
   Category,
   CategoryRowDTO,
   CategoryTree,
@@ -50,14 +53,28 @@ export const useCategoriesTree = (): {
   return { data };
 };
 
-export const useBreadcrumbs = (categoryPath?: string): BreadcrumbItem[] => {
+export const useCategoryData = (categoryPath?: string) => {
   const { data: tree } = useCategoriesTree();
 
   return useMemo(() => {
-    if (!categoryPath || !tree) return [];
+    if (!categoryPath || !tree) {
+      return {
+        breadcrumbs: [],
+        category: null,
+        categoryId: null,
+        categoryIds: null,
+        tree: [],
+      };
+    }
 
     const segments = categoryPath.split('/').filter(Boolean);
     const targetSlug = segments.at(-1) ?? '';
-    return getCategoryBreadcrumbPaths(tree, targetSlug);
+
+    const category = getCategoryBySlug(tree, targetSlug);
+    const breadcrumbs = getCategoryBreadcrumbPaths(tree, targetSlug);
+    const categoryId = category?.id ?? null;
+    const categoryIds = category ? getAllCategoryIds(category) : null;
+
+    return { breadcrumbs, category, categoryId, categoryIds, tree };
   }, [categoryPath, tree]);
 };

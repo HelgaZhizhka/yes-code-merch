@@ -14,7 +14,7 @@ import type {
 
 import { getCurrentUser } from '../helpers';
 
-export const AuthErrorMessages = {
+const AuthErrorMessages = {
   REGISTRATION_FAILED: 'User registration failed',
   ALREADY_REGISTERED: 'You are already registered. Please log in',
   UPDATE_FAILED: 'User update failed',

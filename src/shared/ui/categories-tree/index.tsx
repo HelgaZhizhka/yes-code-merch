@@ -4,11 +4,11 @@ import { ChevronRight } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 
 import type { CategoryTree } from '@shared/api';
-import { useCategoriesTree } from '@shared/api/categories/hooks';
 import { ROUTES } from '@shared/config/routes';
 import { cn } from '@shared/lib/utils';
 
 type CategoriesTreeProps = {
+  categoryTree: CategoryTree[];
   variant?: 'default' | 'mobile' | 'sidebar';
   className?: string;
   useFullPath?: boolean;
@@ -93,11 +93,11 @@ const Node = React.memo(
 Node.displayName = 'CategoryNode';
 
 export const CategoriesTree = ({
+  categoryTree,
   variant = 'default',
   className,
   useFullPath = true,
 }: CategoriesTreeProps) => {
-  const { data } = useCategoriesTree();
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
 
   const toggleNode = useCallback((id: string) => {
@@ -115,7 +115,7 @@ export const CategoriesTree = ({
   return (
     <nav className={className} aria-label="All categories">
       <ul className="flex flex-col gap-4">
-        {data.map((root) => (
+        {categoryTree.map((root) => (
           <Node
             key={root.id}
             node={root}

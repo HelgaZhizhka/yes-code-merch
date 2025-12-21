@@ -18,47 +18,6 @@ entities/address/
   └── index.ts           # Public API
 ```
 
-## Usage
-
-### React Query Hooks
-
-```typescript
-import {
-  useGetAddressess,
-  useCreateAddress,
-  useUpdateAddress,
-  useDeleteAddress,
-  useSetDefaultAddress,
-} from 'entities/address';
-
-function ProfileAddresses() {
-  const { data: addresses } = useGetAddressess();
-
-  return (
-    <div>
-      <AddressList
-        shippingAddresses={addresses.shippingAddresses}
-        billingAddresses={addresses.billingAddresses}
-      />
-    </div>
-  );
-}
-```
-
-### Direct API Call
-
-```typescript
-import { getAddresses, createAddress } from 'entities/address/api';
-
-async function bootstrapAddresses(address: Address) {
-  const rows = await getAddresses();
-
-  if (rows.length === 0) {
-    await createAddress({ address, addressType: 'shipping' });
-  }
-}
-```
-
 ## Features
 
 - ✅ **Separate shipping and billing addresses** via `AddressType`.
@@ -316,7 +275,7 @@ export const useGetAddressess = (): {
     queryFn: getAddresses,
     select: mapAddressesFromDB,
     staleTime: Infinity,
-    refetchOnMount: true,
+    refetchOnMount: true, // need to refetch on mount to get the latest data
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });

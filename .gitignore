@@ -32,3 +32,12 @@ dist-ssr
 storybook-static
 
 .clinerules
+
+# Supabase pooler credentials
+.supabase-pooler.sh
+.supabase-scripts/
+
+CLAUDE.md
+*.csv
+scripts/
+generated/

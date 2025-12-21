@@ -16,53 +16,6 @@ entities/customer/
   └── index.ts           # Public API re-exports
 ```
 
-## Usage
-
-### React Query Hooks
-
-```typescript
-import { useGetCustomer, useUpdateCustomer } from 'entities/customer';
-
-function ProfilePage() {
-  const { data: customer } = useGetCustomer();
-  const { mutate: updateCustomer, isPending } = useUpdateCustomer();
-
-  const handleSubmit = (formData: PersonalFormType) => {
-    updateCustomer(formData);
-  };
-
-  if (!customer) {
-    return <EmptyProfileState />;
-  }
-
-  return (
-    <PersonalForm
-      defaultValues={customer}
-      onSubmit={handleSubmit}
-      isSubmitting={isPending}
-    />
-  );
-}
-```
-
-### Direct API Call
-
-```typescript
-import { getCustomer, updateCustomer } from 'entities/customer/api';
-
-async function syncCustomerProfile(formData: CustomerData) {
-  const customer = await getCustomer();
-
-  if (!customer) {
-    // First-time profile creation
-    await updateCustomer(formData);
-  } else {
-    // Profile update
-    await updateCustomer(formData);
-  }
-}
-```
-
 ## Features
 
 - ✅ **Single customer row per user** — enforced by `user_id` uniqueness and `upsert`.

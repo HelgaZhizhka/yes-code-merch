@@ -25,9 +25,9 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.strict,
-      eslintPluginPrettier,
       unicorn.configs.recommended,
       jsxA11y.flatConfigs.recommended,
+      eslintPluginPrettier,
     ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
