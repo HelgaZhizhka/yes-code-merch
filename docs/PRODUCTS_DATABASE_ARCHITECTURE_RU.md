@@ -101,15 +101,15 @@ create table product_variants (
 
 ### 3️⃣ Таблица `product_images` (Изображения)
 
-Картинки для вариантов продукта в трёх размерах.
+Картинки для вариантов продукта.
 
 ```sql
 create table product_images (
   id uuid primary key,
   variant_id uuid references product_variants(id), -- К какому варианту
-  url text not null,                -- Путь к файлу в storage
+  url text not null,                -- Относительный путь к файлу в storage
   alt text,                         -- Описание для SEO
-  width int,                        -- Ширина изображения (600, 384, 120)
+  width int,                        -- Ширина изображения
   height int,                       -- Высота изображения
   is_primary boolean default false, -- Главное фото
   sort_order int default 0,         -- Порядок отображения
@@ -119,29 +119,33 @@ create table product_images (
 
 **Как это работает:**
 
-1. **Три размера для каждого изображения:**
+1. **Одна запись на изображение (только large):**
 
-   - `large` (600px) - для страниц деталей товара, галерей
-   - `medium` (384px) - для карточек в каталоге, списков товаров
-   - `small` (120px) - для миниатюр, превью, корзины
+   - В базе хранится **только путь к large** размеру
+   - `medium` и `small` генерируются автоматически в коде заменой `/large/` → `/medium/` или `/small/`
 
 2. **Хранение в Supabase Storage:**
 
-   - URL содержит размер: `/large/image.jpg`, `/medium/image.jpg`, `/small/image.jpg`
-   - Для каждого варианта создаются 3 записи с разными URL
-   - Пример:
+   - Структура папок:
+     ```
+     catalog/variants/{sku}/
+       ├── large/{sku}.png   (600px)
+       ├── medium/{sku}.png  (384px)
+       └── small/{sku}.png   (120px)
+     ```
+   - В БД хранится только: `catalog/variants/{sku}/large/{sku}.png`
+   - Пример записи:
      ```
      variant_id: "abc-123"
-     ├─ url: "products/large/tshirt-red.jpg"    (sort_order: 0)
-     ├─ url: "products/medium/tshirt-red.jpg"   (sort_order: 0)
-     └─ url: "products/small/tshirt-red.jpg"    (sort_order: 0)
+     url: "catalog/variants/tshirt-red-m/large/tshirt-red-m.png"
+     sort_order: 0
      ```
 
-3. **Группировка изображений:**
-   - `sort_order` - группирует три размера одного изображения (все имеют одинаковый sort_order)
-   - Первый набор фото: `sort_order = 0` (для large, medium, small)
-   - Второй набор (галерея): `sort_order = 1`, и так далее
-   - `is_primary` - не используется в текущей реализации
+3. **Преимущества подхода:**
+   - Одна запись = одно изображение (меньше данных в БД)
+   - Нет рассинхронизации между размерами
+   - Легко добавить новый размер без изменения БД
+   - `sort_order` определяет порядок (0 = главное фото)
 
 ---
 
@@ -400,14 +404,10 @@ export const getCatalogProducts = async (
         stock: 15,
         is_master: true,
 
+        // Только одна запись на изображение (large путь)
+        // medium и small генерируются автоматически в mapper
         product_images: [
-          { url: 'products/large/tshirt.jpg', is_primary: true, sort_order: 0 },
-          {
-            url: 'products/medium/tshirt.jpg',
-            is_primary: true,
-            sort_order: 0,
-          },
-          { url: 'products/small/tshirt.jpg', is_primary: true, sort_order: 0 },
+          { url: 'catalog/variants/YC-TSHIRT-RED-M/large/YC-TSHIRT-RED-M.png', is_primary: true, sort_order: 0 },
         ],
       },
     ],
@@ -514,37 +514,29 @@ export const getCatalogProducts = async (
 Файл: `src/entities/product/api/mapper.ts`
 
 ```typescript
-// Вспомогательная функция: определяет размер по URL
-const extractImageSize = (url: string): 'large' | 'medium' | 'small' | null => {
-  if (url.includes('/large/')) return 'large';
-  if (url.includes('/medium/')) return 'medium';
-  if (url.includes('/small/')) return 'small';
-  return null;
+// Генерирует URL для всех размеров из базового пути (large)
+const getImageSizes = (basePath: string): ProductImages => {
+  return {
+    large: getStorageUrl(basePath),
+    medium: getStorageUrl(basePath.replace('/large/', '/medium/')),
+    small: getStorageUrl(basePath.replace('/large/', '/small/')),
+  };
 };
 
-// Группирует изображения по размерам
+// Находит главное изображение и генерирует все размеры
 const groupImagesBySizes = (
   images: ProductImageDTO[] | undefined
 ): ProductImages | null => {
   if (!images || images.length === 0) return null;
 
-  // Находим минимальный sort_order
+  // Находим изображение с минимальным sort_order (главное фото)
   const minSortOrder = Math.min(...images.map((img) => img.sort_order));
+  const primaryImage = images.find((img) => img.sort_order === minSortOrder);
 
-  // Берём все изображения с минимальным sort_order
-  const targetImages = images.filter((img) => img.sort_order === minSortOrder);
+  if (!primaryImage) return null;
 
-  // Группируем по размерам
-  const result: ProductImages = { large: null, medium: null, small: null };
-
-  for (const img of targetImages) {
-    const size = extractImageSize(img.url);
-    if (size && !result[size]) {
-      result[size] = getStorageUrl(img.url);
-    }
-  }
-
-  return result.large || result.medium || result.small ? result : null;
+  // Генерируем все три размера из одного пути
+  return getImageSizes(primaryImage.url);
 };
 
 export const mapToCatalogProducts = (
@@ -605,50 +597,49 @@ export const mapToCatalogProducts = (
 // Всегда вернется массив с 1 элементом
 ```
 
-**Как работает группировка изображений?**
+**Как работает генерация размеров изображений?**
 
 ```typescript
-// 1. Из БД приходят все размеры одного изображения (одинаковый sort_order):
+// 1. Из БД приходит только large путь:
 product_images: [
-  { url: "products/large/tshirt.jpg", sort_order: 0 },
-  { url: "products/medium/tshirt.jpg", sort_order: 0 },
-  { url: "products/small/tshirt.jpg", sort_order: 0 }
+  { url: "catalog/variants/tshirt-red/large/tshirt-red.png", sort_order: 0 }
 ]
 
-// 2. Mapper находит минимальный sort_order (0) и берет эту группу:
+// 2. Mapper находит изображение с минимальным sort_order:
 const minSortOrder = Math.min(...images.map(img => img.sort_order)); // 0
-const targetImages = images.filter(img => img.sort_order === minSortOrder);
+const primaryImage = images.find(img => img.sort_order === minSortOrder);
 
-// 3. Группирует по размеру через extractImageSize():
+// 3. Генерирует все три размера заменой "/large/" в пути:
+const getImageSizes = (basePath) => ({
+  large: getStorageUrl(basePath),  // ...large/tshirt-red.png
+  medium: getStorageUrl(basePath.replace('/large/', '/medium/')),  // ...medium/tshirt-red.png
+  small: getStorageUrl(basePath.replace('/large/', '/small/')),    // ...small/tshirt-red.png
+});
+
+// 4. Результат:
 images: {
-  large: "https://storage.example.com/products/large/tshirt.jpg",
-  medium: "https://storage.example.com/products/medium/tshirt.jpg",
-  small: "https://storage.example.com/products/small/tshirt.jpg"
+  large: "https://project.supabase.co/storage/v1/object/public/catalog/variants/tshirt-red/large/tshirt-red.png",
+  medium: "https://project.supabase.co/storage/v1/object/public/catalog/variants/tshirt-red/medium/tshirt-red.png",
+  small: "https://project.supabase.co/storage/v1/object/public/catalog/variants/tshirt-red/small/tshirt-red.png"
 }
 
-// 4. UI выбирает нужный размер:
+// 5. UI выбирает нужный размер:
 // Каталог: product.images?.medium
 // Превью: product.images?.small
 // Детали: product.images?.large
 ```
 
-**Пример галереи (несколько наборов фото):**
+**Пример галереи (несколько фото):**
 
 ```typescript
-// В БД:
+// В БД — по одной записи на фото (только large):
 product_images: [
-  // Первое фото (sort_order = 0)
-  { url: 'products/large/tshirt-front.jpg', sort_order: 0 },
-  { url: 'products/medium/tshirt-front.jpg', sort_order: 0 },
-  { url: 'products/small/tshirt-front.jpg', sort_order: 0 },
-
-  // Второе фото (sort_order = 1)
-  { url: 'products/large/tshirt-back.jpg', sort_order: 1 },
-  { url: 'products/medium/tshirt-back.jpg', sort_order: 1 },
-  { url: 'products/small/tshirt-back.jpg', sort_order: 1 },
+  { url: 'catalog/variants/tshirt/large/tshirt-front.png', sort_order: 0 },  // Главное
+  { url: 'catalog/variants/tshirt/large/tshirt-back.png', sort_order: 1 },   // Второе
 ];
 
-// Mapper берёт только первый набор (minSortOrder = 0)
+// Mapper берёт только первое (minSortOrder = 0)
+// и генерирует все три размера автоматически
 ```
 
 **Почему `filter(isNotNull)`?**
@@ -709,4 +700,4 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 2. **Nested queries** - Supabase позволяет загружать связанные данные одним запросом
 3. **Маппинг** - преобразуем сложный DTO в простой Domain Model
 4. **Скидки (TODO - Phase 1)** - могут быть на продукт или вариант, с приоритетом. Сейчас только процентные
-5. **Изображения** - три размера (large/medium/small), выбираются по минимальному sort_order
+5. **Изображения** - в БД только large путь, medium/small генерируются автоматически заменой `/large/` в URL
