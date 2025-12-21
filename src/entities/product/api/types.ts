@@ -86,5 +86,3 @@ export interface CatalogProduct {
 export interface CatalogParams {
   categoryIds: string[];
 }
-
-export type ImageSize = 'large' | 'medium' | 'small';
