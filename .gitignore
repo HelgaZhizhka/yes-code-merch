@@ -36,3 +36,8 @@ storybook-static
 # Supabase pooler credentials
 .supabase-pooler.sh
 .supabase-scripts/
+
+CLAUDE.md
+*.csv
+scripts/
+generated/
