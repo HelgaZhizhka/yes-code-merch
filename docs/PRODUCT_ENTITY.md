@@ -95,14 +95,25 @@ interface CatalogProduct {
 
 **Image handling:**
 
-- Three image sizes are stored for each product: `large` (600px), `medium` (384px), `small` (120px)
-- Size is determined by URL path segment (e.g., `/large/`, `/medium/`, `/small/`)
+- Only the `large` size path is stored in the database (e.g., `catalog/variants/{sku}/large/{sku}.png`)
+- `medium` and `small` sizes are **generated automatically** by replacing `/large/` with `/medium/` or `/small/`
+- Storage structure in Supabase Storage:
+  ```
+  catalog/variants/{sku}/
+    ├── large/{sku}.png   (600px)
+    ├── medium/{sku}.png  (384px)
+    └── small/{sku}.png   (120px)
+  ```
 - Image selection logic:
-  1. Find minimum `sort_order` value among all product images
-  2. Select all images with that minimum `sort_order` (typically 3 images - one per size)
-  3. For each size (`large`, `medium`, `small`), use the first matching image from the selected set
-- Each size URL is fully qualified (includes Supabase storage domain)
+  1. Find the image with minimum `sort_order` value
+  2. Generate all three size URLs from the base path using `getImageSizes()`
+- Each size URL is fully qualified (includes Supabase storage domain via `getStorageUrl()`)
 - If no images exist for the product, `images` field will be `null`
+
+**Benefits of this approach:**
+- Single source of truth (one DB record per image)
+- Easy to add new sizes without DB changes
+- No sync issues between sizes
 
 ## Query Architecture
 
@@ -219,11 +230,18 @@ interface CatalogProduct {
 The `mapToCatalogProducts()` function transforms DTOs into domain models:
 
 ```typescript
-const extractImageSize = (url: string): 'large' | 'medium' | 'small' | null => {
-  if (url.includes('/large/')) return 'large';
-  if (url.includes('/medium/')) return 'medium';
-  if (url.includes('/small/')) return 'small';
-  return null;
+/**
+ * Generates all image size URLs from a base path.
+ *
+ * Only the "large" path is stored in the database.
+ * Medium and small are derived by replacing "/large/" in the path.
+ */
+const getImageSizes = (basePath: string): ProductImages => {
+  return {
+    large: getStorageUrl(basePath),
+    medium: getStorageUrl(basePath.replace('/large/', '/medium/')),
+    small: getStorageUrl(basePath.replace('/large/', '/small/')),
+  };
 };
 
 const groupImagesBySizes = (
@@ -231,22 +249,12 @@ const groupImagesBySizes = (
 ): ProductImages | null => {
   if (!images || images.length === 0) return null;
 
-  // Find minimum sort_order value
   const minSortOrder = Math.min(...images.map((img) => img.sort_order));
+  const primaryImage = images.find((img) => img.sort_order === minSortOrder);
 
-  // Select all images with minimum sort_order
-  const targetImages = images.filter((img) => img.sort_order === minSortOrder);
+  if (!primaryImage) return null;
 
-  // Group by size
-  const result: ProductImages = { large: null, medium: null, small: null };
-  for (const img of targetImages) {
-    const size = extractImageSize(img.url);
-    if (size && !result[size]) {
-      result[size] = getStorageUrl(img.url);
-    }
-  }
-
-  return result.large || result.medium || result.small ? result : null;
+  return getImageSizes(primaryImage.url);
 };
 
 export const mapToCatalogProducts = (
@@ -279,10 +287,9 @@ export const mapToCatalogProducts = (
 **Mapper responsibilities:**
 
 - ✅ Flattens nested master variant data
-- ✅ Groups images by size (large/medium/small):
-  - Finds minimum `sort_order` value among all images
-  - Selects all images with that minimum `sort_order`
-  - For each size, selects first matching image from the selected set
+- ✅ Generates all image sizes from single DB record:
+  - Finds primary image (minimum `sort_order`)
+  - Derives `medium` and `small` URLs by path substitution
 - ✅ Converts snake_case to camelCase
 - ✅ Filters out products without master variant
 - ✅ Converts storage paths to full URLs (via `getStorageUrl()`)

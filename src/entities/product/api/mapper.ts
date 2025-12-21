@@ -2,37 +2,40 @@ import { getStorageUrl, isNotNull } from '@shared/lib/utils';
 
 import type {
   CatalogProduct,
-  ImageSize,
   ProductDTO,
   ProductImageDTO,
   ProductImages,
 } from './types';
 
-const extractImageSize = (url: string): ImageSize | null => {
-  if (url.includes('/large/')) return 'large';
-  if (url.includes('/medium/')) return 'medium';
-  if (url.includes('/small/')) return 'small';
-  return null;
+const ImageSize = {
+  large: 'large',
+  medium: 'medium',
+  small: 'small',
+} as const;
+
+const getImageSizes = (basePath: string): ProductImages => {
+  return {
+    large: getStorageUrl(basePath),
+    medium: getStorageUrl(
+      basePath.replace(`/${ImageSize.large}/`, `/${ImageSize.medium}/`)
+    ),
+    small: getStorageUrl(
+      basePath.replace(`/${ImageSize.large}/`, `/${ImageSize.small}/`)
+    ),
+  };
 };
 
 const groupImagesBySizes = (
   images: ProductImageDTO[] | undefined
 ): ProductImages | null => {
   if (!images || images.length === 0) return null;
+
   const minSortOrder = Math.min(...images.map((img) => img.sort_order));
-  const targetImages = images.filter((img) => img.sort_order === minSortOrder);
+  const primaryImage = images.find((img) => img.sort_order === minSortOrder);
 
-  const result: ProductImages = { large: null, medium: null, small: null };
+  if (!primaryImage) return null;
 
-  for (const img of targetImages) {
-    const size = extractImageSize(img.url);
-
-    if (size && !result[size]) {
-      result[size] = getStorageUrl(img.url);
-    }
-  }
-
-  return result.large || result.medium || result.small ? result : null;
+  return getImageSizes(primaryImage.url);
 };
 
 export const mapToCatalogProducts = (
