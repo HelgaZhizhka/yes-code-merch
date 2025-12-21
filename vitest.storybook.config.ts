@@ -13,7 +13,7 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     globals: true,
-    workspace: [
+    projects: [
       {
         extends: true,
         plugins: [
