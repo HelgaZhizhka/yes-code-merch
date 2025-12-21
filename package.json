@@ -28,7 +28,6 @@
     "lint:styles:fix": "stylelint \"**/*.css\" --fix",
     "types:db:local": "supabase gen types typescript --local --schema public > src/shared/api/database.types.ts",
     "types:db:stage": "supabase gen types typescript --project-id tlnboeuoaezawexbrblg --schema public > src/shared/api/database.types.ts",
-    "upload:images": "node scripts/migration/upload-images-to-storage.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
