@@ -407,7 +407,11 @@ export const getCatalogProducts = async (
         // Только одна запись на изображение (large путь)
         // medium и small генерируются автоматически в mapper
         product_images: [
-          { url: 'catalog/variants/YC-TSHIRT-RED-M/large/YC-TSHIRT-RED-M.png', is_primary: true, sort_order: 0 },
+          {
+            url: 'catalog/variants/YC-TSHIRT-RED-M/large/YC-TSHIRT-RED-M.png',
+            is_primary: true,
+            sort_order: 0,
+          },
         ],
       },
     ],
@@ -634,8 +638,8 @@ images: {
 ```typescript
 // В БД — по одной записи на фото (только large):
 product_images: [
-  { url: 'catalog/variants/tshirt/large/tshirt-front.png', sort_order: 0 },  // Главное
-  { url: 'catalog/variants/tshirt/large/tshirt-back.png', sort_order: 1 },   // Второе
+  { url: 'catalog/variants/tshirt/large/tshirt-front.png', sort_order: 0 }, // Главное
+  { url: 'catalog/variants/tshirt/large/tshirt-back.png', sort_order: 1 }, // Второе
 ];
 
 // Mapper берёт только первое (minSortOrder = 0)

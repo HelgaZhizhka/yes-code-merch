@@ -111,6 +111,7 @@ interface CatalogProduct {
 - If no images exist for the product, `images` field will be `null`
 
 **Benefits of this approach:**
+
 - Single source of truth (one DB record per image)
 - Easy to add new sizes without DB changes
 - No sync issues between sizes
