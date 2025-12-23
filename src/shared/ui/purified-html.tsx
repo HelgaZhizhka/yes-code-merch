@@ -1,14 +1,18 @@
 import DOMPurify from 'dompurify';
 import parse from 'html-react-parser';
+import { useMemo } from 'react';
 
 interface PurifiedHtmlProps {
   html?: string | null;
 }
 
 export const PurifiedHtml = ({ html }: PurifiedHtmlProps) => {
-  if (!html) return null;
+  const sanitized = useMemo(() => {
+    if (!html) return null;
+    return parse(DOMPurify.sanitize(html));
+  }, [html]);
 
-  const sanitized = DOMPurify.sanitize(html);
+  if (!sanitized) return null;
 
-  return <>{parse(sanitized)}</>;
+  return <>{sanitized}</>;
 };
