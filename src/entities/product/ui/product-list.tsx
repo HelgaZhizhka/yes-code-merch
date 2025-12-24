@@ -6,7 +6,9 @@ interface ProductListProps {
   products: CatalogProduct[];
 }
 
-export const ProductList = ({ products }: ProductListProps) => {
+export const ProductList = ({
+  products,
+}: ProductListProps): React.JSX.Element => {
   if (products.length === 0) {
     return <p>No products found</p>;
   }

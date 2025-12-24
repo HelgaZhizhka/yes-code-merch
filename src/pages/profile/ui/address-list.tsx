@@ -28,7 +28,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@shared/ui/tooltip';
 
 import { useDeleteProfileAddress, useSetDefaultProfileAddress } from '../hooks';
 
-export const AddressList = ({ addresses, addressType }: AddressListProps) => {
+export const AddressList = ({
+  addresses,
+  addressType,
+}: AddressListProps): React.JSX.Element => {
   const { handleSetAddressDefault, isPending } = useSetDefaultProfileAddress();
   const { handleDeleteProfileAddress, isPending: isDeleting } =
     useDeleteProfileAddress();

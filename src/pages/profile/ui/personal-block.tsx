@@ -16,7 +16,7 @@ export const PersonalBlock = ({
   firstName,
   lastName,
   email,
-}: PersonalBlockProps) => {
+}: PersonalBlockProps): React.JSX.Element => {
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-row gap-4 justify-center items-center">
