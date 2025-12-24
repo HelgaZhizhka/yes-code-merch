@@ -42,7 +42,7 @@ export function Spinner({
   show,
   children,
   className,
-}: SpinnerContentProps) {
+}: SpinnerContentProps): React.JSX.Element {
   return (
     <span className={spinnerVariants({ show })}>
       <Loader2 className={cn(loaderVariants({ size }), className)} />

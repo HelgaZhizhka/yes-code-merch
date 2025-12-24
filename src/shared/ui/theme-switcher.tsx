@@ -3,7 +3,7 @@ import { MoonStar, Sun } from 'lucide-react';
 import { useTheme } from '@shared/theme/hooks';
 import { Theme } from '@shared/theme/types';
 
-export const ThemeSwitcher = () => {
+export const ThemeSwitcher = (): React.JSX.Element => {
   const { theme, setTheme } = useTheme();
   const isDark = theme === Theme.DARK;
 

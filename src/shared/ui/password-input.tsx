@@ -5,7 +5,9 @@ import { Input } from '@shared/ui/input';
 
 type PasswordInputProps = React.ComponentProps<typeof Input>;
 
-export const PasswordInput = ({ ...props }: PasswordInputProps) => {
+export const PasswordInput = ({
+  ...props
+}: PasswordInputProps): React.JSX.Element => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (

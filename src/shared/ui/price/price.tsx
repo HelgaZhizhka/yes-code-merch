@@ -16,7 +16,11 @@ const priceVariants = cva('transition-all', {
   defaultVariants: { variant: 'catalog' },
 });
 
-export const Price = ({ value, variant, currency = 'EUR' }: PriceProps) => {
+export const Price = ({
+  value,
+  variant,
+  currency = 'EUR',
+}: PriceProps): React.JSX.Element => {
   return (
     <div className={priceVariants({ variant })}>
       {(value / 100).toFixed(2)} {currency}
