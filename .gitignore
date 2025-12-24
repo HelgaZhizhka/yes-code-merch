@@ -38,6 +38,7 @@ storybook-static
 .supabase-scripts/
 
 CLAUDE.md
+.claude
 *.csv
 scripts/
 generated/
