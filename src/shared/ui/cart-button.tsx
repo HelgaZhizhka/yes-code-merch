@@ -19,7 +19,7 @@ const cartButtonVariants = cva(
   }
 );
 
-export const CartButton = ({ variant }: CartButtonProps) => {
+export const CartButton = ({ variant }: CartButtonProps): React.JSX.Element => {
   return (
     <button
       type="button"

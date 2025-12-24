@@ -8,7 +8,7 @@ interface PriceWithDiscountProps {
 export const PriceWithDiscount = ({
   value,
   currency = 'EUR',
-}: PriceWithDiscountProps) => {
+}: PriceWithDiscountProps): React.JSX.Element => {
   return (
     <div>
       <Price value={value} currency={currency} />

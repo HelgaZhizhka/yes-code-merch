@@ -4,6 +4,6 @@ interface AddToCartProps {
   variant?: 'catalog' | 'product';
 }
 
-export const AddToCart = ({ variant }: AddToCartProps) => {
+export const AddToCart = ({ variant }: AddToCartProps): React.JSX.Element => {
   return <CartButton variant={variant} />;
 };

@@ -6,7 +6,9 @@ interface PurifiedHtmlProps {
   html?: string | null;
 }
 
-export const PurifiedHtml = ({ html }: PurifiedHtmlProps) => {
+export const PurifiedHtml = ({
+  html,
+}: PurifiedHtmlProps): React.JSX.Element | null => {
   const sanitized = useMemo(() => {
     if (!html) return null;
     return parse(DOMPurify.sanitize(html));

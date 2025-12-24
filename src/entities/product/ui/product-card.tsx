@@ -9,7 +9,9 @@ interface ProductCardProps {
   product: CatalogProduct;
 }
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export const ProductCard = ({
+  product,
+}: ProductCardProps): React.JSX.Element => {
   const imageUrl =
     product.images?.medium || 'https://placehold.co/400x400?text=No+Image';
 
