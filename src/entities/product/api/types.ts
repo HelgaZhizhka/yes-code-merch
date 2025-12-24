@@ -83,6 +83,39 @@ export interface CatalogProduct {
   images: ProductImages | null;
 }
 
+export type SortField = 'price' | 'name' | 'createdAt';
+export type SortOrder = 'asc' | 'desc';
+
+export interface PriceRange {
+  min?: number;
+  max?: number;
+}
+
+export interface PaginationParams {
+  page: number;
+  pageSize: number;
+}
+
+export interface PaginationMeta {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
 export interface CatalogParams {
-  categoryIds: string[];
+  categoryIds?: string[];
+  search?: string;
+  priceRange?: PriceRange;
+  inStock?: boolean;
+  sortBy?: SortField;
+  sortOrder?: SortOrder;
+  pagination?: PaginationParams;
+}
+
+export interface CatalogResult {
+  products: CatalogProduct[];
+  pagination: PaginationMeta;
 }

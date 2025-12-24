@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { mapToCatalogProducts } from './mapper';
-import type { CatalogParams, CatalogProduct, ProductDTO } from './types';
+import type { CatalogParams, CatalogProduct, CatalogResult } from './types';
 
 import { getCatalogProducts } from './index';
 
@@ -11,10 +11,17 @@ export const productKeys = {
 } as const;
 
 export const useProducts = (params: CatalogParams) => {
-  return useSuspenseQuery<ProductDTO[], Error, CatalogProduct[]>({
+  return useSuspenseQuery<
+    CatalogResult,
+    Error,
+    { products: CatalogProduct[]; pagination: CatalogResult['pagination'] }
+  >({
     queryKey: productKeys.catalog(params),
     queryFn: () => getCatalogProducts(params),
-    select: mapToCatalogProducts,
+    select: (data) => ({
+      products: mapToCatalogProducts(data.products),
+      pagination: data.pagination,
+    }),
     staleTime: 1000 * 60 * 5,
     refetchOnMount: false,
     refetchOnWindowFocus: false,

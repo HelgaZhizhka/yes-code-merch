@@ -7,7 +7,9 @@ interface CatalogListProps {
 export const CatalogList = ({
   categoryIds,
 }: CatalogListProps): React.JSX.Element | null => {
-  const { data: products } = useProducts({
+  const {
+    data: { products },
+  } = useProducts({
     categoryIds: categoryIds ?? [],
   });
 
