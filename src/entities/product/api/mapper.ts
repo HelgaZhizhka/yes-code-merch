@@ -7,7 +7,7 @@ import type {
   ProductImages,
 } from './types';
 
-import { getActiveDiscounts } from '../lib';
+import { calculateDiscountAmount, getActiveDiscounts } from '../lib';
 
 const ImageSize = {
   large: 'large',
@@ -53,11 +53,13 @@ export const mapToCatalogProducts = (
       const images = groupImagesBySizes(masterVariant.product_images);
 
       const activeDiscounts = getActiveDiscounts(allDiscounts);
-      const percentDiscount = activeDiscounts[0] ?? null;
+      const discount = activeDiscounts[0] ?? null;
       const originalPrice = masterVariant.price;
       const finalPrice = originalPrice;
-      const hasDiscount = Boolean(percentDiscount);
-      const discountAmount = undefined;
+      const hasDiscount = Boolean(discount);
+      const discountAmount = discount
+        ? calculateDiscountAmount(discount, originalPrice)
+        : 0;
       const discountPercentage = undefined;
       const appliedDiscount = undefined;
 

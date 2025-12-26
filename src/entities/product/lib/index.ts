@@ -1,1 +1,4 @@
-export { getActiveDiscounts } from './calculate-discount';
+export {
+  getActiveDiscounts,
+  calculateDiscountAmount,
+} from './calculate-discount';

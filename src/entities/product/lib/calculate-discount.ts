@@ -20,3 +20,10 @@ export const getActiveDiscounts = (
     return true;
   });
 };
+
+export const calculateDiscountAmount = (
+  discount: ProductDiscountDTO,
+  originalPrice: number
+): number => {
+  return Math.round(originalPrice * (discount.discount_value / 100));
+};
