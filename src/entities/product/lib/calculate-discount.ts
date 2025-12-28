@@ -44,6 +44,34 @@ export const calculateFinalPrice = (
   return Math.max(finalPrice, 0);
 };
 
+export const selectBestDiscount = (
+  discounts: ProductDiscountDTO[],
+  originalPrice: number
+): ProductDiscountDTO | null => {
+  if (discounts.length === 0) {
+    return null;
+  }
+
+  const maxPriority = Math.max(
+    ...discounts.map((discount) => discount.priority)
+  );
+
+  const priorityDiscounts = discounts.filter(
+    (discount) => discount.priority === maxPriority
+  );
+
+  if (priorityDiscounts.length === 1) {
+    return priorityDiscounts[0];
+  }
+
+  return priorityDiscounts.reduce((best, current) => {
+    const bestAmount = calculateDiscountAmount(best, originalPrice);
+    const currentAmount = calculateDiscountAmount(current, originalPrice);
+
+    return currentAmount > bestAmount ? current : best;
+  });
+};
+
 export const applyDiscountsToProduct = (
   product: ProductDTO,
   originalPrice: number
@@ -55,7 +83,7 @@ export const applyDiscountsToProduct = (
   const allDiscounts = product.product_discounts ?? [];
   const activeDiscounts = getActiveDiscounts(allDiscounts);
 
-  const discount = activeDiscounts[0] ?? null;
+  const discount = selectBestDiscount(activeDiscounts, originalPrice);
 
   if (!discount) {
     return {
@@ -70,7 +98,7 @@ export const applyDiscountsToProduct = (
   const appliedDiscount: AppliedDiscount = {
     id: discount.id,
     name: discount.name,
-    type: 'percent',
+    type: discount.discount_type === 'amount' ? 'amount' : 'percent',
     value: discount.discount_value,
     validUntil: discount.valid_to ? new Date(discount.valid_to) : undefined,
   };

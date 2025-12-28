@@ -4,7 +4,7 @@ import { formatPrice } from '@shared/lib/price-formatter';
 
 interface PriceProps {
   value: number;
-  variant?: 'catalog' | 'product';
+  variant?: 'catalog' | 'product' | 'old';
   currency?: string;
 }
 
@@ -13,6 +13,7 @@ const priceVariants = cva('transition-all', {
     variant: {
       catalog: 'text-2xl font-semibold text-secondary',
       product: 'text-xl font-bold',
+      old: 'text-sm text-gray-400 line-through',
     },
   },
   defaultVariants: { variant: 'catalog' },
