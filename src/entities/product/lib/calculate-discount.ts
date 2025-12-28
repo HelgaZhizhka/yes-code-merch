@@ -64,12 +64,14 @@ export const selectBestDiscount = (
     return priorityDiscounts[0];
   }
 
-  return priorityDiscounts.reduce((best, current) => {
-    const bestAmount = calculateDiscountAmount(best, originalPrice);
-    const currentAmount = calculateDiscountAmount(current, originalPrice);
-
-    return currentAmount > bestAmount ? current : best;
-  });
+  return priorityDiscounts.reduce(
+    (best, current) =>
+      calculateDiscountAmount(current, originalPrice) >
+      calculateDiscountAmount(best, originalPrice)
+        ? current
+        : best,
+    priorityDiscounts[0]
+  );
 };
 
 export const applyDiscountsToProduct = (
