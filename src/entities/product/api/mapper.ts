@@ -53,9 +53,8 @@ export const mapToCatalogProducts = (
 
       const originalPrice = masterVariant.price;
       const { finalPrice, discountAmount, appliedDiscount } =
-        applyDiscountsToProduct(raw, originalPrice);
+        applyDiscountsToProduct(raw.product_discounts ?? [], originalPrice);
       const hasDiscount = Boolean(appliedDiscount);
-      const discountPercentage = appliedDiscount?.value;
 
       return {
         productId: raw.id,
@@ -70,7 +69,6 @@ export const mapToCatalogProducts = (
         currency: masterVariant.currency,
         hasDiscount,
         discountAmount,
-        discountPercentage,
         appliedDiscount,
         images,
       };

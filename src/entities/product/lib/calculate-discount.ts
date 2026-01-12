@@ -1,7 +1,8 @@
-import type {
-  AppliedDiscount,
-  ProductDiscountDTO,
-  ProductDTO,
+import {
+  DISCOUNT_TYPES,
+  type AppliedDiscount,
+  type DiscountType,
+  type ProductDiscountDTO,
 } from '../api/types';
 
 export const getActiveDiscounts = (
@@ -29,16 +30,21 @@ export const calculateDiscountAmount = (
   discount: ProductDiscountDTO,
   originalPrice: number
 ): number => {
-  return Math.round(originalPrice * (discount.discount_value / 100));
+  if (discount.discount_type === DISCOUNT_TYPES.PERCENT) {
+    return Math.round(originalPrice * (discount.discount_value / 100));
+  }
+
+  if (discount.discount_type === DISCOUNT_TYPES.AMOUNT) {
+    return Math.round(discount.discount_value);
+  }
+
+  throw new Error(`Incorrect discount type: ${discount.discount_type}`);
 };
 
 export const calculateFinalPrice = (
   originalPrice: number,
-  discount: ProductDiscountDTO | null
+  discountAmount: number
 ): number => {
-  if (!discount) return originalPrice;
-
-  const discountAmount = calculateDiscountAmount(discount, originalPrice);
   const finalPrice = originalPrice - discountAmount;
 
   return Math.max(finalPrice, 0);
@@ -47,11 +53,7 @@ export const calculateFinalPrice = (
 export const selectBestDiscount = (
   discounts: ProductDiscountDTO[],
   originalPrice: number
-): ProductDiscountDTO | null => {
-  if (discounts.length === 0) {
-    return null;
-  }
-
+): ProductDiscountDTO => {
   const maxPriority = Math.max(
     ...discounts.map((discount) => discount.priority)
   );
@@ -60,47 +62,47 @@ export const selectBestDiscount = (
     (discount) => discount.priority === maxPriority
   );
 
-  if (priorityDiscounts.length === 1) {
-    return priorityDiscounts[0];
+  let bestDiscount = priorityDiscounts[0];
+  let maxAmount = calculateDiscountAmount(bestDiscount, originalPrice);
+
+  for (let i = 1; i < priorityDiscounts.length; i++) {
+    const discount = priorityDiscounts[i];
+    const amount = calculateDiscountAmount(discount, originalPrice);
+    if (amount > maxAmount) {
+      maxAmount = amount;
+      bestDiscount = discount;
+    }
   }
 
-  return priorityDiscounts.reduce(
-    (best, current) =>
-      calculateDiscountAmount(current, originalPrice) >
-      calculateDiscountAmount(best, originalPrice)
-        ? current
-        : best,
-    priorityDiscounts[0]
-  );
+  return bestDiscount;
 };
 
 export const applyDiscountsToProduct = (
-  product: ProductDTO,
+  discounts: ProductDiscountDTO[],
   originalPrice: number
 ): {
   finalPrice: number;
   discountAmount: number;
   appliedDiscount?: AppliedDiscount;
 } => {
-  const allDiscounts = product.product_discounts ?? [];
-  const activeDiscounts = getActiveDiscounts(allDiscounts);
+  const activeDiscounts = getActiveDiscounts(discounts);
 
-  const discount = selectBestDiscount(activeDiscounts, originalPrice);
-
-  if (!discount) {
+  if (activeDiscounts.length === 0) {
     return {
       finalPrice: originalPrice,
       discountAmount: 0,
     };
   }
 
+  const discount = selectBestDiscount(activeDiscounts, originalPrice);
+
   const discountAmount = calculateDiscountAmount(discount, originalPrice);
-  const finalPrice = calculateFinalPrice(originalPrice, discount);
+  const finalPrice = calculateFinalPrice(originalPrice, discountAmount);
 
   const appliedDiscount: AppliedDiscount = {
     id: discount.id,
     name: discount.name,
-    type: discount.discount_type === 'amount' ? 'amount' : 'percent',
+    type: discount.discount_type as DiscountType,
     value: discount.discount_value,
     validUntil: discount.valid_to ? new Date(discount.valid_to) : undefined,
   };
