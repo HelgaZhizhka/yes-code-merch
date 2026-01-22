@@ -37,10 +37,17 @@ export type ProductDiscountDTO = Pick<
   | 'product_id'
 >;
 
+export const DISCOUNT_TYPES = {
+  PERCENT: 'percent',
+  AMOUNT: 'amount',
+} as const;
+
+export type DiscountType = (typeof DISCOUNT_TYPES)[keyof typeof DISCOUNT_TYPES];
+
 export interface AppliedDiscount {
   id: string;
   name: string;
-  type: 'percent' | 'amount';
+  type: DiscountType;
   value: number;
   validUntil?: Date;
 }
@@ -78,7 +85,6 @@ export interface CatalogProduct {
   currency: string;
   hasDiscount: boolean;
   discountAmount?: number;
-  discountPercentage?: number;
   appliedDiscount?: AppliedDiscount;
   images: ProductImages | null;
 }

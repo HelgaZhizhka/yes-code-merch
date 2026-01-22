@@ -7,6 +7,8 @@ import type {
   ProductImages,
 } from './types';
 
+import { applyDiscountsToProduct } from '../lib';
+
 const ImageSize = {
   large: 'large',
   medium: 'medium',
@@ -50,11 +52,9 @@ export const mapToCatalogProducts = (
       const images = groupImagesBySizes(masterVariant.product_images);
 
       const originalPrice = masterVariant.price;
-      const finalPrice = originalPrice;
-      const hasDiscount = false;
-      const discountAmount = undefined;
-      const discountPercentage = undefined;
-      const appliedDiscount = undefined;
+      const { finalPrice, discountAmount, appliedDiscount } =
+        applyDiscountsToProduct(raw.product_discounts ?? [], originalPrice);
+      const hasDiscount = Boolean(appliedDiscount);
 
       return {
         productId: raw.id,
@@ -69,7 +69,6 @@ export const mapToCatalogProducts = (
         currency: masterVariant.currency,
         hasDiscount,
         discountAmount,
-        discountPercentage,
         appliedDiscount,
         images,
       };
