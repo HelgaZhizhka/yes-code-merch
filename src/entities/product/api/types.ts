@@ -16,7 +16,7 @@ export interface ProductImageDTO {
 export interface ProductVariantDTO {
   id: string;
   sku: string;
-  price: number; // Price in cents (e.g., 3000 = €30.00)
+  price: number;
   currency: string;
   stock: number;
   is_master: boolean;
@@ -89,39 +89,44 @@ export interface CatalogProduct {
   images: ProductImages | null;
 }
 
-export type SortField = 'price' | 'name' | 'createdAt';
-export type SortOrder = 'asc' | 'desc';
+export const PRODUCT_SORT_FIELDS = {
+  NAME: 'name',
+  PRICE: 'price',
+  CREATED_AT: 'created_at',
+} as const;
 
-export interface PriceRange {
-  min?: number;
-  max?: number;
-}
+export type ProductSortField =
+  (typeof PRODUCT_SORT_FIELDS)[keyof typeof PRODUCT_SORT_FIELDS];
 
-export interface PaginationParams {
-  page: number;
-  pageSize: number;
+export const SORT_DIRECTIONS = {
+  ASC: 'asc',
+  DESC: 'desc',
+} as const;
+
+export type SortDirection =
+  (typeof SORT_DIRECTIONS)[keyof typeof SORT_DIRECTIONS];
+
+export interface CatalogParams {
+  categoryIds: string[];
+  search?: string;
+  priceMin?: number;
+  priceMax?: number;
+  page?: number;
+  pageSize?: number;
+  sortField?: ProductSortField;
+  sortDirection?: SortDirection;
 }
 
 export interface PaginationMeta {
-  currentPage: number;
+  page: number;
   pageSize: number;
-  totalItems: number;
+  totalCount: number;
   totalPages: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 }
 
-export interface CatalogParams {
-  categoryIds?: string[];
-  search?: string;
-  priceRange?: PriceRange;
-  inStock?: boolean;
-  sortBy?: SortField;
-  sortOrder?: SortOrder;
-  pagination?: PaginationParams;
-}
-
-export interface CatalogResult {
-  products: CatalogProduct[];
-  pagination: PaginationMeta;
+export interface PaginatedCatalogProducts {
+  data: CatalogProduct[];
+  meta: PaginationMeta;
 }

@@ -2,6 +2,7 @@ import { getStorageUrl, isNotNull } from '@shared/lib/utils';
 
 import type {
   CatalogProduct,
+  PaginationMeta,
   ProductDTO,
   ProductImageDTO,
   ProductImages,
@@ -38,6 +39,22 @@ const groupImagesBySizes = (
   if (!primaryImage) return null;
 
   return getImageSizes(primaryImage.url);
+};
+
+export const createPaginationMeta = (
+  count: number,
+  page: number,
+  pageSize: number
+): PaginationMeta => {
+  const totalPages = Math.ceil(count / pageSize);
+  return {
+    page,
+    pageSize,
+    totalCount: count,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPreviousPage: page > 1,
+  };
 };
 
 export const mapToCatalogProducts = (
