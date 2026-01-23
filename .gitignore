@@ -28,6 +28,7 @@ dist-ssr
 
 .env
 .env.*
+!.env.example
 *storybook.log
 storybook-static
 
@@ -38,7 +39,9 @@ storybook-static
 .supabase-scripts/
 
 CLAUDE.md
-.claude
+AGENTS.md
+.claude/
+
 *.csv
 scripts/
 generated/
