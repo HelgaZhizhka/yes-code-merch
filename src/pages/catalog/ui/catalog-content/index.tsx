@@ -1,7 +1,4 @@
-import { useSearch } from '@tanstack/react-router';
-
-import type { CatalogSearch } from '@entities/product';
-import { ProductList, useProducts } from '@entities/product';
+import { ProductList, useCatalogSearch, useProducts } from '@entities/product';
 
 import { CatalogHeader } from '../catalog-header';
 
@@ -12,10 +9,10 @@ interface CatalogContentProps {
 export const CatalogContent = ({
   categoryIds,
 }: CatalogContentProps): React.JSX.Element | null => {
-  const searchParams = useSearch({ strict: false }) as CatalogSearch;
+  const { searchParams } = useCatalogSearch();
 
   const {
-    data: { data: products, meta },
+    data: { data: products },
   } = useProducts({
     categoryIds: categoryIds ?? [],
     ...searchParams,
@@ -27,7 +24,7 @@ export const CatalogContent = ({
 
   return (
     <div className="flex-1">
-      <CatalogHeader totalCount={meta.totalCount} pageSize={meta.pageSize} />
+      <CatalogHeader />
       <ProductList products={products} />
     </div>
   );

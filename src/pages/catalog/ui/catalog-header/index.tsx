@@ -1,19 +1,7 @@
-interface CatalogHeaderProps {
-  totalCount: number;
-  pageSize: number;
-}
-
-export const CatalogHeader = ({
-  totalCount,
-  pageSize,
-}: CatalogHeaderProps): React.JSX.Element => {
-  if (totalCount === 0) {
-    return <p>No products found</p>;
-  }
-
+export const CatalogHeader = (): React.JSX.Element => {
   return (
     <div className="flex justify-between items-center mb-6">
-      <p className="text-sm text-gray-600">Display {pageSize} per page</p>
+      <h2 className="text-2xl font-bold">Catalog header</h2>
     </div>
   );
 };

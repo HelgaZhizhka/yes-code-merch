@@ -1,5 +1,7 @@
 import type { Public } from '@shared/api/supabase-client';
 
+import type { PRODUCT_SORT_FIELDS, SORT_DIRECTIONS } from '../lib/constants';
+
 export type ProductRowDTO = Public['Tables']['products']['Row'];
 export type ProductVariantRowDTO = Public['Tables']['product_variants']['Row'];
 export type ProductImageRowDTO = Public['Tables']['product_images']['Row'];
@@ -72,6 +74,10 @@ export interface ProductDTO {
   product_categories: ProductCategoryDTO[];
 }
 
+// Type for products_search view (flattened structure)
+// Use the auto-generated type from database
+export type ProductSearchViewDTO = Public['Views']['products_search']['Row'];
+
 export interface CatalogProduct {
   productId: string;
   name: string;
@@ -89,19 +95,13 @@ export interface CatalogProduct {
   images: ProductImages | null;
 }
 
-export const PRODUCT_SORT_FIELDS = {
-  NAME: 'name',
-  PRICE: 'price',
-  CREATED_AT: 'created_at',
-} as const;
+export interface CatalogProductsViewResponse {
+  data: ProductSearchViewDTO[];
+  count: number;
+}
 
 export type ProductSortField =
   (typeof PRODUCT_SORT_FIELDS)[keyof typeof PRODUCT_SORT_FIELDS];
-
-export const SORT_DIRECTIONS = {
-  ASC: 'asc',
-  DESC: 'desc',
-} as const;
 
 export type SortDirection =
   (typeof SORT_DIRECTIONS)[keyof typeof SORT_DIRECTIONS];

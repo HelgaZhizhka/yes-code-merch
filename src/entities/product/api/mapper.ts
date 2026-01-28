@@ -3,9 +3,9 @@ import { getStorageUrl, isNotNull } from '@shared/lib/utils';
 import type {
   CatalogProduct,
   PaginationMeta,
-  ProductDTO,
-  ProductImageDTO,
+  ProductDiscountDTO,
   ProductImages,
+  ProductSearchViewDTO,
 } from './types';
 
 import { applyDiscountsToProduct } from '../lib';
@@ -28,19 +28,6 @@ const getImageSizes = (basePath: string): ProductImages => {
   };
 };
 
-const groupImagesBySizes = (
-  images: ProductImageDTO[] | undefined
-): ProductImages | null => {
-  if (!images || images.length === 0) return null;
-
-  const minSortOrder = Math.min(...images.map((img) => img.sort_order));
-  const primaryImage = images.find((img) => img.sort_order === minSortOrder);
-
-  if (!primaryImage) return null;
-
-  return getImageSizes(primaryImage.url);
-};
-
 export const createPaginationMeta = (
   count: number,
   page: number,
@@ -57,20 +44,32 @@ export const createPaginationMeta = (
   };
 };
 
-export const mapToCatalogProducts = (
-  products: readonly ProductDTO[]
+export const mapFromViewToCatalogProducts = (
+  products: readonly ProductSearchViewDTO[]
 ): CatalogProduct[] => {
   return products
     .map((raw) => {
-      const masterVariant = raw.product_variants?.[0];
+      if (
+        !raw.id ||
+        !raw.name ||
+        !raw.slug ||
+        !raw.variant_id ||
+        !raw.sku ||
+        !raw.currency ||
+        raw.price === null ||
+        raw.stock === null
+      ) {
+        return null;
+      }
 
-      if (!masterVariant) return null;
+      const images = raw.primary_image_url
+        ? getImageSizes(raw.primary_image_url)
+        : null;
 
-      const images = groupImagesBySizes(masterVariant.product_images);
-
-      const originalPrice = masterVariant.price;
+      const originalPrice = raw.price;
+      const discounts = (raw.product_discounts ?? []) as ProductDiscountDTO[];
       const { finalPrice, discountAmount, appliedDiscount } =
-        applyDiscountsToProduct(raw.product_discounts ?? [], originalPrice);
+        applyDiscountsToProduct(discounts, originalPrice);
       const hasDiscount = Boolean(appliedDiscount);
 
       return {
@@ -78,12 +77,12 @@ export const mapToCatalogProducts = (
         name: raw.name,
         slug: raw.slug,
         description: raw.description,
-        masterVariantId: masterVariant.id,
-        sku: masterVariant.sku,
-        stock: masterVariant.stock,
+        masterVariantId: raw.variant_id,
+        sku: raw.sku,
+        stock: raw.stock,
         originalPrice,
         finalPrice,
-        currency: masterVariant.currency,
+        currency: raw.currency,
         hasDiscount,
         discountAmount,
         appliedDiscount,

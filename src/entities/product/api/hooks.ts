@@ -1,13 +1,15 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { createPaginationMeta, mapToCatalogProducts } from './mapper';
-import type { CatalogParams, PaginatedCatalogProducts } from './types';
+import { createPaginationMeta, mapFromViewToCatalogProducts } from './mapper';
+import type {
+  CatalogParams,
+  CatalogProductsViewResponse,
+  PaginatedCatalogProducts,
+} from './types';
 
-import type { CatalogProductsResponse } from './index';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../lib';
+
 import { getCatalogProducts } from './index';
-
-const DEFAULT_PAGE = 1;
-const DEFAULT_PAGE_SIZE = 12;
 
 export const productKeys = {
   all: ['products'],
@@ -15,11 +17,11 @@ export const productKeys = {
 } as const;
 
 const selectPaginatedProducts = (
-  response: CatalogProductsResponse,
+  response: CatalogProductsViewResponse,
   page: number,
   pageSize: number
 ): PaginatedCatalogProducts => {
-  const data = mapToCatalogProducts(response.data);
+  const data = mapFromViewToCatalogProducts(response.data);
   const meta = createPaginationMeta(response.count, page, pageSize);
   return { data, meta };
 };
@@ -29,7 +31,7 @@ export const useProducts = (params: CatalogParams) => {
   const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
 
   return useSuspenseQuery<
-    CatalogProductsResponse,
+    CatalogProductsViewResponse,
     Error,
     PaginatedCatalogProducts
   >({
