@@ -39,6 +39,7 @@ PostgREST (Supabase's REST API) cannot sort by columns from joined tables in one
 ```
 
 **Why VIEW is portable:**
+
 - Standard SQL — works in any database (PostgreSQL, MySQL, etc.)
 - No data duplication — executes the JOIN query on each request
 - Easy to migrate — just copy the SQL script to another database
@@ -49,6 +50,7 @@ PostgREST (Supabase's REST API) cannot sort by columns from joined tables in one
 **Location:** `supabase/migrations/20260127_create_products_search_view.sql`
 
 The VIEW includes:
+
 - Product fields: `id`, `name`, `slug`, `description`, `created_at`
 - Master variant fields: `variant_id`, `price`, `sku`, `currency`, `stock`
 - Primary image: `primary_image_url` (first image by sort_order)
@@ -67,13 +69,22 @@ import { supabase } from '@shared/api/supabase-client';
 export const getCatalogProducts = async (
   params: CatalogParams
 ): Promise<CatalogProductsViewResponse> => {
-  const { categoryIds, search, priceMin, priceMax, page, pageSize, sortField, sortDirection } = params;
+  const {
+    categoryIds,
+    search,
+    priceMin,
+    priceMax,
+    page,
+    pageSize,
+    sortField,
+    sortDirection,
+  } = params;
 
   // 1. Base query to the VIEW
   let query = supabase
     .from('products_search')
-    .select('*', { count: 'exact' })  // count for pagination meta
-    .in('category_id', categoryIds);  // filter by category
+    .select('*', { count: 'exact' }) // count for pagination meta
+    .in('category_id', categoryIds); // filter by category
 
   // 2. Search (optional)
   // Escape special PostgREST characters to prevent filter injection
@@ -152,13 +163,13 @@ The `useCatalogSearch` hook provides helpers for updating URL params:
 
 ```typescript
 const {
-  searchParams,      // Current params from URL
-  setSearchQuery,    // Update search text (resets page to 1)
-  setPage,           // Update page number
-  setSorting,        // Update sort field/direction (resets page to 1)
-  setPriceRange,     // Update price min/max (resets page to 1)
-  resetSearch,       // Reset all params to defaults
-  updateSearch,      // Generic update (merge params)
+  searchParams, // Current params from URL
+  setSearchQuery, // Update search text (resets page to 1)
+  setPage, // Update page number
+  setSorting, // Update sort field/direction (resets page to 1)
+  setPriceRange, // Update price min/max (resets page to 1)
+  resetSearch, // Reset all params to defaults
+  updateSearch, // Generic update (merge params)
 } = useCatalogSearch();
 ```
 
@@ -206,7 +217,14 @@ You have the full API foundation ready. Your task is to build **UI components** 
 
 ```typescript
 // Hook to manage search params
-const { searchParams, setSearchQuery, setPage, setSorting, setPriceRange, resetSearch } = useCatalogSearch();
+const {
+  searchParams,
+  setSearchQuery,
+  setPage,
+  setSorting,
+  setPriceRange,
+  resetSearch,
+} = useCatalogSearch();
 
 // Hook to fetch products (already connected to VIEW)
 const { data } = useProducts({
@@ -229,8 +247,8 @@ interface CatalogProduct {
   masterVariantId: string;
   sku: string;
   stock: number;
-  originalPrice: number;   // Base price (before discounts)
-  finalPrice: number;      // Price after discounts
+  originalPrice: number; // Base price (before discounts)
+  finalPrice: number; // Price after discounts
   currency: string;
   hasDiscount: boolean;
   discountAmount?: number;
@@ -250,6 +268,7 @@ interface CatalogProduct {
 The search should trigger only on **Enter key press or button click** — not on every keystroke. This reduces API calls and gives the user control over when to search.
 
 **What to implement:**
+
 - Text input for the search query
 - Search triggers on form submit (Enter key or button click)
 - Show clear button when search is active
@@ -257,6 +276,7 @@ The search should trigger only on **Enter key press or button click** — not on
 - Input should reflect current URL search param (for page refresh)
 
 **Hints:**
+
 - Use `<form>` with `onSubmit` — this handles both Enter and button click automatically
 - Use local `useState` for the input value (what user types)
 - Use `searchParams.search` from `useCatalogSearch()` to sync input with URL on page load
@@ -289,11 +309,13 @@ const CatalogSort = () => {
 #### 3. Price Filter (`catalog-price-filter/`)
 
 **Important:** Prices in the database are stored in **cents** (smallest currency unit).
+
 - Database value `1500` = displayed as `15.00`
 - When sending to API: multiply user input by 100
 - When displaying: divide by 100
 
 **What to implement:**
+
 - Two number inputs: min price and max price
 - Inputs show prices in the user-friendly format (e.g. `15.00`)
 - On submit → convert to cents and call `setPriceRange(minCents, maxCents)`
@@ -338,6 +360,7 @@ If sorting by discounted price becomes important, the VIEW or query logic would 
 ### Images
 
 Each product has one primary image URL from the VIEW. The mapper generates 3 sizes:
+
 - `images.large` — original
 - `images.medium` — medium size
 - `images.small` — small size
