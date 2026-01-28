@@ -86,7 +86,6 @@ describe('calculateDiscountAmount', () => {
       discount_type: 'percent',
       discount_value: 33,
     });
-    // 1000 * 0.33 = 330
     expect(calculateDiscountAmount(discount, 1000)).toBe(330);
   });
 
@@ -156,7 +155,6 @@ describe('selectBestDiscount', () => {
         discount_value: 10,
       }),
     ];
-    // 200 fixed > 100 (10% of 1000)
     const best = selectBestDiscount(discounts, 1000);
     expect(best.id).toBe('1');
   });
