@@ -74,8 +74,6 @@ export interface ProductDTO {
   product_categories: ProductCategoryDTO[];
 }
 
-// Type for products_search view (flattened structure)
-// Use the auto-generated type from database
 export type ProductSearchViewDTO = Public['Views']['products_search']['Row'];
 
 export interface CatalogProduct {

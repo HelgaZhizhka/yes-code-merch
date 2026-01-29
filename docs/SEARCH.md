@@ -209,9 +209,7 @@ URL: /category/clothes?search=shirt&sortField=price&page=2
 
 ---
 
-## Student UI Implementation Guide
-
-You have the full API foundation ready. Your task is to build **UI components** that connect to it.
+## UI Implementation Guide
 
 ### What's available to you:
 
@@ -226,41 +224,10 @@ const {
   resetSearch,
 } = useCatalogSearch();
 
-// Hook to fetch products (already connected to VIEW)
-const { data } = useProducts({
-  categoryIds,
-  ...searchParams,
-});
-
 // data.data — array of products to render
 // data.meta — pagination info { totalPages, hasNextPage, hasPreviousPage, ... }
+// meta as props for pagination
 ```
-
-### CatalogProduct type (what you render):
-
-```typescript
-interface CatalogProduct {
-  productId: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  masterVariantId: string;
-  sku: string;
-  stock: number;
-  originalPrice: number; // Base price (before discounts)
-  finalPrice: number; // Price after discounts
-  currency: string;
-  hasDiscount: boolean;
-  discountAmount?: number;
-  appliedDiscount?: AppliedDiscount;
-  images: {
-    large: string | null;
-    medium: string | null;
-    small: string | null;
-  } | null;
-}
-```
-
 ### Tasks to implement:
 
 #### 1. Search Input (`catalog-search/`)
@@ -453,9 +420,3 @@ src/
 └── app/routing/
     └── routes.ts                 # Route config with validateSearch
 ```
-
----
-
-## Related
-
-- **View migration:** `supabase/migrations/20260127_create_products_search_view.sql`
