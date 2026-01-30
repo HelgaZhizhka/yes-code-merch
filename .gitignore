@@ -40,8 +40,7 @@ storybook-static
 
 CLAUDE.md
 AGENTS.md
-.claude/
-
+.claude
 *.csv
 scripts/
 generated/

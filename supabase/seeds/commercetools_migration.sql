@@ -10,11 +10,10 @@
 -- =====================================================
 
 -- Safety indexes for UPSERT
+-- NOTE: uniq_products_slug, uniq_categories_slug, uniq_variants_sku удалены
+--       т.к. дублируют автоматические UNIQUE индексы (*_key) из table constraints
 CREATE UNIQUE INDEX IF NOT EXISTS uniq_product_types_name ON product_types(name);
 CREATE UNIQUE INDEX IF NOT EXISTS uniq_attribute_definitions_ptype_name ON attribute_definitions(product_type_id, name);
-CREATE UNIQUE INDEX IF NOT EXISTS uniq_products_slug ON products(slug);
-CREATE UNIQUE INDEX IF NOT EXISTS uniq_variants_sku ON product_variants(sku);
-CREATE UNIQUE INDEX IF NOT EXISTS uniq_categories_slug ON categories(slug);
 CREATE UNIQUE INDEX IF NOT EXISTS uniq_variant_attrs ON product_variant_attributes(variant_id, attribute_definition_id);
 CREATE UNIQUE INDEX IF NOT EXISTS uniq_images_variant_url ON product_images(variant_id, url);
 
