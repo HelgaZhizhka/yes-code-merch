@@ -5,11 +5,14 @@ import { useCatalogSearch, type PaginationMeta } from '@entities/product';
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from '@shared/ui/pagination';
+
+import { getPageNumbers } from '@/shared/lib/get-page-numbers';
 
 interface CatalogPaginationProps {
   meta: PaginationMeta;
@@ -22,8 +25,13 @@ export const CatalogPagination = ({
   const { page, totalPages, hasNextPage, hasPreviousPage } = meta;
 
   const pages = useMemo(
-    () => Array.from({ length: totalPages }, (_, i) => i + 1),
-    [totalPages]
+    () =>
+      getPageNumbers({
+        totalCount: totalPages,
+        currentPage: page,
+        siblingCount: 2,
+      }),
+    [page, totalPages]
   );
 
   if (totalPages <= 1) return null;
@@ -38,11 +46,15 @@ export const CatalogPagination = ({
           />
         </PaginationItem>
 
-        {pages.map((p) => (
-          <PaginationItem key={p}>
-            <PaginationLink isActive={p === page} onClick={() => setPage(p)}>
-              {p}
-            </PaginationLink>
+        {pages.map((p, index) => (
+          <PaginationItem key={p === 'dots' ? `dots-${index}` : `page-${p}`}>
+            {p === 'dots' ? (
+              <PaginationEllipsis />
+            ) : (
+              <PaginationLink isActive={p === page} onClick={() => setPage(p)}>
+                {p}
+              </PaginationLink>
+            )}
           </PaginationItem>
         ))}
 
