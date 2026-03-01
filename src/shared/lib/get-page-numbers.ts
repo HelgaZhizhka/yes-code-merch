@@ -50,5 +50,5 @@ export const getPageNumbers = ({
     return [firstPageIndex, 'dots', ...middleRange, 'dots', lastPageIndex];
   }
 
-  return [];
+  return range(1, totalCount);
 };

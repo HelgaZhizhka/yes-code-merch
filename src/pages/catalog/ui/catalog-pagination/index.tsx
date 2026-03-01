@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { useCatalogSearch, type PaginationMeta } from '@entities/product';
 
+import { getPageNumbers } from '@shared/lib/get-page-numbers';
 import {
   Pagination,
   PaginationContent,
@@ -11,8 +12,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@shared/ui/pagination';
-
-import { getPageNumbers } from '@/shared/lib/get-page-numbers';
 
 interface CatalogPaginationProps {
   meta: PaginationMeta;
