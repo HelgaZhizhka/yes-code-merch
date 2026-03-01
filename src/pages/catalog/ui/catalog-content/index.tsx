@@ -1,6 +1,7 @@
 import { ProductList, useCatalogSearch, useProducts } from '@entities/product';
 
 import { CatalogHeader } from '../catalog-header';
+import { CatalogPagination } from '../catalog-pagination';
 
 interface CatalogContentProps {
   categoryIds: string[] | null;
@@ -12,7 +13,7 @@ export const CatalogContent = ({
   const { searchParams } = useCatalogSearch();
 
   const {
-    data: { data: products },
+    data: { data: products, meta },
   } = useProducts({
     categoryIds: categoryIds ?? [],
     ...searchParams,
@@ -26,6 +27,7 @@ export const CatalogContent = ({
     <div className="flex-1">
       <CatalogHeader />
       <ProductList products={products} />
+      <CatalogPagination meta={meta} />
     </div>
   );
 };

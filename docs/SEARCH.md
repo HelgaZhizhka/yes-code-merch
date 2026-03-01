@@ -228,6 +228,7 @@ const {
 // data.meta — pagination info { totalPages, hasNextPage, hasPreviousPage, ... }
 // meta as props for pagination
 ```
+
 ### Tasks to implement:
 
 #### 1. Search Input (`catalog-search/`)
