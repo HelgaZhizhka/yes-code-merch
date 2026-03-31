@@ -1,6 +1,7 @@
 import { AddToCart } from '@features/add-to-cart';
 
-import { Price } from '@shared/ui/price';
+import { Price, PriceWithDiscount } from '@shared/ui/price';
+import { PurifiedHtml } from '@shared/ui/purified-html';
 
 import type { CatalogProduct } from '../api/types';
 
@@ -8,7 +9,9 @@ interface ProductCardProps {
   product: CatalogProduct;
 }
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export const ProductCard = ({
+  product,
+}: ProductCardProps): React.JSX.Element => {
   const imageUrl =
     product.images?.medium || 'https://placehold.co/400x400?text=No+Image';
 
@@ -27,9 +30,21 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         <AddToCart variant="catalog" />
       </div>
       <h3 className="text-2xl font-bold">{product.name}</h3>
-      {product.description && <p className="text-sm">{product.description}</p>}
+      {product.description && (
+        <div className="text-sm">
+          <PurifiedHtml html={product.description} />
+        </div>
+      )}
       <div className="mt-auto">
-        <Price value={product.finalPrice} variant="catalog" />
+        {product.hasDiscount ? (
+          <PriceWithDiscount
+            originalPrice={product.originalPrice}
+            finalPrice={product.finalPrice}
+            currency={product.currency}
+          />
+        ) : (
+          <Price value={product.originalPrice} currency={product.currency} />
+        )}
       </div>
     </div>
   );

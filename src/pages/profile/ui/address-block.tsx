@@ -5,7 +5,7 @@ import type { Addresses, AddressListProps } from '@entities/address';
 export const AddressBlock = ({
   shippingAddresses,
   billingAddresses,
-}: Addresses) => {
+}: Addresses): React.JSX.Element => {
   const addressBlocks: AddressListProps[] = [
     { addresses: shippingAddresses, addressType: 'shipping' },
     { addresses: billingAddresses ?? [], addressType: 'billing' },

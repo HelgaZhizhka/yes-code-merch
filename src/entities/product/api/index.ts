@@ -1,58 +1,63 @@
 import { supabase } from '@shared/api/supabase-client';
 
-import type { CatalogParams, ProductDTO } from './types';
+import type { CatalogParams, CatalogProductsViewResponse } from './types';
+
+import {
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_SORT_DIRECTION,
+  DEFAULT_SORT_FIELD,
+  SORT_DIRECTIONS,
+} from '../lib';
 
 export const getCatalogProducts = async (
   params: CatalogParams
-): Promise<ProductDTO[]> => {
-  const { categoryIds } = params;
+): Promise<CatalogProductsViewResponse> => {
+  const {
+    categoryIds,
+    search,
+    priceMin,
+    priceMax,
+    page = DEFAULT_PAGE,
+    pageSize = DEFAULT_PAGE_SIZE,
+    sortField = DEFAULT_SORT_FIELD,
+    sortDirection = DEFAULT_SORT_DIRECTION,
+  } = params;
 
-  const query = supabase
-    .from('products')
-    .select(
-      `
-      id,
-      name,
-      slug,
-      description,
-      product_variants!inner(
-        id,
-        sku,
-        price,
-        currency,
-        stock,
-        is_master,
-        product_images(
-          url,
-          alt,
-          is_primary,
-          sort_order
-        )
-      ),
-      product_discounts(
-        id,
-        name,
-        discount_type,
-        discount_value,
-        priority,
-        valid_from,
-        valid_to,
-        is_active,
-        variant_id,
-        product_id
-      ),
-      product_categories!inner(
-        category_id
-      )
-    `
-    )
-    .eq('is_published', true)
-    .eq('product_variants.is_master', true)
-    .in('product_categories.category_id', categoryIds);
+  let query = supabase
+    .from('products_search')
+    .select('*', { count: 'exact' })
+    .in('category_id', categoryIds);
 
-  const { data, error } = await query;
+  if (search) {
+    const escapedSearch = search.replaceAll(/[,%()\\]/g, String.raw`\$&`);
+    query = query.or(
+      `name.ilike.%${escapedSearch}%,description.ilike.%${escapedSearch}%`
+    );
+  }
+
+  if (priceMin !== undefined) {
+    query = query.gte('price', priceMin);
+  }
+
+  if (priceMax !== undefined) {
+    query = query.lte('price', priceMax);
+  }
+
+  query = query.order(sortField, {
+    ascending: sortDirection === SORT_DIRECTIONS.ASC,
+  });
+
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+  query = query.range(from, to);
+
+  const { data, error, count } = await query;
 
   if (error) throw error;
 
-  return data ?? [];
+  return {
+    data: data ?? [],
+    count: count ?? 0,
+  };
 };

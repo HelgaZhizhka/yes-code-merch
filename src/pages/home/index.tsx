@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { LayoutView } from '@shared/types';
 import { Categories } from '@shared/ui/categories';
 
-export const Home = () => {
+export const Home = (): React.JSX.Element => {
   return (
     <div className="flex flex-1 flex-col items-center justify-between p-4">
       <h1 className="text-2xl mb-4">Home page</h1>

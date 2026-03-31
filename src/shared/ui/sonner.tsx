@@ -2,7 +2,7 @@ import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 import { useTheme } from '@shared/theme/hooks';
 
-const Toaster = ({ ...props }: ToasterProps) => {
+const Toaster = ({ ...props }: ToasterProps): React.JSX.Element => {
   const { theme = 'light' } = useTheme();
   return (
     <Sonner

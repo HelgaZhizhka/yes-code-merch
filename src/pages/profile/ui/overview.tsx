@@ -3,7 +3,7 @@ import { useGetProfileData } from '@pages/profile/hooks';
 import { AddressBlock } from './address-block';
 import { PersonalBlock } from './personal-block';
 
-export const Overview = () => {
+export const Overview = (): React.JSX.Element => {
   const { personalData, addressesData } = useGetProfileData();
 
   return (

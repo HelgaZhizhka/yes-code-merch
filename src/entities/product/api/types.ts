@@ -1,5 +1,7 @@
 import type { Public } from '@shared/api/supabase-client';
 
+import type { PRODUCT_SORT_FIELDS, SORT_DIRECTIONS } from '../lib/constants';
+
 export type ProductRowDTO = Public['Tables']['products']['Row'];
 export type ProductVariantRowDTO = Public['Tables']['product_variants']['Row'];
 export type ProductImageRowDTO = Public['Tables']['product_images']['Row'];
@@ -16,7 +18,7 @@ export interface ProductImageDTO {
 export interface ProductVariantDTO {
   id: string;
   sku: string;
-  price: number; // Price in cents (e.g., 3000 = €30.00)
+  price: number;
   currency: string;
   stock: number;
   is_master: boolean;
@@ -37,10 +39,17 @@ export type ProductDiscountDTO = Pick<
   | 'product_id'
 >;
 
+export const DISCOUNT_TYPES = {
+  PERCENT: 'percent',
+  AMOUNT: 'amount',
+} as const;
+
+export type DiscountType = (typeof DISCOUNT_TYPES)[keyof typeof DISCOUNT_TYPES];
+
 export interface AppliedDiscount {
   id: string;
   name: string;
-  type: 'percent' | 'amount';
+  type: DiscountType;
   value: number;
   validUntil?: Date;
 }
@@ -65,6 +74,8 @@ export interface ProductDTO {
   product_categories: ProductCategoryDTO[];
 }
 
+export type ProductSearchViewDTO = Public['Views']['products_search']['Row'];
+
 export interface CatalogProduct {
   productId: string;
   name: string;
@@ -78,11 +89,42 @@ export interface CatalogProduct {
   currency: string;
   hasDiscount: boolean;
   discountAmount?: number;
-  discountPercentage?: number;
   appliedDiscount?: AppliedDiscount;
   images: ProductImages | null;
 }
 
+export interface CatalogProductsViewResponse {
+  data: ProductSearchViewDTO[];
+  count: number;
+}
+
+export type ProductSortField =
+  (typeof PRODUCT_SORT_FIELDS)[keyof typeof PRODUCT_SORT_FIELDS];
+
+export type SortDirection =
+  (typeof SORT_DIRECTIONS)[keyof typeof SORT_DIRECTIONS];
+
 export interface CatalogParams {
   categoryIds: string[];
+  search?: string;
+  priceMin?: number;
+  priceMax?: number;
+  page?: number;
+  pageSize?: number;
+  sortField?: ProductSortField;
+  sortDirection?: SortDirection;
+}
+
+export interface PaginationMeta {
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface PaginatedCatalogProducts {
+  data: CatalogProduct[];
+  meta: PaginationMeta;
 }

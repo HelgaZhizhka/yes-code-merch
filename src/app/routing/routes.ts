@@ -1,5 +1,5 @@
 import type { AnyRoute, RootRoute } from '@tanstack/react-router';
-import { createRoute } from '@tanstack/react-router';
+import { createRoute, stripSearchParams } from '@tanstack/react-router';
 
 import { About } from '@pages/about';
 import { Cart } from '@pages/cart';
@@ -22,6 +22,14 @@ import { Registration } from '@pages/registration';
 import { RegistrationForm } from '@pages/registration/ui/registration-form';
 import { RegistrationSuccess } from '@pages/registration/ui/registration-success';
 import { ResetPassword } from '@pages/reset-password';
+
+import {
+  catalogSearchSchema,
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+  PRODUCT_SORT_FIELDS,
+  SORT_DIRECTIONS,
+} from '@entities/product';
 
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
@@ -133,6 +141,17 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.CATEGORY,
     component: Catalog,
+    validateSearch: catalogSearchSchema,
+    search: {
+      middlewares: [
+        stripSearchParams({
+          page: DEFAULT_PAGE,
+          pageSize: DEFAULT_PAGE_SIZE,
+          sortField: PRODUCT_SORT_FIELDS.CREATED_AT,
+          sortDirection: SORT_DIRECTIONS.DESC,
+        }),
+      ],
+    },
   });
 
 export const productRoute = (parentRoute: FlexibleRouteType) =>

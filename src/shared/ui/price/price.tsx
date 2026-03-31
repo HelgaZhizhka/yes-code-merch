@@ -1,8 +1,10 @@
 import { cva } from 'class-variance-authority';
 
+import { formatPrice } from '@shared/lib/price-formatter';
+
 interface PriceProps {
   value: number;
-  variant?: 'catalog' | 'product';
+  variant?: 'catalog' | 'product' | 'old';
   currency?: string;
 }
 
@@ -11,15 +13,20 @@ const priceVariants = cva('transition-all', {
     variant: {
       catalog: 'text-2xl font-semibold text-secondary',
       product: 'text-xl font-bold',
+      old: 'text-sm text-gray-400 line-through',
     },
   },
   defaultVariants: { variant: 'catalog' },
 });
 
-export const Price = ({ value, variant, currency = 'EUR' }: PriceProps) => {
+export const Price = ({
+  value,
+  variant,
+  currency = 'EUR',
+}: PriceProps): React.JSX.Element => {
   return (
     <div className={priceVariants({ variant })}>
-      {(value / 100).toFixed(2)} {currency}
+      {formatPrice(value, currency)}
     </div>
   );
 };

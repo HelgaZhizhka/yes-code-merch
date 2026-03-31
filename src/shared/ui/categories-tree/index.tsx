@@ -40,7 +40,7 @@ const Node = React.memo(
     useFullPath?: boolean;
     expandedNodes: Set<string>;
     onToggle: (id: string) => void;
-  }) => {
+  }): React.JSX.Element => {
     const { slug, name } = node;
     const fullPath = [pathPrefix, slug].filter(Boolean).join('/');
     const pathToUse = useFullPath ? fullPath : slug;
@@ -97,7 +97,7 @@ export const CategoriesTree = ({
   variant = 'default',
   className,
   useFullPath = true,
-}: CategoriesTreeProps) => {
+}: CategoriesTreeProps): React.JSX.Element => {
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
 
   const toggleNode = useCallback((id: string) => {

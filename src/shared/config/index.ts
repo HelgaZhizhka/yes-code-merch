@@ -2,6 +2,7 @@ export const config = {
   SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL ?? '',
   SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY ?? '',
   HOST: import.meta.env.VITE_HOST ?? 'http://localhost:3000',
+  REGION: import.meta.env.VITE_REGION ?? 'EU',
 };
 export const RootElementId = 'app';
 export const RootElementClassNames = 'min-h-screen flex flex-col';
