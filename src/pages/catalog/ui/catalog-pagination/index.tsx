@@ -50,7 +50,11 @@ export const CatalogPagination = ({
             {p === 'dots' ? (
               <PaginationEllipsis />
             ) : (
-              <PaginationLink isActive={p === page} onClick={() => setPage(p)}>
+              <PaginationLink
+                isActive={p === page}
+                disabled={p === page}
+                onClick={() => setPage(p)}
+              >
                 {p}
               </PaginationLink>
             )}
