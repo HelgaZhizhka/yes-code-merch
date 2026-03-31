@@ -30,24 +30,17 @@ export const getPageNumbers = ({
   const shouldShowLeftDots = leftSiblingIndex > 2;
   const shouldShowRightDots = rightSiblingIndex < totalCount - 2;
 
-  const firstPageIndex = 1;
-  const lastPageIndex = totalCount;
-
   if (!shouldShowLeftDots && shouldShowRightDots) {
     return [...range(1, totalPageNumbers), 'dots', totalCount];
   }
 
   if (shouldShowLeftDots && !shouldShowRightDots) {
-    return [
-      firstPageIndex,
-      'dots',
-      ...range(totalCount - totalPageNumbers + 1, totalCount),
-    ];
+    return [1, 'dots', ...range(totalCount - totalPageNumbers + 1, totalCount)];
   }
 
   if (shouldShowLeftDots && shouldShowRightDots) {
     const middleRange = range(leftSiblingIndex, rightSiblingIndex);
-    return [firstPageIndex, 'dots', ...middleRange, 'dots', lastPageIndex];
+    return [1, 'dots', ...middleRange, 'dots', totalCount];
   }
 
   return range(1, totalCount);
