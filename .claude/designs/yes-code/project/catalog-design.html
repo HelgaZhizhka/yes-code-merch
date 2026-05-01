@@ -1,1414 +1,2022 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YES CODE — Catalog Filter Design</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script type="text/babel" src="design-canvas.jsx"></script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Mukta', sans-serif; background: #e8e8e8; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YES CODE — Catalog Filter Design</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+      integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+      integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+      integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/babel" src="design-canvas.jsx"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Mukta', sans-serif;
+        background: #e8e8e8;
+      }
 
-    /* YES CODE Design Tokens */
-    :root {
-      --bg: #fafafa;
-      --fg: #0b0a0a;
-      --primary: #f2760f;
-      --primary-light: #ff9843;
-      --secondary: #3e17ff;
-      --muted: #979999;
-      --muted-bg: #f4f4f4;
-      --border: #e5e5e5;
-      --card: #ffffff;
-      --radius: 4px;
-      --radius-lg: 8px;
-    }
+      /* YES CODE Design Tokens */
+      :root {
+        --bg: #fafafa;
+        --fg: #0b0a0a;
+        --primary: #f2760f;
+        --primary-light: #ff9843;
+        --secondary: #3e17ff;
+        --muted: #979999;
+        --muted-bg: #f4f4f4;
+        --border: #e5e5e5;
+        --card: #ffffff;
+        --radius: 4px;
+        --radius-lg: 8px;
+      }
 
-    /* ─── SHARED CATALOG SHELL ─── */
-    .catalog-shell {
-      width: 1280px;
-      min-height: 900px;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      font-family: 'Mukta', sans-serif;
-    }
+      /* ─── SHARED CATALOG SHELL ─── */
+      .catalog-shell {
+        width: 1280px;
+        min-height: 900px;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: 'Mukta', sans-serif;
+      }
 
-    /* Topbar */
-    .cat-topbar {
-      background: #0b0a0a;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      padding: 0 40px;
-      flex-shrink: 0;
-    }
-    .cat-topbar-logo {
-      color: var(--primary);
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-    }
-    .cat-topbar-nav {
-      display: flex;
-      gap: 28px;
-    }
-    .cat-topbar-nav a {
-      color: rgba(250,250,250,0.85);
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      letter-spacing: 0.02em;
-    }
-    .cat-topbar-nav a.active { color: var(--primary); }
-    .cat-topbar-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      color: rgba(250,250,250,0.7);
-      font-size: 13px;
-    }
-    .cart-badge {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: rgba(250,250,250,0.85);
-      cursor: pointer;
-    }
-    .cart-count {
-      background: var(--primary);
-      color: white;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      font-size: 10px;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-    }
+      /* Topbar */
+      .cat-topbar {
+        background: #0b0a0a;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        padding: 0 40px;
+        flex-shrink: 0;
+      }
+      .cat-topbar-logo {
+        color: var(--primary);
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+      }
+      .cat-topbar-nav {
+        display: flex;
+        gap: 28px;
+      }
+      .cat-topbar-nav a {
+        color: rgba(250, 250, 250, 0.85);
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        letter-spacing: 0.02em;
+      }
+      .cat-topbar-nav a.active {
+        color: var(--primary);
+      }
+      .cat-topbar-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: rgba(250, 250, 250, 0.7);
+        font-size: 13px;
+      }
+      .cart-badge {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(250, 250, 250, 0.85);
+        cursor: pointer;
+      }
+      .cart-count {
+        background: var(--primary);
+        color: white;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-    /* Breadcrumb */
-    .cat-breadcrumb {
-      padding: 14px 40px 0;
-      font-size: 13px;
-      color: var(--muted);
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .cat-breadcrumb span.sep { opacity: 0.5; }
-    .cat-breadcrumb a { color: var(--muted); text-decoration: none; }
-    .cat-breadcrumb a:hover { color: var(--fg); }
-    .cat-breadcrumb .current { color: var(--fg); font-weight: 500; }
+      /* Breadcrumb */
+      .cat-breadcrumb {
+        padding: 14px 40px 0;
+        font-size: 13px;
+        color: var(--muted);
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .cat-breadcrumb span.sep {
+        opacity: 0.5;
+      }
+      .cat-breadcrumb a {
+        color: var(--muted);
+        text-decoration: none;
+      }
+      .cat-breadcrumb a:hover {
+        color: var(--fg);
+      }
+      .cat-breadcrumb .current {
+        color: var(--fg);
+        font-weight: 500;
+      }
 
-    /* Main area */
-    .cat-main {
-      display: flex;
-      gap: 0;
-      padding: 16px 40px 40px;
-      flex: 1;
-    }
+      /* Main area */
+      .cat-main {
+        display: flex;
+        gap: 0;
+        padding: 16px 40px 40px;
+        flex: 1;
+      }
 
-    /* ─── SIDEBAR ─── */
-    .cat-sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+      /* ─── SIDEBAR ─── */
+      .cat-sidebar {
+        width: 260px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
 
-    /* Content area */
-    .cat-content {
-      flex: 1;
-      padding-left: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+      /* Content area */
+      .cat-content {
+        flex: 1;
+        padding-left: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
 
-    /* ─── FILTER SECTION (accordion) ─── */
-    .filter-section {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 4px;
-    }
-    .filter-section:last-child { border-bottom: none; }
+      /* ─── FILTER SECTION (accordion) ─── */
+      .filter-section {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 4px;
+      }
+      .filter-section:last-child {
+        border-bottom: none;
+      }
 
-    .filter-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      cursor: pointer;
-      user-select: none;
-    }
-    .filter-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--fg);
-      letter-spacing: 0.01em;
-    }
-    .filter-chevron {
-      width: 16px; height: 16px;
-      color: var(--muted);
-      transition: transform 0.2s;
-      flex-shrink: 0;
-    }
-    .filter-chevron.open { transform: rotate(90deg); color: var(--primary); }
-    .filter-body { padding-bottom: 12px; }
+      .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        cursor: pointer;
+        user-select: none;
+      }
+      .filter-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--fg);
+        letter-spacing: 0.01em;
+      }
+      .filter-chevron {
+        width: 16px;
+        height: 16px;
+        color: var(--muted);
+        transition: transform 0.2s;
+        flex-shrink: 0;
+      }
+      .filter-chevron.open {
+        transform: rotate(90deg);
+        color: var(--primary);
+      }
+      .filter-body {
+        padding-bottom: 12px;
+      }
 
-    /* Category tree */
-    .cat-tree { display: flex; flex-direction: column; gap: 2px; }
-    .cat-tree-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 8px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--fg);
-      font-weight: 400;
-      transition: background 0.15s, color 0.15s;
-      text-decoration: none;
-    }
-    .cat-tree-item:hover { background: var(--muted-bg); }
-    .cat-tree-item.active {
-      background: #fff3e8;
-      color: var(--primary);
-      font-weight: 600;
-    }
-    .cat-tree-item .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0;
-      opacity: 0.5;
-    }
-    .cat-tree-item.active .dot { opacity: 1; }
-    .cat-tree-children {
-      padding-left: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      margin-top: 2px;
-    }
-    .cat-tree-children .cat-tree-item { font-size: 13px; }
+      /* Category tree */
+      .cat-tree {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .cat-tree-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 8px;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--fg);
+        font-weight: 400;
+        transition:
+          background 0.15s,
+          color 0.15s;
+        text-decoration: none;
+      }
+      .cat-tree-item:hover {
+        background: var(--muted-bg);
+      }
+      .cat-tree-item.active {
+        background: #fff3e8;
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .cat-tree-item .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .cat-tree-item.active .dot {
+        opacity: 1;
+      }
+      .cat-tree-children {
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: 2px;
+      }
+      .cat-tree-children .cat-tree-item {
+        font-size: 13px;
+      }
 
-    /* Size chips */
-    .size-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-    .size-chip {
-      min-width: 36px;
-      height: 34px;
-      padding: 0 10px;
-      border-radius: var(--radius);
-      border: 1.5px solid var(--border);
-      background: white;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--fg);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-family: 'Mukta', sans-serif;
-    }
-    .size-chip:hover { border-color: var(--primary); color: var(--primary); }
-    .size-chip.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-      font-weight: 700;
-    }
+      /* Size chips */
+      .size-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .size-chip {
+        min-width: 36px;
+        height: 34px;
+        padding: 0 10px;
+        border-radius: var(--radius);
+        border: 1.5px solid var(--border);
+        background: white;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--fg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: 'Mukta', sans-serif;
+      }
+      .size-chip:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .size-chip.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+        font-weight: 700;
+      }
 
-    /* Color swatches */
-    .color-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
-    .color-swatch {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.15s;
-      flex-shrink: 0;
-    }
-    .color-swatch:hover { transform: scale(1.1); }
-    .color-swatch.active::after {
-      content: '';
-      position: absolute;
-      inset: -3px;
-      border-radius: 50%;
-      border: 2px solid var(--primary);
-    }
-    .color-swatch.active.light::after { border-color: var(--muted); }
+      /* Color swatches */
+      .color-swatches {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .color-swatch {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.15s;
+        flex-shrink: 0;
+      }
+      .color-swatch:hover {
+        transform: scale(1.1);
+      }
+      .color-swatch.active::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        border: 2px solid var(--primary);
+      }
+      .color-swatch.active.light::after {
+        border-color: var(--muted);
+      }
 
-    /* Price range */
-    .price-range-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-    .price-range-labels strong { color: var(--fg); font-weight: 600; }
-    .range-track {
-      position: relative;
-      height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      margin: 0 0 4px;
-    }
-    .range-fill {
-      position: absolute;
-      height: 100%;
-      background: var(--primary);
-      border-radius: 2px;
-    }
-    .range-thumb {
-      position: absolute;
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: white;
-      border: 2.5px solid var(--primary);
-      top: -5px;
-      transform: translateX(-50%);
-      cursor: pointer;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-    }
-    .price-inputs {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .price-input {
-      flex: 1;
-      height: 32px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 0 8px;
-      font-size: 13px;
-      font-family: 'Mukta', sans-serif;
-      color: var(--fg);
-      background: white;
-    }
-    .price-input:focus { outline: none; border-color: var(--primary); }
+      /* Price range */
+      .price-range-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .price-range-labels strong {
+        color: var(--fg);
+        font-weight: 600;
+      }
+      .range-track {
+        position: relative;
+        height: 4px;
+        background: var(--border);
+        border-radius: 2px;
+        margin: 0 0 4px;
+      }
+      .range-fill {
+        position: absolute;
+        height: 100%;
+        background: var(--primary);
+        border-radius: 2px;
+      }
+      .range-thumb {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: white;
+        border: 2.5px solid var(--primary);
+        top: -5px;
+        transform: translateX(-50%);
+        cursor: pointer;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      }
+      .price-inputs {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .price-input {
+        flex: 1;
+        height: 32px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 0 8px;
+        font-size: 13px;
+        font-family: 'Mukta', sans-serif;
+        color: var(--fg);
+        background: white;
+      }
+      .price-input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
 
-    /* Stock filter */
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 4px 0;
-    }
-    .toggle-label { font-size: 13px; color: var(--fg); }
-    .toggle-switch {
-      width: 36px; height: 20px;
-      border-radius: 10px;
-      background: var(--border);
-      position: relative;
-      cursor: pointer;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-    .toggle-switch.on { background: var(--primary); }
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: white;
-      top: 3px; left: 3px;
-      transition: left 0.2s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
-    .toggle-switch.on::after { left: 19px; }
+      /* Stock filter */
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px 0;
+      }
+      .toggle-label {
+        font-size: 13px;
+        color: var(--fg);
+      }
+      .toggle-switch {
+        width: 36px;
+        height: 20px;
+        border-radius: 10px;
+        background: var(--border);
+        position: relative;
+        cursor: pointer;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .toggle-switch.on {
+        background: var(--primary);
+      }
+      .toggle-switch::after {
+        content: '';
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: white;
+        top: 3px;
+        left: 3px;
+        transition: left 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+      .toggle-switch.on::after {
+        left: 19px;
+      }
 
-    /* Apply button */
-    .filter-apply-btn {
-      width: 100%;
-      height: 40px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 14px;
-      font-weight: 700;
-      font-family: 'Mukta', sans-serif;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.15s;
-      letter-spacing: 0.02em;
-    }
-    .filter-apply-btn:hover { background: #e06b0a; }
+      /* Apply button */
+      .filter-apply-btn {
+        width: 100%;
+        height: 40px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius);
+        font-size: 14px;
+        font-weight: 700;
+        font-family: 'Mukta', sans-serif;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background 0.15s;
+        letter-spacing: 0.02em;
+      }
+      .filter-apply-btn:hover {
+        background: #e06b0a;
+      }
 
-    .filter-reset-link {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      cursor: pointer;
-      padding: 4px 0;
-      display: block;
-      text-decoration: underline;
-    }
-    .filter-reset-link:hover { color: var(--fg); }
+      .filter-reset-link {
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 4px 0;
+        display: block;
+        text-decoration: underline;
+      }
+      .filter-reset-link:hover {
+        color: var(--fg);
+      }
 
-    /* Active filters tags */
-    .active-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 8px 0 0;
-    }
-    .active-filter-tag {
-      height: 26px;
-      padding: 0 10px;
-      background: #fff3e8;
-      border: 1px solid #ffd0a0;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--primary);
-      display: flex; align-items: center; gap: 6px;
-      cursor: pointer;
-    }
-    .active-filter-tag .x {
-      font-size: 14px;
-      line-height: 1;
-      opacity: 0.7;
-    }
-    .active-filter-tag:hover .x { opacity: 1; }
+      /* Active filters tags */
+      .active-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 8px 0 0;
+      }
+      .active-filter-tag {
+        height: 26px;
+        padding: 0 10px;
+        background: #fff3e8;
+        border: 1px solid #ffd0a0;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+      .active-filter-tag .x {
+        font-size: 14px;
+        line-height: 1;
+        opacity: 0.7;
+      }
+      .active-filter-tag:hover .x {
+        opacity: 1;
+      }
 
-    /* ─── CONTENT TOP BAR ─── */
-    .content-topbar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .search-bar {
-      flex: 1;
-      height: 40px;
-      background: white;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 12px;
-      transition: border-color 0.15s;
-    }
-    .search-bar.focused { border-color: var(--primary); }
-    .search-bar input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      font-size: 14px;
-      font-family: 'Mukta', sans-serif;
-      color: var(--fg);
-      outline: none;
-    }
-    .search-bar input::placeholder { color: var(--muted); }
-    .search-icon { color: var(--muted); width: 16px; height: 16px; flex-shrink: 0; }
+      /* ─── CONTENT TOP BAR ─── */
+      .content-topbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .search-bar {
+        flex: 1;
+        height: 40px;
+        background: white;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        transition: border-color 0.15s;
+      }
+      .search-bar.focused {
+        border-color: var(--primary);
+      }
+      .search-bar input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: 14px;
+        font-family: 'Mukta', sans-serif;
+        color: var(--fg);
+        outline: none;
+      }
+      .search-bar input::placeholder {
+        color: var(--muted);
+      }
+      .search-icon {
+        color: var(--muted);
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
 
-    .sort-select {
-      height: 40px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 0 32px 0 12px;
-      font-size: 13px;
-      font-family: 'Mukta', sans-serif;
-      color: var(--fg);
-      background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23979999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
-      -webkit-appearance: none;
-      cursor: pointer;
-      flex-shrink: 0;
-      min-width: 180px;
-      outline: none;
-    }
-    .sort-select:focus { border-color: var(--primary); }
+      .sort-select {
+        height: 40px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 0 32px 0 12px;
+        font-size: 13px;
+        font-family: 'Mukta', sans-serif;
+        color: var(--fg);
+        background: white
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23979999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+          no-repeat right 10px center;
+        -webkit-appearance: none;
+        cursor: pointer;
+        flex-shrink: 0;
+        min-width: 180px;
+        outline: none;
+      }
+      .sort-select:focus {
+        border-color: var(--primary);
+      }
 
-    .view-toggle {
-      display: flex;
-      gap: 2px;
-      background: var(--muted-bg);
-      border-radius: var(--radius);
-      padding: 3px;
-    }
-    .view-btn {
-      width: 32px; height: 32px;
-      border: none;
-      background: transparent;
-      border-radius: calc(var(--radius) - 1px);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      color: var(--muted);
-      transition: all 0.15s;
-    }
-    .view-btn.active { background: white; color: var(--fg); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+      .view-toggle {
+        display: flex;
+        gap: 2px;
+        background: var(--muted-bg);
+        border-radius: var(--radius);
+        padding: 3px;
+      }
+      .view-btn {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: transparent;
+        border-radius: calc(var(--radius) - 1px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--muted);
+        transition: all 0.15s;
+      }
+      .view-btn.active {
+        background: white;
+        color: var(--fg);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
 
-    .result-count {
-      font-size: 13px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
+      .result-count {
+        font-size: 13px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
 
-    /* ─── PRODUCT GRID ─── */
-    .product-grid {
-      display: grid;
-      gap: 16px;
-    }
-    .product-grid.grid-4 { grid-template-columns: repeat(4, 1fr); }
-    .product-grid.grid-3 { grid-template-columns: repeat(3, 1fr); }
-    .product-grid.grid-list { grid-template-columns: 1fr; }
+      /* ─── PRODUCT GRID ─── */
+      .product-grid {
+        display: grid;
+        gap: 16px;
+      }
+      .product-grid.grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .product-grid.grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .product-grid.grid-list {
+        grid-template-columns: 1fr;
+      }
 
-    .product-card {
-      background: white;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      cursor: pointer;
-      transition: box-shadow 0.2s, transform 0.2s;
-      position: relative;
-    }
-    .product-card:hover {
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
-    }
-    .product-img {
-      aspect-ratio: 1;
-      background: var(--muted-bg);
-      position: relative;
-      overflow: hidden;
-    }
-    .product-img-placeholder {
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      color: #ccc;
-      font-size: 11px;
-      font-family: monospace;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .product-img-stripe {
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 8px,
-        rgba(0,0,0,0.03) 8px,
-        rgba(0,0,0,0.03) 16px
+      .product-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        cursor: pointer;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+        position: relative;
+      }
+      .product-card:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+      .product-img {
+        aspect-ratio: 1;
+        background: var(--muted-bg);
+        position: relative;
+        overflow: hidden;
+      }
+      .product-img-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        font-size: 11px;
+        font-family: monospace;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .product-img-stripe {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 8px,
+          rgba(0, 0, 0, 0.03) 8px,
+          rgba(0, 0, 0, 0.03) 16px
+        );
+      }
+      .product-sale-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background: var(--primary);
+        color: white;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 2px;
+        letter-spacing: 0.04em;
+      }
+      .product-fav {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+        color: var(--muted);
+      }
+      .product-fav.active {
+        color: #e04040;
+      }
+      .product-info {
+        padding: 10px 12px 12px;
+      }
+      .product-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--fg);
+        line-height: 1.4;
+        margin-bottom: 6px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .product-price-row {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+      .product-price {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--fg);
+      }
+      .product-price.sale {
+        color: var(--primary);
+      }
+      .product-price-original {
+        font-size: 12px;
+        color: var(--muted);
+        text-decoration: line-through;
+      }
+
+      /* Pagination */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        padding-top: 8px;
+      }
+      .page-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--radius);
+        border: 1.5px solid var(--border);
+        background: white;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--fg);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Mukta', sans-serif;
+        transition: all 0.15s;
+      }
+      .page-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .page-btn.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+      }
+      .page-btn.arrow {
+        color: var(--muted);
+      }
+
+      /* ── VARIANT 2: HORIZONTAL TOP FILTER BAR ── */
+      .filter-bar-h {
+        background: white;
+        border-bottom: 1px solid var(--border);
+        padding: 0 40px;
+      }
+      .filter-bar-h-inner {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 52px;
+        overflow-x: auto;
+      }
+      .filter-pill {
+        height: 32px;
+        padding: 0 14px;
+        border-radius: 20px;
+        border: 1.5px solid var(--border);
+        background: white;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--fg);
+        white-space: nowrap;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'Mukta', sans-serif;
+        transition: all 0.15s;
+        flex-shrink: 0;
+      }
+      .filter-pill:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .filter-pill.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+      }
+      .filter-pill .chev {
+        font-size: 10px;
+        opacity: 0.6;
+      }
+      .filter-sep {
+        width: 1px;
+        height: 24px;
+        background: var(--border);
+        flex-shrink: 0;
+        margin: 0 4px;
+      }
+
+      /* Dropdown panel for pill filter */
+      .filter-dropdown {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        min-width: 220px;
+      }
+
+      /* ── VARIANT 3: COLLAPSIBLE DRAWER SIDEBAR ── */
+      .drawer-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 40px;
+        padding: 0 14px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        background: white;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--fg);
+        cursor: pointer;
+        font-family: 'Mukta', sans-serif;
+        transition: all 0.15s;
+        flex-shrink: 0;
+      }
+      .drawer-toggle:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .drawer-toggle .badge-count {
+        background: var(--primary);
+        color: white;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Sidebar variants */
+      .sidebar-v3 {
+        width: 240px;
+        flex-shrink: 0;
+      }
+      .sidebar-v3-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--fg);
+        margin-bottom: 16px;
+      }
+      .sidebar-v3-title {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--fg);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .sidebar-v3-reset {
+        font-size: 12px;
+        color: var(--primary);
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      /* Search in sidebar (v3) */
+      .sidebar-search {
+        height: 36px;
+        width: 100%;
+        background: var(--muted-bg);
+        border: 1.5px solid transparent;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        margin-bottom: 16px;
+        transition: border-color 0.15s;
+      }
+      .sidebar-search:focus-within {
+        border-color: var(--primary);
+        background: white;
+      }
+      .sidebar-search input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: 13px;
+        font-family: 'Mukta', sans-serif;
+        color: var(--fg);
+        outline: none;
+      }
+      .sidebar-search input::placeholder {
+        color: var(--muted);
+      }
+
+      /* Category list v1 (checkboxes) */
+      .cat-check-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .cat-check-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 6px;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: background 0.1s;
+      }
+      .cat-check-item:hover {
+        background: var(--muted-bg);
+      }
+      .cat-checkbox {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        border: 1.5px solid var(--border);
+        background: white;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+      .cat-checkbox.checked {
+        background: var(--primary);
+        border-color: var(--primary);
+      }
+      .cat-checkbox.checked::after {
+        content: '';
+        width: 8px;
+        height: 5px;
+        border-left: 2px solid white;
+        border-bottom: 2px solid white;
+        transform: rotate(-45deg) translateY(-1px);
+      }
+      .cat-check-label {
+        font-size: 13px;
+        color: var(--fg);
+        flex: 1;
+      }
+      .cat-check-count {
+        font-size: 11px;
+        color: var(--muted);
+        background: var(--muted-bg);
+        border-radius: 10px;
+        padding: 1px 7px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState, useRef } = React;
+
+      // ── Icons ──
+      const SearchIcon = () => (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
       );
-    }
-    .product-sale-badge {
-      position: absolute;
-      top: 8px; left: 8px;
-      background: var(--primary);
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 2px;
-      letter-spacing: 0.04em;
-    }
-    .product-fav {
-      position: absolute;
-      top: 8px; right: 8px;
-      width: 28px; height: 28px;
-      background: white;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-      color: var(--muted);
-    }
-    .product-fav.active { color: #e04040; }
-    .product-info {
-      padding: 10px 12px 12px;
-    }
-    .product-name {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--fg);
-      line-height: 1.4;
-      margin-bottom: 6px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .product-price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-    }
-    .product-price {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--fg);
-    }
-    .product-price.sale { color: var(--primary); }
-    .product-price-original {
-      font-size: 12px;
-      color: var(--muted);
-      text-decoration: line-through;
-    }
+      const ChevronIcon = ({ open }) => (
+        <svg
+          className={`filter-chevron ${open ? 'open' : ''}`}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      );
+      const GridIcon = () => (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+        </svg>
+      );
+      const ListIcon = () => (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      );
+      const HeartIcon = ({ filled }) => (
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill={filled ? 'currentColor' : 'none'}
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+        </svg>
+      );
+      const FilterIcon = () => (
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+        </svg>
+      );
+      const XIcon = () => (
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      );
+      const CartIcon = () => (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+        </svg>
+      );
 
-    /* Pagination */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-      padding-top: 8px;
-    }
-    .page-btn {
-      width: 34px; height: 34px;
-      border-radius: var(--radius);
-      border: 1.5px solid var(--border);
-      background: white;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--fg);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Mukta', sans-serif;
-      transition: all 0.15s;
-    }
-    .page-btn:hover { border-color: var(--primary); color: var(--primary); }
-    .page-btn.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-    }
-    .page-btn.arrow { color: var(--muted); }
+      // ── Sample data ──
+      const PRODUCTS = [
+        {
+          id: 1,
+          name: 'Стандартная футболка с принтом YES CODE',
+          price: 2800,
+          originalPrice: 3500,
+          hasDiscount: true,
+          fav: false,
+        },
+        {
+          id: 2,
+          name: 'Худи унисекс тёмное',
+          price: 5200,
+          originalPrice: null,
+          hasDiscount: false,
+          fav: true,
+        },
+        {
+          id: 3,
+          name: 'Кружка с енотом',
+          price: 1200,
+          originalPrice: null,
+          hasDiscount: false,
+          fav: false,
+        },
+        {
+          id: 4,
+          name: 'Блокнот А5 с логотипом',
+          price: 800,
+          originalPrice: 1000,
+          hasDiscount: true,
+          fav: false,
+        },
+        {
+          id: 5,
+          name: 'Рюкзак офисный YES CODE',
+          price: 4500,
+          originalPrice: null,
+          hasDiscount: false,
+          fav: false,
+        },
+        {
+          id: 6,
+          name: 'Шопер хлопковый',
+          price: 950,
+          originalPrice: null,
+          hasDiscount: false,
+          fav: false,
+        },
+        {
+          id: 7,
+          name: 'Polo-рубашка базовая',
+          price: 3200,
+          originalPrice: 3800,
+          hasDiscount: true,
+          fav: false,
+        },
+        {
+          id: 8,
+          name: 'Термос стальной 500мл',
+          price: 2100,
+          originalPrice: null,
+          hasDiscount: false,
+          fav: false,
+        },
+      ];
 
-    /* ── VARIANT 2: HORIZONTAL TOP FILTER BAR ── */
-    .filter-bar-h {
-      background: white;
-      border-bottom: 1px solid var(--border);
-      padding: 0 40px;
-    }
-    .filter-bar-h-inner {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      height: 52px;
-      overflow-x: auto;
-    }
-    .filter-pill {
-      height: 32px;
-      padding: 0 14px;
-      border-radius: 20px;
-      border: 1.5px solid var(--border);
-      background: white;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--fg);
-      white-space: nowrap;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
-      font-family: 'Mukta', sans-serif;
-      transition: all 0.15s;
-      flex-shrink: 0;
-    }
-    .filter-pill:hover { border-color: var(--primary); color: var(--primary); }
-    .filter-pill.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-    }
-    .filter-pill .chev {
-      font-size: 10px;
-      opacity: 0.6;
-    }
-    .filter-sep {
-      width: 1px; height: 24px;
-      background: var(--border);
-      flex-shrink: 0;
-      margin: 0 4px;
-    }
+      const CATEGORIES = [
+        { id: 'c1', name: 'Всё', count: 89, active: false },
+        {
+          id: 'c2',
+          name: 'Одежда',
+          count: 34,
+          active: true,
+          children: [
+            { id: 'c2a', name: 'Футболки', count: 12, active: true },
+            { id: 'c2b', name: 'Худи', count: 8, active: false },
+            { id: 'c2c', name: 'Polo', count: 6, active: false },
+          ],
+        },
+        { id: 'c3', name: 'Посуда', count: 18, active: false },
+        { id: 'c4', name: 'Офис', count: 15, active: false },
+        { id: 'c5', name: 'Сумки', count: 22, active: false },
+      ];
 
-    /* Dropdown panel for pill filter */
-    .filter-dropdown {
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-      z-index: 10;
-      min-width: 220px;
-    }
+      const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One size'];
+      const COLORS = [
+        { id: 'white', hex: '#fafafa', border: true },
+        { id: 'black', hex: '#1a1a1a' },
+        { id: 'orange', hex: '#f2760f' },
+        { id: 'blue', hex: '#3e17ff' },
+        { id: 'green', hex: '#008a40' },
+        { id: 'purple', hex: '#b62dd3' },
+        { id: 'red', hex: '#dc2626' },
+        { id: 'gray', hex: '#9ca3af' },
+      ];
 
-    /* ── VARIANT 3: COLLAPSIBLE DRAWER SIDEBAR ── */
-    .drawer-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 14px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      background: white;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--fg);
-      cursor: pointer;
-      font-family: 'Mukta', sans-serif;
-      transition: all 0.15s;
-      flex-shrink: 0;
-    }
-    .drawer-toggle:hover { border-color: var(--primary); color: var(--primary); }
-    .drawer-toggle .badge-count {
-      background: var(--primary);
-      color: white;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      font-size: 10px;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    /* Sidebar variants */
-    .sidebar-v3 {
-      width: 240px;
-      flex-shrink: 0;
-    }
-    .sidebar-v3-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 12px;
-      border-bottom: 2px solid var(--fg);
-      margin-bottom: 16px;
-    }
-    .sidebar-v3-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--fg);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-    .sidebar-v3-reset {
-      font-size: 12px;
-      color: var(--primary);
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    /* Search in sidebar (v3) */
-    .sidebar-search {
-      height: 36px;
-      width: 100%;
-      background: var(--muted-bg);
-      border: 1.5px solid transparent;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 12px;
-      margin-bottom: 16px;
-      transition: border-color 0.15s;
-    }
-    .sidebar-search:focus-within { border-color: var(--primary); background: white; }
-    .sidebar-search input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      font-size: 13px;
-      font-family: 'Mukta', sans-serif;
-      color: var(--fg);
-      outline: none;
-    }
-    .sidebar-search input::placeholder { color: var(--muted); }
-
-    /* Category list v1 (checkboxes) */
-    .cat-check-list { display: flex; flex-direction: column; gap: 6px; }
-    .cat-check-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 5px 6px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: background 0.1s;
-    }
-    .cat-check-item:hover { background: var(--muted-bg); }
-    .cat-checkbox {
-      width: 16px; height: 16px;
-      border-radius: 3px;
-      border: 1.5px solid var(--border);
-      background: white;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.15s;
-    }
-    .cat-checkbox.checked {
-      background: var(--primary);
-      border-color: var(--primary);
-    }
-    .cat-checkbox.checked::after {
-      content: '';
-      width: 8px; height: 5px;
-      border-left: 2px solid white;
-      border-bottom: 2px solid white;
-      transform: rotate(-45deg) translateY(-1px);
-    }
-    .cat-check-label {
-      font-size: 13px;
-      color: var(--fg);
-      flex: 1;
-    }
-    .cat-check-count {
-      font-size: 11px;
-      color: var(--muted);
-      background: var(--muted-bg);
-      border-radius: 10px;
-      padding: 1px 7px;
-    }
-  </style>
-</head>
-<body>
-<div id="root"></div>
-<script type="text/babel">
-const { useState, useRef } = React;
-
-// ── Icons ──
-const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-  </svg>
-);
-const ChevronIcon = ({open}) => (
-  <svg className={`filter-chevron ${open ? 'open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 18l6-6-6-6"/>
-  </svg>
-);
-const GridIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-    <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-  </svg>
-);
-const ListIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-  </svg>
-);
-const HeartIcon = ({filled}) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-  </svg>
-);
-const FilterIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-  </svg>
-);
-const XIcon = () => (
-  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-  </svg>
-);
-const CartIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-  </svg>
-);
-
-// ── Sample data ──
-const PRODUCTS = [
-  { id:1, name:"Стандартная футболка с принтом YES CODE", price:2800, originalPrice:3500, hasDiscount:true, fav:false },
-  { id:2, name:"Худи унисекс тёмное", price:5200, originalPrice:null, hasDiscount:false, fav:true },
-  { id:3, name:"Кружка с енотом", price:1200, originalPrice:null, hasDiscount:false, fav:false },
-  { id:4, name:"Блокнот А5 с логотипом", price:800, originalPrice:1000, hasDiscount:true, fav:false },
-  { id:5, name:"Рюкзак офисный YES CODE", price:4500, originalPrice:null, hasDiscount:false, fav:false },
-  { id:6, name:"Шопер хлопковый", price:950, originalPrice:null, hasDiscount:false, fav:false },
-  { id:7, name:"Polo-рубашка базовая", price:3200, originalPrice:3800, hasDiscount:true, fav:false },
-  { id:8, name:"Термос стальной 500мл", price:2100, originalPrice:null, hasDiscount:false, fav:false },
-];
-
-const CATEGORIES = [
-  { id:'c1', name:'Всё', count:89, active:false },
-  { id:'c2', name:'Одежда', count:34, active:true, children:[
-    { id:'c2a', name:'Футболки', count:12, active:true },
-    { id:'c2b', name:'Худи', count:8, active:false },
-    { id:'c2c', name:'Polo', count:6, active:false },
-  ]},
-  { id:'c3', name:'Посуда', count:18, active:false },
-  { id:'c4', name:'Офис', count:15, active:false },
-  { id:'c5', name:'Сумки', count:22, active:false },
-];
-
-const SIZES = ['XS','S','M','L','XL','XXL','One size'];
-const COLORS = [
-  { id:'white', hex:'#fafafa', border:true },
-  { id:'black', hex:'#1a1a1a' },
-  { id:'orange', hex:'#f2760f' },
-  { id:'blue', hex:'#3e17ff' },
-  { id:'green', hex:'#008a40' },
-  { id:'purple', hex:'#b62dd3' },
-  { id:'red', hex:'#dc2626' },
-  { id:'gray', hex:'#9ca3af' },
-];
-
-// ── Shared components ──
-const TopBar = () => (
-  <div className="cat-topbar">
-    <div className="cat-topbar-logo">YES CODE</div>
-    <nav className="cat-topbar-nav">
-      <a href="#" className="active">Одежда</a>
-      <a href="#">Посуда</a>
-      <a href="#">Офис</a>
-      <a href="#">Сумки</a>
-    </nav>
-    <div className="cat-topbar-right">
-      <span>Войти</span>
-      <div className="cart-badge">
-        <CartIcon />
-        <span>Корзина</span>
-        <div className="cart-count">3</div>
-      </div>
-    </div>
-  </div>
-);
-
-const Breadcrumb = ({path}) => (
-  <div className="cat-breadcrumb">
-    <a href="#">Главная</a>
-    {path.map((item, i) => (
-      <React.Fragment key={i}>
-        <span className="sep">/</span>
-        {i === path.length-1
-          ? <span className="current">{item}</span>
-          : <a href="#">{item}</a>
-        }
-      </React.Fragment>
-    ))}
-  </div>
-);
-
-const ProductCard = ({ product, compact }) => {
-  const [fav, setFav] = useState(product.fav);
-  const fmt = v => `€${(v/100).toFixed(0)}`;
-  return (
-    <div className="product-card">
-      <div className="product-img" style={{ height: compact ? 140 : 180 }}>
-        <div className="product-img-stripe" />
-        <div className="product-img-placeholder">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <path d="M21 15l-5-5L5 21"/>
-          </svg>
-          <span>product photo</span>
+      // ── Shared components ──
+      const TopBar = () => (
+        <div className="cat-topbar">
+          <div className="cat-topbar-logo">YES CODE</div>
+          <nav className="cat-topbar-nav">
+            <a href="#" className="active">
+              Одежда
+            </a>
+            <a href="#">Посуда</a>
+            <a href="#">Офис</a>
+            <a href="#">Сумки</a>
+          </nav>
+          <div className="cat-topbar-right">
+            <span>Войти</span>
+            <div className="cart-badge">
+              <CartIcon />
+              <span>Корзина</span>
+              <div className="cart-count">3</div>
+            </div>
+          </div>
         </div>
-        {product.hasDiscount && <div className="product-sale-badge">SALE</div>}
-        <div className={`product-fav ${fav ? 'active' : ''}`} onClick={e => { e.stopPropagation(); setFav(!fav); }}>
-          <HeartIcon filled={fav} />
+      );
+
+      const Breadcrumb = ({ path }) => (
+        <div className="cat-breadcrumb">
+          <a href="#">Главная</a>
+          {path.map((item, i) => (
+            <React.Fragment key={i}>
+              <span className="sep">/</span>
+              {i === path.length - 1 ? (
+                <span className="current">{item}</span>
+              ) : (
+                <a href="#">{item}</a>
+              )}
+            </React.Fragment>
+          ))}
         </div>
-      </div>
-      <div className="product-info">
-        <div className="product-name">{product.name}</div>
-        <div className="product-price-row">
-          <span className={`product-price ${product.hasDiscount ? 'sale' : ''}`}>{fmt(product.price)}</span>
-          {product.originalPrice && <span className="product-price-original">{fmt(product.originalPrice)}</span>}
-        </div>
-      </div>
-    </div>
-  );
-};
+      );
 
-const ProductGrid = ({ cols=4 }) => (
-  <div className={`product-grid grid-${cols}`}>
-    {PRODUCTS.map(p => <ProductCard key={p.id} product={p} />)}
-  </div>
-);
-
-const Pagination = () => (
-  <div className="pagination">
-    <button className="page-btn arrow">‹</button>
-    {[1,2,3,'…',12].map((n,i) => (
-      <button key={i} className={`page-btn ${n===1?'active':''}`}>{n}</button>
-    ))}
-    <button className="page-btn arrow">›</button>
-  </div>
-);
-
-// ──────────────────────────────────────────────
-// VARIANT 1: CLASSIC LEFT SIDEBAR (accordion)
-// ──────────────────────────────────────────────
-const FilterSection = ({ title, children, defaultOpen=true }) => {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="filter-section">
-      <div className="filter-header" onClick={() => setOpen(!open)}>
-        <span className="filter-title">{title}</span>
-        <ChevronIcon open={open} />
-      </div>
-      {open && <div className="filter-body">{children}</div>}
-    </div>
-  );
-};
-
-const V1Sidebar = () => {
-  const [expanded, setExpanded] = useState(new Set(['c2']));
-  const [activeSizes, setActiveSizes] = useState(new Set(['M','L']));
-  const [activeColors, setActiveColors] = useState(new Set(['black','orange']));
-
-  const toggleSize = s => {
-    setActiveSizes(prev => {
-      const n = new Set(prev);
-      n.has(s) ? n.delete(s) : n.add(s);
-      return n;
-    });
-  };
-  const toggleColor = c => {
-    setActiveColors(prev => {
-      const n = new Set(prev);
-      n.has(c) ? n.delete(c) : n.add(c);
-      return n;
-    });
-  };
-  const toggleExpand = id => {
-    setExpanded(prev => {
-      const n = new Set(prev);
-      n.has(id) ? n.delete(id) : n.add(id);
-      return n;
-    });
-  };
-
-  return (
-    <div className="cat-sidebar">
-      {/* Active filters */}
-      <div className="active-filters">
-        <div className="active-filter-tag">Одежда <span className="x"><XIcon /></span></div>
-        <div className="active-filter-tag">M, L <span className="x"><XIcon /></span></div>
-        <div className="active-filter-tag">€0–€50 <span className="x"><XIcon /></span></div>
-      </div>
-
-      <FilterSection title="Категории">
-        <div className="cat-tree">
-          {CATEGORIES.map(cat => (
-            <React.Fragment key={cat.id}>
+      const ProductCard = ({ product, compact }) => {
+        const [fav, setFav] = useState(product.fav);
+        const fmt = (v) => `€${(v / 100).toFixed(0)}`;
+        return (
+          <div className="product-card">
+            <div
+              className="product-img"
+              style={{ height: compact ? 140 : 180 }}
+            >
+              <div className="product-img-stripe" />
+              <div className="product-img-placeholder">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#ccc"
+                  strokeWidth="1.5"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <path d="M21 15l-5-5L5 21" />
+                </svg>
+                <span>product photo</span>
+              </div>
+              {product.hasDiscount && (
+                <div className="product-sale-badge">SALE</div>
+              )}
               <div
-                className={`cat-tree-item ${cat.active ? 'active' : ''}`}
-                onClick={() => cat.children && toggleExpand(cat.id)}
+                className={`product-fav ${fav ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setFav(!fav);
+                }}
               >
-                <span className="dot"/>
-                {cat.name}
-                {cat.children && (
-                  <span style={{marginLeft:'auto', fontSize:10, color:'var(--muted)'}}>
-                    {expanded.has(cat.id) ? '▲' : '▼'}
+                <HeartIcon filled={fav} />
+              </div>
+            </div>
+            <div className="product-info">
+              <div className="product-name">{product.name}</div>
+              <div className="product-price-row">
+                <span
+                  className={`product-price ${product.hasDiscount ? 'sale' : ''}`}
+                >
+                  {fmt(product.price)}
+                </span>
+                {product.originalPrice && (
+                  <span className="product-price-original">
+                    {fmt(product.originalPrice)}
                   </span>
                 )}
               </div>
-              {cat.children && expanded.has(cat.id) && (
-                <div className="cat-tree-children">
-                  {cat.children.map(child => (
-                    <div key={child.id} className={`cat-tree-item ${child.active ? 'active' : ''}`}>
-                      {child.name}
-                      <span style={{marginLeft:'auto', fontSize:11, color:'var(--muted)'}}>{child.count}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      </FilterSection>
-
-      <FilterSection title="Размер">
-        <div className="size-chips">
-          {SIZES.map(s => (
-            <button key={s} className={`size-chip ${activeSizes.has(s) ? 'active' : ''}`} onClick={() => toggleSize(s)}>{s}</button>
-          ))}
-        </div>
-      </FilterSection>
-
-      <FilterSection title="Цвет">
-        <div className="color-swatches">
-          {COLORS.map(c => (
-            <div
-              key={c.id}
-              className={`color-swatch ${activeColors.has(c.id) ? 'active' : ''} ${c.id==='white' ? 'light' : ''}`}
-              style={{ background: c.hex, border: c.border ? '1.5px solid #ddd' : 'none' }}
-              onClick={() => toggleColor(c.id)}
-            />
-          ))}
-        </div>
-      </FilterSection>
-
-      <FilterSection title="Цена">
-        <div className="price-range-labels">
-          <span>от <strong>€0</strong></span>
-          <span>до <strong>€60</strong></span>
-        </div>
-        <div className="range-track">
-          <div className="range-fill" style={{left:'5%', width:'60%'}} />
-          <div className="range-thumb" style={{left:'5%'}} />
-          <div className="range-thumb" style={{left:'65%'}} />
-        </div>
-        <div className="price-inputs">
-          <input className="price-input" placeholder="€ мин" defaultValue="0" />
-          <input className="price-input" placeholder="€ макс" defaultValue="60" />
-        </div>
-      </FilterSection>
-
-      <FilterSection title="Наличие" defaultOpen={false}>
-        <div className="toggle-row">
-          <span className="toggle-label">Только в наличии</span>
-          <div className="toggle-switch on" />
-        </div>
-      </FilterSection>
-
-      <button className="filter-apply-btn">Применить</button>
-      <span className="filter-reset-link">Сбросить все фильтры</span>
-    </div>
-  );
-};
-
-const Variant1 = () => {
-  const [view, setView] = useState('4');
-  const [search, setSearch] = useState('');
-  return (
-    <div className="catalog-shell">
-      <TopBar />
-      <Breadcrumb path={['Одежда', 'Футболки']} />
-      <div className="cat-main">
-        <V1Sidebar />
-        <div className="cat-content">
-          <div className="content-topbar">
-            <div className={`search-bar`}>
-              <span className="search-icon"><SearchIcon /></span>
-              <input placeholder="Поиск по каталогу…" value={search} onChange={e => setSearch(e.target.value)} />
             </div>
-            <select className="sort-select">
-              <option>По умолчанию</option>
-              <option>Сначала новые</option>
-              <option>Цена: возрастание</option>
-              <option>Цена: убывание</option>
-              <option>A → Z</option>
-            </select>
-            <div className="view-toggle">
-              <button className={`view-btn ${view==='4'?'active':''}`} onClick={() => setView('4')}><GridIcon /></button>
-              <button className={`view-btn ${view==='3'?'active':''}`} onClick={() => setView('3')}><ListIcon /></button>
-            </div>
-            <span className="result-count">89 товаров</span>
           </div>
-          <ProductGrid cols={view==='4'?4:3} />
-          <Pagination />
-        </div>
-      </div>
-    </div>
-  );
-};
+        );
+      };
 
-// ──────────────────────────────────────────────
-// VARIANT 2: HORIZONTAL FILTER PILLS (топ-бар)
-// ──────────────────────────────────────────────
-
-const V2FilterBar = () => {
-  const [activePill, setActivePill] = useState(null);
-  const [activeSizes, setActiveSizes] = useState(new Set(['M']));
-  const [activeColors, setActiveColors] = useState(new Set(['orange']));
-
-  const pills = [
-    { id:'cat', label:'Категория', value:'Одежда' },
-    { id:'size', label:'Размер', value:'M' },
-    { id:'color', label:'Цвет', value:null },
-    { id:'price', label:'Цена', value:'€0–€50' },
-    { id:'sort', label:'Сортировка', value:'По умолчанию' },
-  ];
-
-  return (
-    <div style={{position:'relative'}}>
-      <div className="filter-bar-h">
-        <div className="filter-bar-h-inner">
-          {pills.map((pill, i) => (
-            <React.Fragment key={pill.id}>
-              {i === pills.length-2 && <div className="filter-sep"/>}
-              <button
-                className={`filter-pill ${pill.value || activePill===pill.id ? 'active' : ''}`}
-                onClick={() => setActivePill(activePill===pill.id ? null : pill.id)}
-              >
-                {pill.value || pill.label}
-                <span className="chev">{activePill===pill.id ? '▲' : '▼'}</span>
-              </button>
-            </React.Fragment>
+      const ProductGrid = ({ cols = 4 }) => (
+        <div className={`product-grid grid-${cols}`}>
+          {PRODUCTS.map((p) => (
+            <ProductCard key={p.id} product={p} />
           ))}
-          <div className="filter-sep"/>
-          <button className="filter-pill active" style={{gap:4}}>
-            <XIcon /> Сбросить (3)
-          </button>
         </div>
-      </div>
-    </div>
-  );
-};
+      );
 
-const Variant2 = () => {
-  const [view, setView] = useState('4');
-  return (
-    <div className="catalog-shell">
-      <TopBar />
-      <Breadcrumb path={['Одежда']} />
-
-      {/* Search + count row */}
-      <div style={{padding:'12px 40px 0', display:'flex', gap:12, alignItems:'center'}}>
-        <div className="search-bar" style={{maxWidth:420}}>
-          <span className="search-icon"><SearchIcon /></span>
-          <input placeholder="Поиск по каталогу…" />
+      const Pagination = () => (
+        <div className="pagination">
+          <button className="page-btn arrow">‹</button>
+          {[1, 2, 3, '…', 12].map((n, i) => (
+            <button key={i} className={`page-btn ${n === 1 ? 'active' : ''}`}>
+              {n}
+            </button>
+          ))}
+          <button className="page-btn arrow">›</button>
         </div>
-        <span className="result-count" style={{marginLeft:'auto'}}>89 товаров</span>
-        <div className="view-toggle">
-          <button className={`view-btn ${view==='4'?'active':''}`} onClick={() => setView('4')}><GridIcon /></button>
-          <button className={`view-btn ${view==='3'?'active':''}`} onClick={() => setView('3')}><ListIcon /></button>
-        </div>
-      </div>
+      );
 
-      <V2FilterBar />
+      // ──────────────────────────────────────────────
+      // VARIANT 1: CLASSIC LEFT SIDEBAR (accordion)
+      // ──────────────────────────────────────────────
+      const FilterSection = ({ title, children, defaultOpen = true }) => {
+        const [open, setOpen] = useState(defaultOpen);
+        return (
+          <div className="filter-section">
+            <div className="filter-header" onClick={() => setOpen(!open)}>
+              <span className="filter-title">{title}</span>
+              <ChevronIcon open={open} />
+            </div>
+            {open && <div className="filter-body">{children}</div>}
+          </div>
+        );
+      };
 
-      {/* Active tags */}
-      <div style={{padding:'8px 40px 0', display:'flex', gap:6}}>
-        {['Одежда', 'M', '€0–€50'].map(tag => (
-          <div key={tag} className="active-filter-tag">{tag} <span className="x"><XIcon /></span></div>
-        ))}
-      </div>
+      const V1Sidebar = () => {
+        const [expanded, setExpanded] = useState(new Set(['c2']));
+        const [activeSizes, setActiveSizes] = useState(new Set(['M', 'L']));
+        const [activeColors, setActiveColors] = useState(
+          new Set(['black', 'orange'])
+        );
 
-      <div className="cat-main" style={{paddingTop:16}}>
-        {/* Compact left category nav */}
-        <div style={{width:180, flexShrink:0, display:'flex', flexDirection:'column', gap:2}}>
-          <div style={{fontSize:11, fontWeight:700, color:'var(--muted)', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:8, paddingLeft:8}}>Категории</div>
-          {CATEGORIES.map(cat => (
-            <React.Fragment key={cat.id}>
-              <div className={`cat-tree-item ${cat.active?'active':''}`} style={{justifyContent:'space-between'}}>
-                <span>{cat.name}</span>
-                <span style={{fontSize:11, color:'var(--muted)'}}>{cat.count}</span>
+        const toggleSize = (s) => {
+          setActiveSizes((prev) => {
+            const n = new Set(prev);
+            n.has(s) ? n.delete(s) : n.add(s);
+            return n;
+          });
+        };
+        const toggleColor = (c) => {
+          setActiveColors((prev) => {
+            const n = new Set(prev);
+            n.has(c) ? n.delete(c) : n.add(c);
+            return n;
+          });
+        };
+        const toggleExpand = (id) => {
+          setExpanded((prev) => {
+            const n = new Set(prev);
+            n.has(id) ? n.delete(id) : n.add(id);
+            return n;
+          });
+        };
+
+        return (
+          <div className="cat-sidebar">
+            {/* Active filters */}
+            <div className="active-filters">
+              <div className="active-filter-tag">
+                Одежда{' '}
+                <span className="x">
+                  <XIcon />
+                </span>
               </div>
-              {cat.children && cat.active && (
-                <div className="cat-tree-children">
-                  {cat.children.map(c => (
-                    <div key={c.id} className={`cat-tree-item ${c.active?'active':''}`} style={{justifyContent:'space-between'}}>
-                      <span>{c.name}</span>
-                      <span style={{fontSize:11, color:'var(--muted)'}}>{c.count}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-
-        <div className="cat-content" style={{paddingLeft:24}}>
-          <ProductGrid cols={view==='4'?4:3} />
-          <Pagination />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ──────────────────────────────────────────────
-// VARIANT 3: SIDEBAR + INLINE SEARCH (Bold/Editorial)
-// ──────────────────────────────────────────────
-
-const V3FilterSection = ({ title, children, defaultOpen=true }) => {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div style={{borderBottom:'1px solid var(--border)', marginBottom:4}}>
-      <div
-        className="filter-header"
-        onClick={() => setOpen(!open)}
-        style={{padding:'10px 0'}}
-      >
-        <span style={{fontSize:11, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.1em', color:'var(--fg)'}}>{title}</span>
-        <svg style={{width:12, height:12, transition:'transform 0.2s', transform: open ? 'rotate(180deg)':'rotate(0)', color:'var(--muted)', flexShrink:0}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-          <path d="M6 9l6 6 6-6"/>
-        </svg>
-      </div>
-      {open && <div style={{paddingBottom:12}}>{children}</div>}
-    </div>
-  );
-};
-
-const V3Sidebar = () => {
-  const [activeSizes, setActiveSizes] = useState(new Set(['M']));
-  const [activeColors, setActiveColors] = useState(new Set(['black']));
-  const [checked, setChecked] = useState(new Set(['c2','c2a']));
-
-  const toggle = (set, setter, k) => {
-    setter(prev => { const n = new Set(prev); n.has(k) ? n.delete(k) : n.add(k); return n; });
-  };
-
-  return (
-    <div className="sidebar-v3">
-      <div className="sidebar-v3-header">
-        <span className="sidebar-v3-title">Фильтры</span>
-        <span className="sidebar-v3-reset">Сбросить</span>
-      </div>
-
-      <div className="sidebar-search">
-        <SearchIcon />
-        <input placeholder="Поиск…" />
-      </div>
-
-      <V3FilterSection title="Категория">
-        <div className="cat-check-list">
-          {CATEGORIES.flatMap(cat => [
-            cat,
-            ...(cat.children && checked.has(cat.id) ? cat.children.map(c => ({...c, indent:true})) : [])
-          ]).map(cat => (
-            <div
-              key={cat.id}
-              className="cat-check-item"
-              style={cat.indent ? {paddingLeft:24} : {}}
-              onClick={() => toggle(checked, setChecked, cat.id)}
-            >
-              <div className={`cat-checkbox ${checked.has(cat.id) ? 'checked' : ''}`} />
-              <span className="cat-check-label" style={{fontSize: cat.indent ? 12 : 13}}>{cat.name}</span>
-              <span className="cat-check-count">{cat.count}</span>
+              <div className="active-filter-tag">
+                M, L{' '}
+                <span className="x">
+                  <XIcon />
+                </span>
+              </div>
+              <div className="active-filter-tag">
+                €0–€50{' '}
+                <span className="x">
+                  <XIcon />
+                </span>
+              </div>
             </div>
-          ))}
-        </div>
-      </V3FilterSection>
 
-      <V3FilterSection title="Размер">
-        <div className="size-chips" style={{gap:5}}>
-          {SIZES.map(s => (
-            <button
-              key={s}
-              className={`size-chip ${activeSizes.has(s) ? 'active' : ''}`}
-              onClick={() => toggle(activeSizes, setActiveSizes, s)}
-              style={{height:30, fontSize:12, minWidth:32}}
-            >{s}</button>
-          ))}
-        </div>
-      </V3FilterSection>
+            <FilterSection title="Категории">
+              <div className="cat-tree">
+                {CATEGORIES.map((cat) => (
+                  <React.Fragment key={cat.id}>
+                    <div
+                      className={`cat-tree-item ${cat.active ? 'active' : ''}`}
+                      onClick={() => cat.children && toggleExpand(cat.id)}
+                    >
+                      <span className="dot" />
+                      {cat.name}
+                      {cat.children && (
+                        <span
+                          style={{
+                            marginLeft: 'auto',
+                            fontSize: 10,
+                            color: 'var(--muted)',
+                          }}
+                        >
+                          {expanded.has(cat.id) ? '▲' : '▼'}
+                        </span>
+                      )}
+                    </div>
+                    {cat.children && expanded.has(cat.id) && (
+                      <div className="cat-tree-children">
+                        {cat.children.map((child) => (
+                          <div
+                            key={child.id}
+                            className={`cat-tree-item ${child.active ? 'active' : ''}`}
+                          >
+                            {child.name}
+                            <span
+                              style={{
+                                marginLeft: 'auto',
+                                fontSize: 11,
+                                color: 'var(--muted)',
+                              }}
+                            >
+                              {child.count}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </FilterSection>
 
-      <V3FilterSection title="Цвет">
-        <div className="color-swatches">
-          {COLORS.map(c => (
-            <div
-              key={c.id}
-              className={`color-swatch ${activeColors.has(c.id) ? 'active' : ''} ${c.id==='white'?'light':''}`}
-              style={{ background: c.hex, border: c.border ? '1.5px solid #ddd' : 'none', width:24, height:24 }}
-              onClick={() => toggle(activeColors, setActiveColors, c.id)}
-            />
-          ))}
-        </div>
-      </V3FilterSection>
+            <FilterSection title="Размер">
+              <div className="size-chips">
+                {SIZES.map((s) => (
+                  <button
+                    key={s}
+                    className={`size-chip ${activeSizes.has(s) ? 'active' : ''}`}
+                    onClick={() => toggleSize(s)}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </FilterSection>
 
-      <V3FilterSection title="Цена">
-        <div className="price-range-labels" style={{marginBottom:8}}>
-          <span>от <strong>€0</strong></span>
-          <span>до <strong>€60</strong></span>
-        </div>
-        <div className="range-track">
-          <div className="range-fill" style={{left:'0%', width:'70%'}} />
-          <div className="range-thumb" style={{left:'0%'}} />
-          <div className="range-thumb" style={{left:'70%'}} />
-        </div>
-        <div className="price-inputs" style={{marginTop:10}}>
-          <input className="price-input" placeholder="€ от" defaultValue="0" />
-          <input className="price-input" placeholder="€ до" defaultValue="60" />
-        </div>
-      </V3FilterSection>
+            <FilterSection title="Цвет">
+              <div className="color-swatches">
+                {COLORS.map((c) => (
+                  <div
+                    key={c.id}
+                    className={`color-swatch ${activeColors.has(c.id) ? 'active' : ''} ${c.id === 'white' ? 'light' : ''}`}
+                    style={{
+                      background: c.hex,
+                      border: c.border ? '1.5px solid #ddd' : 'none',
+                    }}
+                    onClick={() => toggleColor(c.id)}
+                  />
+                ))}
+              </div>
+            </FilterSection>
 
-      <V3FilterSection title="Наличие" defaultOpen={false}>
-        <div className="toggle-row">
-          <span className="toggle-label">В наличии</span>
-          <div className="toggle-switch on" />
-        </div>
-      </V3FilterSection>
+            <FilterSection title="Цена">
+              <div className="price-range-labels">
+                <span>
+                  от <strong>€0</strong>
+                </span>
+                <span>
+                  до <strong>€60</strong>
+                </span>
+              </div>
+              <div className="range-track">
+                <div
+                  className="range-fill"
+                  style={{ left: '5%', width: '60%' }}
+                />
+                <div className="range-thumb" style={{ left: '5%' }} />
+                <div className="range-thumb" style={{ left: '65%' }} />
+              </div>
+              <div className="price-inputs">
+                <input
+                  className="price-input"
+                  placeholder="€ мин"
+                  defaultValue="0"
+                />
+                <input
+                  className="price-input"
+                  placeholder="€ макс"
+                  defaultValue="60"
+                />
+              </div>
+            </FilterSection>
 
-      <button className="filter-apply-btn" style={{marginTop:12, borderRadius:'var(--radius)', fontWeight:800, letterSpacing:'0.05em', textTransform:'uppercase', fontSize:12}}>Применить</button>
-    </div>
-  );
-};
+            <FilterSection title="Наличие" defaultOpen={false}>
+              <div className="toggle-row">
+                <span className="toggle-label">Только в наличии</span>
+                <div className="toggle-switch on" />
+              </div>
+            </FilterSection>
 
-const Variant3 = () => {
-  const [view, setView] = useState('4');
-  return (
-    <div className="catalog-shell">
-      <TopBar />
-      {/* Full-width search hero */}
-      <div style={{background:'#0b0a0a', padding:'16px 40px', display:'flex', gap:12, alignItems:'center'}}>
-        <div style={{flex:1, maxWidth:600}}>
-          <div className="search-bar" style={{background:'rgba(255,255,255,0.08)', borderColor:'rgba(255,255,255,0.12)', height:44}}>
-            <span style={{color:'rgba(255,255,255,0.4)'}}><SearchIcon /></span>
-            <input
-              placeholder="Поиск: футболки, кружки, сумки…"
-              style={{color:'white', fontSize:15}}
-            />
+            <button className="filter-apply-btn">Применить</button>
+            <span className="filter-reset-link">Сбросить все фильтры</span>
           </div>
-        </div>
-        <Breadcrumb path={['Одежда', 'Футболки']} />
-      </div>
+        );
+      };
 
-      <div className="cat-main" style={{paddingTop:24, alignItems:'flex-start'}}>
-        <V3Sidebar />
-        <div className="cat-content">
-          <div className="content-topbar">
-            <div style={{display:'flex', gap:6, flex:1, flexWrap:'wrap'}}>
-              {['Одежда', 'M', 'Чёрный', '€0–€60'].map(tag => (
-                <div key={tag} className="active-filter-tag">{tag} <span className="x"><XIcon /></span></div>
+      const Variant1 = () => {
+        const [view, setView] = useState('4');
+        const [search, setSearch] = useState('');
+        return (
+          <div className="catalog-shell">
+            <TopBar />
+            <Breadcrumb path={['Одежда', 'Футболки']} />
+            <div className="cat-main">
+              <V1Sidebar />
+              <div className="cat-content">
+                <div className="content-topbar">
+                  <div className={`search-bar`}>
+                    <span className="search-icon">
+                      <SearchIcon />
+                    </span>
+                    <input
+                      placeholder="Поиск по каталогу…"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <select className="sort-select">
+                    <option>По умолчанию</option>
+                    <option>Сначала новые</option>
+                    <option>Цена: возрастание</option>
+                    <option>Цена: убывание</option>
+                    <option>A → Z</option>
+                  </select>
+                  <div className="view-toggle">
+                    <button
+                      className={`view-btn ${view === '4' ? 'active' : ''}`}
+                      onClick={() => setView('4')}
+                    >
+                      <GridIcon />
+                    </button>
+                    <button
+                      className={`view-btn ${view === '3' ? 'active' : ''}`}
+                      onClick={() => setView('3')}
+                    >
+                      <ListIcon />
+                    </button>
+                  </div>
+                  <span className="result-count">89 товаров</span>
+                </div>
+                <ProductGrid cols={view === '4' ? 4 : 3} />
+                <Pagination />
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // ──────────────────────────────────────────────
+      // VARIANT 2: HORIZONTAL FILTER PILLS (топ-бар)
+      // ──────────────────────────────────────────────
+
+      const V2FilterBar = () => {
+        const [activePill, setActivePill] = useState(null);
+        const [activeSizes, setActiveSizes] = useState(new Set(['M']));
+        const [activeColors, setActiveColors] = useState(new Set(['orange']));
+
+        const pills = [
+          { id: 'cat', label: 'Категория', value: 'Одежда' },
+          { id: 'size', label: 'Размер', value: 'M' },
+          { id: 'color', label: 'Цвет', value: null },
+          { id: 'price', label: 'Цена', value: '€0–€50' },
+          { id: 'sort', label: 'Сортировка', value: 'По умолчанию' },
+        ];
+
+        return (
+          <div style={{ position: 'relative' }}>
+            <div className="filter-bar-h">
+              <div className="filter-bar-h-inner">
+                {pills.map((pill, i) => (
+                  <React.Fragment key={pill.id}>
+                    {i === pills.length - 2 && <div className="filter-sep" />}
+                    <button
+                      className={`filter-pill ${pill.value || activePill === pill.id ? 'active' : ''}`}
+                      onClick={() =>
+                        setActivePill(activePill === pill.id ? null : pill.id)
+                      }
+                    >
+                      {pill.value || pill.label}
+                      <span className="chev">
+                        {activePill === pill.id ? '▲' : '▼'}
+                      </span>
+                    </button>
+                  </React.Fragment>
+                ))}
+                <div className="filter-sep" />
+                <button className="filter-pill active" style={{ gap: 4 }}>
+                  <XIcon /> Сбросить (3)
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const Variant2 = () => {
+        const [view, setView] = useState('4');
+        return (
+          <div className="catalog-shell">
+            <TopBar />
+            <Breadcrumb path={['Одежда']} />
+
+            {/* Search + count row */}
+            <div
+              style={{
+                padding: '12px 40px 0',
+                display: 'flex',
+                gap: 12,
+                alignItems: 'center',
+              }}
+            >
+              <div className="search-bar" style={{ maxWidth: 420 }}>
+                <span className="search-icon">
+                  <SearchIcon />
+                </span>
+                <input placeholder="Поиск по каталогу…" />
+              </div>
+              <span className="result-count" style={{ marginLeft: 'auto' }}>
+                89 товаров
+              </span>
+              <div className="view-toggle">
+                <button
+                  className={`view-btn ${view === '4' ? 'active' : ''}`}
+                  onClick={() => setView('4')}
+                >
+                  <GridIcon />
+                </button>
+                <button
+                  className={`view-btn ${view === '3' ? 'active' : ''}`}
+                  onClick={() => setView('3')}
+                >
+                  <ListIcon />
+                </button>
+              </div>
+            </div>
+
+            <V2FilterBar />
+
+            {/* Active tags */}
+            <div style={{ padding: '8px 40px 0', display: 'flex', gap: 6 }}>
+              {['Одежда', 'M', '€0–€50'].map((tag) => (
+                <div key={tag} className="active-filter-tag">
+                  {tag}{' '}
+                  <span className="x">
+                    <XIcon />
+                  </span>
+                </div>
               ))}
             </div>
-            <select className="sort-select" style={{minWidth:160}}>
-              <option>Новинки</option>
-              <option>Цена: возрастание</option>
-              <option>Цена: убывание</option>
-              <option>A → Z</option>
-            </select>
-            <div className="view-toggle">
-              <button className={`view-btn ${view==='4'?'active':''}`} onClick={() => setView('4')}><GridIcon /></button>
-              <button className={`view-btn ${view==='3'?'active':''}`} onClick={() => setView('3')}><ListIcon /></button>
+
+            <div className="cat-main" style={{ paddingTop: 16 }}>
+              {/* Compact left category nav */}
+              <div
+                style={{
+                  width: 180,
+                  flexShrink: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: 'var(--muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    marginBottom: 8,
+                    paddingLeft: 8,
+                  }}
+                >
+                  Категории
+                </div>
+                {CATEGORIES.map((cat) => (
+                  <React.Fragment key={cat.id}>
+                    <div
+                      className={`cat-tree-item ${cat.active ? 'active' : ''}`}
+                      style={{ justifyContent: 'space-between' }}
+                    >
+                      <span>{cat.name}</span>
+                      <span style={{ fontSize: 11, color: 'var(--muted)' }}>
+                        {cat.count}
+                      </span>
+                    </div>
+                    {cat.children && cat.active && (
+                      <div className="cat-tree-children">
+                        {cat.children.map((c) => (
+                          <div
+                            key={c.id}
+                            className={`cat-tree-item ${c.active ? 'active' : ''}`}
+                            style={{ justifyContent: 'space-between' }}
+                          >
+                            <span>{c.name}</span>
+                            <span
+                              style={{ fontSize: 11, color: 'var(--muted)' }}
+                            >
+                              {c.count}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <div className="cat-content" style={{ paddingLeft: 24 }}>
+                <ProductGrid cols={view === '4' ? 4 : 3} />
+                <Pagination />
+              </div>
             </div>
-            <span className="result-count">89 товаров</span>
           </div>
-          <ProductGrid cols={view==='4'?4:3} />
-          <Pagination />
-        </div>
-      </div>
-    </div>
-  );
-};
+        );
+      };
 
-// ── Main App ──
-function App() {
-  return (
-    <DesignCanvas>
-      <DCSection id="s1" title="Вариант 1 — Classic Sidebar Accordion">
-        <DCArtboard id="v1" label="Sidebar accordion + active tags" width={1280} height={960}>
-          <Variant1 />
-        </DCArtboard>
-      </DCSection>
+      // ──────────────────────────────────────────────
+      // VARIANT 3: SIDEBAR + INLINE SEARCH (Bold/Editorial)
+      // ──────────────────────────────────────────────
 
-      <DCSection id="s2" title="Вариант 2 — Horizontal Filter Pills">
-        <DCArtboard id="v2" label="Top pills + compact category nav" width={1280} height={960}>
-          <Variant2 />
-        </DCArtboard>
-      </DCSection>
+      const V3FilterSection = ({ title, children, defaultOpen = true }) => {
+        const [open, setOpen] = useState(defaultOpen);
+        return (
+          <div
+            style={{ borderBottom: '1px solid var(--border)', marginBottom: 4 }}
+          >
+            <div
+              className="filter-header"
+              onClick={() => setOpen(!open)}
+              style={{ padding: '10px 0' }}
+            >
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 800,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: 'var(--fg)',
+                }}
+              >
+                {title}
+              </span>
+              <svg
+                style={{
+                  width: 12,
+                  height: 12,
+                  transition: 'transform 0.2s',
+                  transform: open ? 'rotate(180deg)' : 'rotate(0)',
+                  color: 'var(--muted)',
+                  flexShrink: 0,
+                }}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </div>
+            {open && <div style={{ paddingBottom: 12 }}>{children}</div>}
+          </div>
+        );
+      };
 
-      <DCSection id="s3" title="Вариант 3 — Bold Sidebar + Dark Search Bar">
-        <DCArtboard id="v3" label="Editorial sidebar + dark search hero" width={1280} height={960}>
-          <Variant3 />
-        </DCArtboard>
-      </DCSection>
-    </DesignCanvas>
-  );
-}
+      const V3Sidebar = () => {
+        const [activeSizes, setActiveSizes] = useState(new Set(['M']));
+        const [activeColors, setActiveColors] = useState(new Set(['black']));
+        const [checked, setChecked] = useState(new Set(['c2', 'c2a']));
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
-</script>
-</body>
+        const toggle = (set, setter, k) => {
+          setter((prev) => {
+            const n = new Set(prev);
+            n.has(k) ? n.delete(k) : n.add(k);
+            return n;
+          });
+        };
+
+        return (
+          <div className="sidebar-v3">
+            <div className="sidebar-v3-header">
+              <span className="sidebar-v3-title">Фильтры</span>
+              <span className="sidebar-v3-reset">Сбросить</span>
+            </div>
+
+            <div className="sidebar-search">
+              <SearchIcon />
+              <input placeholder="Поиск…" />
+            </div>
+
+            <V3FilterSection title="Категория">
+              <div className="cat-check-list">
+                {CATEGORIES.flatMap((cat) => [
+                  cat,
+                  ...(cat.children && checked.has(cat.id)
+                    ? cat.children.map((c) => ({ ...c, indent: true }))
+                    : []),
+                ]).map((cat) => (
+                  <div
+                    key={cat.id}
+                    className="cat-check-item"
+                    style={cat.indent ? { paddingLeft: 24 } : {}}
+                    onClick={() => toggle(checked, setChecked, cat.id)}
+                  >
+                    <div
+                      className={`cat-checkbox ${checked.has(cat.id) ? 'checked' : ''}`}
+                    />
+                    <span
+                      className="cat-check-label"
+                      style={{ fontSize: cat.indent ? 12 : 13 }}
+                    >
+                      {cat.name}
+                    </span>
+                    <span className="cat-check-count">{cat.count}</span>
+                  </div>
+                ))}
+              </div>
+            </V3FilterSection>
+
+            <V3FilterSection title="Размер">
+              <div className="size-chips" style={{ gap: 5 }}>
+                {SIZES.map((s) => (
+                  <button
+                    key={s}
+                    className={`size-chip ${activeSizes.has(s) ? 'active' : ''}`}
+                    onClick={() => toggle(activeSizes, setActiveSizes, s)}
+                    style={{ height: 30, fontSize: 12, minWidth: 32 }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </V3FilterSection>
+
+            <V3FilterSection title="Цвет">
+              <div className="color-swatches">
+                {COLORS.map((c) => (
+                  <div
+                    key={c.id}
+                    className={`color-swatch ${activeColors.has(c.id) ? 'active' : ''} ${c.id === 'white' ? 'light' : ''}`}
+                    style={{
+                      background: c.hex,
+                      border: c.border ? '1.5px solid #ddd' : 'none',
+                      width: 24,
+                      height: 24,
+                    }}
+                    onClick={() => toggle(activeColors, setActiveColors, c.id)}
+                  />
+                ))}
+              </div>
+            </V3FilterSection>
+
+            <V3FilterSection title="Цена">
+              <div className="price-range-labels" style={{ marginBottom: 8 }}>
+                <span>
+                  от <strong>€0</strong>
+                </span>
+                <span>
+                  до <strong>€60</strong>
+                </span>
+              </div>
+              <div className="range-track">
+                <div
+                  className="range-fill"
+                  style={{ left: '0%', width: '70%' }}
+                />
+                <div className="range-thumb" style={{ left: '0%' }} />
+                <div className="range-thumb" style={{ left: '70%' }} />
+              </div>
+              <div className="price-inputs" style={{ marginTop: 10 }}>
+                <input
+                  className="price-input"
+                  placeholder="€ от"
+                  defaultValue="0"
+                />
+                <input
+                  className="price-input"
+                  placeholder="€ до"
+                  defaultValue="60"
+                />
+              </div>
+            </V3FilterSection>
+
+            <V3FilterSection title="Наличие" defaultOpen={false}>
+              <div className="toggle-row">
+                <span className="toggle-label">В наличии</span>
+                <div className="toggle-switch on" />
+              </div>
+            </V3FilterSection>
+
+            <button
+              className="filter-apply-btn"
+              style={{
+                marginTop: 12,
+                borderRadius: 'var(--radius)',
+                fontWeight: 800,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                fontSize: 12,
+              }}
+            >
+              Применить
+            </button>
+          </div>
+        );
+      };
+
+      const Variant3 = () => {
+        const [view, setView] = useState('4');
+        return (
+          <div className="catalog-shell">
+            <TopBar />
+            {/* Full-width search hero */}
+            <div
+              style={{
+                background: '#0b0a0a',
+                padding: '16px 40px',
+                display: 'flex',
+                gap: 12,
+                alignItems: 'center',
+              }}
+            >
+              <div style={{ flex: 1, maxWidth: 600 }}>
+                <div
+                  className="search-bar"
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    borderColor: 'rgba(255,255,255,0.12)',
+                    height: 44,
+                  }}
+                >
+                  <span style={{ color: 'rgba(255,255,255,0.4)' }}>
+                    <SearchIcon />
+                  </span>
+                  <input
+                    placeholder="Поиск: футболки, кружки, сумки…"
+                    style={{ color: 'white', fontSize: 15 }}
+                  />
+                </div>
+              </div>
+              <Breadcrumb path={['Одежда', 'Футболки']} />
+            </div>
+
+            <div
+              className="cat-main"
+              style={{ paddingTop: 24, alignItems: 'flex-start' }}
+            >
+              <V3Sidebar />
+              <div className="cat-content">
+                <div className="content-topbar">
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: 6,
+                      flex: 1,
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    {['Одежда', 'M', 'Чёрный', '€0–€60'].map((tag) => (
+                      <div key={tag} className="active-filter-tag">
+                        {tag}{' '}
+                        <span className="x">
+                          <XIcon />
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <select className="sort-select" style={{ minWidth: 160 }}>
+                    <option>Новинки</option>
+                    <option>Цена: возрастание</option>
+                    <option>Цена: убывание</option>
+                    <option>A → Z</option>
+                  </select>
+                  <div className="view-toggle">
+                    <button
+                      className={`view-btn ${view === '4' ? 'active' : ''}`}
+                      onClick={() => setView('4')}
+                    >
+                      <GridIcon />
+                    </button>
+                    <button
+                      className={`view-btn ${view === '3' ? 'active' : ''}`}
+                      onClick={() => setView('3')}
+                    >
+                      <ListIcon />
+                    </button>
+                  </div>
+                  <span className="result-count">89 товаров</span>
+                </div>
+                <ProductGrid cols={view === '4' ? 4 : 3} />
+                <Pagination />
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // ── Main App ──
+      function App() {
+        return (
+          <DesignCanvas>
+            <DCSection id="s1" title="Вариант 1 — Classic Sidebar Accordion">
+              <DCArtboard
+                id="v1"
+                label="Sidebar accordion + active tags"
+                width={1280}
+                height={960}
+              >
+                <Variant1 />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="s2" title="Вариант 2 — Horizontal Filter Pills">
+              <DCArtboard
+                id="v2"
+                label="Top pills + compact category nav"
+                width={1280}
+                height={960}
+              >
+                <Variant2 />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection
+              id="s3"
+              title="Вариант 3 — Bold Sidebar + Dark Search Bar"
+            >
+              <DCArtboard
+                id="v3"
+                label="Editorial sidebar + dark search hero"
+                width={1280}
+                height={960}
+              >
+                <Variant3 />
+              </DCArtboard>
+            </DCSection>
+          </DesignCanvas>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
 </html>

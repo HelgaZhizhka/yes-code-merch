@@ -3,6 +3,7 @@
 ## General Principles
 
 ### Strict Mode
+
 ```json
 // tsconfig.json
 {
@@ -18,6 +19,7 @@
 ```
 
 **Rules:**
+
 - **NO `any` allowed**: Use `unknown` if the type is truly dynamic, then use type guards.
 - **Explicit Typing**: All function parameters and return types must be explicitly typed.
 - **Arrow Functions**: ALWAYS use arrow functions for components, hooks, and general logic. Avoid the `function` keyword unless specifically required (e.g., for `this` context or specific generator patterns).
@@ -27,19 +29,20 @@
 
 ```typescript
 // ✅ Good
-interface UserProfile { }
+interface UserProfile {}
 type UserId = string;
-enum UserRole { }
+enum UserRole {}
 const MAX_RETRY_COUNT = 3;
 
 // ❌ Bad
-interface userProfile { }
+interface userProfile {}
 type userid = string;
-enum userrole { }
+enum userrole {}
 const max_retry_count = 3;
 ```
 
 **Rules:**
+
 - **Interfaces/Types/Enums**: `PascalCase`.
 - **Variables/Functions**: `camelCase`.
 - **Constants**: `UPPER_SNAKE_CASE`.
@@ -50,6 +53,7 @@ const max_retry_count = 3;
 ### Interfaces vs Types
 
 **Use `interface` for component props and object definitions:**
+
 ```typescript
 // ✅ Good
 interface ButtonProps {
@@ -63,17 +67,18 @@ type ButtonProps = {
   label: string;
   onClick: () => void;
   disabled?: boolean;
-}
+};
 ```
 
 **Use `type` for unions, intersections, and primitives:**
+
 ```typescript
 // ✅ Good
 type Status = 'pending' | 'success' | 'error';
 type UserWithRole = User & { role: Role };
 
 // ❌ Bad (interfaces cannot represent unions)
-interface Status { } 
+interface Status {}
 ```
 
 ### TypeScript Utilities
@@ -164,7 +169,7 @@ const isProduct = (obj: unknown): obj is Product => {
 ### Discriminated Unions
 
 ```typescript
-type ApiResponse<T> = 
+type ApiResponse<T> =
   | { status: 'success'; data: T }
   | { status: 'error'; error: string }
   | { status: 'loading' };
@@ -194,15 +199,15 @@ interface ButtonProps {
 }
 
 // ✅ Good - Typed component using Arrow Function
-export const Button = ({ 
-  label, 
-  onClick, 
+export const Button = ({
+  label,
+  onClick,
   variant = 'primary',
-  disabled = false 
+  disabled = false
 }: ButtonProps): JSX.Element => {
   return (
-    <button 
-      onClick={onClick} 
+    <button
+      onClick={onClick}
       disabled={disabled}
       className={`btn btn-${variant}`}
     >
@@ -221,7 +226,7 @@ const Form = ({ onSubmit }: FormProps): JSX.Element => {
     const formData = new FormData(e.currentTarget);
     onSubmit(formData);
   };
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     console.log(e.target.value);
   };
@@ -240,7 +245,7 @@ const Form = ({ onSubmit }: FormProps): JSX.Element => {
 
 ```typescript
 // ✅ Good - Immutable map
-const updatedItems = items.map(item => 
+const updatedItems = items.map((item) =>
   item.id === targetId ? { ...item, quantity: item.quantity + 1 } : item
 );
 
@@ -248,7 +253,7 @@ const updatedItems = items.map(item =>
 const newItems = [...items, newItem];
 
 // ❌ Bad - Direct mutation
-items.push(newItem); 
+items.push(newItem);
 ```
 
 ### Null Safety
@@ -259,7 +264,7 @@ const userName = user?.profile?.name ?? 'Guest';
 const port = config.port ?? 3000;
 
 // ❌ Bad - Non-null assertion (use with extreme caution)
-const name = user!.name; 
+const name = user!.name;
 ```
 
 ## Restrictions
@@ -268,7 +273,7 @@ const name = user!.name;
 ❌ **NO `function` keyword**: Strictly use `const Name = () => {}`.  
 ❌ **NO `@ts-ignore`**: Fix the underlying type issue instead.  
 ❌ **NO `as` Casting**: Only use if absolutely necessary (e.g., external API mismatches) and verify with guards.  
-❌ **NO Type Duplication**: Use utility types (`Pick`, `Omit`, etc.).  
+❌ **NO Type Duplication**: Use utility types (`Pick`, `Omit`, etc.).
 
 ## Pre-commit Checklist
 

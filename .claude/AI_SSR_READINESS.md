@@ -17,6 +17,7 @@ The migration target is **TanStack Start** (Vite-based, but with a server runtim
 ## DO
 
 ### ✅ Use `queryOptions(...)` factory for all queries
+
 Reusable in both router `loader` and component `useQuery`/`useSuspenseQuery`.
 
 ```ts
@@ -30,23 +31,28 @@ export const filterOptionsQueryOptions = (categoryIds: string[]) =>
 ```
 
 ### ✅ Prefer router `loader` + `ensureQueryData` for route-level data
+
 - Good UX (no fallback flash)
 - SSR-ready by design
 - Use `loaderDeps` to declare dependencies on params/search
 
 ### ✅ Keep state in URL (search params)
+
 - Filters, pagination, sorting, search — all in URL via Zod schema
 - Avoid Zustand for view state that affects what's rendered
 
 ### ✅ Guard browser-only APIs
+
 - `typeof window !== 'undefined'` before `window`/`document`/`localStorage`/`sessionStorage`
 - Or extract into a hook that's safe by construction (`useLocalStorage` with SSR check)
 
 ### ✅ Pure functions in render
+
 - No `Math.random()`, `Date.now()`, `new Date()` in render output (causes hydration mismatch)
 - Use `useEffect` or stable IDs
 
 ### ✅ Supabase client should be lazy/single
+
 - Currently `@shared/api/supabase-client` — keep it as a singleton, accessed inside functions, not at module top-level if it touches `window`
 
 ---
@@ -54,6 +60,7 @@ export const filterOptionsQueryOptions = (categoryIds: string[]) =>
 ## DON'T
 
 ### ❌ Don't read `window`/`document`/`localStorage` at module scope
+
 ```ts
 // BAD — runs at import time, breaks SSR
 const theme = localStorage.getItem('theme');
@@ -67,15 +74,19 @@ const useTheme = () => {
 ```
 
 ### ❌ Don't put filter/UI state in Zustand
+
 - URL is the source of truth. Zustand is fine for cart/auth, NOT for filters/sort/pagination.
 
 ### ❌ Don't use `useEffect` to sync URL ↔ component state
+
 - Use `useSearch` from TanStack Router directly.
 
 ### ❌ Don't depend on `process.env` directly in client code
+
 - Use `import.meta.env.VITE_*` (Vite) — works in SSR build too.
 
 ### ❌ Don't hardcode absolute URLs
+
 - Future SSR runtime needs config-based base URLs.
 
 ---

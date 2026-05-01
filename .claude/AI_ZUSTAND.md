@@ -1,6 +1,6 @@
 ### Обновлённый файл: `docs/AI_ZUSTAND.md`
 
-```markdown
+````markdown
 # State Management (Zustand) Rules for AI Assistants
 
 ## Core Philosophy
@@ -8,6 +8,7 @@
 In this project, we separate state into two distinct categories:
 
 1. **Server State** (Data from API) → Managed by **TanStack Query**.
+
    - Do NOT use Zustand to store data fetched from the backend.
    - Use `useQuery` and `useMutation` hooks within the `entities/` layer.
 
@@ -19,6 +20,7 @@ In this project, we separate state into two distinct categories:
 ## When to use Zustand?
 
 ✅ **YES:**
+
 - Shopping Cart (client-side items before checkout).
 - User Session / Auth Tokens (if not handled by HTTP-only cookies).
 - UI Themes (Dark/Light mode).
@@ -26,6 +28,7 @@ In this project, we separate state into two distinct categories:
 - Complex multi-step form state (wizard).
 
 ❌ **NO:**
+
 - Caching API responses (Use TanStack Query).
 - Storing lists of products/users (Use TanStack Query).
 - Local component state (Use `useState` or `useReducer`).
@@ -51,7 +54,7 @@ interface CartItem {
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
-  
+
   // Actions
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
@@ -65,30 +68,35 @@ export const useCartStore = createAppStore<CartState>(
   (set) => ({
     items: [],
     isOpen: false,
-    
-    addItem: (newItem) => set((state) => {
-      const existingItem = state.items.find((item) => item.id === newItem.id);
-      if (existingItem) {
-        existingItem.quantity += newItem.quantity;
-      } else {
-        state.items.push(newItem); // Valid because of Immer
-      }
-    }),
 
-    removeItem: (id) => set((state) => {
-      state.items = state.items.filter((item) => item.id !== id);
-    }),
+    addItem: (newItem) =>
+      set((state) => {
+        const existingItem = state.items.find((item) => item.id === newItem.id);
+        if (existingItem) {
+          existingItem.quantity += newItem.quantity;
+        } else {
+          state.items.push(newItem); // Valid because of Immer
+        }
+      }),
 
-    toggleCart: () => set((state) => {
-      state.isOpen = !state.isOpen;
-    }),
+    removeItem: (id) =>
+      set((state) => {
+        state.items = state.items.filter((item) => item.id !== id);
+      }),
 
-    clearCart: () => set((state) => {
-      state.items = [];
-    }),
+    toggleCart: () =>
+      set((state) => {
+        state.isOpen = !state.isOpen;
+      }),
+
+    clearCart: () =>
+      set((state) => {
+        state.items = [];
+      }),
   })
 );
 ```
+````
 
 ---
 
@@ -110,7 +118,7 @@ export const CartToggle = () => {
 };
 
 // ❌ Bad - Destructuring (Causes re-renders on unrelated changes)
-const { items, toggleCart } = useCartStore(); 
+const { items, toggleCart } = useCartStore();
 ```
 
 ---
@@ -123,9 +131,10 @@ Sometimes Zustand needs to interact with Server State. Keep them decoupled.
 - **Effect Layer**: `useEffect` listens to Query data and updates Zustand (avoid if possible).
 
 **Best Practice**: Keep them separate.
+
 - The UI renders data from `useQuery`.
 - User interactions trigger `useMutation`.
-- Zustand handles the *result* of interactions only if it affects global UI (e.g., opening a success modal).
+- Zustand handles the _result_ of interactions only if it affects global UI (e.g., opening a success modal).
 
 ---
 
@@ -134,7 +143,7 @@ Sometimes Zustand needs to interact with Server State. Keep them decoupled.
 ❌ **NO Server Data in Zustand**: If it comes from an API, it belongs in `useQuery`.  
 ❌ **NO `any` types**: State and actions must be strictly typed.  
 ❌ **NO Logic in Components**: Move complex state logic into store actions.  
-❌ **NO Direct State Access in Render**: Always use selectors.  
+❌ **NO Direct State Access in Render**: Always use selectors.
 
 ---
 
@@ -145,5 +154,7 @@ Sometimes Zustand needs to interact with Server State. Keep them decoupled.
 - [ ] Store uses `createAppStore` factory.
 - [ ] All actions use arrow functions.
 - [ ] Selectors are used in components.
+
+```
 
 ```

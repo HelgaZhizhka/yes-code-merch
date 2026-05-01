@@ -7,6 +7,7 @@ This document describes the locale and region configuration system for internati
 ## Overview
 
 The locale system provides region-based formatting for:
+
 - Currency (prices)
 - Dates (future)
 - Numbers (future)
@@ -66,17 +67,17 @@ export type RegionType = (typeof Region)[keyof typeof Region];
 
 ```typescript
 export interface LocaleConfig {
-  locale: string;    // BCP 47 locale tag (e.g., 'en-GB')
+  locale: string; // BCP 47 locale tag (e.g., 'en-GB')
   region: RegionType;
 }
 ```
 
 ### Region to Locale Mapping
 
-| Region | Locale | Format Example (EUR) |
-|--------|--------|---------------------|
-| `EU`   | `en-GB` | €30.00 |
-| `US`   | `en-US` | €30.00 |
+| Region | Locale  | Format Example (EUR) |
+| ------ | ------- | -------------------- |
+| `EU`   | `en-GB` | €30.00               |
+| `US`   | `en-US` | €30.00               |
 
 ---
 
@@ -88,8 +89,8 @@ export interface LocaleConfig {
 import { localeConfig } from '@shared/config/locale';
 
 // Access current locale
-localeConfig.locale  // 'en-GB'
-localeConfig.region  // 'EU'
+localeConfig.locale; // 'en-GB'
+localeConfig.region; // 'EU'
 ```
 
 ### Price Formatting
@@ -97,8 +98,8 @@ localeConfig.region  // 'EU'
 ```typescript
 import { formatPrice } from '@shared/lib/price-formatter';
 
-formatPrice(3000, 'EUR');  // €30.00
-formatPrice(3000, 'USD');  // $30.00
+formatPrice(3000, 'EUR'); // €30.00
+formatPrice(3000, 'USD'); // $30.00
 ```
 
 ### Date Formatting (Example)
@@ -110,7 +111,7 @@ const formatDate = (date: Date): string => {
   return new Intl.DateTimeFormat(localeConfig.locale).format(date);
 };
 
-formatDate(new Date());  // '21/01/2026' (en-GB) or '1/21/2026' (en-US)
+formatDate(new Date()); // '21/01/2026' (en-GB) or '1/21/2026' (en-US)
 ```
 
 ### Number Formatting (Example)
@@ -122,7 +123,7 @@ const formatNumber = (num: number): string => {
   return new Intl.NumberFormat(localeConfig.locale).format(num);
 };
 
-formatNumber(1234567.89);  // '1,234,567.89'
+formatNumber(1234567.89); // '1,234,567.89'
 ```
 
 ---
@@ -136,8 +137,8 @@ formatNumber(1234567.89);  // '1,234,567.89'
 export const Region = {
   EU: 'EU',
   US: 'US',
-  UK: 'UK',    // new
-  CA: 'CA',    // new
+  UK: 'UK', // new
+  CA: 'CA', // new
 } as const;
 
 const REGION_LOCALE_MAP: Record<RegionType, string> = {
@@ -164,13 +165,13 @@ const REGION_CONFIG_MAP: Record<RegionType, LocaleConfig> = {
     locale: 'en-GB',
     region: 'EU',
     language: 'en',
-    dateFormat: 'DD/MM/YYYY'
+    dateFormat: 'DD/MM/YYYY',
   },
   US: {
     locale: 'en-US',
     region: 'US',
     language: 'en',
-    dateFormat: 'MM/DD/YYYY'
+    dateFormat: 'MM/DD/YYYY',
   },
 };
 ```
@@ -193,11 +194,12 @@ export const useLocaleStore = createAppStore<LocaleState>(
   (set) => ({
     region: getLocaleConfig().region,
     locale: getLocaleConfig().locale,
-    setRegion: (region) => set((state) => {
-      const config = getLocaleConfigForRegion(region);
-      state.region = region;
-      state.locale = config.locale;
-    }),
+    setRegion: (region) =>
+      set((state) => {
+        const config = getLocaleConfigForRegion(region);
+        state.region = region;
+        state.locale = config.locale;
+      }),
   })
 );
 ```

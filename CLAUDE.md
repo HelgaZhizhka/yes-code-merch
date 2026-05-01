@@ -29,6 +29,7 @@ pnpm types:db:local   # Generate Supabase types from local DB
 ```
 
 Run a single test file:
+
 ```bash
 pnpm vitest run path/to/file.test.ts --config vitest.unit.config.ts
 ```
@@ -50,9 +51,11 @@ src/
 ```
 
 ### Path Aliases
+
 Use `@app/`, `@pages/`, `@features/`, `@entities/`, `@shared/`, `@/` for imports.
 
 ### Import Order (enforced by ESLint)
+
 `builtin → external → @app → @pages → @widgets → @features → @entities → @shared → @/`
 
 **For detailed FSD rules and patterns, see [`.claude/AI_FSD.md`](.claude/AI_FSD.md)**
@@ -62,15 +65,19 @@ Use `@app/`, `@pages/`, `@features/`, `@entities/`, `@shared/`, `@/` for imports
 ## Key Patterns
 
 ### Routing (TanStack Router)
+
 Routes are factory functions in `src/app/routing/routes.ts`.  
 **Details:** [`.claude/AI_TANSTACK.md`](.claude/AI_TANSTACK.md)
 
 ### State Management (Zustand)
+
 Global state uses `createAppStore` factory from `@shared/lib/create-app-store.ts`.  
 **Details:** [`.claude/AI_ZUSTAND.md`](.claude/AI_ZUSTAND.md)
 
 ### Data Fetching (TanStack Query + Supabase)
+
 Entity pattern for API integration:
+
 ```
 entities/product/
 ├── api/
@@ -79,14 +86,17 @@ entities/product/
 │   └── mapper.ts   # DTO → domain transformation
 └── ui/             # ProductCard, ProductList components
 ```
+
 Supabase client: `@shared/api/supabase-client/`  
 Generated types: `@shared/api/database.types.ts`  
 **Details:** [`.claude/AI_TANSTACK.md`](.claude/AI_TANSTACK.md)
 
 ### Forms (React Hook Form + Zod)
+
 Validation schemas live in entity `lib/schema.ts` files. Use `@hookform/resolvers` for integration.
 
 ### UI Components
+
 Built with Radix UI primitives and Tailwind CSS. Located in `@shared/ui/`.  
 **Details:** [`.claude/AI_TAILWIND.md`](.claude/AI_TAILWIND.md)
 
@@ -95,6 +105,7 @@ Built with Radix UI primitives and Tailwind CSS. Located in `@shared/ui/`.
 ## Environment Variables
 
 Required in `.env`:
+
 ```
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -122,16 +133,19 @@ VITE_REGION=EU
 ## Custom Shortcuts
 
 ### **GG** (Good Game / Update Context & Docs)
+
 Run this command at the end of every feature or significant task.
 
 **What this command does:**
 
 1. **Update Documentation** (`docs/`):
+
    - If a new feature/entity was added, create or update relevant documentation in `docs/` folder.
    - Example: After adding Search API → update or create `docs/SEARCH_API.md` with usage examples.
    - Use clear structure: Overview, API Methods, Usage Examples, Edge Cases.
 
 2. **Update Project Memory** (`.claude/CONTEXT.md`):
+
    - Add a new timestamped entry summarizing:
      - **Date & Feature Name**
      - **What Changed** (files, layers, new APIs)
@@ -139,6 +153,7 @@ Run this command at the end of every feature or significant task.
      - **Technical Debt / Next Steps** (if any)
 
 3. **Verify Rules Consistency**:
+
    - Check if any new patterns introduced need to be reflected in `.claude/AI_*.md` files.
    - If a new best practice emerged (e.g., new hook pattern), suggest updating the relevant guide.
 
@@ -149,14 +164,17 @@ Run this command at the end of every feature or significant task.
      - Any recommendations for rule updates
 
 **Format for `.claude/CONTEXT.md` entries:**
+
 ```markdown
 ### [Date] - [Feature/Task Name]
+
 - **Changes**: Brief list of files/layers modified
 - **Decisions**: Why this approach was chosen
 - **Tech Debt/Next**: Any follow-up needed
 ```
 
 **Example Response after `GG`:**
+
 ```
 ✅ Documentation updated: docs/SEARCH_API.md
 ✅ Context logged: .claude/CONTEXT.md (Entry: Search/Pagination/Filter)
@@ -166,7 +184,9 @@ Mission Accomplished, Олечка! 🚀
 ```
 
 ### Processing the "GG" Command
+
 When the user types "GG":
+
 - **Step 1**: Determine if new documentation is needed in `docs/`. Create or update `.md` files with clear examples.
 - **Step 2**: Add a structured entry to `.claude/CONTEXT.md` following the format above.
 - **Step 3**: Check if `.claude/AI_*.md` files need updates based on new patterns.
@@ -178,19 +198,23 @@ When the user types "GG":
 ## Response Guidelines for Claude
 
 ### Plan Mode
+
 When planning code changes:
+
 - Make the plan extremely concise. Sacrifice grammar for concision.
 - Use lists instead of paragraphs.
 - Remove unnecessary words.
 - At the end, list unresolved questions if any.
 
 ### Code Mode
+
 - Be concise - show code, don't talk about code
 - Use lists instead of paragraphs
 - Provide working examples, not pseudo-code
 - Ask if something is unclear before proceeding
 
 ### Incremental Changes
+
 - DON'T rewrite entire files unless absolutely necessary
 - Make targeted, minimal changes
 - Preserve existing code structure and style
@@ -202,16 +226,19 @@ When planning code changes:
 ## What NOT to Do
 
 ❌ **TypeScript:**
+
 - DON'T use `any` types (use `unknown` + type guards)
 - DON'T ignore TypeScript errors with `@ts-ignore`
 - DON'T duplicate types (use utility types: `Pick`, `Omit`, etc.)
 
 ❌ **Architecture:**
+
 - DON'T violate FSD layer boundaries (features can't import from pages)
 - DON'T create circular dependencies between layers
 - DON'T put business logic in UI components
 
 ❌ **React:**
+
 - DON'T write class components (only functional with arrow functions)
 - DON'T mutate state directly (use immutable updates)
 - DON'T forget `key` prop in lists
@@ -219,6 +246,7 @@ When planning code changes:
 - DON'T put derived state in useState (calculate during render)
 
 ❌ **General:**
+
 - DON'T use npm or yarn (only `pnpm`)
 - DON'T add new dependencies without asking first
 - DON'T commit `console.log` statements
@@ -226,6 +254,7 @@ When planning code changes:
 - DON'T use inline styles (use Tailwind classes)
 
 ❌ **Workflow:**
+
 - Don’t run any sub-agents without my approval
 - Don't do anything extra that I didn’t ask you to
 
@@ -278,15 +307,17 @@ When the task is unclear, ask:
 
 ## Project Memory Management
 
-After completing any significant task or feature, update `.claude/CONTEXT.md`. 
+After completing any significant task or feature, update `.claude/CONTEXT.md`.
 This file serves as the "long-term memory" of the project.
 
 ### When to update:
+
 - After implementing a new feature or entity.
 - After a major refactoring.
 - After changing the database schema or environment variables.
 
 ### What to record:
+
 1. **Feature/Change**: Brief name.
 2. **Key Decisions**: Why was it done this way?
 3. **Technical Context**: New hooks, state changes, or API endpoints.

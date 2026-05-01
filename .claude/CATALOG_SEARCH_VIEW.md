@@ -13,7 +13,7 @@
 supabase
   .from('products')
   .select('*, product_variants!inner(*)')
-  .order('product_variants.price')  // ❌ ЛОМАЛОСЬ
+  .order('product_variants.price'); // ❌ ЛОМАЛОСЬ
 ```
 
 ### Проблема
@@ -21,6 +21,7 @@ supabase
 PostgREST (API Supabase) имеет ограничение: **нельзя сортировать по колонкам из связанных таблиц** в отношениях `one-to-many`.
 
 У нас:
+
 - Таблица `products` (один товар)
 - Таблица `product_variants` (много вариантов у товара)
 - Нужно сортировать по `price` из `product_variants`
@@ -50,13 +51,13 @@ SELECT * FROM products_search ORDER BY price;
 
 Рассматривались альтернативы:
 
-| Решение | Плюсы | Минусы |
-|---------|-------|--------|
-| **VIEW** ✅ | Стандарт SQL, переносимо, нет дублирования данных | — |
-| RPC функция | Полный контроль | Привязка к Postgres, больше кода |
-| Edge Function | Гибкость | Привязка к Supabase Functions |
-| Computed column | Быстро | Денормализация, нужен триггер |
-| Начать запрос с product_variants | Сортировка работает | Не работает для фильтров по атрибутам |
+| Решение                          | Плюсы                                             | Минусы                                |
+| -------------------------------- | ------------------------------------------------- | ------------------------------------- |
+| **VIEW** ✅                      | Стандарт SQL, переносимо, нет дублирования данных | —                                     |
+| RPC функция                      | Полный контроль                                   | Привязка к Postgres, больше кода      |
+| Edge Function                    | Гибкость                                          | Привязка к Supabase Functions         |
+| Computed column                  | Быстро                                            | Денормализация, нужен триггер         |
+| Начать запрос с product_variants | Сортировка работает                               | Не работает для фильтров по атрибутам |
 
 **Решающий аргумент от ментора:** Проект должен быть независимым от Supabase, чтобы можно было мигрировать на другой бэкенд.
 
@@ -73,6 +74,7 @@ SELECT * FROM products_search ORDER BY price;
 **Файл:** `supabase/migrations/20260127_create_products_search_view.sql`
 
 VIEW объединяет:
+
 - `products` — базовая информация товара
 - `product_variants` (master) — цена, SKU, stock
 - `product_images` — первая картинка (subquery)
@@ -95,6 +97,7 @@ WHERE p.is_published = true;
 ```
 
 **Ключевые решения:**
+
 - `security_invoker = true` — VIEW выполняется с правами запрашивающего пользователя, а не создателя. Это важно для безопасности и RLS.
 - `is_master = true` — на витрине каталога показываем только master вариант товара
 - `product_discounts` через `jsonb_agg` — скидки приходят как JSONB массив, который парсим на клиенте
@@ -104,20 +107,27 @@ WHERE p.is_published = true;
 **Файл:** `src/entities/product/api/index.ts`
 
 Было:
+
 ```typescript
-supabase.from('products').select('*, product_variants!inner(*)...')
+supabase
+  .from('products')
+  .select('*, product_variants!inner(*)...')
   .eq('product_variants.is_master', true)
-  .order('product_variants.price')  // ❌
+  .order('product_variants.price'); // ❌
 ```
 
 Стало:
+
 ```typescript
-supabase.from('products_search').select('*', { count: 'exact' })
+supabase
+  .from('products_search')
+  .select('*', { count: 'exact' })
   .in('category_id', categoryIds)
-  .order(sortField)  // ✅ price теперь колонка в VIEW
+  .order(sortField); // ✅ price теперь колонка в VIEW
 ```
 
 Упрощения:
+
 - Нет больше вложенных `!inner()` selects
 - Сортировка по `price` просто `.order('price')` — колонка уже в VIEW
 - Фильтр по цене: `.gte('price', priceMin)` — напрямую
@@ -127,6 +137,7 @@ supabase.from('products_search').select('*', { count: 'exact' })
 **Файл:** `src/entities/product/api/mapper.ts`
 
 `mapFromViewToCatalogProducts` — преобразует flat данные из VIEW в `CatalogProduct`:
+
 - Парсит `product_discounts` из JSONB и применяет скидки через `applyDiscountsToProduct`
 - Генерирует URL картинок из `primary_image_url`
 - Валидация: пропускает записи с пропущенными обязательными полями
@@ -147,6 +158,7 @@ export type ProductSearchViewDTO = Public['Views']['products_search']['Row'];
 **Файл:** `src/entities/product/api/hooks.ts`
 
 Хук `useProducts` теперь использует новый тип и mapper, но **интерфейс не изменился**:
+
 ```typescript
 const { data } = useProducts({ categoryIds, search, sortField, page });
 // data.data — массив CatalogProduct (как раньше)
@@ -179,7 +191,8 @@ URL: /category/clothes?search=shirt&sortField=price&sortDirection=asc&page=2
 // В getCatalogProducts добавить:
 if (size) {
   // Фильтр: товар попадёт если ХОТЯ БЫ ОДИН вариант подходит
-  query = query.in('id',
+  query = query.in(
+    'id',
     supabase.from('product_variants').select('product_id').eq('size', size)
   );
 }
@@ -192,6 +205,7 @@ VIEW не нужно менять — фильтрация идёт через �
 ## Миграция на другой backend
 
 При смене бэкенда:
+
 1. VIEW (`products_search`) — скопировать SQL в новую БД (стандарт SQL)
 2. `getCatalogProducts` — изменить только внутренность (fetch к новому API)
 3. Типы, mapper, hooks — **не меняются**
@@ -200,11 +214,11 @@ VIEW не нужно менять — фильтрация идёт через �
 
 ## Файлы которые были изменены
 
-| Файл | Что сделано |
-|------|-------------|
-| `supabase/migrations/20260127_create_products_search_view.sql` | Миграция с VIEW |
-| `src/entities/product/api/index.ts` | Запрос к VIEW |
-| `src/entities/product/api/types.ts` | Тип VIEW из сгенерированных |
-| `src/entities/product/api/mapper.ts` | Новый mapper для flat данных |
-| `src/entities/product/api/hooks.ts` | Обновлены для нового mapper |
-| `docs/SEARCH.md` | Документация для студентов |
+| Файл                                                           | Что сделано                  |
+| -------------------------------------------------------------- | ---------------------------- |
+| `supabase/migrations/20260127_create_products_search_view.sql` | Миграция с VIEW              |
+| `src/entities/product/api/index.ts`                            | Запрос к VIEW                |
+| `src/entities/product/api/types.ts`                            | Тип VIEW из сгенерированных  |
+| `src/entities/product/api/mapper.ts`                           | Новый mapper для flat данных |
+| `src/entities/product/api/hooks.ts`                            | Обновлены для нового mapper  |
+| `docs/SEARCH.md`                                               | Документация для студентов   |

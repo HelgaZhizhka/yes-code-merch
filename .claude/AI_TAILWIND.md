@@ -7,7 +7,7 @@
 - **Responsive Design**: Use mobile-first approach with prefix modifiers (`sm:`, `md:`, `lg:`, `xl:`).
 - **No Inline Styles**: Strictly forbidden unless calculating values dynamically (e.g., progress bar width).
 
-***
+---
 
 ## Component Pattern
 
@@ -49,12 +49,14 @@ export const InfoCard = ({ title, description, className }: CardProps): JSX.Elem
 };
 ```
 
-***
+---
 
 ## Class Organization
 
 ### 1. Order of Classes
+
 To keep classes readable, follow this logical order:
+
 1. **Layout**: `flex`, `grid`, `block`, `absolute`, `z-10`
 2. **Sizing**: `w-full`, `h-32`, `max-w-md`
 3. **Spacing**: `p-4`, `m-2`, `space-x-4`, `gap-4`
@@ -64,6 +66,7 @@ To keep classes readable, follow this logical order:
 7. **Responsive**: `md:`, `lg:`
 
 ### 2. Handling Complexity
+
 If the `className` string becomes too long, break it into multiple lines or use the `cn()` utility.
 
 ```typescript
@@ -79,7 +82,7 @@ If the `className` string becomes too long, break it into multiple lines or use 
 </button>
 ```
 
-***
+---
 
 ## Responsive Design
 
@@ -92,7 +95,7 @@ Always build for mobile first, then add larger screen modifiers.
 </div>
 ```
 
-***
+---
 
 ## Conditional Classes
 
@@ -121,26 +124,26 @@ export const Button = ({ variant, fullWidth }: ButtonProps): JSX.Element => {
 };
 ```
 
-***
+---
 
 ## Design System Constraints
 
 - **Colors**: Use the Slate scale for neutrals (e.g., `text-slate-600`, `bg-slate-50`).
 - **Spacing**: Use standard multiples of 4 (e.g., `p-4` = 16px).
-- **Typography**: 
+- **Typography**:
   - Titles: `font-bold` or `font-semibold`.
   - Body: `text-base` (16px) or `text-sm` (14px).
 
-***
+---
 
 ## Restrictions
 
 ❌ **NO Custom CSS**: Do not write `.my-class { ... }` in CSS files.  
 ❌ **NO Inline Styles**: Do not use `style={{ color: 'red' }}`.  
 ❌ **NO Arbitrary Values**: Avoid `top-[13px]` or `w-[432px]` unless absolutely necessary (prefer standard scale).  
-❌ **NO Hardcoded Hex Codes**: Use Tailwind colors (e.g., `text-blue-500`, not `text-[#3b82f6]`).  
+❌ **NO Hardcoded Hex Codes**: Use Tailwind colors (e.g., `text-blue-500`, not `text-[#3b82f6]`).
 
-***
+---
 
 ## Checklist for AI
 

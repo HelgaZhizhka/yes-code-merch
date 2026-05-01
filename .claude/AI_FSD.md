@@ -27,12 +27,14 @@ src/
 **Purpose:** App-wide initialization, global providers, routing setup.
 
 **Contains:**
+
 - `main.tsx` - App entry point
 - `app/index.tsx` - Root component with providers
 - `routing/` - Route definitions
 - `styles/` - Global styles
 
 **Rules:**
+
 - ✅ CAN import from any layer
 - ✅ Initializes global state, routing, providers
 - ❌ CANNOT contain business logic
@@ -45,12 +47,13 @@ src/
 **Purpose:** Route entry points. Compose UI from features/entities.
 
 **Contains:**
+
 - One page per route
 - Page-specific layouts
 - Composition of features/entities
 
-
 **Rules:**
+
 - ✅ CAN import from: features, entities, layouts, shared
 - ❌ CANNOT import from: other pages
 - ❌ CANNOT contain business logic (delegate to features)
@@ -63,6 +66,7 @@ src/
 **Purpose:** User-facing features and interactions (e.g., add-to-cart, login, search).
 
 **Slice structure:**
+
 ```
 features/add-to-cart/
 ├── ui/
@@ -76,6 +80,7 @@ features/add-to-cart/
 ```
 
 **Example:**
+
 ```typescript
 // features/add-to-cart/model/use-add-to-cart.ts
 import { useCartStore } from '@entities/cart';
@@ -83,7 +88,7 @@ import type { Product } from '@entities/product';
 
 export function useAddToCart() {
   const addItem = useCartStore((state) => state.addItem);
-  
+
   return (product: Product) => {
     addItem({
       id: product.id,
@@ -103,7 +108,7 @@ interface AddToCartButtonProps {
 
 export function AddToCartButton({ product }: AddToCartButtonProps) {
   const addToCart = useAddToCart();
-  
+
   return (
     <button onClick={() => addToCart(product)}>
       Add to Cart
@@ -117,6 +122,7 @@ export { useAddToCart } from './model/use-add-to-cart';
 ```
 
 **Rules:**
+
 - ✅ CAN import from: entities, shared
 - ❌ CANNOT import from: pages, other features
 - ✅ Contains business logic for user interactions
@@ -130,6 +136,7 @@ export { useAddToCart } from './model/use-add-to-cart';
 **Purpose:** Business entities with data layer and UI components.
 
 **Slice structure:**
+
 ```
 entities/product/
 ├── api/
@@ -149,6 +156,7 @@ entities/product/
 ```
 
 **Example:**
+
 ```typescript
 // entities/product/api/types.ts
 export interface ProductDTO {
@@ -183,7 +191,7 @@ export function useProducts() {
       const { data, error } = await supabase
         .from('products')
         .select('*');
-      
+
       if (error) throw error;
       return data.map(mapProductFromDTO);
     },
@@ -216,6 +224,7 @@ export type { Product } from './model/types';
 ```
 
 **Rules:**
+
 - ✅ CAN import from: shared, other entities (carefully!)
 - ❌ CANNOT import from: pages, features
 - ✅ Owns data fetching/mutations
@@ -230,6 +239,7 @@ export type { Product } from './model/types';
 **Purpose:** Page layouts and wrappers (header, footer, sidebar).
 
 **Rules:**
+
 - ✅ CAN import from: entities, shared
 - ❌ CANNOT import from: pages, features
 - ✅ Provides page structure
@@ -242,6 +252,7 @@ export type { Product } from './model/types';
 **Purpose:** Reusable code, UI kit, utilities, API clients.
 
 **Structure:**
+
 ```
 shared/
 ├── ui/                 # UI components (Button, Input, Modal, etc.)
@@ -251,8 +262,8 @@ shared/
 ├── types.ts              # Shared types
 ```
 
-
 **Rules:**
+
 - ✅ CAN import from: nothing (or other shared modules)
 - ❌ CANNOT import from: app, pages, features, entities
 - ✅ Must be reusable across the app
@@ -300,6 +311,7 @@ shared/    → can import from: nothing (or other shared)
 ```
 
 **Visualization:**
+
 ```
 ┌─────────────────────────────────────┐
 │ app/                                │
@@ -347,12 +359,12 @@ import { useCartStore } from '@entities/cart';
 // pages/cart/ui/CartPage.tsx
 export function CartPage() {
   const [items, setItems] = useState([]);
-  
+
   const addItem = (item) => {
     // Business logic in page!
     setItems([...items, item]);
   };
-  
+
   return <div>...</div>;
 }
 ```
@@ -406,7 +418,7 @@ export function ProductCard({ product, actions }: ProductCardProps) {
 import { ProductCard } from '@entities/product';
 import { AddToCartButton } from '@features/add-to-cart';
 
-<ProductCard 
+<ProductCard
   product={product}
   actions={<AddToCartButton productId={product.id} />}
 />
@@ -430,16 +442,15 @@ Before creating/modifying code:
 
 ## Quick Reference
 
-| Layer | Purpose | Can Import From |
-|-------|---------|-----------------|
-| **app** | Initialization | pages, features, entities, shared |
-| **pages** | Route entry points | features, entities, layouts, shared |
-| **features** | User interactions | entities, shared |
-| **entities** | Business entities | shared, (other entities) |
-| **layouts** | Page layouts | entities, shared |
-| **shared** | Reusable code | nothing |
+| Layer        | Purpose            | Can Import From                     |
+| ------------ | ------------------ | ----------------------------------- |
+| **app**      | Initialization     | pages, features, entities, shared   |
+| **pages**    | Route entry points | features, entities, layouts, shared |
+| **features** | User interactions  | entities, shared                    |
+| **entities** | Business entities  | shared, (other entities)            |
+| **layouts**  | Page layouts       | entities, shared                    |
+| **shared**   | Reusable code      | nothing                             |
 
 ---
 
 **For more details, see:** [Feature-Sliced Design Documentation](https://feature-sliced.design/)
-

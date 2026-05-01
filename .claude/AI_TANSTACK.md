@@ -15,11 +15,12 @@ import { rootRoute } from './router';
 import { HomePage } from '@pages/home';
 
 // ✅ Good - Route Factory
-export const homeRoute = (parentRoute: typeof rootRoute) => createRoute({
-  getParentRoute: () => parentRoute,
-  path: '/',
-  component: HomePage,
-});
+export const homeRoute = (parentRoute: typeof rootRoute) =>
+  createRoute({
+    getParentRoute: () => parentRoute,
+    path: '/',
+    component: HomePage,
+  });
 ```
 
 ### Navigation

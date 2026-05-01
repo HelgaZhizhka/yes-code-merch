@@ -3,7 +3,8 @@
 ## General Principles
 
 ### Functional Components Only
-Always use **Arrow Functions** for components, hooks, and all internal logic. 
+
+Always use **Arrow Functions** for components, hooks, and all internal logic.
 
 ```typescript
 // ✅ Good - Explicitly typed arrow function
@@ -40,7 +41,7 @@ export function ProductCard(props) { ... }
 const MyComponent = () => {
   const [count, setCount] = useState<number>(0);
   const value = useMemo(() => expensiveCalc(), []);
-  
+
   return <div>{count}</div>;
 };
 
@@ -63,8 +64,8 @@ const [count, setCount] = useState<number>(0);
 const [user, setUser] = useState<User | null>(null);
 
 // ✅ Good - Functional updates
-setCount(prev => prev + 1);
-setItems(prev => [...prev, newItem]);
+setCount((prev) => prev + 1);
+setItems((prev) => [...prev, newItem]);
 
 // ❌ Bad - Direct state mutation
 items.push(newItem); // NEVER do this!
@@ -81,7 +82,7 @@ setItems([...items, newItem]);
 const ProductList = ({ products }: { products: Product[] }) => {
   const inStockProducts = products.filter(p => p.inStock);
   const totalPrice = products.reduce((sum, p) => sum + p.price, 0);
-  
+
   return (
     <div>
       <p>In stock: {inStockProducts.length}</p>
@@ -93,7 +94,7 @@ const ProductList = ({ products }: { products: Product[] }) => {
 // ❌ Bad - Don't store what can be calculated
 const ProductList = ({ products }: { products: Product[] }) => {
   const [totalPrice, setTotalPrice] = useState(0);
-  
+
   useEffect(() => {
     setTotalPrice(products.reduce((sum, p) => sum + p.price, 0));
   }, [products]); // Redundant useEffect and state!
@@ -115,8 +116,12 @@ useEffect(() => {
 }, []);
 
 // ✅ Good - Separate effects for separate concerns
-useEffect(() => { /* Logic A */ }, [depA]);
-useEffect(() => { /* Logic B */ }, [depB]);
+useEffect(() => {
+  /* Logic A */
+}, [depA]);
+useEffect(() => {
+  /* Logic B */
+}, [depB]);
 
 // ❌ Bad - Missing dependencies or too many concerns in one effect
 ```
@@ -124,6 +129,7 @@ useEffect(() => { /* Logic B */ }, [depB]);
 ### useMemo and useCallback
 
 Use these only for:
+
 - ✅ Expensive calculations (filtering/sorting large arrays).
 - ✅ Maintaining stable references for dependencies of other hooks.
 - ✅ Passing props to `React.memo` components.
@@ -178,7 +184,7 @@ export const Card = ({ title, children }: CardProps): JSX.Element => (
 // ✅ Good - Early return for complex conditions
 const UserProfile = ({ user }: { user: User | null }) => {
   if (!user) return <div>Please login</div>;
-  
+
   return <h1>{user.name}</h1>;
 };
 ```
@@ -227,7 +233,7 @@ const Modal = ({ isOpen, title, children }: Props) => (
 ❌ **NO State Mutation**: Use functional updates and spread operators.  
 ❌ **NO Over-effecting**: Don't use `useEffect` if logic can be handled in events or during render.  
 ❌ **NO Inline Styles**: Always use **Tailwind CSS** classes.  
-❌ **NO index as key**: Use unique IDs for list items.  
+❌ **NO index as key**: Use unique IDs for list items.
 
 ## Pre-commit Checklist
 
