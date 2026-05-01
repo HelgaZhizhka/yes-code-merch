@@ -12,9 +12,7 @@ export const CatalogContent = ({
 }: CatalogContentProps): React.JSX.Element | null => {
   const { searchParams } = useCatalogSearch();
 
-  const {
-    data: { data: products, meta },
-  } = useProducts({
+  const query = useProducts({
     categoryIds: categoryIds ?? [],
     ...searchParams,
   });
@@ -22,6 +20,12 @@ export const CatalogContent = ({
   if (!categoryIds || categoryIds.length === 0) {
     return null;
   }
+
+  if (!query.data) {
+    return null;
+  }
+
+  const { data: products, meta } = query.data;
 
   return (
     <div className="flex-1">

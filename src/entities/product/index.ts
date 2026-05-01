@@ -1,4 +1,4 @@
-export { productKeys, useProducts } from './api/hooks';
+export { productKeys, useFilterOptions, useProducts } from './api/hooks';
 export type {
   AppliedDiscount,
   CatalogParams,
