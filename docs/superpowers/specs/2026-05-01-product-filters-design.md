@@ -374,6 +374,47 @@ No font changes (Mukta already loaded via `src/app/styles/index.css`).
 
 Each new filter component gets a story file with: empty state, with values selected, hover, disabled (where applicable). For components depending on `useCatalogSearch`, use a router decorator (mock TanStack Router context).
 
+### 9.5. Accessibility requirements
+
+The project already has `eslint-plugin-jsx-a11y` (recommended) and uses Radix Primitives via shadcn/ui, which gives a solid baseline. The new filter components must meet WCAG 2.1 AA. Below is the per-component contract.
+
+**Global rules for the filter UI**
+
+- All interactive elements are native `<button>` or `<a>` — no `<div onClick>`.
+- Focus-visible state is non-default; ensure `focus-visible:outline-2 focus-visible:outline-primary` (or equivalent token-based ring) on every interactive element.
+- Touch targets ≥ 24×24 CSS px (color circles in the design are 26×26 — already compliant).
+- Color is never the only differentiator (especially in `<CatalogColorFilter>`).
+- Live regions for async content updates (grid, count) so screen readers announce changes.
+
+**Per-component contract**
+
+| Component | Required ARIA / semantics |
+|---|---|
+| `<FilterSection>` (accordion) | `<button aria-expanded={open} aria-controls={bodyId}>` as trigger. Body has `id={bodyId}`. Title is the button content (no extra aria-label needed). |
+| `<CatalogColorFilter>` | Each circle is `<button role="checkbox" aria-checked={isActive} aria-label={`Цвет: ${colorName}`}>`. Plain visible label below circle OR tooltip with text — color alone is not sufficient. Group wrapped in `<fieldset><legend className="sr-only">Цвет</legend>...</fieldset>` (or use the section title as `aria-labelledby`). |
+| `<CatalogSizeFilter>` | Each chip is `<button aria-pressed={isActive} aria-label={`Размер: ${size}`}>` (text label is already visible — `aria-label` mirrors it for clarity). Group `aria-labelledby` to the section heading. |
+| `<CatalogPriceFilter>` | Use Radix `Slider` (already in deps) — it provides `aria-valuemin/max/now/text` automatically. Inputs labelled via `<label htmlFor>` (visible or sr-only). Apply button has descriptive text "Применить цену". |
+| `<CatalogActiveFilters>` | Wrapper has `role="region" aria-label="Активные фильтры"`. Each X button: `aria-label={`Убрать фильтр: ${value}`}`. |
+| `<CatalogEmptyState>` | Wrapper has `role="status" aria-live="polite"` so screen readers announce when results disappear. Reset button has descriptive text. |
+| `<CatalogContent>` grid | `aria-busy={isFetching}` on the grid wrapper while a refetch runs (works with our `opacity-60` fade). |
+| `<GridViewToggle>` | Two buttons with `aria-pressed={isActive}` and `aria-label={`Сетка ${count} в ряд`}`. Group `role="group" aria-label="Вид сетки"`. |
+| `<CategoriesTree>` (existing) | Already correct (`<nav aria-label>`, `<ul>/<li>`, `aria-current="page"` on active link). No change. |
+| Reset all button | Plain text "Сбросить все фильтры", no aria-label override. Disabled state when nothing to reset (`aria-disabled` not just `disabled` if you want it focusable for hint). |
+
+**Out of scope for this spec (separate a11y backlog)**
+
+- Storybook `@storybook/addon-a11y` integration.
+- Global skip-to-content link in `Layout`.
+- Color-contrast audit (Lighthouse / axe DevTools sweep).
+- CI integration of `axe-playwright` (waits for e2e infrastructure).
+
+**Acceptance check (added to Section 12)**
+
+- All filter controls reachable via Tab; active state announced (`aria-pressed` / `aria-checked`).
+- VoiceOver / NVDA reads color filter as "Цвет: чёрный, флажок, не отмечено" (or local equivalent), not just "button".
+- Empty-state announcement fires when count goes to 0.
+- No new `eslint-plugin-jsx-a11y` warnings introduced.
+
 ---
 
 ## 10. Loading, Empty, and Error States
@@ -418,7 +459,7 @@ This feature is built to be SSR-ready (per `.claude/AI_SSR_READINESS.md`). Speci
 - [ ] Empty state appears when no products match; "Reset all" button clears filters and grid reappears.
 - [ ] Hover-prefetch on category tree links triggers a fetch visible in DevTools network tab.
 - [ ] No console errors during normal interaction (filter clicks, pagination, navigation).
-- [ ] Filter controls reachable via keyboard (Tab/Enter/Space); active state announced by screen reader (aria-pressed for chips, aria-checked for color circles).
+- [ ] Filter controls reachable via keyboard (Tab/Enter/Space); active state announced by screen reader (`aria-pressed` for chips, `aria-checked` for color circles). Full a11y contract per Section 9.5.
 - [ ] Storybook stories for new filter components render and `pnpm test:storybook` passes.
 - [ ] Existing tests pass; new unit tests for `catalogSearchSchema` (colors, sizes, view) and `useCatalogSearch` setters (`toggleColor`, `toggleSize`, `removeFilter`, `resetFilters`) added.
 
