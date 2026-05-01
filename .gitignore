@@ -38,9 +38,6 @@ storybook-static
 .supabase-pooler.sh
 .supabase-scripts/
 
-CLAUDE.md
-AGENTS.md
-.claude
 *.csv
 scripts/
 generated/
