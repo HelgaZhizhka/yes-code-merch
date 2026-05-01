@@ -18,6 +18,8 @@ export const getCatalogProducts = async (
     search,
     priceMin,
     priceMax,
+    colors,
+    sizes,
     page = DEFAULT_PAGE,
     pageSize = DEFAULT_PAGE_SIZE,
     sortField = DEFAULT_SORT_FIELD,
@@ -27,7 +29,7 @@ export const getCatalogProducts = async (
   let query = supabase
     .from('products_search')
     .select('*', { count: 'exact' })
-    .in('category_id', categoryIds);
+    .overlaps('category_ids', categoryIds);
 
   if (search) {
     const escapedSearch = search.replaceAll(/[,%()\\]/g, String.raw`\$&`);
@@ -42,6 +44,14 @@ export const getCatalogProducts = async (
 
   if (priceMax !== undefined) {
     query = query.lte('price', priceMax);
+  }
+
+  if (colors && colors.length > 0) {
+    query = query.overlaps('colors', colors);
+  }
+
+  if (sizes && sizes.length > 0) {
+    query = query.overlaps('sizes', sizes);
   }
 
   query = query.order(sortField, {
