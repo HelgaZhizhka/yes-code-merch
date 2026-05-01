@@ -1,6 +1,10 @@
 import type { Public } from '@shared/api/supabase-client';
 
-import type { PRODUCT_SORT_FIELDS, SORT_DIRECTIONS } from '../lib/constants';
+import type {
+  CATALOG_VIEWS,
+  PRODUCT_SORT_FIELDS,
+  SORT_DIRECTIONS,
+} from '../lib/constants';
 
 export type ProductRowDTO = Public['Tables']['products']['Row'];
 export type ProductVariantRowDTO = Public['Tables']['product_variants']['Row'];
@@ -104,15 +108,20 @@ export type ProductSortField =
 export type SortDirection =
   (typeof SORT_DIRECTIONS)[keyof typeof SORT_DIRECTIONS];
 
+export type CatalogView = (typeof CATALOG_VIEWS)[keyof typeof CATALOG_VIEWS];
+
 export interface CatalogParams {
   categoryIds: string[];
   search?: string;
   priceMin?: number;
   priceMax?: number;
+  colors?: string[];
+  sizes?: string[];
   page?: number;
   pageSize?: number;
   sortField?: ProductSortField;
   sortDirection?: SortDirection;
+  view?: CatalogView;
 }
 
 export interface PaginationMeta {
@@ -127,4 +136,12 @@ export interface PaginationMeta {
 export interface PaginatedCatalogProducts {
   data: CatalogProduct[];
   meta: PaginationMeta;
+}
+
+export interface FilterOptions {
+  colors: string[];
+  sizes: string[];
+  priceMin: number;
+  priceMax: number;
+  hasSizeFilter: boolean;
 }
