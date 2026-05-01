@@ -83,3 +83,53 @@ grant select on products_search to authenticated, anon;
 
 comment on view products_search is
   'Flattened view of published products with master variant data and attribute aggregates (colors, sizes, category_ids) for catalog search and filtering.';
+
+-- RPC: returns available filter values for a set of categories.
+-- Single round-trip used by the sidebar to populate color/size lists,
+-- price range, and decide whether the size filter is shown at all.
+create or replace function get_catalog_filter_options(p_category_ids uuid[])
+returns table(
+  colors text[],
+  sizes text[],
+  price_min int,
+  price_max int,
+  has_size_filter boolean
+)
+language sql stable security invoker
+set search_path = public
+as $$
+  select
+    (
+      select array_agg(distinct c)
+      from products_search ps, unnest(ps.colors) c
+      where ps.category_ids && p_category_ids
+    ),
+    (
+      select array_agg(distinct s)
+      from products_search ps, unnest(ps.sizes) s
+      where ps.category_ids && p_category_ids
+    ),
+    (
+      select min(price)::int
+      from products_search
+      where category_ids && p_category_ids
+    ),
+    (
+      select max(price)::int
+      from products_search
+      where category_ids && p_category_ids
+    ),
+    exists(
+      select 1 from products_search ps
+      where ps.category_ids && p_category_ids
+        and cardinality(ps.sizes) > 0
+    );
+$$;
+
+grant execute on function get_catalog_filter_options(uuid[]) to authenticated, anon;
+
+-- Supporting indexes (idempotent).
+create index if not exists idx_pva_attr_value
+  on product_variant_attributes (attribute_definition_id, ((value #>> '{}')));
+create index if not exists idx_attr_def_name
+  on attribute_definitions (name);
