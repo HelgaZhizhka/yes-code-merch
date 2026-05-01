@@ -391,15 +391,15 @@ The project already has `eslint-plugin-jsx-a11y` (recommended) and uses Radix Pr
 | Component | Required ARIA / semantics |
 |---|---|
 | `<FilterSection>` (accordion) | `<button aria-expanded={open} aria-controls={bodyId}>` as trigger. Body has `id={bodyId}`. Title is the button content (no extra aria-label needed). |
-| `<CatalogColorFilter>` | Each circle is `<button role="checkbox" aria-checked={isActive} aria-label={`Цвет: ${colorName}`}>`. Plain visible label below circle OR tooltip with text — color alone is not sufficient. Group wrapped in `<fieldset><legend className="sr-only">Цвет</legend>...</fieldset>` (or use the section title as `aria-labelledby`). |
-| `<CatalogSizeFilter>` | Each chip is `<button aria-pressed={isActive} aria-label={`Размер: ${size}`}>` (text label is already visible — `aria-label` mirrors it for clarity). Group `aria-labelledby` to the section heading. |
-| `<CatalogPriceFilter>` | Use Radix `Slider` (already in deps) — it provides `aria-valuemin/max/now/text` automatically. Inputs labelled via `<label htmlFor>` (visible or sr-only). Apply button has descriptive text "Применить цену". |
-| `<CatalogActiveFilters>` | Wrapper has `role="region" aria-label="Активные фильтры"`. Each X button: `aria-label={`Убрать фильтр: ${value}`}`. |
+| `<CatalogColorFilter>` | Each circle is `<button role="checkbox" aria-checked={isActive} aria-label={`Color: ${colorName}`}>`. Plain visible label below circle OR tooltip with text — color alone is not sufficient. Group wrapped in `<fieldset><legend className="sr-only">Color</legend>...</fieldset>` (or use the section title as `aria-labelledby`). |
+| `<CatalogSizeFilter>` | Each chip is `<button aria-pressed={isActive} aria-label={`Size: ${size}`}>` (text label is already visible — `aria-label` mirrors it for clarity). Group `aria-labelledby` to the section heading. |
+| `<CatalogPriceFilter>` | Use Radix `Slider` (already in deps) — it provides `aria-valuemin/max/now/text` automatically. Inputs labelled via `<label htmlFor>` (visible or sr-only). Apply button has descriptive text "Apply price". |
+| `<CatalogActiveFilters>` | Wrapper has `role="region" aria-label="Active filters"`. Each X button: `aria-label={`Remove filter: ${value}`}`. |
 | `<CatalogEmptyState>` | Wrapper has `role="status" aria-live="polite"` so screen readers announce when results disappear. Reset button has descriptive text. |
 | `<CatalogContent>` grid | `aria-busy={isFetching}` on the grid wrapper while a refetch runs (works with our `opacity-60` fade). |
-| `<GridViewToggle>` | Two buttons with `aria-pressed={isActive}` and `aria-label={`Сетка ${count} в ряд`}`. Group `role="group" aria-label="Вид сетки"`. |
+| `<GridViewToggle>` | Two buttons with `aria-pressed={isActive}` and `aria-label={`Grid: ${count} per row`}`. Group `role="group" aria-label="Grid view"`. |
 | `<CategoriesTree>` (existing) | Already correct (`<nav aria-label>`, `<ul>/<li>`, `aria-current="page"` on active link). No change. |
-| Reset all button | Plain text "Сбросить все фильтры", no aria-label override. Disabled state when nothing to reset (`aria-disabled` not just `disabled` if you want it focusable for hint). |
+| Reset all button | Plain text "Reset all filters", no aria-label override. Disabled state when nothing to reset (`aria-disabled` not just `disabled` if you want it focusable for hint). |
 
 **Out of scope for this spec (separate a11y backlog)**
 
@@ -411,9 +411,40 @@ The project already has `eslint-plugin-jsx-a11y` (recommended) and uses Radix Pr
 **Acceptance check (added to Section 12)**
 
 - All filter controls reachable via Tab; active state announced (`aria-pressed` / `aria-checked`).
-- VoiceOver / NVDA reads color filter as "Цвет: чёрный, флажок, не отмечено" (or local equivalent), not just "button".
+- VoiceOver / NVDA reads color filter as "Color: black, checkbox, not checked" (or local equivalent), not just "button".
 - Empty-state announcement fires when count goes to 0.
 - No new `eslint-plugin-jsx-a11y` warnings introduced.
+
+### 9.6. Strings & i18n readiness
+
+The project does NOT use an i18n library yet (no `i18next`, `react-intl`, `lingui`, etc.). It does have **region-based formatting** (`VITE_REGION` → `localeConfig`, `formatPrice`, `Intl.*`) — that stays as-is and covers numbers/dates/currency.
+
+**UI language:** English. The mockup HTML in `.claude/designs/yes-code/` uses Russian for ergonomics during design but the production UI is English. All visible text and ARIA labels for new components are written in English.
+
+**Pre-i18n step (mandatory in this feature):**
+
+- All new UI strings and ARIA labels for filter components live in a single module: `src/pages/catalog/lib/catalog-text.ts`, exported as a frozen object `CATALOG_TEXT`.
+- No string literals inline in JSX — every visible word and every `aria-label` references `CATALOG_TEXT`.
+- Functions for parameterised strings: `removeFilter: (value: string) => `Remove filter: ${value}``, `colorAriaLabel: (color: string) => `Color: ${color}``, etc.
+- Naming pattern: `CATALOG_TEXT.filters.title`, `CATALOG_TEXT.filters.reset`, `CATALOG_TEXT.colors.legend`, `CATALOG_TEXT.empty.title`, `CATALOG_TEXT.empty.cta`, etc.
+
+**Why this matters:** when the project eventually adopts `react-i18next` (likely during the SSR migration sprint, or earlier if multi-language becomes a requirement), the migration is mechanical:
+
+```ts
+// before
+<button aria-label={CATALOG_TEXT.filters.removeFilter(value)}>
+
+// after
+<button aria-label={t('catalog.filters.removeFilter', { value })}>
+```
+
+A find-and-replace on `CATALOG_TEXT.x.y` → `t('catalog.x.y')` plus moving the values into `locales/en.json` is the entire migration path for this slice.
+
+**Out of scope for this feature** (separate cleanup task tracked in `.claude/CONTEXT.md` after merge):
+
+- Audit and migrate strings in existing `shared/ui` components (Pagination, CategoriesTree, etc.) into a shared text module — they currently inline English strings in JSX (acceptable but not ideal).
+- Decide and implement the actual i18n library (`react-i18next` recommended for SSR compatibility).
+- Translation workflow (where translation files live, who owns updates).
 
 ---
 
@@ -472,13 +503,14 @@ This feature is built to be SSR-ready (per `.claude/AI_SSR_READINESS.md`). Speci
 3. **URL state** — extend Zod schema, extend `useCatalogSearch`, update `stripSearchParams` defaults.
 4. **Router** — `context: { queryClient }`, `categoryDataQueryOptions`, `loader` on category route, `<Link preload="intent">` on tree.
 5. **Design tokens** — add 2 CSS variables.
-6. **UI primitives** — `<FilterSection>`, `<GridViewToggle>`.
-7. **Filter components** — color, size, price (with Apply), active-tags, empty-state.
-8. **Compose** — `<CatalogFilters>` orchestrator; integrate into sidebar; refactor `<CatalogHeader>` and `<CatalogContent>`.
-9. **Storybook** — stories for each filter.
-10. **Tests** — unit tests for schema and setters; smoke test for filter URL updates.
-11. **Docs** — update `docs/SEARCH.md`, add `docs/FILTERS.md`.
-12. **Manual QA** — acceptance criteria checklist; cross-category test runs.
+6. **Strings module** — create `pages/catalog/lib/catalog-text.ts` with `CATALOG_TEXT` object (visible text + ARIA labels) before any UI work, per Section 9.6.
+7. **UI primitives** — `<FilterSection>`, `<GridViewToggle>`.
+8. **Filter components** — color, size, price (with Apply), active-tags, empty-state.
+9. **Compose** — `<CatalogFilters>` orchestrator; integrate into sidebar; refactor `<CatalogHeader>` and `<CatalogContent>`.
+10. **Storybook** — stories for each filter.
+11. **Tests** — unit tests for schema and setters; smoke test for filter URL updates.
+12. **Docs** — update `docs/SEARCH.md`, add `docs/FILTERS.md`.
+13. **Manual QA** — acceptance criteria checklist; cross-category test runs.
 
 The detailed step-by-step plan with subtasks is produced by the writing-plans skill after this spec is approved.
 
