@@ -144,7 +144,6 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
     path: ROUTES.CATEGORY,
     component: Catalog,
     validateSearch: catalogSearchSchema,
-    loaderDeps: ({ params }) => ({ slug: params._splat }),
     loader: async ({ context }) => {
       await context.queryClient.ensureQueryData(categoriesTreeQueryOptions());
     },
