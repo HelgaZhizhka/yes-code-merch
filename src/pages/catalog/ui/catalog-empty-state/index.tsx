@@ -1,8 +1,8 @@
 import { SearchX } from 'lucide-react';
 
-import { useCatalogSearch } from '@entities/product';
-
 import { CATALOG_TEXT } from '@pages/catalog/lib';
+
+import { useCatalogSearch } from '@entities/product';
 
 export const CatalogEmptyState = (): React.JSX.Element => {
   const { resetFilters } = useCatalogSearch();

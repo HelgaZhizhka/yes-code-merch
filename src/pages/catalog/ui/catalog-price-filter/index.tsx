@@ -1,11 +1,11 @@
 import * as Slider from '@radix-ui/react-slider';
 import { useEffect, useState } from 'react';
 
+import { CATALOG_TEXT } from '@pages/catalog/lib';
+
 import { useCatalogSearch } from '@entities/product';
 
 import { cn } from '@shared/lib/utils';
-
-import { CATALOG_TEXT } from '@pages/catalog/lib';
 
 interface CatalogPriceFilterProps {
   /** Min price in cents from filter options. */
