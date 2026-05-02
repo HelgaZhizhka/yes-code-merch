@@ -32,6 +32,7 @@ import {
   SORT_DIRECTIONS,
 } from '@entities/product';
 
+import { categoriesTreeQueryOptions } from '@shared/api';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
@@ -143,6 +144,9 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
     path: ROUTES.CATEGORY,
     component: Catalog,
     validateSearch: catalogSearchSchema,
+    loader: async ({ context }) => {
+      await context.queryClient.ensureQueryData(categoriesTreeQueryOptions());
+    },
     search: {
       middlewares: [
         stripSearchParams({
