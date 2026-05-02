@@ -1,5 +1,8 @@
 import { ProductList, useCatalogSearch, useProducts } from '@entities/product';
 
+import { cn } from '@shared/lib/utils';
+
+import { CatalogEmptyState } from '../catalog-empty-state';
 import { CatalogHeader } from '../catalog-header';
 import { CatalogPagination } from '../catalog-pagination';
 
@@ -26,12 +29,28 @@ export const CatalogContent = ({
   }
 
   const { data: products, meta } = query.data;
+  const isFetching = query.isFetching;
+  const isEmpty = meta.totalCount === 0;
 
   return (
-    <div className="flex-1">
-      <CatalogHeader />
-      <ProductList products={products} />
-      <CatalogPagination meta={meta} />
+    <div className="flex flex-1 flex-col" aria-busy={isFetching}>
+      <CatalogHeader totalCount={meta.totalCount} />
+
+      {isEmpty ? (
+        <CatalogEmptyState />
+      ) : (
+        <>
+          <div
+            className={cn(
+              'transition-opacity',
+              isFetching && 'opacity-60 pointer-events-none'
+            )}
+          >
+            <ProductList products={products} view={searchParams.view} />
+          </div>
+          <CatalogPagination meta={meta} />
+        </>
+      )}
     </div>
   );
 };
