@@ -16,14 +16,16 @@ export const Catalog = (): React.JSX.Element => {
   return (
     <div className="container mx-auto px-4 py-6">
       <Breadcrumbs items={breadcrumbs} className="mb-6" />
-      <Suspense fallback={<p>Loading...</p>}>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="flex gap-6">
-            <SideBar categoryTree={tree} />
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <div className="flex gap-6">
+          <Suspense fallback={<p>Loading filters...</p>}>
+            <SideBar categoryTree={tree} categoryIds={categoryIds ?? []} />
+          </Suspense>
+          <Suspense fallback={<p>Loading products...</p>}>
             <CatalogContent categoryIds={categoryIds} />
-          </div>
-        </ErrorBoundary>
-      </Suspense>
+          </Suspense>
+        </div>
+      </ErrorBoundary>
     </div>
   );
 };
