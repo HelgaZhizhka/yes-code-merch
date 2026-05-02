@@ -7,16 +7,12 @@ import {
   getCategoryBySlug,
 } from './helpers';
 import { mapCategories, mapCategoriesTree } from './mapper';
-import type {
-  Category,
-  CategoryRowDTO,
-  CategoryTree,
-  CategoryTreeDTO,
-} from './types';
+import { categoriesTreeQueryOptions } from './queries';
+import type { Category, CategoryRowDTO, CategoryTree } from './types';
 
 import { queryKey } from '../constants';
 
-import { getCategoriesTree, getRootCategories } from './';
+import { getRootCategories } from './';
 
 export const useRootCategories = (): {
   data: Category[];
@@ -38,15 +34,12 @@ export const useRootCategories = (): {
 export const useCategoriesTree = (): {
   data: CategoryTree[];
 } => {
-  const { data } = useSuspenseQuery<CategoryTreeDTO[], Error, CategoryTree[]>({
-    queryKey: queryKey.categoriesTree,
-    queryFn: getCategoriesTree,
+  const { data } = useSuspenseQuery({
+    ...categoriesTreeQueryOptions(),
     select: mapCategoriesTree,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    staleTime: 24 * 60 * 60 * 1000,
-    gcTime: 7 * 24 * 60 * 60 * 1000,
     retry: 1,
   });
 
