@@ -111,3 +111,33 @@ describe('catalogSearchSchema', () => {
     });
   });
 });
+
+describe('catalogSearchSchema — filter extensions', () => {
+  it('accepts and preserves colors array', () => {
+    const result = catalogSearchSchema.parse({
+      colors: ['black', 'red'],
+    });
+    expect(result.colors).toEqual(['black', 'red']);
+  });
+
+  it('accepts and preserves sizes array', () => {
+    const result = catalogSearchSchema.parse({
+      sizes: ['m', 'l'],
+    });
+    expect(result.sizes).toEqual(['m', 'l']);
+  });
+
+  it('defaults view to grid-4', () => {
+    const result = catalogSearchSchema.parse({});
+    expect(result.view).toBe('grid-4');
+  });
+
+  it('accepts grid-3 as a valid view', () => {
+    const result = catalogSearchSchema.parse({ view: 'grid-3' });
+    expect(result.view).toBe('grid-3');
+  });
+
+  it('rejects unknown view values', () => {
+    expect(() => catalogSearchSchema.parse({ view: 'list' })).toThrow();
+  });
+});
