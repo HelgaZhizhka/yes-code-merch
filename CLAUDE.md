@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+@AGENTS.md
 
 ---
 
@@ -124,7 +124,7 @@ VITE_REGION=EU
 - **State Management (Zustand)**: [`.claude/AI_ZUSTAND.md`](.claude/AI_ZUSTAND.md) - Store patterns, selectors
 - **TanStack (Router & Query)**: [`.claude/AI_TANSTACK.md`](.claude/AI_TANSTACK.md) - Routing, data fetching patterns
 - **Styling (Tailwind)**: [`.claude/AI_TAILWIND.md`](.claude/AI_TAILWIND.md) - Class naming, responsive design
-- **Testing Guidelines**: [`.claude/AI_TESTING.md`](.claude/AI_TESTING.md) - Unit tests, integration tests
+- **Localisation**: [`.claude/AI_LOCALE.md`](.claude/AI_LOCALE.md) - i18n patterns, locale config
 - **Code Review Checklist**: [`.claude/AI_CODE_REVIEW.md`](.claude/AI_CODE_REVIEW.md) - Quality criteria
 - **SSR Readiness (Future Migration)**: [`.claude/AI_SSR_READINESS.md`](.claude/AI_SSR_READINESS.md) - DO/DON'T to keep code SSR-friendly for planned TanStack Start migration
 
@@ -132,65 +132,31 @@ VITE_REGION=EU
 
 ## Custom Shortcuts
 
-### **GG** (Good Game / Update Context & Docs)
+### **GG** (Good Game / Archive Knowledge)
 
-Run this command at the end of every feature or significant task.
+Run this command when you want to archive architectural decisions and update documentation.
+Session continuity (progress, feature status, commit) is handled automatically via `AGENTS.md`.
 
 **What this command does:**
 
 1. **Update Documentation** (`docs/`):
+   - Create or update the relevant `docs/` file for the feature.
+   - Structure: Overview, API Methods, Usage Examples, Key Decisions, Edge Cases.
+   - Key Decisions belong here — why this approach, what was rejected and why.
 
-   - If a new feature/entity was added, create or update relevant documentation in `docs/` folder.
-   - Example: After adding Search API → update or create `docs/SEARCH_API.md` with usage examples.
-   - Use clear structure: Overview, API Methods, Usage Examples, Edge Cases.
+2. **Verify Rules Consistency**:
+   - Check if any new patterns need to be reflected in `.claude/AI_*.md` files.
 
-2. **Update Project Memory** (`.claude/CONTEXT.md`):
-
-   - Add a new timestamped entry summarizing:
-     - **Date & Feature Name**
-     - **What Changed** (files, layers, new APIs)
-     - **Key Decisions** (why this approach? e.g., "Used `ilike` over Full-text for simplicity")
-     - **Technical Debt / Next Steps** (if any)
-
-3. **Verify Rules Consistency**:
-
-   - Check if any new patterns introduced need to be reflected in `.claude/AI_*.md` files.
-   - If a new best practice emerged (e.g., new hook pattern), suggest updating the relevant guide.
-
-4. **Output Summary**:
-   - Provide a brief "Mission Accomplished" report listing:
-     - Files updated in `docs/`
-     - Entry added to `.claude/CONTEXT.md`
-     - Any recommendations for rule updates
-
-**Format for `.claude/CONTEXT.md` entries:**
-
-```markdown
-### [Date] - [Feature/Task Name]
-
-- **Changes**: Brief list of files/layers modified
-- **Decisions**: Why this approach was chosen
-- **Tech Debt/Next**: Any follow-up needed
-```
-
-**Example Response after `GG`:**
-
-```
-✅ Documentation updated: docs/SEARCH_API.md
-✅ Context logged: .claude/CONTEXT.md (Entry: Search/Pagination/Filter)
-✅ No rule updates needed.
-
-Mission Accomplished, Олечка! 🚀
-```
+3. **Output Summary**:
+   - Brief report listing everything updated.
 
 ### Processing the "GG" Command
 
 When the user types "GG":
 
-- **Step 1**: Determine if new documentation is needed in `docs/`. Create or update `.md` files with clear examples.
-- **Step 2**: Add a structured entry to `.claude/CONTEXT.md` following the format above.
-- **Step 3**: Check if `.claude/AI_*.md` files need updates based on new patterns.
-- **Step 4**: Report what was done in a concise list.
+- **Step 1**: Update or create the feature doc in `docs/`. Include a **Decisions** section.
+- **Step 2**: Check if `.claude/AI_*.md` files need updates.
+- **Step 3**: Report what was done in a concise list.
 - **DO NOT ask for permission** — just execute and report status.
 
 ---
@@ -307,18 +273,7 @@ When the task is unclear, ask:
 
 ## Project Memory Management
 
-After completing any significant task or feature, update `.claude/CONTEXT.md`.
-This file serves as the "long-term memory" of the project.
+After completing any significant task or feature, run the `GG` command (see above).
+It updates `docs/` with feature documentation including key architectural decisions.
 
-### When to update:
-
-- After implementing a new feature or entity.
-- After a major refactoring.
-- After changing the database schema or environment variables.
-
-### What to record:
-
-1. **Feature/Change**: Brief name.
-2. **Key Decisions**: Why was it done this way?
-3. **Technical Context**: New hooks, state changes, or API endpoints.
-4. **Next Steps**: Any technical debt or planned improvements.
+For session continuity — tracking what's done, what's next, smoke-check on start — see `AGENTS.md`.
