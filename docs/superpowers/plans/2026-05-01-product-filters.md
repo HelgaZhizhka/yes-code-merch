@@ -16,56 +16,56 @@
 
 ### New files
 
-| Path | Responsibility |
-|---|---|
-| `supabase/migrations/20260501_extend_products_search_for_filters.sql` | Replace view with attribute aggregates + new RPC + indexes |
-| `src/entities/product/api/filter-options.ts` | `getFilterOptions(categoryIds)` — calls RPC |
-| `src/entities/product/api/queries.ts` | `productQueries.catalog`, `productQueries.filterOptions` factories |
-| `src/entities/product/api/queries.test.ts` | Unit tests for query factories (key shape) |
-| `src/entities/product/api/filter-options.test.ts` | Unit test for filter-options mapper |
-| `src/shared/api/categories/queries.ts` | `categoriesTreeQueryOptions` factory for loader use |
-| `src/pages/catalog/lib/catalog-text.ts` | All UI strings + ARIA labels (`CATALOG_TEXT`) |
-| `src/pages/catalog/lib/index.ts` | Re-exports |
-| `src/pages/catalog/ui/catalog-filters/index.tsx` | Sidebar filters orchestrator (header + active-tags + sections) |
-| `src/pages/catalog/ui/catalog-filters/filter-section.tsx` | Reusable accordion primitive `<FilterSection>` |
-| `src/pages/catalog/ui/catalog-filters/filter-section.stories.tsx` | Storybook for FilterSection |
-| `src/pages/catalog/ui/catalog-active-filters/index.tsx` | Color/size chips with X in sidebar top |
-| `src/pages/catalog/ui/catalog-active-filters/index.stories.tsx` | |
-| `src/pages/catalog/ui/catalog-color-filter/index.tsx` | Color circles multi-select |
-| `src/pages/catalog/ui/catalog-color-filter/index.stories.tsx` | |
-| `src/pages/catalog/ui/catalog-size-filter/index.tsx` | Size chips multi-select |
-| `src/pages/catalog/ui/catalog-size-filter/index.stories.tsx` | |
-| `src/pages/catalog/ui/catalog-price-filter/index.tsx` | Dual slider + 2 inputs + Apply |
-| `src/pages/catalog/ui/catalog-price-filter/index.stories.tsx` | |
-| `src/pages/catalog/ui/catalog-empty-state/index.tsx` | "No products found" + reset CTA |
-| `src/pages/catalog/ui/catalog-empty-state/index.stories.tsx` | |
-| `src/pages/catalog/ui/catalog-header/grid-view-toggle.tsx` | 4-col / 3-col toggle |
-| `src/pages/catalog/ui/catalog-layout/index.tsx` | Wrapper (sidebar + content shell) extracted from page |
-| `docs/FILTERS.md` | User-facing filter API documentation |
+| Path                                                                  | Responsibility                                                     |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `supabase/migrations/20260501_extend_products_search_for_filters.sql` | Replace view with attribute aggregates + new RPC + indexes         |
+| `src/entities/product/api/filter-options.ts`                          | `getFilterOptions(categoryIds)` — calls RPC                        |
+| `src/entities/product/api/queries.ts`                                 | `productQueries.catalog`, `productQueries.filterOptions` factories |
+| `src/entities/product/api/queries.test.ts`                            | Unit tests for query factories (key shape)                         |
+| `src/entities/product/api/filter-options.test.ts`                     | Unit test for filter-options mapper                                |
+| `src/shared/api/categories/queries.ts`                                | `categoriesTreeQueryOptions` factory for loader use                |
+| `src/pages/catalog/lib/catalog-text.ts`                               | All UI strings + ARIA labels (`CATALOG_TEXT`)                      |
+| `src/pages/catalog/lib/index.ts`                                      | Re-exports                                                         |
+| `src/pages/catalog/ui/catalog-filters/index.tsx`                      | Sidebar filters orchestrator (header + active-tags + sections)     |
+| `src/pages/catalog/ui/catalog-filters/filter-section.tsx`             | Reusable accordion primitive `<FilterSection>`                     |
+| `src/pages/catalog/ui/catalog-filters/filter-section.stories.tsx`     | Storybook for FilterSection                                        |
+| `src/pages/catalog/ui/catalog-active-filters/index.tsx`               | Color/size chips with X in sidebar top                             |
+| `src/pages/catalog/ui/catalog-active-filters/index.stories.tsx`       |                                                                    |
+| `src/pages/catalog/ui/catalog-color-filter/index.tsx`                 | Color circles multi-select                                         |
+| `src/pages/catalog/ui/catalog-color-filter/index.stories.tsx`         |                                                                    |
+| `src/pages/catalog/ui/catalog-size-filter/index.tsx`                  | Size chips multi-select                                            |
+| `src/pages/catalog/ui/catalog-size-filter/index.stories.tsx`          |                                                                    |
+| `src/pages/catalog/ui/catalog-price-filter/index.tsx`                 | Dual slider + 2 inputs + Apply                                     |
+| `src/pages/catalog/ui/catalog-price-filter/index.stories.tsx`         |                                                                    |
+| `src/pages/catalog/ui/catalog-empty-state/index.tsx`                  | "No products found" + reset CTA                                    |
+| `src/pages/catalog/ui/catalog-empty-state/index.stories.tsx`          |                                                                    |
+| `src/pages/catalog/ui/catalog-header/grid-view-toggle.tsx`            | 4-col / 3-col toggle                                               |
+| `src/pages/catalog/ui/catalog-layout/index.tsx`                       | Wrapper (sidebar + content shell) extracted from page              |
+| `docs/FILTERS.md`                                                     | User-facing filter API documentation                               |
 
 ### Modified files
 
-| Path | What changes |
-|---|---|
-| `src/app/styles/index.css` | + `--primary-soft`, `--primary-soft-border` CSS vars and Tailwind theme entries |
-| `src/entities/product/api/index.ts` | + `colors`/`sizes` filters, `.overlaps('category_ids')` |
-| `src/entities/product/api/types.ts` | + `colors`/`sizes` in `CatalogParams`, + `FilterOptions` interface |
-| `src/entities/product/api/hooks.ts` | `useProducts` → `useQuery` + `placeholderData`; + `useFilterOptions` |
-| `src/entities/product/api/mapper.ts` | Type updates only; behavior unchanged |
-| `src/entities/product/lib/catalog-search-schema.ts` | + `colors[]`, `sizes[]`, `view` |
-| `src/entities/product/lib/catalog-search-schema.test.ts` | + tests for colors/sizes/view |
-| `src/entities/product/lib/constants.ts` | + `DEFAULT_VIEW`, `CATALOG_VIEWS` |
-| `src/entities/product/model/use-catalog-search.ts` | + `toggleColor`, `toggleSize`, `setView`, `removeFilter`, `resetFilters` |
-| `src/entities/product/index.ts` | Re-exports |
-| `src/app/routing/index.tsx` | + `context: { queryClient }` |
-| `src/app/routing/routes.ts` | + `loaderDeps`, `loader` on category route, defaults for `view` |
-| `src/pages/catalog/index.tsx` | Use `<CatalogLayout>`; remove top-level Suspense (loader handles it) |
-| `src/pages/catalog/ui/catalog-content/index.tsx` | Pass `view` to grid; render `<CatalogEmptyState>` when `count === 0`; `aria-busy` |
-| `src/pages/catalog/ui/catalog-header/index.tsx` | + grid-view toggle + total count |
-| `src/pages/catalog/ui/sidebar/index.tsx` | + `<CatalogFilters>` |
-| `src/shared/ui/categories-tree/index.tsx` | Tree links navigate with `search: { view: prev.view }` |
-| `docs/SEARCH.md` | Note that filter behaviour is now documented in `docs/FILTERS.md` |
-| `.claude/CONTEXT.md` | New entry per project's GG protocol |
+| Path                                                     | What changes                                                                      |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `src/app/styles/index.css`                               | + `--primary-soft`, `--primary-soft-border` CSS vars and Tailwind theme entries   |
+| `src/entities/product/api/index.ts`                      | + `colors`/`sizes` filters, `.overlaps('category_ids')`                           |
+| `src/entities/product/api/types.ts`                      | + `colors`/`sizes` in `CatalogParams`, + `FilterOptions` interface                |
+| `src/entities/product/api/hooks.ts`                      | `useProducts` → `useQuery` + `placeholderData`; + `useFilterOptions`              |
+| `src/entities/product/api/mapper.ts`                     | Type updates only; behavior unchanged                                             |
+| `src/entities/product/lib/catalog-search-schema.ts`      | + `colors[]`, `sizes[]`, `view`                                                   |
+| `src/entities/product/lib/catalog-search-schema.test.ts` | + tests for colors/sizes/view                                                     |
+| `src/entities/product/lib/constants.ts`                  | + `DEFAULT_VIEW`, `CATALOG_VIEWS`                                                 |
+| `src/entities/product/model/use-catalog-search.ts`       | + `toggleColor`, `toggleSize`, `setView`, `removeFilter`, `resetFilters`          |
+| `src/entities/product/index.ts`                          | Re-exports                                                                        |
+| `src/app/routing/index.tsx`                              | + `context: { queryClient }`                                                      |
+| `src/app/routing/routes.ts`                              | + `loaderDeps`, `loader` on category route, defaults for `view`                   |
+| `src/pages/catalog/index.tsx`                            | Use `<CatalogLayout>`; remove top-level Suspense (loader handles it)              |
+| `src/pages/catalog/ui/catalog-content/index.tsx`         | Pass `view` to grid; render `<CatalogEmptyState>` when `count === 0`; `aria-busy` |
+| `src/pages/catalog/ui/catalog-header/index.tsx`          | + grid-view toggle + total count                                                  |
+| `src/pages/catalog/ui/sidebar/index.tsx`                 | + `<CatalogFilters>`                                                              |
+| `src/shared/ui/categories-tree/index.tsx`                | Tree links navigate with `search: { view: prev.view }`                            |
+| `docs/SEARCH.md`                                         | Note that filter behaviour is now documented in `docs/FILTERS.md`                 |
+| `.claude/CONTEXT.md`                                     | New entry per project's GG protocol                                               |
 
 ---
 
@@ -84,6 +84,7 @@
 ### Task 1: Create migration file with extended `products_search` view
 
 **Files:**
+
 - Create: `supabase/migrations/20260501_extend_products_search_for_filters.sql`
 
 - [ ] **Step 1: Create the migration file**
@@ -177,9 +178,11 @@ Expected: migration applies cleanly, no errors. If using `supabase db reset` wor
 - [ ] **Step 3: Verify view structure**
 
 Run:
+
 ```bash
 psql "$SUPABASE_DB_URL" -c "\d products_search"
 ```
+
 Or via Supabase Studio → Database → Views.
 
 Expected: see columns `category_ids uuid[]`, `colors text[]`, `sizes text[]` in the view.
@@ -187,6 +190,7 @@ Expected: see columns `category_ids uuid[]`, `colors text[]`, `sizes text[]` in 
 - [ ] **Step 4: Sanity-check data**
 
 Run:
+
 ```sql
 select id, name, category_ids, colors, sizes
 from products_search
@@ -207,6 +211,7 @@ git commit -m "feat(db): extend products_search view with attribute aggregates"
 ### Task 2: Add `get_catalog_filter_options` RPC and indexes
 
 **Files:**
+
 - Modify: `supabase/migrations/20260501_extend_products_search_for_filters.sql`
 
 - [ ] **Step 1: Append RPC and indexes to the migration file**
@@ -275,6 +280,7 @@ Expected: no errors.
 - [ ] **Step 3: Smoke-test the RPC**
 
 Run:
+
 ```sql
 select * from get_catalog_filter_options(
   array(select id from categories where slug = 'clothes')
@@ -284,6 +290,7 @@ select * from get_catalog_filter_options(
 Expected: a single row with `colors` containing several values (e.g. `{'black','white','red',...}`), `sizes` non-null, `price_min`/`price_max` present, `has_size_filter = true`.
 
 Run:
+
 ```sql
 select * from get_catalog_filter_options(
   array(select id from categories where slug = 'drinkware')
@@ -311,6 +318,7 @@ git commit -m "feat(db): add get_catalog_filter_options RPC and supporting index
 ### Task 3: Extend types with `colors`, `sizes`, `FilterOptions`
 
 **Files:**
+
 - Modify: `src/entities/product/api/types.ts`
 
 - [ ] **Step 1: Add filter-related types**
@@ -359,6 +367,7 @@ Hold the commit until Task 4 lands so types compile. Skip step 3 here.
 ### Task 4: Add `CATALOG_VIEWS` constant and `CatalogView` type
 
 **Files:**
+
 - Modify: `src/entities/product/lib/constants.ts`
 - Modify: `src/entities/product/api/types.ts`
 
@@ -390,8 +399,7 @@ import type {
 Then add the type next to `ProductSortField`:
 
 ```ts
-export type CatalogView =
-  (typeof CATALOG_VIEWS)[keyof typeof CATALOG_VIEWS];
+export type CatalogView = (typeof CATALOG_VIEWS)[keyof typeof CATALOG_VIEWS];
 ```
 
 - [ ] **Step 3: Update entity barrel exports**
@@ -426,6 +434,7 @@ git commit -m "feat(product): add CATALOG_VIEWS constant and CatalogView/FilterO
 ### Task 5: Implement `getFilterOptions` (TDD)
 
 **Files:**
+
 - Create: `src/entities/product/api/filter-options.ts`
 - Create: `src/entities/product/api/filter-options.test.ts`
 
@@ -453,16 +462,17 @@ describe('getFilterOptions', () => {
 
   it('maps RPC payload to FilterOptions and supplies defaults for nullable fields', async () => {
     rpcMock.mockReturnValue({
-      single: () => Promise.resolve({
-        data: {
-          colors: ['black', 'white'],
-          sizes: ['m', 'l'],
-          price_min: 1000,
-          price_max: 5000,
-          has_size_filter: true,
-        },
-        error: null,
-      }),
+      single: () =>
+        Promise.resolve({
+          data: {
+            colors: ['black', 'white'],
+            sizes: ['m', 'l'],
+            price_min: 1000,
+            price_max: 5000,
+            has_size_filter: true,
+          },
+          error: null,
+        }),
     });
 
     const result = await getFilterOptions(['cat-1']);
@@ -481,16 +491,17 @@ describe('getFilterOptions', () => {
 
   it('returns empty arrays and zero range when RPC returns nulls', async () => {
     rpcMock.mockReturnValue({
-      single: () => Promise.resolve({
-        data: {
-          colors: null,
-          sizes: null,
-          price_min: null,
-          price_max: null,
-          has_size_filter: false,
-        },
-        error: null,
-      }),
+      single: () =>
+        Promise.resolve({
+          data: {
+            colors: null,
+            sizes: null,
+            price_min: null,
+            price_max: null,
+            has_size_filter: false,
+          },
+          error: null,
+        }),
     });
 
     const result = await getFilterOptions(['cat-1']);
@@ -506,10 +517,11 @@ describe('getFilterOptions', () => {
 
   it('throws when RPC returns an error', async () => {
     rpcMock.mockReturnValue({
-      single: () => Promise.resolve({
-        data: null,
-        error: { message: 'rpc failed' },
-      }),
+      single: () =>
+        Promise.resolve({
+          data: null,
+          error: { message: 'rpc failed' },
+        }),
     });
 
     await expect(getFilterOptions(['cat-1'])).rejects.toMatchObject({
@@ -569,6 +581,7 @@ git commit -m "feat(product): add getFilterOptions API"
 ### Task 6: Extend `getCatalogProducts` with attribute filters and array category lookup
 
 **Files:**
+
 - Modify: `src/entities/product/api/index.ts`
 
 - [ ] **Step 1: Replace category filter and add attribute filters**
@@ -680,6 +693,7 @@ git commit -m "feat(product): support color/size filters and array category matc
 ### Task 7: Add `productQueries` factories with `placeholderData`
 
 **Files:**
+
 - Create: `src/entities/product/api/queries.ts`
 - Create: `src/entities/product/api/queries.test.ts`
 
@@ -771,6 +785,7 @@ git commit -m "feat(product): add productQueries factories for catalog and filte
 ### Task 8: Refactor `useProducts` and add `useFilterOptions`
 
 **Files:**
+
 - Modify: `src/entities/product/api/hooks.ts`
 - Modify: `src/entities/product/index.ts`
 
@@ -794,8 +809,7 @@ import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../lib';
 
 export const productKeys = {
   all: ['products'] as const,
-  catalog: (params: CatalogParams) =>
-    productQueries.catalog(params).queryKey,
+  catalog: (params: CatalogParams) => productQueries.catalog(params).queryKey,
   filterOptions: (categoryIds: string[]) =>
     productQueries.filterOptions(categoryIds).queryKey,
 } as const;
@@ -886,7 +900,7 @@ export const CatalogContent = ({
 
   if (!query.data) {
     return null; // Loader has already prefetched on first load; subsequent
-                 // refetches keep previous data via placeholderData.
+    // refetches keep previous data via placeholderData.
   }
 
   const { data: products, meta } = query.data;
@@ -924,6 +938,7 @@ git commit -m "refactor(product): use useQuery with placeholderData; add useFilt
 ### Task 9: Extend Zod schema with `colors`, `sizes`, `view` (TDD)
 
 **Files:**
+
 - Modify: `src/entities/product/lib/catalog-search-schema.ts`
 - Modify: `src/entities/product/lib/catalog-search-schema.test.ts`
 
@@ -958,9 +973,7 @@ describe('catalogSearchSchema — filter extensions', () => {
   });
 
   it('rejects unknown view values', () => {
-    expect(() =>
-      catalogSearchSchema.parse({ view: 'list' })
-    ).toThrow();
+    expect(() => catalogSearchSchema.parse({ view: 'list' })).toThrow();
   });
 });
 ```
@@ -1029,6 +1042,7 @@ git commit -m "feat(product): extend catalogSearchSchema with colors/sizes/view"
 ### Task 10: Extend `useCatalogSearch` with new setters
 
 **Files:**
+
 - Modify: `src/entities/product/model/use-catalog-search.ts`
 
 - [ ] **Step 1: Replace the hook with the extended version**
@@ -1042,7 +1056,10 @@ import type { CatalogSearch } from '../lib/catalog-search-schema';
 
 type FilterTag = { type: 'color' | 'size'; value: string };
 
-const toggleInArray = (array: string[] | undefined, value: string): string[] => {
+const toggleInArray = (
+  array: string[] | undefined,
+  value: string
+): string[] => {
   const current = array ?? [];
   return current.includes(value)
     ? current.filter((v) => v !== value)
@@ -1179,6 +1196,7 @@ git commit -m "feat(product): add filter setters (toggleColor/Size, setView, rem
 ### Task 11: Update `stripSearchParams` defaults to include `view`
 
 **Files:**
+
 - Modify: `src/app/routing/routes.ts`
 
 - [ ] **Step 1: Update the route configuration**
@@ -1237,6 +1255,7 @@ git commit -m "feat(routing): strip default view param from URL"
 ### Task 12: Add `categoriesTreeQueryOptions` factory in shared/api
 
 **Files:**
+
 - Create: `src/shared/api/categories/queries.ts`
 - Modify: `src/shared/api/index.ts`
 
@@ -1310,6 +1329,7 @@ git commit -m "feat(shared/api): add categoriesTreeQueryOptions factory"
 ### Task 13: Add `context: { queryClient }` to the router
 
 **Files:**
+
 - Modify: `src/app/routing/index.tsx`
 
 - [ ] **Step 1: Inspect current router setup**
@@ -1347,7 +1367,9 @@ declare module '@tanstack/react-router' {
 Find where `<RouterProvider router={...} />` is rendered. Pass the `QueryClient` instance into `createAppRouter`. If `QueryClient` is created in the same component, this is a one-line refactor:
 
 ```tsx
-const queryClient = new QueryClient({ /* existing config */ });
+const queryClient = new QueryClient({
+  /* existing config */
+});
 const router = useMemo(() => createAppRouter(queryClient), [queryClient]);
 ```
 
@@ -1375,6 +1397,7 @@ git commit -m "feat(routing): expose queryClient via router context"
 ### Task 14: Add `loader` to category route
 
 **Files:**
+
 - Modify: `src/app/routing/routes.ts`
 
 - [ ] **Step 1: Add loader to `categoryRoute`**
@@ -1443,6 +1466,7 @@ git commit -m "feat(routing): preload categories tree via category route loader"
 ### Task 15: Make tree links preserve `view` and reset filters on navigation
 
 **Files:**
+
 - Modify: `src/shared/ui/categories-tree/index.tsx`
 
 - [ ] **Step 1: Update `<Link>` to clear filters but preserve view**
@@ -1492,6 +1516,7 @@ git commit -m "feat(categories-tree): reset filters on category navigation, pres
 ### Task 16: Add `--primary-soft` and `--primary-soft-border` tokens
 
 **Files:**
+
 - Modify: `src/app/styles/index.css`
 
 - [ ] **Step 1: Add the two CSS variables**
@@ -1501,15 +1526,15 @@ Open `src/app/styles/index.css`.
 Inside `:root { ... }`, append:
 
 ```css
-  --primary-soft: #fff3e8;
-  --primary-soft-border: #ffd0a0;
+--primary-soft: #fff3e8;
+--primary-soft-border: #ffd0a0;
 ```
 
 Inside `@theme inline { ... }`, append (right after the existing primary entries):
 
 ```css
-  --color-primary-soft: var(--primary-soft);
-  --color-primary-soft-border: var(--primary-soft-border);
+--color-primary-soft: var(--primary-soft);
+--color-primary-soft-border: var(--primary-soft-border);
 ```
 
 - [ ] **Step 2: Verify Tailwind picks up the new utilities**
@@ -1530,6 +1555,7 @@ git commit -m "feat(styles): add --primary-soft and --primary-soft-border tokens
 ### Task 17: Create `CATALOG_TEXT` strings module
 
 **Files:**
+
 - Create: `src/pages/catalog/lib/catalog-text.ts`
 - Create: `src/pages/catalog/lib/index.ts`
 
@@ -1616,6 +1642,7 @@ git commit -m "feat(catalog): add CATALOG_TEXT strings module (pre-i18n)"
 ### Task 18: Create `<FilterSection>` accordion primitive
 
 **Files:**
+
 - Create: `src/pages/catalog/ui/catalog-filters/filter-section.tsx`
 - Create: `src/pages/catalog/ui/catalog-filters/filter-section.stories.tsx`
 
@@ -1729,6 +1756,7 @@ git commit -m "feat(catalog): add FilterSection accordion primitive"
 ### Task 19: Create `<GridViewToggle>`
 
 **Files:**
+
 - Create: `src/pages/catalog/ui/catalog-header/grid-view-toggle.tsx`
 - Create: `src/pages/catalog/ui/catalog-header/grid-view-toggle.stories.tsx`
 
@@ -1739,7 +1767,11 @@ Create `src/pages/catalog/ui/catalog-header/grid-view-toggle.tsx`:
 ```tsx
 import { LayoutGrid, Grid3X3 } from 'lucide-react';
 
-import { useCatalogSearch, CATALOG_VIEWS, type CatalogView } from '@entities/product';
+import {
+  useCatalogSearch,
+  CATALOG_VIEWS,
+  type CatalogView,
+} from '@entities/product';
 
 import { cn } from '@shared/lib/utils';
 
@@ -1844,6 +1876,7 @@ git commit -m "feat(catalog): add GridViewToggle component"
 ### Task 20: Implement `<CatalogColorFilter>`
 
 **Files:**
+
 - Modify: `src/pages/catalog/ui/catalog-color-filter/index.tsx` (currently empty)
 - Create: `src/pages/catalog/ui/catalog-color-filter/index.stories.tsx`
 
@@ -1973,8 +2006,16 @@ type Story = StoryObj<typeof CatalogColorFilter>;
 export const FullPalette: Story = {
   args: {
     available: [
-      'white', 'black', 'orange', 'blue', 'green',
-      'purple', 'red', 'gray', 'beige', 'navy',
+      'white',
+      'black',
+      'orange',
+      'blue',
+      'green',
+      'purple',
+      'red',
+      'gray',
+      'beige',
+      'navy',
     ],
   },
 };
@@ -2005,6 +2046,7 @@ git commit -m "feat(catalog): add CatalogColorFilter with color hex map"
 ### Task 21: Implement `<CatalogSizeFilter>`
 
 **Files:**
+
 - Modify: `src/pages/catalog/ui/catalog-size-filter/index.tsx`
 - Create: `src/pages/catalog/ui/catalog-size-filter/index.stories.tsx`
 
@@ -2112,6 +2154,7 @@ git commit -m "feat(catalog): add CatalogSizeFilter chip component"
 ### Task 22: Implement `<CatalogPriceFilter>` with Apply button
 
 **Files:**
+
 - Modify: `src/pages/catalog/ui/catalog-price-filter/index.tsx`
 - Create: `src/pages/catalog/ui/catalog-price-filter/index.stories.tsx`
 
@@ -2178,10 +2221,12 @@ export const CatalogPriceFilter = ({
     <div>
       <div className="mb-3 flex justify-between text-xs text-muted-foreground">
         <span>
-          {CATALOG_TEXT.price.minLabel} <strong className="text-foreground">€{draft[0]}</strong>
+          {CATALOG_TEXT.price.minLabel}{' '}
+          <strong className="text-foreground">€{draft[0]}</strong>
         </span>
         <span>
-          {CATALOG_TEXT.price.maxLabel} <strong className="text-foreground">€{draft[1]}</strong>
+          {CATALOG_TEXT.price.maxLabel}{' '}
+          <strong className="text-foreground">€{draft[1]}</strong>
         </span>
       </div>
       <Slider.Root
@@ -2190,7 +2235,9 @@ export const CatalogPriceFilter = ({
         max={maxEur}
         step={1}
         value={draft}
-        onValueChange={(value) => setDraft([value[0], value[1]] as [number, number])}
+        onValueChange={(value) =>
+          setDraft([value[0], value[1]] as [number, number])
+        }
         aria-label={CATALOG_TEXT.price.rangeAriaLabel}
         minStepsBetweenThumbs={1}
       >
@@ -2295,6 +2342,7 @@ git commit -m "feat(catalog): add CatalogPriceFilter (Radix slider + inputs + Ap
 ### Task 23: Implement `<CatalogActiveFilters>`
 
 **Files:**
+
 - Create: `src/pages/catalog/ui/catalog-active-filters/index.tsx`
 - Create: `src/pages/catalog/ui/catalog-active-filters/index.stories.tsx`
 
@@ -2396,6 +2444,7 @@ git commit -m "feat(catalog): add CatalogActiveFilters chips"
 ### Task 24: Implement `<CatalogEmptyState>`
 
 **Files:**
+
 - Create: `src/pages/catalog/ui/catalog-empty-state/index.tsx`
 - Create: `src/pages/catalog/ui/catalog-empty-state/index.stories.tsx`
 
@@ -2420,7 +2469,9 @@ export const CatalogEmptyState = (): React.JSX.Element => {
       className="flex flex-1 flex-col items-center justify-center gap-4 px-10 py-20 text-center"
     >
       <SearchX className="h-16 w-16 text-border" aria-hidden />
-      <p className="text-xl font-bold text-foreground">{CATALOG_TEXT.empty.title}</p>
+      <p className="text-xl font-bold text-foreground">
+        {CATALOG_TEXT.empty.title}
+      </p>
       <p className="max-w-[280px] text-sm leading-relaxed text-muted-foreground">
         {CATALOG_TEXT.empty.description}
       </p>
@@ -2475,6 +2526,7 @@ git commit -m "feat(catalog): add CatalogEmptyState"
 ### Task 25: Implement `<CatalogFilters>` orchestrator
 
 **Files:**
+
 - Create: `src/pages/catalog/ui/catalog-filters/index.tsx`
 
 - [ ] **Step 1: Create the orchestrator**
@@ -2557,6 +2609,7 @@ git commit -m "feat(catalog): add CatalogFilters sidebar orchestrator"
 ### Task 26: Wire `<CatalogFilters>` into the sidebar
 
 **Files:**
+
 - Modify: `src/pages/catalog/ui/sidebar/index.tsx`
 
 - [ ] **Step 1: Update the sidebar**
@@ -2647,6 +2700,7 @@ git commit -m "feat(catalog): integrate CatalogFilters into sidebar"
 ### Task 27: Update `<CatalogHeader>` with grid-view toggle and total count
 
 **Files:**
+
 - Modify: `src/pages/catalog/ui/catalog-header/index.tsx`
 
 - [ ] **Step 1: Replace catalog header**
@@ -2694,6 +2748,7 @@ Hold the commit until Task 28 lands. Skip step 3.
 ### Task 28: Update `<CatalogContent>` for empty state, view, and `aria-busy`
 
 **Files:**
+
 - Modify: `src/pages/catalog/ui/catalog-content/index.tsx`
 - Modify: `src/entities/product/ui/product-list.tsx`
 
@@ -2808,6 +2863,7 @@ Expected: no errors.
 - [ ] **Step 4: Manual smoke test**
 
 Run: `pnpm dev`. Open `/category/clothes`. Try:
+
 1. Click a color → grid updates, brief opacity dim during refetch.
 2. Apply a price range that yields zero results → empty state appears.
 3. Click "Reset all filters" in empty state → filters clear, grid returns.
@@ -2857,6 +2913,7 @@ git commit -m "style(catalog): wrap categories tree in FilterSection"
 ### Task 30: Add `docs/FILTERS.md`
 
 **Files:**
+
 - Create: `docs/FILTERS.md`
 
 - [ ] **Step 1: Create the doc**
@@ -2870,13 +2927,13 @@ Context-aware filtering of the product catalog by **price**, **color**, and **si
 
 ## URL contract
 
-| Param        | Type            | Example                  | Notes |
-|--------------|-----------------|--------------------------|-------|
-| `colors`     | string[]        | `?colors=black&colors=red` | Multi-select; instant apply on click |
-| `sizes`      | string[]        | `?sizes=m&sizes=l`        | Visible only for categories with size attributes |
-| `priceMin`   | int (cents)     | `?priceMin=1000`          | Committed via Apply button |
-| `priceMax`   | int (cents)     | `?priceMax=5000`          | Committed via Apply button |
-| `view`       | grid-4 / grid-3 | `?view=grid-3`            | Persists across category changes |
+| Param      | Type            | Example                    | Notes                                            |
+| ---------- | --------------- | -------------------------- | ------------------------------------------------ |
+| `colors`   | string[]        | `?colors=black&colors=red` | Multi-select; instant apply on click             |
+| `sizes`    | string[]        | `?sizes=m&sizes=l`         | Visible only for categories with size attributes |
+| `priceMin` | int (cents)     | `?priceMin=1000`           | Committed via Apply button                       |
+| `priceMax` | int (cents)     | `?priceMax=5000`           | Committed via Apply button                       |
+| `view`     | grid-4 / grid-3 | `?view=grid-3`             | Persists across category changes                 |
 
 Filters are reset when the category changes (the `<Link>` in `CategoriesTree` navigates with `search: { view: prev.view }`).
 
@@ -2917,6 +2974,7 @@ git commit -m "docs: add FILTERS.md describing the filter feature"
 ### Task 31: Update `docs/SEARCH.md`
 
 **Files:**
+
 - Modify: `docs/SEARCH.md`
 
 - [ ] **Step 1: Add a banner pointing to FILTERS.md**
@@ -2949,6 +3007,7 @@ git commit -m "docs: cross-link SEARCH.md to FILTERS.md"
 ### Task 32: Update `.claude/CONTEXT.md`
 
 **Files:**
+
 - Modify: `.claude/CONTEXT.md`
 
 - [ ] **Step 1: Add an entry per the GG protocol**
@@ -2959,6 +3018,7 @@ Open `.claude/CONTEXT.md` and append:
 ### 2026-05-01 — Product Filters (price + color + size)
 
 - **Changes**:
+
   - DB: extended `products_search` view with `category_ids[]`, `colors[]`, `sizes[]`; added RPC `get_catalog_filter_options`; new indexes on `product_variant_attributes` and `attribute_definitions`.
   - Entity (`entities/product`): new `getFilterOptions` API; `productQueries` factory; `useProducts` switched to `useQuery` + `placeholderData`; `useFilterOptions` (suspense) added.
   - URL state: `catalogSearchSchema` extended with `colors`/`sizes`/`view`; `useCatalogSearch` got `toggleColor`/`toggleSize`/`setView`/`removeFilter`/`resetFilters`.
@@ -2966,6 +3026,7 @@ Open `.claude/CONTEXT.md` and append:
   - UI: 7 new components in `pages/catalog/ui/`; design tokens `--primary-soft` / `--primary-soft-border`; strings module `pages/catalog/lib/catalog-text.ts`.
 
 - **Decisions**:
+
   - Kept the portable VIEW + RPC approach (rejecting alternatives: client-only subqueries, materialised views, merge into a single RPC).
   - Filter options cached for 1 hour; products cached for 5 minutes with `placeholderData` for smooth filter transitions.
   - Pre-i18n strings module (`CATALOG_TEXT`) — postpones the i18n library decision until SSR migration.
@@ -3016,6 +3077,7 @@ Expected: build succeeds with no errors.
 - [ ] **Step 5: Manual a11y check (matches spec Section 9.5 acceptance)**
 
 Run: `pnpm dev`. Open `/category/clothes`.
+
 - Tab through the sidebar. Every filter control is reachable; focus ring visible.
 - Use keyboard (Space/Enter) to toggle a color circle and a size chip. URL updates.
 - Open VoiceOver / NVDA / Narrator. Focus a color circle. Expect "Color: black, checkbox, not checked" (or similar).

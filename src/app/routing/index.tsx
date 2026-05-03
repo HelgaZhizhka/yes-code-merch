@@ -5,7 +5,6 @@ import { ErrorPage } from '@pages/error';
 import { TanStackQueryProvider } from '@shared/api/tanstack-query';
 
 import {
-  aboutRoute,
   cartRoute,
   categoryRoute,
   forgotPasswordRoute,
@@ -41,7 +40,6 @@ const profileLayout = profileLayoutRoute(layoutRoute);
 const routeTree = rootRoute.addChildren([
   layoutRoute.addChildren([
     homeRoute(layoutRoute),
-    aboutRoute(layoutRoute),
     loginRoute(layoutRoute),
     registrationLayout.addChildren([
       registrationFormRoute(registrationLayout),

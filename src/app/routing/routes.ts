@@ -1,7 +1,6 @@
 import type { AnyRoute, RootRoute } from '@tanstack/react-router';
 import { createRoute, stripSearchParams } from '@tanstack/react-router';
 
-import { About } from '@pages/about';
 import { Cart } from '@pages/cart';
 import { Catalog } from '@pages/catalog';
 import { ForgotPassword } from '@pages/forgot-password';
@@ -122,13 +121,6 @@ export const homeRoute = (parentRoute: FlexibleRouteType) =>
     getParentRoute: () => parentRoute,
     path: ROUTES.HOME,
     component: Home,
-  });
-
-export const aboutRoute = (parentRoute: FlexibleRouteType) =>
-  createRoute({
-    getParentRoute: () => parentRoute,
-    path: ROUTES.ABOUT,
-    component: About,
   });
 
 export const cartRoute = (parentRoute: FlexibleRouteType) =>
