@@ -51,3 +51,30 @@ This file tracks significant changes, decisions, and context for the yes-code-me
 - **Tech Debt/Next**:
   - E2E tests with Playwright when cart and checkout are implemented
   - Consider adding integration tests for React Query hooks if needed
+
+---
+
+### 2026-05-01 — Product Filters (price + color + size)
+
+- **Changes**:
+
+  - DB: extended `products_search` view with `category_ids[]`, `colors[]`, `sizes[]`; added RPC `get_catalog_filter_options`; new indexes on `product_variant_attributes` and `attribute_definitions`.
+  - Entity (`entities/product`): new `getFilterOptions` API; `productQueries` factory; `useProducts` switched to `useQuery` + `placeholderData`; `useFilterOptions` (suspense) added.
+  - URL state: `catalogSearchSchema` extended with `colors`/`sizes`/`view`; `useCatalogSearch` got `toggleColor`/`toggleSize`/`setView`/`removeFilter`/`resetFilters`.
+  - Router: `context: { queryClient }`; category route loader preloads the categories tree.
+  - UI: 7 new components in `pages/catalog/ui/`; design tokens `--primary-soft` / `--primary-soft-border`; strings module `pages/catalog/lib/catalog-text.ts`.
+
+- **Decisions**:
+
+  - Kept the portable VIEW + RPC approach (rejecting alternatives: client-only subqueries, materialised views, merge into a single RPC).
+  - Filter options cached for 1 hour; products cached for 5 minutes with `placeholderData` for smooth filter transitions.
+  - Pre-i18n strings module (`CATALOG_TEXT`) — postpones the i18n library decision until SSR migration.
+  - Categories tree links use `search: { view: prev.view }` to reset filters on category change while keeping the user's grid-view preference.
+
+- **Tech Debt/Next**:
+  - Search autosuggest dropdown (separate ticket).
+  - Stock filter (blocked by seed data: `stock = 0` for most rows).
+  - Faceted counts.
+  - Inline English strings in `shared/ui` (Pagination, etc.) → migrate into a shared text module before the eventual `react-i18next` adoption.
+  - Storybook a11y addon, skip-link, color-contrast audit (P1 backlog from spec Section 9.5).
+  - SSR migration via TanStack Start (separate sprint, after cart/checkout MVP).
