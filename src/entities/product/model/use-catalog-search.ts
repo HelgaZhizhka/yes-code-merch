@@ -1,8 +1,11 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 
-import type { CatalogSearch } from '../lib/catalog-search-schema';
+import {
+  catalogSearchSchema,
+  type CatalogSearch,
+} from '../lib/catalog-search-schema';
 
-type FilterTag = { type: 'color' | 'size'; value: string };
+export type FilterTag = { type: 'color' | 'size'; value: string };
 
 const toggleInArray = (
   array: string[] | undefined,
@@ -16,17 +19,19 @@ const toggleInArray = (
 
 export const useCatalogSearch = () => {
   const navigate = useNavigate();
-  const searchParams = useSearch({ strict: false }) as CatalogSearch;
+  const searchParams = catalogSearchSchema.parse(useSearch({ strict: false }));
 
   const updateSearch = (
     updates: Partial<CatalogSearch>,
-    options?: { resetScroll?: boolean; replace?: boolean }
+    options?: { resetScroll?: boolean }
   ): void => {
     navigate({
       to: '.',
-      search: (prev: CatalogSearch) => ({ ...prev, ...updates }),
+      search: (prev: Record<string, unknown>) => ({
+        ...catalogSearchSchema.parse(prev),
+        ...updates,
+      }),
       resetScroll: options?.resetScroll ?? true,
-      replace: options?.replace ?? false,
     });
   };
 
@@ -95,7 +100,6 @@ export const useCatalogSearch = () => {
       sizes: undefined,
       priceMin: undefined,
       priceMax: undefined,
-      search: undefined,
       page: 1,
     });
   };

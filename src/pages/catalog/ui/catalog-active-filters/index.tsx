@@ -2,17 +2,12 @@ import { X } from 'lucide-react';
 
 import { CATALOG_TEXT } from '@pages/catalog/lib';
 
-import { useCatalogSearch } from '@entities/product';
-
-type ActiveTag = {
-  type: 'color' | 'size';
-  value: string;
-};
+import { type FilterTag, useCatalogSearch } from '@entities/product';
 
 const buildTags = (
   colors: string[] | undefined,
   sizes: string[] | undefined
-): ActiveTag[] => [
+): FilterTag[] => [
   ...(colors ?? []).map((value) => ({ type: 'color' as const, value })),
   ...(sizes ?? []).map((value) => ({ type: 'size' as const, value })),
 ];

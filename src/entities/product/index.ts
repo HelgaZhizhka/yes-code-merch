@@ -18,5 +18,5 @@ export {
   PRODUCT_SORT_FIELDS,
   SORT_DIRECTIONS,
 } from './lib';
-export { useCatalogSearch } from './model/use-catalog-search';
+export { useCatalogSearch, type FilterTag } from './model/use-catalog-search';
 export { ProductCard, ProductList } from './ui';

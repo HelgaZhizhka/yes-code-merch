@@ -64,6 +64,7 @@ const Node = React.memo(
 
           {node.children.length > 0 && (
             <button
+              type="button"
               onClick={() => onToggle(node.id)}
               aria-label={'Dropdown menu'}
               className={cn(

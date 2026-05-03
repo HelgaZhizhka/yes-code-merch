@@ -5,7 +5,6 @@ import { productQueries } from './queries';
 import type {
   CatalogParams,
   CatalogProductsViewResponse,
-  FilterOptions,
   PaginatedCatalogProducts,
 } from './types';
 
@@ -38,9 +37,5 @@ export const useProducts = (params: CatalogParams) => {
   });
 };
 
-export const useFilterOptions = (
-  categoryIds: string[]
-): { data: FilterOptions } => {
-  const { data } = useSuspenseQuery(productQueries.filterOptions(categoryIds));
-  return { data };
-};
+export const useFilterOptions = (categoryIds: string[]) =>
+  useSuspenseQuery(productQueries.filterOptions(categoryIds));

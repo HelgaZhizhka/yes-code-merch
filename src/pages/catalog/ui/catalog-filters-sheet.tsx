@@ -22,12 +22,27 @@ interface CatalogFiltersSheetProps {
   categoryIds: string[];
 }
 
+const SheetFiltersContent = ({
+  categoryIds,
+}: {
+  categoryIds: string[];
+}): React.JSX.Element => {
+  const { data: categoryTree } = useCategoriesTree();
+  return (
+    <>
+      <FilterSection title={CATALOG_TEXT.categories.title} defaultOpen>
+        <CategoriesTree categoryTree={categoryTree} variant="sidebar" />
+      </FilterSection>
+      <CatalogFilters categoryIds={categoryIds} />
+    </>
+  );
+};
+
 export const CatalogFiltersSheet = ({
   categoryIds,
 }: CatalogFiltersSheetProps): React.JSX.Element => {
   const [open, setOpen] = useState(false);
   const { searchParams } = useCatalogSearch();
-  const { data: categoryTree } = useCategoriesTree();
 
   const activeCount =
     (searchParams.colors?.length ?? 0) +
@@ -59,11 +74,8 @@ export const CatalogFiltersSheet = ({
         <SheetHeader className="pb-2">
           <SheetTitle>{CATALOG_TEXT.filters.title}</SheetTitle>
         </SheetHeader>
-        <FilterSection title={CATALOG_TEXT.categories.title} defaultOpen>
-          <CategoriesTree categoryTree={categoryTree} variant="sidebar" />
-        </FilterSection>
         <Suspense fallback={null}>
-          <CatalogFilters categoryIds={categoryIds} />
+          <SheetFiltersContent categoryIds={categoryIds} />
         </Suspense>
       </SheetContent>
     </Sheet>
