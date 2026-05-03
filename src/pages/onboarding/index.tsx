@@ -1,19 +1,12 @@
 import { Link, Outlet } from '@tanstack/react-router';
 
 import { ROUTES } from '@shared/config/routes';
-import { Loader } from '@shared/ui/loader';
 import { useAuthRedirect } from '@shared/viewer/hooks';
 
 export const Onboarding = (): React.JSX.Element => {
   const { isLoading } = useAuthRedirect();
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
+  if (isLoading) return null;
 
   return (
     <div className="flex flex-1 items-center justify-center flex-col">
