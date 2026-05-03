@@ -15,6 +15,8 @@ import { Banner } from './banner';
 
 import { MobileMenu } from '../mobile-menu';
 
+const NAV_SKELETON_COUNT = 4;
+
 interface HeaderProps extends AuthProps {
   onLogout(): Promise<void>;
 }
@@ -78,7 +80,7 @@ export const Header = ({
           <Suspense
             fallback={
               <div className="flex gap-6">
-                {Array.from({ length: 4 }).map((_, i) => (
+                {Array.from({ length: NAV_SKELETON_COUNT }).map((_, i) => (
                   <div
                     key={i}
                     className="h-4 w-16 animate-pulse rounded bg-white/20"

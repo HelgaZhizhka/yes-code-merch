@@ -3,6 +3,8 @@ import { Suspense } from 'react';
 import { LayoutView } from '@shared/types';
 import { Categories } from '@shared/ui/categories';
 
+const NAV_SKELETON_COUNT = 4;
+
 export const Home = (): React.JSX.Element => {
   return (
     <div className="flex flex-1 flex-col items-center justify-between p-4">
@@ -12,7 +14,7 @@ export const Home = (): React.JSX.Element => {
         <Suspense
           fallback={
             <div className="flex flex-wrap justify-center gap-4 w-full">
-              {Array.from({ length: 4 }).map((_, i) => (
+              {Array.from({ length: NAV_SKELETON_COUNT }).map((_, i) => (
                 <div
                   key={i}
                   className="h-32 w-40 animate-pulse rounded-lg bg-muted"
