@@ -1,10 +1,8 @@
 import { z } from 'zod';
 
 import {
-  CATALOG_VIEWS,
   DEFAULT_SORT_DIRECTION,
   DEFAULT_SORT_FIELD,
-  DEFAULT_VIEW,
   PRODUCT_SORT_FIELDS,
   SORT_DIRECTIONS,
 } from './constants';
@@ -17,9 +15,6 @@ export const catalogSearchSchema = z.object({
   priceMax: z.number().int().nonnegative().optional(),
   colors: z.array(z.string()).optional(),
   sizes: z.array(z.string()).optional(),
-  view: z
-    .enum([CATALOG_VIEWS.GRID_4, CATALOG_VIEWS.GRID_3])
-    .default(DEFAULT_VIEW),
   sortField: z
     .enum([
       PRODUCT_SORT_FIELDS.NAME,

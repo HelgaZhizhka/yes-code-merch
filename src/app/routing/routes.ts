@@ -26,7 +26,6 @@ import {
   catalogSearchSchema,
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
-  DEFAULT_VIEW,
   PRODUCT_SORT_FIELDS,
   SORT_DIRECTIONS,
 } from '@entities/product';
@@ -146,7 +145,6 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
           pageSize: DEFAULT_PAGE_SIZE,
           sortField: PRODUCT_SORT_FIELDS.CREATED_AT,
           sortDirection: SORT_DIRECTIONS.DESC,
-          view: DEFAULT_VIEW,
         }),
       ],
     },

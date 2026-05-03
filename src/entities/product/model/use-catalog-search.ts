@@ -75,10 +75,6 @@ export const useCatalogSearch = () => {
     updateSearch({ sizes, page: 1 });
   };
 
-  const setView = (view: CatalogSearch['view']): void => {
-    updateSearch({ view });
-  };
-
   const removeFilter = ({ type, value }: FilterTag): void => {
     if (type === 'color') {
       updateSearch({
@@ -115,7 +111,6 @@ export const useCatalogSearch = () => {
     toggleSize,
     setColors,
     setSizes,
-    setView,
     removeFilter,
     resetFilters,
   };

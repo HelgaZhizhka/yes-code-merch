@@ -55,9 +55,7 @@ const Node = React.memo(
             to={ROUTES.CATEGORY}
             params={{ _splat: pathToUse }}
             preload={variant === 'mobile' ? false : 'intent'}
-            search={(prev: { view?: 'grid-4' | 'grid-3' }) =>
-              prev.view ? { view: prev.view } : {}
-            }
+            search={() => ({})}
             className={cn(linkVariants({ variant }))}
             activeProps={{ 'data-active': true, 'aria-current': 'page' }}
           >

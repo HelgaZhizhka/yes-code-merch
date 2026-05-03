@@ -2,7 +2,7 @@ import { ResetPasswordForm } from '@pages/reset-password/ui/reset-password-form'
 
 import { useAuthRedirect } from '@shared/viewer';
 
-export const ResetPassword = (): React.JSX.Element => {
+export const ResetPassword = (): React.JSX.Element | null => {
   const { isLoading } = useAuthRedirect();
 
   if (isLoading) return null;

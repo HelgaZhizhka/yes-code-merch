@@ -35,11 +35,6 @@ export const CATALOG_TEXT = {
     countLabel: (count: number) =>
       count === 1 ? '1 product' : `${count} products`,
   },
-  view: {
-    groupLabel: 'Grid view',
-    grid4Label: 'Grid: 4 per row',
-    grid3Label: 'Grid: 3 per row',
-  },
   empty: {
     title: 'No products found',
     description:

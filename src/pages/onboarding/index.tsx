@@ -3,7 +3,7 @@ import { Link, Outlet } from '@tanstack/react-router';
 import { ROUTES } from '@shared/config/routes';
 import { useAuthRedirect } from '@shared/viewer/hooks';
 
-export const Onboarding = (): React.JSX.Element => {
+export const Onboarding = (): React.JSX.Element | null => {
   const { isLoading } = useAuthRedirect();
 
   if (isLoading) return null;

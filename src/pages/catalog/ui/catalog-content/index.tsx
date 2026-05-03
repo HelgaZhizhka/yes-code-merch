@@ -5,7 +5,6 @@ import { cn } from '@shared/lib/utils';
 import { CatalogActiveFilters } from '../catalog-active-filters';
 import { CatalogEmptyState } from '../catalog-empty-state';
 import { CatalogFiltersSheet } from '../catalog-filters-sheet';
-import { CatalogHeader } from '../catalog-header';
 import { CatalogPagination } from '../catalog-pagination';
 
 interface CatalogContentProps {
@@ -42,8 +41,6 @@ export const CatalogContent = ({
         <CatalogActiveFilters />
       </div>
 
-      <CatalogHeader />
-
       {isEmpty ? (
         <CatalogEmptyState />
       ) : (
@@ -54,7 +51,7 @@ export const CatalogContent = ({
               isFetching && 'opacity-60 pointer-events-none'
             )}
           >
-            <ProductList products={products} view={searchParams.view} />
+            <ProductList products={products} />
           </div>
           <CatalogPagination meta={meta} />
         </>
