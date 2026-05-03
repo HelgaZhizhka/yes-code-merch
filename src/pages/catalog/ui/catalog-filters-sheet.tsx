@@ -5,6 +5,8 @@ import { CATALOG_TEXT } from '@pages/catalog/lib';
 
 import { useCatalogSearch } from '@entities/product';
 
+import { useCategoriesTree } from '@shared/api';
+import { CategoriesTree } from '@shared/ui/categories-tree';
 import {
   Sheet,
   SheetContent,
@@ -14,6 +16,7 @@ import {
 } from '@shared/ui/sheet';
 
 import { CatalogFilters } from './catalog-filters';
+import { FilterSection } from './catalog-filters/filter-section';
 
 interface CatalogFiltersSheetProps {
   categoryIds: string[];
@@ -24,6 +27,7 @@ export const CatalogFiltersSheet = ({
 }: CatalogFiltersSheetProps): React.JSX.Element => {
   const [open, setOpen] = useState(false);
   const { searchParams } = useCatalogSearch();
+  const { data: categoryTree } = useCategoriesTree();
 
   const activeCount =
     (searchParams.colors?.length ?? 0) +
@@ -55,6 +59,9 @@ export const CatalogFiltersSheet = ({
         <SheetHeader className="pb-2">
           <SheetTitle>{CATALOG_TEXT.filters.title}</SheetTitle>
         </SheetHeader>
+        <FilterSection title={CATALOG_TEXT.categories.title} defaultOpen>
+          <CategoriesTree categoryTree={categoryTree} variant="sidebar" />
+        </FilterSection>
         <Suspense fallback={null}>
           <CatalogFilters categoryIds={categoryIds} />
         </Suspense>
