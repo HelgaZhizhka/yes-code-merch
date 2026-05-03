@@ -48,7 +48,14 @@ export const MobileMenu = (): React.JSX.Element => {
         <div className="flex-1 overflow-y-auto flex flex-col gap-4">
           <Suspense
             fallback={
-              <div className="text-2xl text-primary-foreground">Loading...</div>
+              <div className="flex flex-col gap-5">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-7 w-36 animate-pulse rounded bg-muted"
+                  />
+                ))}
+              </div>
             }
           >
             <CategoriesTree categoryTree={categoryTree} variant="mobile" />

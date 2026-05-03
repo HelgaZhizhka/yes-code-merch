@@ -53,7 +53,6 @@ export const Header = ({
           </div>
           <div className="h-full">
             <nav className="flex gap-4 grow-1 justify-end items-center text-2xl">
-              <Link to={ROUTES.ABOUT}>About Us</Link>
               <AuthMenu
                 isLoading={isLoading}
                 isGuest={isGuest}
@@ -80,7 +79,14 @@ export const Header = ({
         <div className="hidden sm:block">
           <Suspense
             fallback={
-              <div className="text-secondary-foreground">Loading...</div>
+              <div className="flex gap-6">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-4 w-16 animate-pulse rounded bg-white/20"
+                  />
+                ))}
+              </div>
             }
           >
             <Categories />

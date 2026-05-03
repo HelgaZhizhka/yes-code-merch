@@ -32,12 +32,6 @@ export const Footer = ({
           </Link>
           <h1 className="text-base mt-2">YesCode: Merch for True Coders</h1>
           <nav className="flex flex-col gap-1">
-            <Link
-              to={ROUTES.ABOUT}
-              className="text-violet-foreground hover:text-violet-accent-foreground"
-            >
-              About Us
-            </Link>
             <AuthMenu
               isLoading={isLoading}
               isGuest={isGuest}
@@ -50,7 +44,7 @@ export const Footer = ({
         </div>
         <div className="hidden md:block">
           <h5 className="font-bold mb-2">Categories</h5>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={null}>
             <Categories variant={LayoutView.FOOTER} />
           </Suspense>
         </div>

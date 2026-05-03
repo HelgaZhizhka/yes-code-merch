@@ -9,7 +9,18 @@ export const Home = (): React.JSX.Element => {
       <h1 className="text-2xl mb-4">Home page</h1>
       <div className="flex flex-col items-center gap-4 w-full">
         <h2 className="text-xl">Shop by category</h2>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <div className="flex flex-wrap justify-center gap-4 w-full">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-32 w-40 animate-pulse rounded-lg bg-muted"
+                />
+              ))}
+            </div>
+          }
+        >
           <Categories variant={LayoutView.HOME} />
         </Suspense>
       </div>
