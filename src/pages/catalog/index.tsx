@@ -7,6 +7,7 @@ import { Breadcrumbs } from '@shared/ui/breadcrumbs';
 
 import { ErrorFallback } from './error';
 import { CatalogContent } from './ui/catalog-content';
+import { ContentSkeleton, SidebarSkeleton } from './ui/catalog-skeleton';
 import { SideBar } from './ui/sidebar';
 
 export const Catalog = (): React.JSX.Element => {
@@ -18,10 +19,10 @@ export const Catalog = (): React.JSX.Element => {
       <Breadcrumbs items={breadcrumbs} className="mb-6" />
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <div className="flex gap-6">
-          <Suspense fallback={<p>Loading filters...</p>}>
+          <Suspense fallback={<SidebarSkeleton />}>
             <SideBar categoryTree={tree} categoryIds={categoryIds ?? []} />
           </Suspense>
-          <Suspense fallback={<p>Loading products...</p>}>
+          <Suspense fallback={<ContentSkeleton />}>
             <CatalogContent categoryIds={categoryIds} />
           </Suspense>
         </div>

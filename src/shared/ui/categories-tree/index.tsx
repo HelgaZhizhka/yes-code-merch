@@ -19,7 +19,8 @@ const linkVariants = cva('transition-all', {
     variant: {
       default: '',
       mobile: 'text-2xl text-primary-foreground',
-      sidebar: '',
+      sidebar:
+        'block w-full py-1 pl-3 text-sm text-muted-foreground border-l-2 border-transparent hover:text-foreground hover:border-border data-[active]:border-primary data-[active]:text-primary data-[active]:font-medium',
     },
   },
   defaultVariants: { variant: 'default' },
@@ -67,8 +68,18 @@ const Node = React.memo(
             <button
               onClick={() => onToggle(node.id)}
               aria-label={'Dropdown menu'}
+              className={cn(
+                'ml-auto p-0.5 text-muted-foreground transition-colors hover:text-foreground',
+                variant === 'sidebar' && 'mr-1'
+              )}
             >
-              <ChevronRight className={cn('w-6 h-6', isOpen && 'rotate-90')} />
+              <ChevronRight
+                className={cn(
+                  'transition-transform',
+                  variant === 'sidebar' ? 'h-3.5 w-3.5' : 'h-6 w-6',
+                  isOpen && 'rotate-90'
+                )}
+              />
             </button>
           )}
         </div>
@@ -117,7 +128,12 @@ export const CategoriesTree = ({
 
   return (
     <nav className={className} aria-label="All categories">
-      <ul className="flex flex-col gap-4">
+      <ul
+        className={cn(
+          'flex flex-col',
+          variant === 'sidebar' ? 'gap-0.5' : 'gap-4'
+        )}
+      >
         {categoryTree.map((root) => (
           <Node
             key={root.id}
