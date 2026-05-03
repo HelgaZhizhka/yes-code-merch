@@ -1,4 +1,4 @@
-const CONTENT_SKELETON_COUNT = 4;
+const CARD_SKELETON_KEYS = ['card-1', 'card-2', 'card-3', 'card-4'] as const;
 
 const FilterSectionSkeleton = (): React.JSX.Element => (
   <div className="border-t border-border">
@@ -37,8 +37,8 @@ const CardSkeleton = (): React.JSX.Element => (
 export const ContentSkeleton = (): React.JSX.Element => (
   <div className="flex flex-1 flex-col">
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {Array.from({ length: CONTENT_SKELETON_COUNT }).map((_, i) => (
-        <CardSkeleton key={i} />
+      {CARD_SKELETON_KEYS.map((key) => (
+        <CardSkeleton key={key} />
       ))}
     </div>
   </div>

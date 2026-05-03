@@ -19,8 +19,7 @@ export const CatalogActiveFilters = (): React.JSX.Element | null => {
   if (tags.length === 0) return null;
 
   return (
-    <div
-      role="region"
+    <section
       aria-label={CATALOG_TEXT.filters.activeRegionLabel}
       className="mb-3 flex flex-wrap gap-1.5"
     >
@@ -36,6 +35,6 @@ export const CatalogActiveFilters = (): React.JSX.Element | null => {
           <X className="h-2.5 w-2.5" aria-hidden />
         </button>
       ))}
-    </div>
+    </section>
   );
 };

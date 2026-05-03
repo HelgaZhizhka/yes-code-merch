@@ -18,7 +18,7 @@ import {
 
 import { useMobileMenu } from './use-mobile-menu';
 
-const NAV_SKELETON_COUNT = 4;
+const NAV_SKELETON_KEYS = ['nav-1', 'nav-2', 'nav-3', 'nav-4'] as const;
 
 import { Banner } from '../header/banner';
 
@@ -50,9 +50,9 @@ export const MobileMenu = (): React.JSX.Element => {
           <Suspense
             fallback={
               <div className="flex flex-col gap-5">
-                {Array.from({ length: NAV_SKELETON_COUNT }).map((_, i) => (
+                {NAV_SKELETON_KEYS.map((key) => (
                   <div
-                    key={i}
+                    key={key}
                     className="h-7 w-36 animate-pulse rounded bg-muted"
                   />
                 ))}

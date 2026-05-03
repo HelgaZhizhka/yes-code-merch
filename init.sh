@@ -10,12 +10,12 @@ echo ""
 
 # 1. Check package manager
 if ! command -v pnpm &>/dev/null; then
-  echo "ERROR: pnpm not found. Install it: corepack enable && corepack prepare pnpm@latest --activate"
+  echo "ERROR: pnpm not found. Install it: corepack enable && corepack prepare pnpm@latest --activate" >&2
   exit 1
 fi
 
 # 2. Install dependencies if needed
-if [ ! -d "node_modules" ]; then
+if [[ ! -d "node_modules" ]]; then
   echo ">>> node_modules missing — running pnpm install..."
   pnpm install --frozen-lockfile
 fi
