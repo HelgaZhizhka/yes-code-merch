@@ -34,6 +34,7 @@ export const useProducts = (params: CatalogParams) => {
   return useQuery({
     ...productQueries.catalog(params),
     select: (response) => selectPaginatedProducts(response, page, pageSize),
+    placeholderData: (prev) => prev,
   });
 };
 

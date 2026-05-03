@@ -6,6 +6,7 @@ import { CatalogActiveFilters } from '../catalog-active-filters';
 import { CatalogEmptyState } from '../catalog-empty-state';
 import { CatalogFiltersSheet } from '../catalog-filters-sheet';
 import { CatalogPagination } from '../catalog-pagination';
+import { ContentSkeleton } from '../catalog-skeleton';
 
 interface CatalogContentProps {
   categoryIds: string[] | null;
@@ -26,7 +27,7 @@ export const CatalogContent = ({
   }
 
   if (!query.data) {
-    return null;
+    return <ContentSkeleton />;
   }
 
   const { data: products, meta } = query.data;
@@ -35,7 +36,6 @@ export const CatalogContent = ({
 
   return (
     <div className="flex flex-1 flex-col" aria-busy={isFetching}>
-      {/* Mobile: filter button + active chips */}
       <div className="mb-3 flex flex-wrap items-center gap-2 lg:hidden">
         <CatalogFiltersSheet categoryIds={categoryIds} />
         <CatalogActiveFilters />

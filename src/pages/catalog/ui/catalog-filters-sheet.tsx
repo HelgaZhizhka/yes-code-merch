@@ -5,8 +5,6 @@ import { CATALOG_TEXT } from '@pages/catalog/lib';
 
 import { useCatalogSearch } from '@entities/product';
 
-import { useCategoriesTree } from '@shared/api';
-import { CategoriesTree } from '@shared/ui/categories-tree';
 import {
   Sheet,
   SheetContent,
@@ -16,27 +14,10 @@ import {
 } from '@shared/ui/sheet';
 
 import { CatalogFilters } from './catalog-filters';
-import { FilterSection } from './catalog-filters/filter-section';
 
 interface CatalogFiltersSheetProps {
   categoryIds: string[];
 }
-
-const SheetFiltersContent = ({
-  categoryIds,
-}: {
-  categoryIds: string[];
-}): React.JSX.Element => {
-  const { data: categoryTree } = useCategoriesTree();
-  return (
-    <>
-      <FilterSection title={CATALOG_TEXT.categories.title} defaultOpen>
-        <CategoriesTree categoryTree={categoryTree} variant="sidebar" />
-      </FilterSection>
-      <CatalogFilters categoryIds={categoryIds} />
-    </>
-  );
-};
 
 export const CatalogFiltersSheet = ({
   categoryIds,
@@ -75,7 +56,7 @@ export const CatalogFiltersSheet = ({
           <SheetTitle>{CATALOG_TEXT.filters.title}</SheetTitle>
         </SheetHeader>
         <Suspense fallback={null}>
-          <SheetFiltersContent categoryIds={categoryIds} />
+          <CatalogFilters categoryIds={categoryIds} />
         </Suspense>
       </SheetContent>
     </Sheet>

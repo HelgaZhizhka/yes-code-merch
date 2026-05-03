@@ -17,7 +17,7 @@ export const SideBar = ({
   categoryIds,
 }: SideBarProps): React.JSX.Element => {
   return (
-    <aside className="sticky top-5 flex w-[268px] shrink-0 flex-col">
+    <aside className="sticky top-5 hidden lg:flex w-[268px] shrink-0 flex-col">
       <FilterSection title={CATALOG_TEXT.categories.title} defaultOpen>
         <CategoriesTree categoryTree={categoryTree} variant="sidebar" />
       </FilterSection>

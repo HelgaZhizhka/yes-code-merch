@@ -1,4 +1,4 @@
-import { DEFAULT_PAGE_SIZE } from '@entities/product';
+const CONTENT_SKELETON_COUNT = 4;
 
 const FilterSectionSkeleton = (): React.JSX.Element => (
   <div className="border-t border-border">
@@ -15,7 +15,7 @@ const FilterSectionSkeleton = (): React.JSX.Element => (
 );
 
 export const SidebarSkeleton = (): React.JSX.Element => (
-  <div className="flex w-[268px] shrink-0 flex-col">
+  <div className="hidden lg:flex w-[268px] shrink-0 flex-col">
     <FilterSectionSkeleton />
     <FilterSectionSkeleton />
     <FilterSectionSkeleton />
@@ -36,13 +36,8 @@ const CardSkeleton = (): React.JSX.Element => (
 
 export const ContentSkeleton = (): React.JSX.Element => (
   <div className="flex flex-1 flex-col">
-    <div className="mb-4 flex h-9 items-center gap-2">
-      <div className="flex-1" />
-      <div className="h-8 w-16 animate-pulse rounded bg-muted" />
-      <div className="h-4 w-20 animate-pulse rounded bg-muted" />
-    </div>
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {Array.from({ length: DEFAULT_PAGE_SIZE }).map((_, i) => (
+      {Array.from({ length: CONTENT_SKELETON_COUNT }).map((_, i) => (
         <CardSkeleton key={i} />
       ))}
     </div>
