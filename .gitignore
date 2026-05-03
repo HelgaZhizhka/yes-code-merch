@@ -34,6 +34,10 @@ storybook-static
 
 .clinerules
 
+# Claude Code
+.claude/settings.json
+.playwright-mcp/
+
 # Supabase pooler credentials
 .supabase-pooler.sh
 .supabase-scripts/
