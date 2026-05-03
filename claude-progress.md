@@ -6,11 +6,11 @@
 
 ## Текущий статус (2026-05-03)
 
-**Последнее проверенное состояние:** Все тесты проходят, TypeScript без ошибок, lint чистый.
+**Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
 
-**Следующий шаг:** Начать реализацию корзины (`cart` feature) — см. `feature_list.json` id: `cart`.
+**Следующий шаг:** Начать реализацию корзины (`cart` feature) на новой ветке — см. `feature_list.json` id: `cart`.
 
-**Активная ветка:** `yes-100` (локально, не запушена на GitHub)
+**Активная ветка:** `yes-100` запушена, PR #203 открыт → develop.
 
 ---
 
@@ -45,6 +45,34 @@
 
 - Нет явной договорённости о стеке для Cart (Zustand + localStorage vs Supabase RLS orders table)
 - Перед стартом Cart нужно решить: сохранять корзину в Supabase или только локально
+
+---
+
+### 2026-05-03 — Code review + polish yes-100
+
+**Что сделано:**
+
+- Code review ветки yes-100 (8 issues исправлено)
+- Fix: `useCatalogSearch` unsafe cast → `catalogSearchSchema.parse()`
+- Fix: `FilterSection` `aria-controls` → `hidden` вместо unmount
+- Fix: `CatalogFiltersSheet` Suspense boundary для `useSuspenseQuery`
+- Fix: дублирование `FilterTag`/`ActiveTag` → единый экспорт из entity
+- Fix: `type="button"` на expand кнопку в `CategoriesTree`
+- Fix: `useFilterOptions` возвращает полный query object
+- Fix: `resetFilters` не сбрасывает search-запрос
+- Fix: `ContentSkeleton` теперь реально рендерится (useQuery + placeholderData)
+- Убраны категории из мобильного sheet
+- Убран лишний `div` вокруг сайдбара
+- `withRouter` декоратор для Storybook stories с TanStack Router хуками
+- Supabase PAT удалён из git-истории через `git filter-repo`
+- Ветка запушена, PR #203 открыт
+
+**Статус на конец сессии:** PR открыт, все тесты зелёные, репо чистое.
+
+**Нерешённые вопросы/блокеры:**
+
+- Supabase PAT нужно ротировать в Supabase Dashboard
+- Нет договорённости о стеке для Cart (Zustand + localStorage vs Supabase)
 
 ---
 
