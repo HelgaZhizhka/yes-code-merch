@@ -140,11 +140,13 @@ Session continuity (progress, feature status, commit) is handled automatically v
 **What this command does:**
 
 1. **Update Documentation** (`docs/`):
+
    - Create or update the relevant `docs/` file for the feature.
    - Structure: Overview, API Methods, Usage Examples, Key Decisions, Edge Cases.
    - Key Decisions belong here — why this approach, what was rejected and why.
 
 2. **Verify Rules Consistency**:
+
    - Check if any new patterns need to be reflected in `.claude/AI_*.md` files.
 
 3. **Output Summary**:

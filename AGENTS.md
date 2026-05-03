@@ -57,11 +57,11 @@ A feature is only `done` when **all** of the following are true:
 
 ## Key Continuity Files
 
-| File | Purpose |
-|---|---|
-| `feature_list.json` | Source of truth for feature status (done / in-progress / pending / blocked) |
-| `claude-progress.md` | Live session log + current verified status + next step |
-| `session-handoff.md` | Filled only when interrupted mid-feature; cleared when feature is done |
-| `init.sh` | Standard start + smoke verification |
-| `CLAUDE.md` | Code style, architecture rules, project patterns, GG command |
-| `docs/` | Feature documentation including architectural decisions (Decisions section) |
+| File                 | Purpose                                                                     |
+| -------------------- | --------------------------------------------------------------------------- |
+| `feature_list.json`  | Source of truth for feature status (done / in-progress / pending / blocked) |
+| `claude-progress.md` | Live session log + current verified status + next step                      |
+| `session-handoff.md` | Filled only when interrupted mid-feature; cleared when feature is done      |
+| `init.sh`            | Standard start + smoke verification                                         |
+| `CLAUDE.md`          | Code style, architecture rules, project patterns, GG command                |
+| `docs/`              | Feature documentation including architectural decisions (Decisions section) |
