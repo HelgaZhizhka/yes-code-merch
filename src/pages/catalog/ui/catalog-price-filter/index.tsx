@@ -8,7 +8,6 @@ import { useCatalogSearch } from '@entities/product';
 import { cn } from '@shared/lib/utils';
 
 interface CatalogPriceFilterProps {
-  /** Min price in cents from filter options. */
   bounds: { min: number; max: number };
 }
 
@@ -63,7 +62,7 @@ export const CatalogPriceFilter = ({
         max={maxEur}
         step={1}
         value={draft}
-        onValueChange={(value) =>
+        onValueChange={(value: number[]) =>
           setDraft([value[0], value[1]] as [number, number])
         }
         aria-label={CATALOG_TEXT.price.rangeAriaLabel}
