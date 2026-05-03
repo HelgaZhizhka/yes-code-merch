@@ -42,7 +42,7 @@ export const CatalogContent = ({
         <CatalogActiveFilters />
       </div>
 
-      <CatalogHeader totalCount={meta.totalCount} />
+      <CatalogHeader />
 
       {isEmpty ? (
         <CatalogEmptyState />
