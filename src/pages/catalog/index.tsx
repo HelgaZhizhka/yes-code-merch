@@ -19,9 +19,11 @@ export const Catalog = (): React.JSX.Element => {
       <Breadcrumbs items={breadcrumbs} className="mb-6" />
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <div className="flex gap-6">
-          <Suspense fallback={<SidebarSkeleton />}>
-            <SideBar categoryTree={tree} categoryIds={categoryIds ?? []} />
-          </Suspense>
+          <div className="hidden lg:block">
+            <Suspense fallback={<SidebarSkeleton />}>
+              <SideBar categoryTree={tree} categoryIds={categoryIds ?? []} />
+            </Suspense>
+          </div>
           <Suspense fallback={<ContentSkeleton />}>
             <CatalogContent categoryIds={categoryIds} />
           </Suspense>

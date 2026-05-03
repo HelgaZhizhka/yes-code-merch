@@ -2,7 +2,9 @@ import { ProductList, useCatalogSearch, useProducts } from '@entities/product';
 
 import { cn } from '@shared/lib/utils';
 
+import { CatalogActiveFilters } from '../catalog-active-filters';
 import { CatalogEmptyState } from '../catalog-empty-state';
+import { CatalogFiltersSheet } from '../catalog-filters-sheet';
 import { CatalogHeader } from '../catalog-header';
 import { CatalogPagination } from '../catalog-pagination';
 
@@ -34,6 +36,12 @@ export const CatalogContent = ({
 
   return (
     <div className="flex flex-1 flex-col" aria-busy={isFetching}>
+      {/* Mobile: filter button + active chips */}
+      <div className="mb-3 flex flex-wrap items-center gap-2 lg:hidden">
+        <CatalogFiltersSheet categoryIds={categoryIds} />
+        <CatalogActiveFilters />
+      </div>
+
       <CatalogHeader totalCount={meta.totalCount} />
 
       {isEmpty ? (
