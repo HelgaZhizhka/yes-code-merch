@@ -36,6 +36,7 @@ storybook-static
 
 # Claude Code
 .claude/settings.json
+.claude/designs/
 .playwright-mcp/
 
 # Supabase pooler credentials
