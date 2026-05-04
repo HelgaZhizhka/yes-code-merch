@@ -45,4 +45,5 @@ storybook-static
 
 *.csv
 scripts/
+!.github/scripts/
 generated/
