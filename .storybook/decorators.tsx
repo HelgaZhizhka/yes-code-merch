@@ -9,11 +9,11 @@ import React from 'react';
 import '../src/app/styles/index.css';
 import { TanStackQueryProvider } from '../src/shared/api/tanstack-query';
 
-export const withStyleDecorator: Decorator = (Story: React.FC) => {
+export const withStyleDecorator: Decorator = (Story) => {
   return <Story />;
 };
 
-export const withQueryClient: Decorator = (Story: React.FC) => {
+export const withQueryClient: Decorator = (Story) => {
   return (
     <TanStackQueryProvider.Provider>
       <Story />

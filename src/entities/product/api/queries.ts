@@ -11,7 +11,6 @@ export const productQueries = {
       queryKey: ['products', 'catalog', params] as const,
       queryFn: () => getCatalogProducts(params),
       staleTime: 1000 * 60 * 5,
-      placeholderData: (previous) => previous,
     }),
   filterOptions: (categoryIds: string[]) =>
     queryOptions({

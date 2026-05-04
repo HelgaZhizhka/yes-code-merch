@@ -72,12 +72,14 @@ export const CatalogPriceFilter = ({
           <Slider.Range className="absolute h-full rounded-sm bg-primary" />
         </Slider.Track>
         <Slider.Thumb
+          aria-label={CATALOG_TEXT.price.minLabel}
           className={cn(
             'block h-3.5 w-3.5 rounded-full border-2 border-primary bg-background shadow-sm',
             'focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2'
           )}
         />
         <Slider.Thumb
+          aria-label={CATALOG_TEXT.price.maxLabel}
           className={cn(
             'block h-3.5 w-3.5 rounded-full border-2 border-primary bg-background shadow-sm',
             'focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2'

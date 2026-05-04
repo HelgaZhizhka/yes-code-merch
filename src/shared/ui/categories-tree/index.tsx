@@ -66,7 +66,8 @@ const Node = React.memo(
             <button
               type="button"
               onClick={() => onToggle(node.id)}
-              aria-label={'Dropdown menu'}
+              aria-label={`Toggle ${name} subcategories`}
+              aria-expanded={isOpen}
               className={cn(
                 'ml-auto p-0.5 text-muted-foreground transition-colors hover:text-foreground',
                 variant === 'sidebar' && 'mr-1'
