@@ -20,7 +20,29 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: isStaging,
       minify: isStaging ? false : 'esbuild',
-      rollupOptions: {},
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom'],
+            'vendor-router': ['@tanstack/react-router'],
+            'vendor-query': ['@tanstack/react-query'],
+            'vendor-supabase': ['@supabase/supabase-js'],
+            'vendor-radix': [
+              '@radix-ui/react-avatar',
+              '@radix-ui/react-checkbox',
+              '@radix-ui/react-dialog',
+              '@radix-ui/react-label',
+              '@radix-ui/react-popover',
+              '@radix-ui/react-radio-group',
+              '@radix-ui/react-select',
+              '@radix-ui/react-slider',
+              '@radix-ui/react-slot',
+              '@radix-ui/react-tooltip',
+              '@radix-ui/react-visually-hidden',
+            ],
+          },
+        },
+      },
     },
     define: {
       __STAGING__: JSON.stringify(isStaging),
