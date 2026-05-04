@@ -14,24 +14,27 @@ Project context:
 - Architecture: Feature-Sliced Design (FSD) — layers: app, pages, features, entities, shared
   - Import direction: app → pages → features → entities → shared (never upward)
   - Each layer has an index.ts public API; internals are not imported directly
+  - Features must not import from other features
 - Package manager: pnpm
 
 Review focus (in priority order):
-1. TypeScript correctness — no `any`, no unsafe casts (`as`), proper explicit types
-2. FSD layer boundaries — no upward imports, no circular dependencies
-3. React correctness — immutable state, proper list keys, no index as key for dynamic lists
-4. Accessibility — semantic HTML (section not div[role=region], input not button[role=checkbox]), ARIA attributes
-5. Security — no command injection, no XSS, safe use of external data
-6. Logic correctness — edge cases, null/undefined handling, error handling at system boundaries
-7. Code quality — no dead code, no premature abstractions, no unnecessary wrappers
+1. TypeScript correctness — no `any`, no unsafe `as` casts (use Zod or type guards instead), all functions must have explicit return types
+2. FSD layer boundaries — no upward imports, no circular dependencies, no deep imports bypassing index.ts
+3. React correctness — only arrow function components (never `function Name()`), immutable state, proper list keys (never array index for dynamic lists)
+4. State management — API data must be in TanStack Query, never in Zustand; Zustand access via selectors (not destructuring)
+5. Accessibility — semantic HTML (section not div[role=region], input not button[role=checkbox]), ARIA attributes where needed
+6. Security — no command injection, no XSS, safe use of external data
+7. Logic correctness — edge cases, null/undefined handling, error handling at system boundaries
+8. Code quality — no dead code, no premature abstractions, no unnecessary wrappers
 
 Format your review as GitHub-flavoured markdown:
 - Start with a one-sentence summary of what the PR does
-- **Issues** section: list only real problems (bugs, violations, security). For each: `file.tsx:line — description`
+- **Issues** section: list only real problems (bugs, violations, security). For each: `path/to/file.tsx:line — description and why it matters`
 - **Suggestions** section (optional): improvements worth considering but not blocking
 - **Looks Good** section: 1-3 things done well
 
-Rules:
+CRITICAL rules:
+- Only reference file paths that appear verbatim in the diff header lines (e.g., `diff --git a/src/...`). Never invent, guess, or paraphrase file paths.
 - Be concise and direct. No filler phrases.
 - Skip issues already caught by ESLint/Prettier (formatting, import order, etc.)
 - Do not comment on missing tests unless tests were explicitly required
@@ -59,11 +62,13 @@ def post_comment(body: str) -> None:
     pr_number = os.environ["PR_NUMBER"]
     repo = os.environ["REPO"]
 
-    with open("/tmp/review_body.md", "w") as f:
+    runner_temp = os.environ.get("RUNNER_TEMP", "/tmp")
+    review_file = os.path.join(runner_temp, "review_body.md")
+    with open(review_file, "w") as f:
         f.write(body)
 
     subprocess.run(
-        ["gh", "pr", "comment", pr_number, "--repo", repo, "--body-file", "/tmp/review_body.md"],
+        ["gh", "pr", "comment", pr_number, "--repo", repo, "--body-file", review_file],
         check=True,
     )
 

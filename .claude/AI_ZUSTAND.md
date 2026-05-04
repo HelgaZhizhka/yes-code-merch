@@ -1,6 +1,3 @@
-### Обновлённый файл: `docs/AI_ZUSTAND.md`
-
-````markdown
 # State Management (Zustand) Rules for AI Assistants
 
 ## Core Philosophy
@@ -96,7 +93,6 @@ export const useCartStore = createAppStore<CartState>(
   })
 );
 ```
-````
 
 ---
 
@@ -154,7 +150,3 @@ Sometimes Zustand needs to interact with Server State. Keep them decoupled.
 - [ ] Store uses `createAppStore` factory.
 - [ ] All actions use arrow functions.
 - [ ] Selectors are used in components.
-
-```
-
-```
