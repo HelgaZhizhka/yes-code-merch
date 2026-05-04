@@ -1,26 +1,83 @@
 import type { AnyRoute, RootRoute } from '@tanstack/react-router';
 import { createRoute, stripSearchParams } from '@tanstack/react-router';
+import { lazy } from 'react';
 
-import { Cart } from '@pages/cart';
-import { Catalog } from '@pages/catalog';
-import { ForgotPassword } from '@pages/forgot-password';
-import { Home } from '@pages/home';
-import { Login } from '@pages/login';
-import { NotFound } from '@pages/not-found';
-import { Onboarding } from '@pages/onboarding/index';
-import { AddressStep } from '@pages/onboarding/ui/address-step';
-import { InitStep } from '@pages/onboarding/ui/init-step';
-import { Product } from '@pages/product';
-import { Profile } from '@pages/profile';
-import { AddAddress } from '@pages/profile/ui/add-address';
-import { ChangePassword } from '@pages/profile/ui/change-password';
-import { EditAddress } from '@pages/profile/ui/edit-address';
-import { EditPersonal } from '@pages/profile/ui/edit-personal';
-import { Overview } from '@pages/profile/ui/overview';
-import { Registration } from '@pages/registration';
-import { RegistrationForm } from '@pages/registration/ui/registration-form';
-import { RegistrationSuccess } from '@pages/registration/ui/registration-success';
-import { ResetPassword } from '@pages/reset-password';
+const Cart = lazy(() =>
+  import('@pages/cart').then((m) => ({ default: m.Cart }))
+);
+const Catalog = lazy(() =>
+  import('@pages/catalog').then((m) => ({ default: m.Catalog }))
+);
+const ForgotPassword = lazy(() =>
+  import('@pages/forgot-password').then((m) => ({ default: m.ForgotPassword }))
+);
+const Home = lazy(() =>
+  import('@pages/home').then((m) => ({ default: m.Home }))
+);
+const Login = lazy(() =>
+  import('@pages/login').then((m) => ({ default: m.Login }))
+);
+const NotFound = lazy(() =>
+  import('@pages/not-found').then((m) => ({ default: m.NotFound }))
+);
+const Onboarding = lazy(() =>
+  import('@pages/onboarding/index').then((m) => ({ default: m.Onboarding }))
+);
+const AddressStep = lazy(() =>
+  import('@pages/onboarding/ui/address-step').then((m) => ({
+    default: m.AddressStep,
+  }))
+);
+const InitStep = lazy(() =>
+  import('@pages/onboarding/ui/init-step').then((m) => ({
+    default: m.InitStep,
+  }))
+);
+const Product = lazy(() =>
+  import('@pages/product').then((m) => ({ default: m.Product }))
+);
+const Profile = lazy(() =>
+  import('@pages/profile').then((m) => ({ default: m.Profile }))
+);
+const AddAddress = lazy(() =>
+  import('@pages/profile/ui/add-address').then((m) => ({
+    default: m.AddAddress,
+  }))
+);
+const ChangePassword = lazy(() =>
+  import('@pages/profile/ui/change-password').then((m) => ({
+    default: m.ChangePassword,
+  }))
+);
+const EditAddress = lazy(() =>
+  import('@pages/profile/ui/edit-address').then((m) => ({
+    default: m.EditAddress,
+  }))
+);
+const EditPersonal = lazy(() =>
+  import('@pages/profile/ui/edit-personal').then((m) => ({
+    default: m.EditPersonal,
+  }))
+);
+const Overview = lazy(() =>
+  import('@pages/profile/ui/overview').then((m) => ({ default: m.Overview }))
+);
+const Registration = lazy(() =>
+  import('@pages/registration').then((m) => ({ default: m.Registration }))
+);
+const RegistrationForm = lazy(() =>
+  import('@pages/registration/ui/registration-form').then((m) => ({
+    default: m.RegistrationForm,
+  }))
+);
+const RegistrationSuccess = lazy(() =>
+  import('@pages/registration/ui/registration-success').then((m) => ({
+    default: m.RegistrationSuccess,
+  }))
+);
+const ResetPassword = lazy(() =>
+  import('@pages/reset-password').then((m) => ({ default: m.ResetPassword }))
+);
 
 import {
   catalogSearchSchema,
