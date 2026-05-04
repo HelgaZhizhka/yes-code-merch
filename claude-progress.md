@@ -4,13 +4,13 @@
 
 ---
 
-## Текущий статус (2026-05-03)
+## Текущий статус (2026-05-04)
 
 **Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
 
-**Следующий шаг:** Начать реализацию корзины (`cart` feature) на новой ветке — см. `feature_list.json` id: `cart`.
+**Следующий шаг:** Смержить PR #203 → начать `cart` feature на новой ветке от `develop`.
 
-**Активная ветка:** `yes-100` запушена, PR #203 открыт → develop.
+**Активная ветка:** `yes-100` запушена, PR #203 открыт → develop. Готов к мержу.
 
 ---
 
@@ -76,10 +76,31 @@
 
 ---
 
-### [Следующая сессия — заполнить здесь]
+### 2026-05-04 — Code review polish + CI setup
 
-**Дата:**
-**Фича:**
 **Что сделано:**
+
+- Запущен `superpowers:requesting-code-review` → исправлено ещё несколько issues
+- Fix: `Slider.Thumb` — добавлены `aria-label` Min/Max
+- Fix: `categories-tree` — `aria-label` стал динамическим, добавлен `aria-expanded`
+- Fix: `queries.ts` — удалён дублирующий `placeholderData` (мёртвый код)
+- Fix: `decorators.tsx` — убран лишний тип `React.FC`
+- Fix: `AI_ZUSTAND.md` — удалён stray heading и внешний code fence
+- Создан и затем удалён GitHub Actions Claude PR review (заменён на `/code-review` skill)
+- Telegram workflow временно отключён (`if: false`)
+- Изучены и сравнены 3 подхода к ревью: GitHub Actions / `fsd-code-reviewer` / `/code-review:code-review`
+- `/code-review:code-review` оставил комментарий в PR #203 (1 issue — `withRouter` singleton, решено не исправлять)
+
 **Статус на конец сессии:**
+
+- Все тесты зелёные: TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓
+- PR #203 открыт, готов к мержу
+- Ветка `yes-100` чистая
+
 **Нерешённые вопросы/блокеры:**
+
+- `withRouter` в `.storybook/decorators.tsx` создаёт роутер на каждый рендер — решено оставить как есть (Storybook only, тесты проходят)
+- Supabase PAT нужно ротировать в Supabase Dashboard (если ещё не сделано)
+- Нет договорённости о стеке для Cart (Zustand + localStorage vs Supabase)
+
+**Следующий шаг:** Смержить PR #203 → начать `cart` feature на новой ветке.
