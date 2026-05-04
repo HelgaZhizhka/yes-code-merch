@@ -1,6 +1,7 @@
 """Automated Claude PR review — posts a code review comment on a GitHub PR."""
 
 import os
+import re
 import subprocess
 
 import anthropic
@@ -33,8 +34,9 @@ Format your review as GitHub-flavoured markdown:
 - **Suggestions** section (optional): improvements worth considering but not blocking
 - **Looks Good** section: 1-3 things done well
 
-CRITICAL rules:
-- Only reference file paths that appear verbatim in the diff header lines (e.g., `diff --git a/src/...`). Never invent, guess, or paraphrase file paths.
+ABSOLUTE rules — violation wastes the author's time:
+- You MUST only cite file paths from the "Files changed" list provided above the diff. If a path is not in that list, do not mention it.
+- Never invent, guess, reconstruct, or abbreviate file paths.
 - Be concise and direct. No filler phrases.
 - Skip issues already caught by ESLint/Prettier (formatting, import order, etc.)
 - Do not comment on missing tests unless tests were explicitly required
@@ -43,7 +45,7 @@ CRITICAL rules:
 """
 
 
-def get_diff() -> str:
+def get_diff() -> tuple[str, list[str]]:
     base_sha = os.environ["BASE_SHA"]
     head_sha = os.environ["HEAD_SHA"]
     result = subprocess.run(
@@ -53,9 +55,10 @@ def get_diff() -> str:
         check=True,
     )
     diff = result.stdout
+    changed_files = re.findall(r"^diff --git a/(.+) b/", diff, re.MULTILINE)
     if len(diff) > MAX_DIFF_CHARS:
         diff = diff[:MAX_DIFF_CHARS] + "\n\n[... diff truncated — too large to show in full ...]"
-    return diff
+    return diff, changed_files
 
 
 def post_comment(body: str) -> None:
@@ -74,13 +77,14 @@ def post_comment(body: str) -> None:
 
 
 def main() -> None:
-    diff = get_diff()
+    diff, changed_files = get_diff()
 
     if not diff.strip():
         print("No diff found, skipping review.")
         return
 
     pr_title = os.environ.get("PR_TITLE", "")
+    files_list = "\n".join(f"- {f}" for f in changed_files)
 
     client = anthropic.Anthropic()
 
@@ -93,6 +97,7 @@ def main() -> None:
                 "role": "user",
                 "content": (
                     f"PR title: {pr_title}\n\n"
+                    f"Files changed ({len(changed_files)} total):\n{files_list}\n\n"
                     f"Diff:\n\n```diff\n{diff}\n```"
                 ),
             }
