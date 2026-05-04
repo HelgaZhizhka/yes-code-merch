@@ -11,6 +11,8 @@
   --primary-foreground: #1a1a1a;
   --primary-light: #ff9843;
   --primary-light-foreground: #1a1a1a;
+  --primary-soft: #fff3e8;
+  --primary-soft-border: #ffd0a0;
   --secondary: #3e17ff;
   --secondary-foreground: #fafafa;
   --accent: #eef7ff;
@@ -115,6 +117,8 @@
   --color-success-foreground: var(--success-foreground);
   --color-primary-light: var(--primary-light);
   --color-primary-light-foreground: var(--primary-light-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-border: var(--primary-soft-border);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);

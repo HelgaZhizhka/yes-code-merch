@@ -109,6 +109,8 @@ export interface CatalogParams {
   search?: string;
   priceMin?: number;
   priceMax?: number;
+  colors?: string[];
+  sizes?: string[];
   page?: number;
   pageSize?: number;
   sortField?: ProductSortField;
@@ -127,4 +129,12 @@ export interface PaginationMeta {
 export interface PaginatedCatalogProducts {
   data: CatalogProduct[];
   meta: PaginationMeta;
+}
+
+export interface FilterOptions {
+  colors: string[];
+  sizes: string[];
+  priceMin: number;
+  priceMax: number;
+  hasSizeFilter: boolean;
 }

@@ -1,8 +1,9 @@
-export { productKeys, useProducts } from './api/hooks';
+export { productKeys, useFilterOptions, useProducts } from './api/hooks';
 export type {
   AppliedDiscount,
   CatalogParams,
   CatalogProduct,
+  FilterOptions,
   PaginatedCatalogProducts,
   PaginationMeta,
   ProductSortField,
@@ -17,5 +18,5 @@ export {
   PRODUCT_SORT_FIELDS,
   SORT_DIRECTIONS,
 } from './lib';
-export { useCatalogSearch } from './model/use-catalog-search';
+export { useCatalogSearch, type FilterTag } from './model/use-catalog-search';
 export { ProductCard, ProductList } from './ui';

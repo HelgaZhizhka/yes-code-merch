@@ -15,6 +15,8 @@ import { Banner } from './banner';
 
 import { MobileMenu } from '../mobile-menu';
 
+const NAV_SKELETON_KEYS = ['nav-1', 'nav-2', 'nav-3', 'nav-4'] as const;
+
 interface HeaderProps extends AuthProps {
   onLogout(): Promise<void>;
 }
@@ -51,26 +53,23 @@ export const Header = ({
               />
             </div>
           </div>
-          <div className="h-full">
-            <nav className="flex gap-4 grow-1 justify-end items-center text-2xl">
-              <Link to={ROUTES.ABOUT}>About Us</Link>
-              <AuthMenu
-                isLoading={isLoading}
-                isGuest={isGuest}
-                isAuthenticated={isAuthenticated}
-                isError={isError}
-                onLogout={onLogout}
+          <nav className="flex gap-4 grow-1 justify-end items-center text-2xl">
+            <AuthMenu
+              isLoading={isLoading}
+              isGuest={isGuest}
+              isAuthenticated={isAuthenticated}
+              isError={isError}
+              onLogout={onLogout}
+            />
+            <Link to={ROUTES.CART} className="flex items-center">
+              <ShoppingCart
+                className="w-9 h-9 text-primary-foreground"
+                aria-hidden="false"
+                focusable="false"
+                aria-labelledby="cart-title"
               />
-              <Link to={ROUTES.CART} className="flex items-center">
-                <ShoppingCart
-                  className="w-9 h-9 text-primary-foreground"
-                  aria-hidden="false"
-                  focusable="false"
-                  aria-labelledby="cart-title"
-                />
-              </Link>
-            </nav>
-          </div>
+            </Link>
+          </nav>
         </div>
       </div>
       <div className="bg-dark-background h-17 flex items-center pl-11 pr-11 justify-between">
@@ -80,7 +79,14 @@ export const Header = ({
         <div className="hidden sm:block">
           <Suspense
             fallback={
-              <div className="text-secondary-foreground">Loading...</div>
+              <div className="flex gap-6">
+                {NAV_SKELETON_KEYS.map((key) => (
+                  <div
+                    key={key}
+                    className="h-4 w-16 animate-pulse rounded bg-white/20"
+                  />
+                ))}
+              </div>
             }
           >
             <Categories />

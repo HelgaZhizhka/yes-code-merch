@@ -1,18 +1,11 @@
 import { ResetPasswordForm } from '@pages/reset-password/ui/reset-password-form';
 
-import { Loader } from '@shared/ui/loader';
 import { useAuthRedirect } from '@shared/viewer';
 
-export const ResetPassword = (): React.JSX.Element => {
+export const ResetPassword = (): React.JSX.Element | null => {
   const { isLoading } = useAuthRedirect();
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
+  if (isLoading) return null;
 
   return (
     <div className="flex flex-1 items-center justify-center flex-col">

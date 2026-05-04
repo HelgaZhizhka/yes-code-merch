@@ -1,0 +1,95 @@
+{
+  "updated": "2026-05-03",
+  "features": [
+    {
+      "id": "product-search-pagination",
+      "name": "Product Search / Pagination / Sort / Price Filter",
+      "status": "done",
+      "priority": 1,
+      "verified": true,
+      "notes": "ilike search, server-side pagination (range), sort by price/name/date, price filter on master variant",
+      "commits": ["merged with discount feature f00dd4e"],
+      "docs": ["docs/SEARCH.md"]
+    },
+    {
+      "id": "discount-calculation",
+      "name": "Price Calculation with Discounts",
+      "status": "done",
+      "priority": 1,
+      "verified": true,
+      "notes": "calculateDiscount logic in entities/product/lib; 19 unit tests passing",
+      "docs": []
+    },
+    {
+      "id": "unit-tests-business-logic",
+      "name": "Unit Tests — Business Logic & Zod Schemas",
+      "status": "done",
+      "priority": 2,
+      "verified": true,
+      "notes": "Vitest tests for calculateDiscount + catalogSearchSchema (33 tests total)",
+      "docs": ["docs/testing-guide.md"]
+    },
+    {
+      "id": "product-filters",
+      "name": "Product Filters — Price + Color + Size",
+      "status": "done",
+      "priority": 1,
+      "verified": true,
+      "notes": "DB view extended (category_ids[], colors[], sizes[]); RPC get_catalog_filter_options; URL-driven via Zod; 7 new UI components; router loader preloads categories tree",
+      "docs": ["docs/FILTERS.md"],
+      "tech_debt": [
+        "Search autosuggest dropdown (separate ticket)",
+        "Stock filter (seed data: stock=0 for most rows)",
+        "Faceted counts",
+        "Inline English strings in shared/ui (Pagination etc) — migrate before i18next",
+        "Storybook a11y addon + color-contrast audit (P1 backlog)",
+        "SSR migration via TanStack Start (after cart/checkout MVP)"
+      ]
+    },
+    {
+      "id": "cart",
+      "name": "Shopping Cart",
+      "status": "pending",
+      "priority": 1,
+      "verified": false,
+      "notes": "Not yet started. Likely Zustand global store + localStorage persistence + Supabase order entity",
+      "docs": []
+    },
+    {
+      "id": "checkout",
+      "name": "Checkout Flow",
+      "status": "pending",
+      "priority": 1,
+      "verified": false,
+      "notes": "Blocked by Cart. Will need order/payment entities",
+      "docs": []
+    },
+    {
+      "id": "search-autosuggest",
+      "name": "Search Autosuggest Dropdown",
+      "status": "pending",
+      "priority": 2,
+      "verified": false,
+      "notes": "Debounced input → suggest products/categories. Separate ticket from main search.",
+      "docs": []
+    },
+    {
+      "id": "e2e-tests",
+      "name": "E2E Tests (Playwright)",
+      "status": "pending",
+      "priority": 3,
+      "verified": false,
+      "notes": "Deferred until cart/checkout flow is implemented",
+      "docs": []
+    },
+    {
+      "id": "ssr-migration",
+      "name": "SSR Migration (TanStack Start)",
+      "status": "pending",
+      "priority": 3,
+      "verified": false,
+      "notes": "Separate sprint after cart/checkout MVP. SSR-readiness guidelines in .claude/AI_SSR_READINESS.md",
+      "docs": [".claude/AI_SSR_READINESS.md"]
+    }
+  ]
+}

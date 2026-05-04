@@ -1,7 +1,6 @@
 import type { AnyRoute, RootRoute } from '@tanstack/react-router';
 import { createRoute, stripSearchParams } from '@tanstack/react-router';
 
-import { About } from '@pages/about';
 import { Cart } from '@pages/cart';
 import { Catalog } from '@pages/catalog';
 import { ForgotPassword } from '@pages/forgot-password';
@@ -31,6 +30,7 @@ import {
   SORT_DIRECTIONS,
 } from '@entities/product';
 
+import { categoriesTreeQueryOptions } from '@shared/api';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
 
 import { Layout } from '@/layouts';
@@ -122,13 +122,6 @@ export const homeRoute = (parentRoute: FlexibleRouteType) =>
     component: Home,
   });
 
-export const aboutRoute = (parentRoute: FlexibleRouteType) =>
-  createRoute({
-    getParentRoute: () => parentRoute,
-    path: ROUTES.ABOUT,
-    component: About,
-  });
-
 export const cartRoute = (parentRoute: FlexibleRouteType) =>
   createRoute({
     getParentRoute: () => parentRoute,
@@ -142,6 +135,9 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
     path: ROUTES.CATEGORY,
     component: Catalog,
     validateSearch: catalogSearchSchema,
+    loader: async ({ context }) => {
+      await context.queryClient.ensureQueryData(categoriesTreeQueryOptions());
+    },
     search: {
       middlewares: [
         stripSearchParams({

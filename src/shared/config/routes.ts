@@ -5,7 +5,6 @@ export const ROUTES = {
   REGISTRATION_SUCCESS: '/registration/success',
   FORGOT: '/forgot',
   RESET: '/reset',
-  ABOUT: '/about',
   PROFILE: '/profile',
   PROFILE_PERSONAL: '/profile/personal',
   PROFILE_SECRET: '/profile/secret',

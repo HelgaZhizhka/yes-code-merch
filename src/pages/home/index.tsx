@@ -3,13 +3,26 @@ import { Suspense } from 'react';
 import { LayoutView } from '@shared/types';
 import { Categories } from '@shared/ui/categories';
 
+const NAV_SKELETON_KEYS = ['nav-1', 'nav-2', 'nav-3', 'nav-4'] as const;
+
 export const Home = (): React.JSX.Element => {
   return (
     <div className="flex flex-1 flex-col items-center justify-between p-4">
       <h1 className="text-2xl mb-4">Home page</h1>
       <div className="flex flex-col items-center gap-4 w-full">
         <h2 className="text-xl">Shop by category</h2>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <div className="flex flex-wrap justify-center gap-4 w-full">
+              {NAV_SKELETON_KEYS.map((key) => (
+                <div
+                  key={key}
+                  className="h-32 w-40 animate-pulse rounded-lg bg-muted"
+                />
+              ))}
+            </div>
+          }
+        >
           <Categories variant={LayoutView.HOME} />
         </Suspense>
       </div>

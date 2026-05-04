@@ -1,6 +1,7 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { createPaginationMeta, mapFromViewToCatalogProducts } from './mapper';
+import { productQueries } from './queries';
 import type {
   CatalogParams,
   CatalogProductsViewResponse,
@@ -9,11 +10,11 @@ import type {
 
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../lib';
 
-import { getCatalogProducts } from './index';
-
 export const productKeys = {
-  all: ['products'],
-  catalog: (params: CatalogParams) => ['products', 'catalog', params] as const,
+  all: ['products'] as const,
+  catalog: (params: CatalogParams) => productQueries.catalog(params).queryKey,
+  filterOptions: (categoryIds: string[]) =>
+    productQueries.filterOptions(categoryIds).queryKey,
 } as const;
 
 const selectPaginatedProducts = (
@@ -30,19 +31,12 @@ export const useProducts = (params: CatalogParams) => {
   const page = params.page ?? DEFAULT_PAGE;
   const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
 
-  return useSuspenseQuery<
-    CatalogProductsViewResponse,
-    Error,
-    PaginatedCatalogProducts
-  >({
-    queryKey: productKeys.catalog(params),
-    queryFn: () => getCatalogProducts(params),
+  return useQuery({
+    ...productQueries.catalog(params),
     select: (response) => selectPaginatedProducts(response, page, pageSize),
-    staleTime: 1000 * 60 * 5,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    gcTime: 7 * 24 * 60 * 60 * 1000,
-    retry: 1,
+    placeholderData: (prev) => prev,
   });
 };
+
+export const useFilterOptions = (categoryIds: string[]) =>
+  useSuspenseQuery(productQueries.filterOptions(categoryIds));

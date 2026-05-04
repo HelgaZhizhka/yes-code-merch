@@ -1,12 +1,13 @@
 import { withThemeByClassName } from '@storybook/addon-themes';
 import type { Preview, ReactRenderer } from '@storybook/react-vite';
 
-import { withStyleDecorator, withQueryClient } from './decorators';
+import { withStyleDecorator, withQueryClient, withRouter } from './decorators';
 
 const preview: Preview = {
   decorators: [
     withStyleDecorator,
     withQueryClient,
+    withRouter,
     withThemeByClassName<ReactRenderer>({
       themes: {
         light: 'light',

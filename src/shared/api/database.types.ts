@@ -689,7 +689,8 @@ export type Database = {
     Views: {
       products_search: {
         Row: {
-          category_id: string | null;
+          category_ids: string[] | null;
+          colors: string[] | null;
           created_at: string | null;
           currency: string | null;
           description: string | null;
@@ -701,19 +702,13 @@ export type Database = {
           primary_image_url: string | null;
           product_discounts: Json | null;
           product_type_id: string | null;
+          sizes: string[] | null;
           sku: string | null;
           slug: string | null;
           stock: number | null;
           variant_id: string | null;
         };
         Relationships: [
-          {
-            foreignKeyName: 'product_categories_category_id_fkey';
-            columns: ['category_id'];
-            isOneToOne: false;
-            referencedRelation: 'categories';
-            referencedColumns: ['id'];
-          },
           {
             foreignKeyName: 'products_product_type_id_fkey';
             columns: ['product_type_id'];
@@ -737,6 +732,16 @@ export type Database = {
           root_name: string;
           root_slug: string;
           slug: string;
+        }[];
+      };
+      get_catalog_filter_options: {
+        Args: { p_category_ids: string[] };
+        Returns: {
+          colors: string[];
+          has_size_filter: boolean;
+          price_max: number;
+          price_min: number;
+          sizes: string[];
         }[];
       };
     };

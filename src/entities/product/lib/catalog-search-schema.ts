@@ -13,6 +13,8 @@ export const catalogSearchSchema = z.object({
   search: z.string().optional(),
   priceMin: z.number().int().nonnegative().optional(),
   priceMax: z.number().int().nonnegative().optional(),
+  colors: z.array(z.string()).optional(),
+  sizes: z.array(z.string()).optional(),
   sortField: z
     .enum([
       PRODUCT_SORT_FIELDS.NAME,

@@ -25,6 +25,7 @@ export {
   signUp,
   updateUser,
 } from './auth';
+export { categoriesTreeQueryOptions } from './categories/queries';
 export {
   useCategoriesTree,
   useCategoryData,

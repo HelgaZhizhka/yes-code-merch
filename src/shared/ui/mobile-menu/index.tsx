@@ -1,11 +1,10 @@
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { Link, useLocation } from '@tanstack/react-router';
+import { useLocation } from '@tanstack/react-router';
 import { Menu, Phone } from 'lucide-react';
 import { Suspense, useEffect } from 'react';
 
 import { useCategoriesTree } from '@shared/api';
 import { SaleCategoryName } from '@shared/config';
-import { ROUTES } from '@shared/config/routes';
 import { CategoriesTree } from '@shared/ui/categories-tree';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import {
@@ -18,6 +17,8 @@ import {
 } from '@shared/ui/sheet';
 
 import { useMobileMenu } from './use-mobile-menu';
+
+const NAV_SKELETON_KEYS = ['nav-1', 'nav-2', 'nav-3', 'nav-4'] as const;
 
 import { Banner } from '../header/banner';
 
@@ -48,14 +49,18 @@ export const MobileMenu = (): React.JSX.Element => {
         <div className="flex-1 overflow-y-auto flex flex-col gap-4">
           <Suspense
             fallback={
-              <div className="text-2xl text-primary-foreground">Loading...</div>
+              <div className="flex flex-col gap-5">
+                {NAV_SKELETON_KEYS.map((key) => (
+                  <div
+                    key={key}
+                    className="h-7 w-36 animate-pulse rounded bg-muted"
+                  />
+                ))}
+              </div>
             }
           >
             <CategoriesTree categoryTree={categoryTree} variant="mobile" />
           </Suspense>
-          <Link className="text-2xl" to={ROUTES.ABOUT}>
-            About Us
-          </Link>
           <div className="flex items-center text-2xl gap-2">
             <ContactWidget
               icon={<Phone className="h-8" />}

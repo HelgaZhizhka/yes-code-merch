@@ -1,5 +1,7 @@
 # Product Catalog Search, Sorting & Pagination
 
+> **Filter behaviour** (color/size/price/view) is documented separately in [`docs/FILTERS.md`](./FILTERS.md). This document covers search, sort, pagination, and the underlying view architecture.
+
 This document describes the product catalog functionality: search, sorting, filtering, and pagination. It serves as a guide for implementing UI components on top of the existing API foundation.
 
 ---
@@ -339,18 +341,9 @@ All can be `null` if no image is set.
 
 Currently all products have `stock = 0` (not yet used in the project). Products with `stock = null` are filtered out by the mapper as a data integrity check.
 
-### Future: Variant attribute filters
+### Variant attribute filters
 
-When implementing filters by size, color, etc., the approach will be:
-
-```typescript
-// Filter by attribute (any variant, not just master)
-// This will be a separate task
-if (size) {
-  // Show product if ANY of its variants matches
-  // Implementation details TBD
-}
-```
+Implemented in 2026-05. See [`docs/FILTERS.md`](./FILTERS.md) for the user-facing contract and `supabase/migrations/20260501_extend_products_search_for_filters.sql` for the database changes.
 
 The VIEW stays the same — attribute filtering will use additional subqueries.
 

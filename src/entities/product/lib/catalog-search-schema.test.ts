@@ -111,3 +111,19 @@ describe('catalogSearchSchema', () => {
     });
   });
 });
+
+describe('catalogSearchSchema — filter extensions', () => {
+  it('accepts and preserves colors array', () => {
+    const result = catalogSearchSchema.parse({
+      colors: ['black', 'red'],
+    });
+    expect(result.colors).toEqual(['black', 'red']);
+  });
+
+  it('accepts and preserves sizes array', () => {
+    const result = catalogSearchSchema.parse({
+      sizes: ['m', 'l'],
+    });
+    expect(result.sizes).toEqual(['m', 'l']);
+  });
+});
