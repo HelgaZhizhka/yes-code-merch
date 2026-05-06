@@ -18,7 +18,8 @@ const linkVariants = cva('transition-all', {
   variants: {
     variant: {
       default: '',
-      mobile: 'text-2xl text-foreground hover:text-primary',
+      mobile:
+        'text-2xl text-foreground hover:text-primary data-[active]:text-primary data-[active]:font-semibold',
       sidebar:
         'block w-full py-1 pl-3 text-sm text-muted-foreground border-l-2 border-transparent hover:text-foreground hover:border-border data-[active]:border-primary data-[active]:text-primary data-[active]:font-medium',
     },
@@ -34,7 +35,6 @@ const Node = React.memo(
     pathPrefix = '',
     expandedNodes,
     onToggle,
-    rootIndex,
   }: {
     node: CategoryTree;
     pathPrefix?: string;
@@ -42,7 +42,6 @@ const Node = React.memo(
     useFullPath?: boolean;
     expandedNodes: Set<string>;
     onToggle: (id: string) => void;
-    rootIndex?: number;
   }): React.JSX.Element => {
     const { slug, name } = node;
     const fullPath = [pathPrefix, slug].filter(Boolean).join('/');
@@ -52,14 +51,13 @@ const Node = React.memo(
 
     return (
       <li
-        className={cn(variant === 'mobile' && 'animate-menu-item')}
-        style={
-          variant === 'mobile'
-            ? { animationDelay: `${(rootIndex ?? 0) * 60}ms` }
-            : undefined
-        }
+        className={cn(
+          node.children.length > 0 &&
+            variant === 'mobile' &&
+            'border-b border-border'
+        )}
       >
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 justify-between">
           <Link
             to={ROUTES.CATEGORY}
             params={{ _splat: pathToUse }}
@@ -78,8 +76,9 @@ const Node = React.memo(
               aria-label={`Toggle ${name} subcategories`}
               aria-expanded={isOpen}
               className={cn(
-                'ml-auto p-0.5 text-muted-foreground transition-colors hover:text-foreground',
-                variant === 'sidebar' && 'mr-1'
+                'text-muted-foreground transition-colors hover:text-foreground',
+                variant === 'sidebar' && 'mr-1 p-0.5',
+                variant === 'mobile' && 'p-2'
               )}
             >
               <ChevronRight
@@ -104,7 +103,6 @@ const Node = React.memo(
                 useFullPath={useFullPath}
                 expandedNodes={expandedNodes}
                 onToggle={onToggle}
-                rootIndex={rootIndex}
               />
             ))}
           </ul>
@@ -144,7 +142,7 @@ export const CategoriesTree = ({
           variant === 'sidebar' ? 'gap-0.5' : 'gap-4'
         )}
       >
-        {categoryTree.map((root, index) => (
+        {categoryTree.map((root) => (
           <Node
             key={root.id}
             node={root}
@@ -152,7 +150,6 @@ export const CategoriesTree = ({
             useFullPath={useFullPath}
             expandedNodes={expandedNodes}
             onToggle={toggleNode}
-            rootIndex={variant === 'mobile' ? index : undefined}
           />
         ))}
       </ul>

@@ -39,7 +39,7 @@ export const MobileMenu = (): React.JSX.Element => {
         <Menu className="size-7 text-foreground" />
       </SheetTrigger>
       <SheetContent side="left" className="flex h-screen w-screen flex-col p-5">
-        <SheetHeader className="p-0">
+        <SheetHeader className="p-2">
           <VisuallyHidden.Root>
             <SheetTitle>Navigation menu</SheetTitle>
             <SheetDescription>Navigation menu</SheetDescription>
