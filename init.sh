@@ -35,6 +35,16 @@ echo ">>> Unit tests..."
 pnpm vitest run --config vitest.unit.config.ts
 echo "    OK"
 
+# 6. Storybook tests
+echo ">>> Storybook tests..."
+pnpm test:storybook
+echo "    OK"
+
+# 7. Build check
+echo ">>> Build..."
+pnpm build
+echo "    OK"
+
 echo ""
 echo "=== Smoke check PASSED ==="
 echo ""

@@ -23,7 +23,8 @@ Before writing any code, always do this:
 
 - Work on one feature at a time.
 - Don't mark a feature as done just because code was added.
-- Keep changes within the scope of the selected feature unless a blocker forces a narrow fix.
+- Keep changes within the scope of the selected feature. Unrelated bugs → create a separate issue.
+- Narrow exception: a 1–2 line fix that unblocks your feature is allowed — document it in the PR description.
 - Don't silently change verification rules during implementation.
 - Prefer durable repository artifacts over chat summaries.
 
@@ -50,6 +51,14 @@ A feature is only `done` when **all** of the following are true:
 - Required verification was actually run (lint + tsc + tests)
 - Evidence is recorded in `feature_list.json` or `claude-progress.md`
 - Repo is still startable via `./init.sh`
+
+---
+
+## Context Management
+
+- If a feature touches more than 10 files — break it into sub-tasks in `feature_list.json`.
+- If context feels large: start a fresh session and pass state via `session-handoff.md`.
+- Prefer `session-handoff.md` over chat summaries for mid-feature continuity.
 
 ---
 

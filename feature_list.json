@@ -7,6 +7,7 @@
       "status": "done",
       "priority": 1,
       "verified": true,
+      "dependencies": [],
       "notes": "ilike search, server-side pagination (range), sort by price/name/date, price filter on master variant",
       "commits": ["merged with discount feature f00dd4e"],
       "docs": ["docs/SEARCH.md"]
@@ -17,6 +18,7 @@
       "status": "done",
       "priority": 1,
       "verified": true,
+      "dependencies": [],
       "notes": "calculateDiscount logic in entities/product/lib; 19 unit tests passing",
       "docs": []
     },
@@ -26,6 +28,7 @@
       "status": "done",
       "priority": 2,
       "verified": true,
+      "dependencies": ["discount-calculation"],
       "notes": "Vitest tests for calculateDiscount + catalogSearchSchema (33 tests total)",
       "docs": ["docs/testing-guide.md"]
     },
@@ -35,6 +38,7 @@
       "status": "done",
       "priority": 1,
       "verified": true,
+      "dependencies": ["product-search-pagination"],
       "notes": "DB view extended (category_ids[], colors[], sizes[]); RPC get_catalog_filter_options; URL-driven via Zod; 7 new UI components; router loader preloads categories tree",
       "docs": ["docs/FILTERS.md"],
       "tech_debt": [
@@ -49,10 +53,37 @@
     {
       "id": "redesign-header-navigation-home",
       "name": "Redesign header, navigation and home page",
+      "linear": "YES-136",
+      "branch": "yes-136",
+      "status": "in-progress",
+      "priority": 1,
+      "verified": false,
+      "dependencies": ["product-filters"],
+      "notes": "Header layout/spacing, category nav, mobile menu, Shop by category section. Design decisions before implementation. Sub-tasks: YES-137 first, then YES-138.",
+      "docs": []
+    },
+    {
+      "id": "home-hero-slider-usp",
+      "name": "Implement Home Page Hero Slider and USP Section",
+      "linear": "YES-137",
+      "branch": "yes-137",
       "status": "pending",
       "priority": 1,
       "verified": false,
-      "notes": "Not yet started. Redesign header, navigation and home page",
+      "dependencies": ["redesign-header-navigation-home"],
+      "notes": "HeroSlider (2-3 static slides, prev/next, dots, no autoplay) + USPSection (3 cards: delivery/range/order). Wire up in src/pages/home/index.tsx above HomeCatalog. Implement FIRST within the yes-136 redesign scope.",
+      "docs": []
+    },
+    {
+      "id": "productcard-discount-badge-size",
+      "name": "Improve ProductCard: discount badge + size selector",
+      "linear": "YES-138",
+      "branch": "yes-138",
+      "status": "pending",
+      "priority": 2,
+      "verified": false,
+      "dependencies": ["redesign-header-navigation-home"],
+      "notes": "Discount badge on product image (top-left) + size selector UI. Implement after YES-137 is done.",
       "docs": []
     }
   ]

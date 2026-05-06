@@ -41,9 +41,19 @@ Get credentials from:
 
 ### Security
 
-- `.mcp.json` is in `.gitignore` — **never commit it**
-- Contains sensitive tokens — keep it local
-- Restart Claude Code after editing `.mcp.json`
+- `.claude/settings.local.json` is in `.gitignore` — **never commit it**
+- `SUPABASE_ACCESS_TOKEN` must be set as a shell environment variable:
+
+```bash
+# Add to ~/.zshrc or ~/.bash_profile
+export SUPABASE_ACCESS_TOKEN="sbp_your_token_here"
+```
+
+The token is read at Claude Code startup via `${SUPABASE_ACCESS_TOKEN}` in `settings.local.json` — it is never hardcoded.
+
+Get your token from: Supabase Dashboard → Account → Access Tokens
+
+- Restart Claude Code after changing env vars or token rotation
 
 ### What it unlocks
 

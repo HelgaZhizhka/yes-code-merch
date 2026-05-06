@@ -8,7 +8,15 @@
 
 **Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
 
-**Следующий шаг:** начать `redesign-header-navigation-home` feature на новой ветке от `develop`.
+**Следующий шаг:** ветка `yes-136` открыта. Начать с YES-137 (HeroSlider + USPSection) → затем YES-138 (ProductCard).
+
+### Порядок задач на ветке yes-136
+
+| # | Linear | Задача | Статус |
+|---|--------|--------|--------|
+| 1 | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page | pending |
+| 2 | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending |
+| — | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign | in-progress |
 
 ---
 
