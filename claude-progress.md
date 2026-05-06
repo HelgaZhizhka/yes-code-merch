@@ -4,13 +4,11 @@
 
 ---
 
-## Текущий статус (2026-05-04)
+## Текущий статус (2026-05-06)
 
 **Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
 
-**Следующий шаг:** Смержить PR #203 → начать `cart` feature на новой ветке от `develop`.
-
-**Активная ветка:** `yes-100` запушена, PR #203 открыт → develop. Готов к мержу.
+**Следующий шаг:** начать `redesign-header-navigation-home` feature на новой ветке от `develop`.
 
 ---
 
@@ -39,12 +37,7 @@
 **Текущее состояние проекта:**
 
 - 4 фичи завершены: product-search-pagination, discount-calculation, unit-tests, product-filters
-- Следующая приоритетная фича: Shopping Cart
-
-**Нерешённые вопросы:**
-
-- Нет явной договорённости о стеке для Cart (Zustand + localStorage vs Supabase RLS orders table)
-- Перед стартом Cart нужно решить: сохранять корзину в Supabase или только локально
+- Следующая приоритетная фича: Redesign header, navigation and home page
 
 ---
 
@@ -64,43 +57,4 @@
 - Убраны категории из мобильного sheet
 - Убран лишний `div` вокруг сайдбара
 - `withRouter` декоратор для Storybook stories с TanStack Router хуками
-- Supabase PAT удалён из git-истории через `git filter-repo`
-- Ветка запушена, PR #203 открыт
-
-**Статус на конец сессии:** PR открыт, все тесты зелёные, репо чистое.
-
-**Нерешённые вопросы/блокеры:**
-
-- Supabase PAT нужно ротировать в Supabase Dashboard
-- Нет договорённости о стеке для Cart (Zustand + localStorage vs Supabase)
-
----
-
-### 2026-05-04 — Code review polish + CI setup
-
-**Что сделано:**
-
-- Запущен `superpowers:requesting-code-review` → исправлено ещё несколько issues
-- Fix: `Slider.Thumb` — добавлены `aria-label` Min/Max
-- Fix: `categories-tree` — `aria-label` стал динамическим, добавлен `aria-expanded`
-- Fix: `queries.ts` — удалён дублирующий `placeholderData` (мёртвый код)
-- Fix: `decorators.tsx` — убран лишний тип `React.FC`
-- Fix: `AI_ZUSTAND.md` — удалён stray heading и внешний code fence
-- Создан и затем удалён GitHub Actions Claude PR review (заменён на `/code-review` skill)
-- Telegram workflow временно отключён (`if: false`)
-- Изучены и сравнены 3 подхода к ревью: GitHub Actions / `fsd-code-reviewer` / `/code-review:code-review`
-- `/code-review:code-review` оставил комментарий в PR #203 (1 issue — `withRouter` singleton, решено не исправлять)
-
-**Статус на конец сессии:**
-
-- Все тесты зелёные: TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓
-- PR #203 открыт, готов к мержу
-- Ветка `yes-100` чистая
-
-**Нерешённые вопросы/блокеры:**
-
-- `withRouter` в `.storybook/decorators.tsx` создаёт роутер на каждый рендер — решено оставить как есть (Storybook only, тесты проходят)
-- Supabase PAT нужно ротировать в Supabase Dashboard (если ещё не сделано)
-- Нет договорённости о стеке для Cart (Zustand + localStorage vs Supabase)
-
-**Следующий шаг:** Смержить PR #203 → начать `cart` feature на новой ветке.
+- Ветка запушена, PR #203 закрыт

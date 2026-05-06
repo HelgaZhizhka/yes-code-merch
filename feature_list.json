@@ -47,49 +47,13 @@
       ]
     },
     {
-      "id": "cart",
-      "name": "Shopping Cart",
+      "id": "redesign-header-navigation-home",
+      "name": "Redesign header, navigation and home page",
       "status": "pending",
       "priority": 1,
       "verified": false,
-      "notes": "Not yet started. Likely Zustand global store + localStorage persistence + Supabase order entity",
+      "notes": "Not yet started. Redesign header, navigation and home page",
       "docs": []
-    },
-    {
-      "id": "checkout",
-      "name": "Checkout Flow",
-      "status": "pending",
-      "priority": 1,
-      "verified": false,
-      "notes": "Blocked by Cart. Will need order/payment entities",
-      "docs": []
-    },
-    {
-      "id": "search-autosuggest",
-      "name": "Search Autosuggest Dropdown",
-      "status": "pending",
-      "priority": 2,
-      "verified": false,
-      "notes": "Debounced input → suggest products/categories. Separate ticket from main search.",
-      "docs": []
-    },
-    {
-      "id": "e2e-tests",
-      "name": "E2E Tests (Playwright)",
-      "status": "pending",
-      "priority": 3,
-      "verified": false,
-      "notes": "Deferred until cart/checkout flow is implemented",
-      "docs": []
-    },
-    {
-      "id": "ssr-migration",
-      "name": "SSR Migration (TanStack Start)",
-      "status": "pending",
-      "priority": 3,
-      "verified": false,
-      "notes": "Separate sprint after cart/checkout MVP. SSR-readiness guidelines in .claude/AI_SSR_READINESS.md",
-      "docs": [".claude/AI_SSR_READINESS.md"]
     }
   ]
 }

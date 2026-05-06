@@ -42,8 +42,6 @@ Before finishing any session:
 If the session is interrupted mid-feature — fill in `session-handoff.md` before stopping.
 When the feature is done — clear `session-handoff.md` back to its empty template.
 
----
-
 ## Definition of Done
 
 A feature is only `done` when **all** of the following are true:
@@ -63,5 +61,5 @@ A feature is only `done` when **all** of the following are true:
 | `claude-progress.md` | Live session log + current verified status + next step                      |
 | `session-handoff.md` | Filled only when interrupted mid-feature; cleared when feature is done      |
 | `init.sh`            | Standard start + smoke verification                                         |
-| `CLAUDE.md`          | Code style, architecture rules, project patterns, GG command                |
-| `docs/`              | Feature documentation including architectural decisions (Decisions section) |
+| `CLAUDE.md`          | Code style, architecture rules, project patterns, routing                   |
+| `docs/`              | Feature documentation including architectural decisions (created via GG)    |

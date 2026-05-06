@@ -35,7 +35,7 @@ storybook-static
 .clinerules
 
 # Claude Code
-.claude/settings.json
+.claude/settings.local.json
 .claude/designs/
 .playwright-mcp/
 

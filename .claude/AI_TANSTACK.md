@@ -1,20 +1,21 @@
-# TanStack (Router & Query) Rules for AI Assistants
+---
+name: TanStack (Router & Query) patterns
+description: Routes as factories, Query with queryOptions, suspense queries
+type: reference
+---
+
+# TanStack Router & Query
+
+---
 
 ## TanStack Router
 
-We use **code-based routing** with factory functions.
+Code-based routing with factory functions.
 
-### Route Definition Pattern
-
-Routes are defined as factory functions to support FSD and dependency injection.
+### Route Definition
 
 ```typescript
-// app/routing/routes.ts
-import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from './router';
-import { HomePage } from '@pages/home';
-
-// ✅ Good - Route Factory
+// src/app/routing/routes.ts
 export const homeRoute = (parentRoute: typeof rootRoute) =>
   createRoute({
     getParentRoute: () => parentRoute,
@@ -23,112 +24,92 @@ export const homeRoute = (parentRoute: typeof rootRoute) =>
   });
 ```
 
-### Navigation
-
-Use the type-safe `Link` component or `useNavigate` hook.
+### Navigation (Type-Safe)
 
 ```typescript
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 
-// ✅ Good - Type-safe navigation
-export const Nav = () => (
-  <nav>
-    <Link to="/" className="[&.active]:font-bold">Home</Link>
-    <Link to="/products" params={{ page: 1 }}>Products</Link>
-  </nav>
-);
+// Link
+<Link to="/" params={{ page: 1 }}>Home</Link>
+
+// Programmatic
+const navigate = useNavigate();
+navigate({ to: '/products', search: { page: 1 } });
 ```
 
 ---
 
-## TanStack Query (React Query)
+## TanStack Query
 
-**Primary Rule**: This is our **Server State Manager**. All API data lives here.
+**Server state manager** — all API data lives here.
 
-### Query Hooks Location
+### Pattern: queryOptions Factories
 
-- Queries must be encapsulated in **Custom Hooks** inside the `entities/{entity}/api/` layer.
-- Do NOT use `useQuery` directly in UI components.
+**NOT query keys factory** — we use `queryOptions` factories. More modern, includes queryKey + queryFn + select together.
 
-### Structure Example
+```typescript
+// entities/product/api/queries.ts
+import { queryOptions } from '@tanstack/react-query';
+import { supabase } from '@shared/api/supabase-client';
+
+export const productQueries = {
+  catalog: (params: CatalogParams) =>
+    queryOptions({
+      queryKey: ['products', 'catalog', params],
+      queryFn: () => supabase.from('products').select('*').match(params),
+      select: (data) => transformCatalog(data),
+    }),
+
+  detail: (id: string) =>
+    queryOptions({
+      queryKey: ['products', id],
+      queryFn: () => supabase.from('products').select('*').eq('id', id).single(),
+    }),
+};
+```
+
+### Custom Hooks (Encapsulation)
+
+Always wrap queries in custom hooks in `entities/{entity}/api/hooks.ts`.
 
 ```typescript
 // entities/product/api/hooks.ts
-import { useQuery } from '@tanstack/react-query';
-import { productService } from './service';
-import { productKeys } from './keys';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { productQueries } from './queries';
 
-// ✅ Good - Encapsulated Hook using Arrow Function
 export const useProduct = (id: string) => {
-  return useQuery({
-    queryKey: productKeys.detail(id),
-    queryFn: () => productService.getById(id),
-    enabled: !!id,
-  });
+  return useSuspenseQuery(productQueries.detail(id));
+};
+
+export const useCatalogProducts = (params: CatalogParams) => {
+  return useSuspenseQuery(productQueries.catalog(params));
 };
 ```
 
-### Query Keys Factory
-
-Always use a Query Key Factory pattern to avoid key collisions and make invalidation easy.
+### Usage in Component
 
 ```typescript
-// entities/product/api/keys.ts
-export const productKeys = {
-  all: ['products'] as const,
-  lists: () => [...productKeys.all, 'list'] as const,
-  list: (filters: string) => [...productKeys.lists(), { filters }] as const,
-  details: () => [...productKeys.all, 'detail'] as const,
-  detail: (id: string) => [...productKeys.details(), id] as const,
+// pages/catalog/index.tsx
+export const CatalogPage = () => {
+  const { data } = useCatalogProducts({ categoryIds: ['c1'], page: 1 });
+  
+  return <ProductList products={data.products} />;
 };
-```
-
-### Paginated Queries
-
-For queries with pagination, return a structured response with data and metadata:
-
-```typescript
-// entities/product/api/hooks.ts
-interface PaginatedResponse<T> {
-  data: T[];
-  meta: {
-    page: number;
-    pageSize: number;
-    totalCount: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-  };
-}
-
-export const useProducts = (params: CatalogParams) => {
-  return useSuspenseQuery<APIResponse, Error, PaginatedResponse<Product>>({
-    queryKey: productKeys.catalog(params), // Include ALL params in key
-    queryFn: () => getCatalogProducts(params),
-    select: (response) => transformToPaginated(response, params),
-  });
-};
-
-// Usage in component
-const { data } = useProducts({ categoryIds, page: 2, pageSize: 12 });
-const products = data.data;
-const { hasNextPage, totalCount } = data.meta;
 ```
 
 ### Mutations
 
-Mutations should also be encapsulated hooks.
-
 ```typescript
 // features/add-to-cart/model/use-add-to-cart.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: cartService.addItem,
+    mutationFn: (item) => cartService.add(item),
     onSuccess: () => {
-      // Invalidate relevant queries
-      queryClient.invalidateQueries({ queryKey: cartKeys.all });
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 };
@@ -138,16 +119,17 @@ export const useAddToCart = () => {
 
 ## Restrictions
 
-❌ **NO direct `useQuery` in components**: Always wrap in a custom hook in `entities/`.  
-❌ **NO magic strings for keys**: Use the Key Factory pattern.  
-❌ **NO business logic in `queryFn`**: The `queryFn` should only call an API service/client.  
-❌ **NO ignoring `isLoading` / `isError`**: Always handle loading and error states in the UI.
+❌ NO direct `useQuery` in components — wrap in custom hook  
+❌ NO raw strings for query keys — use `queryOptions` factory pattern  
+❌ NO business logic in `queryFn` — only API calls  
+❌ NO ignoring `isLoading`/`isError` — always handle states
 
 ---
 
-## Checklist for AI
+## Checklist
 
-- [ ] Routes are defined using the factory pattern.
-- [ ] API calls are wrapped in `useQuery`/`useMutation` hooks inside `entities/`.
-- [ ] Query Keys are centralized in a `keys.ts` file.
-- [ ] Loading and Error states are handled in the UI.
+- [ ] Routes use factory pattern
+- [ ] API calls wrapped in hooks inside `entities/`
+- [ ] Query keys in `queries.ts` via `queryOptions`
+- [ ] Loading & error states handled
+- [ ] Mutations invalidate correct keys
