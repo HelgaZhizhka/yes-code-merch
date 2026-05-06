@@ -1,6 +1,7 @@
 /* sonarjs-disable-all */
 @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -329,5 +330,23 @@
   to {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+
+@keyframes menu-item-fade-in {
+  from {
+    transform: translateX(-12px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .animate-menu-item {
+    animation: menu-item-fade-in 300ms ease-out both;
   }
 }

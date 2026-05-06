@@ -57,19 +57,19 @@ pnpm lint:fix         # Fix linting + format
 
 ### Code Rules & Patterns
 
-| Topic | Document | When to read |
-|-------|----------|--------------|
-| FSD architecture | [.claude/AI_FSD.md](.claude/AI_FSD.md) | Layer boundaries, imports |
-| TanStack Router / React Query | [.claude/AI_TANSTACK.md](.claude/AI_TANSTACK.md) | Routing, data fetching |
-| Zustand state management | [.claude/AI_ZUSTAND.md](.claude/AI_ZUSTAND.md) | Global state, selectors |
-| TypeScript rules | [.claude/AI_TYPESCRIPT.md](.claude/AI_TYPESCRIPT.md) | Strict mode, no `any` |
-| React best practices | [.claude/AI_REACT.md](.claude/AI_REACT.md) | Hooks, components, performance |
-| Tailwind + styling | [.claude/AI_TAILWIND.md](.claude/AI_TAILWIND.md) | Class naming, responsive |
-| Testing | [.claude/TESTING_GUIDE.md](.claude/TESTING_GUIDE.md) | Unit + E2E strategies |
-| Localization | [.claude/AI_LOCALE.md](.claude/AI_LOCALE.md) | i18n patterns |
-| Code review checklist | [.claude/AI_CODE_REVIEW.md](.claude/AI_CODE_REVIEW.md) | Quality gates |
-| SSR readiness | [.claude/AI_SSR_READINESS.md](.claude/AI_SSR_READINESS.md) | TanStack Start migration prep |
-| Common patterns | [.claude/AI_PATTERNS.md](.claude/AI_PATTERNS.md) | Recipes, copy-paste examples |
+| Topic                         | Document                                                   | When to read                   |
+| ----------------------------- | ---------------------------------------------------------- | ------------------------------ |
+| FSD architecture              | [.claude/AI_FSD.md](.claude/AI_FSD.md)                     | Layer boundaries, imports      |
+| TanStack Router / React Query | [.claude/AI_TANSTACK.md](.claude/AI_TANSTACK.md)           | Routing, data fetching         |
+| Zustand state management      | [.claude/AI_ZUSTAND.md](.claude/AI_ZUSTAND.md)             | Global state, selectors        |
+| TypeScript rules              | [.claude/AI_TYPESCRIPT.md](.claude/AI_TYPESCRIPT.md)       | Strict mode, no `any`          |
+| React best practices          | [.claude/AI_REACT.md](.claude/AI_REACT.md)                 | Hooks, components, performance |
+| Tailwind + styling            | [.claude/AI_TAILWIND.md](.claude/AI_TAILWIND.md)           | Class naming, responsive       |
+| Testing                       | [.claude/TESTING_GUIDE.md](.claude/TESTING_GUIDE.md)       | Unit + E2E strategies          |
+| Localization                  | [.claude/AI_LOCALE.md](.claude/AI_LOCALE.md)               | i18n patterns                  |
+| Code review checklist         | [.claude/AI_CODE_REVIEW.md](.claude/AI_CODE_REVIEW.md)     | Quality gates                  |
+| SSR readiness                 | [.claude/AI_SSR_READINESS.md](.claude/AI_SSR_READINESS.md) | TanStack Start migration prep  |
+| Common patterns               | [.claude/AI_PATTERNS.md](.claude/AI_PATTERNS.md)           | Recipes, copy-paste examples   |
 
 ---
 

@@ -18,13 +18,13 @@ Routes are factory functions in `src/app/routing/routes.ts`.
 
 ```typescript
 // routes.ts
-import { createRoute } from '@tanstack/react-router'
+import { createRoute } from '@tanstack/react-router';
 
 export const productsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/products',
   component: ProductsPage,
-})
+});
 ```
 
 Then add to router:
@@ -46,21 +46,22 @@ Factory pattern from `@shared/lib/create-app-store.ts`.
 
 ```typescript
 // features/cart/lib/store.ts
-import { createAppStore } from '@shared/lib/create-app-store'
+import { createAppStore } from '@shared/lib/create-app-store';
 
 export const useCartStore = createAppStore((set) => ({
   items: [],
-  addItem: (id) => set((state) => ({
-    items: [...state.items, id],
-  })),
-}))
+  addItem: (id) =>
+    set((state) => ({
+      items: [...state.items, id],
+    })),
+}));
 
 // Component usage
 export const CartView = () => {
-  const items = useCartStore((state) => state.items)
-  const addItem = useCartStore((state) => state.addItem)
+  const items = useCartStore((state) => state.items);
+  const addItem = useCartStore((state) => state.addItem);
   // ...
-}
+};
 ```
 
 **Why:** Selectors prevent unnecessary re-renders.
@@ -91,14 +92,14 @@ entities/product/
 
 ```typescript
 // entities/product/api/hooks.ts
-import { useQuery } from '@tanstack/react-query'
-import { supabase } from '@shared/api/supabase-client'
-import type { Database } from '@shared/api/database.types'
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@shared/api/supabase-client';
+import type { Database } from '@shared/api/database.types';
 
 const PRODUCT_QUERY_KEYS = {
   all: ['products'] as const,
   detail: (id: string) => [...PRODUCT_QUERY_KEYS.all, id] as const,
-}
+};
 
 export const useProduct = (id: string) => {
   return useQuery({
@@ -108,12 +109,12 @@ export const useProduct = (id: string) => {
         .from('products')
         .select('*')
         .eq('id', id)
-        .single()
-      if (error) throw error
-      return data
+        .single();
+      if (error) throw error;
+      return data;
     },
-  })
-}
+  });
+};
 ```
 
 **Read:** [.claude/AI_TANSTACK.md](AI_TANSTACK.md)
@@ -200,14 +201,14 @@ Strict mode — no `any`.
 
 ```typescript
 // Instead of duplicating:
-type ProductWithoutId = Omit<Product, 'id'>
+type ProductWithoutId = Omit<Product, 'id'>;
 
 // Instead of object mutation:
-const updated = { ...state, field: newValue }
+const updated = { ...state, field: newValue };
 
 // Type guards:
 function isProduct(item: unknown): item is Product {
-  return typeof item === 'object' && item !== null && 'id' in item
+  return typeof item === 'object' && item !== null && 'id' in item;
 }
 ```
 
@@ -224,26 +225,26 @@ builtin → external → @app → @pages → @features → @entities → @shared
 **Example:**
 
 ```typescript
-import * as React from 'react'  // builtin
-import { useQuery } from '@tanstack/react-query'  // external
-import { router } from '@app/routing'  // @app
-import { CartView } from '@features/cart/ui'  // @features
-import { useProduct } from '@entities/product/api'  // @entities
-import { Button } from '@shared/ui/button'  // @shared
-import { cn } from '@/lib/utils'  // @/
+import * as React from 'react'; // builtin
+import { useQuery } from '@tanstack/react-query'; // external
+import { router } from '@app/routing'; // @app
+import { CartView } from '@features/cart/ui'; // @features
+import { useProduct } from '@entities/product/api'; // @entities
+import { Button } from '@shared/ui/button'; // @shared
+import { cn } from '@/lib/utils'; // @/
 ```
 
 ---
 
 ## 8. FSD Layer Boundaries
 
-| Layer | Can import from | Cannot import from |
-|-------|-----------------|-------------------|
-| **app** | shared | anything else |
-| **pages** | entities, shared | features, pages |
+| Layer        | Can import from  | Cannot import from    |
+| ------------ | ---------------- | --------------------- |
+| **app**      | shared           | anything else         |
+| **pages**    | entities, shared | features, pages       |
 | **features** | entities, shared | pages, other features |
-| **entities** | shared | anything above |
-| **shared** | nothing above | — |
+| **entities** | shared           | anything above        |
+| **shared**   | nothing above    | —                     |
 
 **Read:** [.claude/AI_FSD.md](AI_FSD.md)
 
@@ -280,11 +281,11 @@ pnpm vitest run src/entities/product/ui/ProductCard.test.tsx --config vitest.uni
 
 ## 10. Session Continuity Files
 
-| File | Purpose |
-|------|---------|
-| `feature_list.json` | Source of truth (done/in-progress/pending) |
-| `claude-progress.md` | Session log + verified status + next step |
-| `session-handoff.md` | Filled only when interrupted mid-feature |
-| `AGENTS.md` | Agent workflow rules |
+| File                 | Purpose                                    |
+| -------------------- | ------------------------------------------ |
+| `feature_list.json`  | Source of truth (done/in-progress/pending) |
+| `claude-progress.md` | Session log + verified status + next step  |
+| `session-handoff.md` | Filled only when interrupted mid-feature   |
+| `AGENTS.md`          | Agent workflow rules                       |
 
 **Read:** [AGENTS.md](../AGENTS.md)

@@ -15,9 +15,9 @@ type: user
 ```
 src/
 ├── app/       # Инициализация, роутинг, глобальные стили
-├── pages/     # Entry points маршрутов  
+├── pages/     # Entry points маршрутов
 ├── features/  # User-facing фичи (cart, filters, etc)
-├── entities/  # Доменные сущности (product, user, etc) 
+├── entities/  # Доменные сущности (product, user, etc)
 ├── shared/    # Utils, UI компоненты, API клиенты
 └── layouts/   # Макеты (header, footer)
 ```
@@ -34,15 +34,15 @@ pnpm lint:fix         # Авто-fix линтер + prettier
 
 ## Ключевые паттерны
 
-| Что | Где | Документ |
-|-----|-----|----------|
-| **FSD классификация** | Какой слой куда | [AI_FSD.md](AI_FSD.md) |
-| **Роутинг** | TanStack Router factory | [AI_TANSTACK.md](AI_TANSTACK.md) |
-| **State** | Zustand + selectors | [AI_ZUSTAND.md](AI_ZUSTAND.md) |
-| **Data fetch** | React Query + Supabase | [AI_TANSTACK.md](AI_TANSTACK.md) |
-| **UI** | Radix + Tailwind | [AI_TAILWIND.md](AI_TAILWIND.md) |
-| **TypeScript** | Strict mode rules | [AI_TYPESCRIPT.md](AI_TYPESCRIPT.md) |
-| **Тестирование** | Unit + E2E | [TESTING_GUIDE.md](TESTING_GUIDE.md) |
+| Что                   | Где                     | Документ                             |
+| --------------------- | ----------------------- | ------------------------------------ |
+| **FSD классификация** | Какой слой куда         | [AI_FSD.md](AI_FSD.md)               |
+| **Роутинг**           | TanStack Router factory | [AI_TANSTACK.md](AI_TANSTACK.md)     |
+| **State**             | Zustand + selectors     | [AI_ZUSTAND.md](AI_ZUSTAND.md)       |
+| **Data fetch**        | React Query + Supabase  | [AI_TANSTACK.md](AI_TANSTACK.md)     |
+| **UI**                | Radix + Tailwind        | [AI_TAILWIND.md](AI_TAILWIND.md)     |
+| **TypeScript**        | Strict mode rules       | [AI_TYPESCRIPT.md](AI_TYPESCRIPT.md) |
+| **Тестирование**      | Unit + E2E              | [TESTING_GUIDE.md](TESTING_GUIDE.md) |
 
 ## Hard constraints (⛔ никогда)
 

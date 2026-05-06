@@ -40,8 +40,8 @@ const REGION_LOCALE_MAP: Record<RegionType, string> = {
 ```typescript
 import { localeConfig } from '@shared/config/locale';
 
-localeConfig.locale;  // 'en-GB' (from VITE_REGION env)
-localeConfig.region;  // 'EU'
+localeConfig.locale; // 'en-GB' (from VITE_REGION env)
+localeConfig.region; // 'EU'
 ```
 
 ### Format Price

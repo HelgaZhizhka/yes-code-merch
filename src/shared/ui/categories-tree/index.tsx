@@ -18,7 +18,7 @@ const linkVariants = cva('transition-all', {
   variants: {
     variant: {
       default: '',
-      mobile: 'text-2xl text-primary-foreground',
+      mobile: 'text-2xl text-foreground hover:text-primary',
       sidebar:
         'block w-full py-1 pl-3 text-sm text-muted-foreground border-l-2 border-transparent hover:text-foreground hover:border-border data-[active]:border-primary data-[active]:text-primary data-[active]:font-medium',
     },
@@ -34,6 +34,7 @@ const Node = React.memo(
     pathPrefix = '',
     expandedNodes,
     onToggle,
+    rootIndex,
   }: {
     node: CategoryTree;
     pathPrefix?: string;
@@ -41,6 +42,7 @@ const Node = React.memo(
     useFullPath?: boolean;
     expandedNodes: Set<string>;
     onToggle: (id: string) => void;
+    rootIndex?: number;
   }): React.JSX.Element => {
     const { slug, name } = node;
     const fullPath = [pathPrefix, slug].filter(Boolean).join('/');
@@ -49,7 +51,14 @@ const Node = React.memo(
     const isOpen = expandedNodes.has(node.id);
 
     return (
-      <li>
+      <li
+        className={cn(variant === 'mobile' && 'animate-menu-item')}
+        style={
+          variant === 'mobile'
+            ? { animationDelay: `${(rootIndex ?? 0) * 60}ms` }
+            : undefined
+        }
+      >
         <div className="flex items-center gap-1">
           <Link
             to={ROUTES.CATEGORY}
@@ -95,6 +104,7 @@ const Node = React.memo(
                 useFullPath={useFullPath}
                 expandedNodes={expandedNodes}
                 onToggle={onToggle}
+                rootIndex={rootIndex}
               />
             ))}
           </ul>
@@ -134,7 +144,7 @@ export const CategoriesTree = ({
           variant === 'sidebar' ? 'gap-0.5' : 'gap-4'
         )}
       >
-        {categoryTree.map((root) => (
+        {categoryTree.map((root, index) => (
           <Node
             key={root.id}
             node={root}
@@ -142,6 +152,7 @@ export const CategoriesTree = ({
             useFullPath={useFullPath}
             expandedNodes={expandedNodes}
             onToggle={toggleNode}
+            rootIndex={variant === 'mobile' ? index : undefined}
           />
         ))}
       </ul>

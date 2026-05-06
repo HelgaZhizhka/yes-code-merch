@@ -36,17 +36,17 @@ export const MobileMenu = (): React.JSX.Element => {
       open={isOpen}
       onOpenChange={(next) => (next ? openMenu() : closeMenu())}
     >
-      <SheetTrigger>
-        <Menu className="w-9 h-9 text-secondary-foreground" />
+      <SheetTrigger aria-label="Open navigation menu">
+        <Menu className="size-7 text-foreground" />
       </SheetTrigger>
-      <SheetContent side="left" className="w-screen h-screen p-5">
-        <SheetHeader>
+      <SheetContent side="left" className="flex h-screen w-screen flex-col p-5">
+        <SheetHeader className="p-0">
           <VisuallyHidden.Root>
             <SheetTitle>Navigation menu</SheetTitle>
             <SheetDescription>Navigation menu</SheetDescription>
           </VisuallyHidden.Root>
         </SheetHeader>
-        <div className="flex-1 overflow-y-auto flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto">
           <Suspense
             fallback={
               <div className="flex flex-col gap-5">
@@ -61,15 +61,15 @@ export const MobileMenu = (): React.JSX.Element => {
           >
             <CategoriesTree categoryTree={categoryTree} variant="mobile" />
           </Suspense>
-          <div className="flex items-center text-2xl gap-2">
+        </div>
+        <div className="mt-auto flex flex-col items-center gap-6">
+          <Banner category={SaleCategoryName} variant="mobile" />
+          <div className="flex items-center gap-2 text-2xl">
             <ContactWidget
               icon={<Phone className="h-8" />}
               label="(+971) 58 8284186"
               href="tel:971588284186"
             />
-          </div>
-          <div className="mt-10">
-            <Banner category={SaleCategoryName} variant="mobile" />
           </div>
         </div>
       </SheetContent>

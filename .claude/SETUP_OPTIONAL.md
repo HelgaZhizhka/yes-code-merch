@@ -36,6 +36,7 @@ Edit `.mcp.json` with your Supabase credentials:
 ```
 
 Get credentials from:
+
 - `SUPABASE_URL` → Project settings > API
 - `SUPABASE_ACCESS_TOKEN` → Create a new access token in Project settings > Access tokens
 
@@ -58,6 +59,7 @@ Get your token from: Supabase Dashboard → Account → Access Tokens
 ### What it unlocks
 
 Once enabled, Claude Code can:
+
 - Run `list_tables`, `list_migrations` — inspect schema
 - `execute_sql` — run queries directly
 - `apply_migration` — run migrations programmatically

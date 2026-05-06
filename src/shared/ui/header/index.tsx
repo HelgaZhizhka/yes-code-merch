@@ -1,21 +1,17 @@
 import { Link } from '@tanstack/react-router';
 import { Phone, ShoppingCart } from 'lucide-react';
-import { Suspense } from 'react';
 
 import type { AuthProps } from '@shared/api';
 import logo from '@shared/assets/header-logo-sprite.svg';
 import { SaleCategoryName } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
 import { AuthMenu } from '@shared/ui/auth-menu';
-import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import { ThemeSwitcher } from '@shared/ui/theme-switcher';
 
 import { Banner } from './banner';
 
 import { MobileMenu } from '../mobile-menu';
-
-const NAV_SKELETON_KEYS = ['nav-1', 'nav-2', 'nav-3', 'nav-4'] as const;
 
 interface HeaderProps extends AuthProps {
   onLogout(): Promise<void>;
@@ -29,11 +25,19 @@ export const Header = ({
   onLogout,
 }: HeaderProps): React.JSX.Element => {
   return (
-    <header className="flex flex-col">
-      <div className="flex justify-between items-center gap-25 p-5 pl-11 pr-11">
-        <Link to={ROUTES.HOME}>
+    <header className="flex h-16 items-center gap-4 px-4 min-[1020px]:h-20 min-[1020px]:px-8 min-[1120px]:h-25 min-[1120px]:px-11">
+      <div className="flex items-center gap-3">
+        <div className="min-[1020px]:hidden">
+          <MobileMenu />
+        </div>
+        <Link
+          to={ROUTES.HOME}
+          className="flex items-center text-foreground"
+          aria-label="Yes Code Merch — home"
+        >
           <svg
-            className="h-24 w-40 text-foreground"
+            viewBox="0 0 161 94"
+            className="hidden h-12 w-auto min-[1120px]:block"
             aria-hidden="false"
             focusable="false"
             aria-labelledby="logo-title"
@@ -41,59 +45,48 @@ export const Header = ({
             <title id="logo-title">Yes Code Merch logo</title>
             <use href={`${logo}#logo`}></use>
           </svg>
-        </Link>
-        <div className="flex flex-col gap-4 grow-1">
-          <div className="flex justify-between w-full grow-1">
-            <Banner category={SaleCategoryName} />
-            <div className="h-10 flex justify-end items-center text-xl gap-2">
-              <ContactWidget
-                icon={<Phone className="h-8" />}
-                label="(+971) 58 8284186"
-                href="tel:971588284186"
-              />
-            </div>
-          </div>
-          <nav className="flex gap-4 grow-1 justify-end items-center text-2xl">
-            <AuthMenu
-              isLoading={isLoading}
-              isGuest={isGuest}
-              isAuthenticated={isAuthenticated}
-              isError={isError}
-              onLogout={onLogout}
-            />
-            <Link to={ROUTES.CART} className="flex items-center">
-              <ShoppingCart
-                className="w-9 h-9 text-primary-foreground"
-                aria-hidden="false"
-                focusable="false"
-                aria-labelledby="cart-title"
-              />
-            </Link>
-          </nav>
-        </div>
-      </div>
-      <div className="bg-dark-background h-17 flex items-center pl-11 pr-11 justify-between">
-        <div className="sm:hidden flex items-center">
-          <MobileMenu />
-        </div>
-        <div className="hidden sm:block">
-          <Suspense
-            fallback={
-              <div className="flex gap-6">
-                {NAV_SKELETON_KEYS.map((key) => (
-                  <div
-                    key={key}
-                    className="h-4 w-16 animate-pulse rounded bg-white/20"
-                  />
-                ))}
-              </div>
-            }
+          <svg
+            viewBox="0 0 116 100"
+            className="block h-10 w-auto min-[1120px]:hidden"
+            aria-hidden="false"
+            focusable="false"
+            aria-labelledby="face-logo-title"
           >
-            <Categories />
-          </Suspense>
-        </div>
-        <ThemeSwitcher />
+            <title id="face-logo-title">Yes Code Merch logo</title>
+            <use href={`${logo}#face-logo`}></use>
+          </svg>
+        </Link>
       </div>
+
+      <div className="hidden flex-1 items-center justify-center min-[1020px]:flex">
+        <Banner category={SaleCategoryName} />
+      </div>
+
+      <div className="hidden items-center gap-2 text-xl min-[1020px]:flex">
+        <ContactWidget
+          icon={<Phone className="h-6" />}
+          label="(+971) 58 8284186"
+          href="tel:971588284186"
+        />
+      </div>
+
+      <nav className="ml-auto flex items-center gap-4 min-[1020px]:ml-0">
+        <AuthMenu
+          isLoading={isLoading}
+          isGuest={isGuest}
+          isAuthenticated={isAuthenticated}
+          isError={isError}
+          onLogout={onLogout}
+        />
+        <Link
+          to={ROUTES.CART}
+          className="flex items-center text-foreground"
+          aria-label="Cart"
+        >
+          <ShoppingCart className="h-7 w-7" aria-hidden="true" />
+        </Link>
+        <ThemeSwitcher />
+      </nav>
     </header>
   );
 };

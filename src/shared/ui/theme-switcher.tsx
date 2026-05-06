@@ -9,10 +9,10 @@ export const ThemeSwitcher = (): React.JSX.Element => {
 
   return (
     <button
-      className="text-secondary-foreground hover:text-primary transition-all"
+      className="text-foreground hover:text-primary transition-all"
       onClick={() => setTheme(isDark ? Theme.LIGHT : Theme.DARK)}
     >
-      {isDark ? <Sun className="w-9 h-9" /> : <MoonStar className="w-9 h-9" />}
+      {isDark ? <Sun className="size-7" /> : <MoonStar className="size-7" />}
     </button>
   );
 };

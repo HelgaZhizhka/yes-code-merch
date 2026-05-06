@@ -22,6 +22,8 @@ Before writing any code, always do this:
 ## Working Rules
 
 - Work on one feature at a time.
+- Only start the next feature after the current one passes end-to-end verification.
+- Don't "also refactor" feature B while implementing feature A.
 - Don't mark a feature as done just because code was added.
 - Keep changes within the scope of the selected feature. Unrelated bugs → create a separate issue.
 - Narrow exception: a 1–2 line fix that unblocks your feature is allowed — document it in the PR description.

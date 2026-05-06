@@ -63,7 +63,8 @@ export const productQueries = {
   detail: (id: string) =>
     queryOptions({
       queryKey: ['products', id],
-      queryFn: () => supabase.from('products').select('*').eq('id', id).single(),
+      queryFn: () =>
+        supabase.from('products').select('*').eq('id', id).single(),
     }),
 };
 ```
@@ -92,7 +93,7 @@ export const useCatalogProducts = (params: CatalogParams) => {
 // pages/catalog/index.tsx
 export const CatalogPage = () => {
   const { data } = useCatalogProducts({ categoryIds: ['c1'], page: 1 });
-  
+
   return <ProductList products={data.products} />;
 };
 ```

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-03",
+  "updated": "2026-05-06",
   "features": [
     {
       "id": "product-search-pagination",
@@ -40,7 +40,7 @@
       "verified": true,
       "dependencies": ["product-search-pagination"],
       "notes": "DB view extended (category_ids[], colors[], sizes[]); RPC get_catalog_filter_options; URL-driven via Zod; 7 new UI components; router loader preloads categories tree",
-      "docs": ["docs/FILTERS.md"],
+      "docs": [],
       "tech_debt": [
         "Search autosuggest dropdown (separate ticket)",
         "Stock filter (seed data: stock=0 for most rows)",
@@ -84,6 +84,33 @@
       "verified": false,
       "dependencies": ["redesign-header-navigation-home"],
       "notes": "Discount badge on product image (top-left) + size selector UI. Implement after YES-137 is done.",
+      "docs": []
+    },
+    {
+      "id": "home-super-hot-deals",
+      "name": "Home page — Super hot deals this month (product cards block)",
+      "linear": "YES-139",
+      "branch": "yes-139",
+      "status": "pending",
+      "priority": 2,
+      "verified": false,
+      "dependencies": [
+        "home-hero-slider-usp",
+        "productcard-discount-badge-size"
+      ],
+      "notes": "Section above HomeCatalog rendering ProductCard items for products with discount_price IS NOT NULL. Mobile carousel / desktop grid. Reuses ProductCard from entities/product. Hidden if no discounted products. Also bundles BannerText refactor.",
+      "docs": []
+    },
+    {
+      "id": "mobile-menu-animations",
+      "name": "Mobile menu — slide-in sheet animation + staggered category items",
+      "linear": "YES-140",
+      "branch": "yes-140",
+      "status": "pending",
+      "priority": 3,
+      "verified": false,
+      "dependencies": ["redesign-header-navigation-home"],
+      "notes": "Custom keyframes for sheet slide-in/out (left only) + overlay fade; stagger animation for top-level CategoriesTree items in mobile variant. Use @layer utilities (NOT @utility — breaks @storybook/addon-vitest setup).",
       "docs": []
     }
   ]
