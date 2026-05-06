@@ -4,19 +4,20 @@
 
 ---
 
-## Текущий статус (2026-05-06)
+## Текущий статус (2026-05-07)
 
 **Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
 
-**Следующий шаг:** ветка `yes-136` открыта. Начать с YES-137 (HeroSlider + USPSection) → затем YES-138 (ProductCard).
+**Следующий шаг:** YES-136 завершена ✅. Следующие приоритетные: YES-137 → YES-138 → YES-139.
 
 ### Порядок задач на ветке yes-136
 
 | #   | Linear                                               | Задача                                      | Статус      |
 | --- | ---------------------------------------------------- | ------------------------------------------- | ----------- |
+| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done     |
 | 1   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending     |
 | 2   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending     |
-| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | in-progress |
+| 3   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | pending     |
 
 ---
 
@@ -32,6 +33,39 @@
 ---
 
 ## Лог сессий
+
+### 2026-05-07 — YES-136 Header Redesign (Phase 1) ✅ DONE
+
+**Что сделано:**
+
+- ✅ Одностроковая шапка с адаптивом на 3 брейкпоинта (h-16 | h-20 | h-25)
+- ✅ Переключение логотипа (full "YES CODE" → compact "face-logo")
+- ✅ AuthMenu dual-variant (текст на десктопе, иконки на мобилке <640px)
+- ✅ Mobile sheet layout (категории scrollable, прomo+phone закреплены снизу)
+- ✅ UX улучшения:
+  - Padding между пунктами меню (py-2)
+  - Бордеры только у родительских категорий
+  - Расширенная область клика на стрелку (32px touch target)
+  - Стрелка прибита к краю справа (justify-between)
+  - Выделение активной категории (оранжевый + bold)
+- ✅ Header border для визуального разделения
+- ✅ Code review fixes (accessibility, FSD compliance, SVG clipPath)
+  - ThemeSwitcher: `type="button"` + `aria-label`
+  - SVG logos: убрана redundant `aria-hidden="false"`
+  - Banner: moved to public `shared/ui/banner/`
+  - SVG sprite: clipPath перемещён в outer defs
+
+**Коммиты:**
+- `b493d7e` — feat: header redesign
+- `7ef1cf3` — refactor: code review fixes
+- `593faae` — refactor: UX improvements
+- `192bb91` — docs: mark yes-136 as done
+
+**Верификация:** ✅ Визуальная проверка в браузере passed, lint ✓, tsc ✓, tests ✓
+
+**Следующий приоритет:** YES-139 Super Hot Deals (зависит от YES-137 & YES-138)
+
+---
 
 ### 2026-05-03 — Настройка системы continuity (walkinglabs шаблон)
 
