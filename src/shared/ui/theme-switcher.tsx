@@ -9,6 +9,8 @@ export const ThemeSwitcher = (): React.JSX.Element => {
 
   return (
     <button
+      type="button"
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       className="text-foreground hover:text-primary transition-all"
       onClick={() => setTheme(isDark ? Theme.LIGHT : Theme.DARK)}
     >

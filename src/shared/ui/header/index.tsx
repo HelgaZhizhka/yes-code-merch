@@ -6,10 +6,9 @@ import logo from '@shared/assets/header-logo-sprite.svg';
 import { SaleCategoryName } from '@shared/config';
 import { ROUTES } from '@shared/config/routes';
 import { AuthMenu } from '@shared/ui/auth-menu';
+import { Banner } from '@shared/ui/banner';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import { ThemeSwitcher } from '@shared/ui/theme-switcher';
-
-import { Banner } from './banner';
 
 import { MobileMenu } from '../mobile-menu';
 
@@ -38,8 +37,6 @@ export const Header = ({
           <svg
             viewBox="0 0 161 94"
             className="hidden h-12 w-auto min-[1120px]:block"
-            aria-hidden="false"
-            focusable="false"
             aria-labelledby="logo-title"
           >
             <title id="logo-title">Yes Code Merch logo</title>
@@ -48,8 +45,6 @@ export const Header = ({
           <svg
             viewBox="0 0 116 100"
             className="block h-10 w-auto min-[1120px]:hidden"
-            aria-hidden="false"
-            focusable="false"
             aria-labelledby="face-logo-title"
           >
             <title id="face-logo-title">Yes Code Merch logo</title>
