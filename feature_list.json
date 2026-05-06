@@ -55,12 +55,13 @@
       "name": "Redesign header, navigation and home page",
       "linear": "YES-136",
       "branch": "yes-136",
-      "status": "in-progress",
+      "status": "done",
       "priority": 1,
-      "verified": false,
+      "verified": true,
       "dependencies": ["product-filters"],
-      "notes": "Header layout/spacing, category nav, mobile menu, Shop by category section. Design decisions before implementation. Sub-tasks: YES-137 first, then YES-138.",
-      "docs": []
+      "notes": "Single-row header with 3 breakpoints; logo switching (full→face); AuthMenu dual-variant (text+icons); mobile sheet layout; header border; active category highlighting. Code review fixes: accessibility (aria-label/removed aria-hidden), FSD compliance (Banner→shared/ui/banner), SVG clipPath positioning.",
+      "commits": ["b493d7e (main)", "7ef1cf3 (review fixes)", "593faae (UX improvements)"],
+      "docs": ["docs/superpowers/specs/2026-05-06-header-redesign-design.md"]
     },
     {
       "id": "home-hero-slider-usp",
