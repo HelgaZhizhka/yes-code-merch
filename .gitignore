@@ -38,6 +38,7 @@ storybook-static
 .claude/settings.local.json
 .claude/designs/
 .playwright-mcp/
+.mcp.json
 
 # Supabase pooler credentials
 .supabase-pooler.sh
