@@ -37,17 +37,15 @@ export const Header = ({
           <svg
             viewBox="0 0 161 94"
             className="hidden h-12 w-auto min-[1120px]:block"
-            aria-labelledby="logo-title"
+            aria-hidden="true"
           >
-            <title id="logo-title">Yes Code Merch logo</title>
             <use href={`${logo}#logo`}></use>
           </svg>
           <svg
             viewBox="0 0 116 100"
             className="block h-10 w-auto min-[1120px]:hidden"
-            aria-labelledby="face-logo-title"
+            aria-hidden="true"
           >
-            <title id="face-logo-title">Yes Code Merch logo</title>
             <use href={`${logo}#face-logo`}></use>
           </svg>
         </Link>
