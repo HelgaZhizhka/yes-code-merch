@@ -12,12 +12,12 @@
 
 ### Порядок задач на ветке yes-136
 
-| #   | Linear                                               | Задача                                      | Статус      |
-| --- | ---------------------------------------------------- | ------------------------------------------- | ----------- |
-| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done     |
-| 1   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending     |
-| 2   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending     |
-| 3   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | pending     |
+| #   | Linear                                               | Задача                                      | Статус  |
+| --- | ---------------------------------------------------- | ------------------------------------------- | ------- |
+| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done |
+| 1   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending |
+| 2   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending |
+| 3   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | pending |
 
 ---
 
@@ -56,6 +56,7 @@
   - SVG sprite: clipPath перемещён в outer defs
 
 **Коммиты:**
+
 - `b493d7e` — feat: header redesign
 - `7ef1cf3` — refactor: code review fixes
 - `593faae` — refactor: UX improvements

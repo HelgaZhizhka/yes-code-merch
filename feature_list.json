@@ -60,7 +60,11 @@
       "verified": true,
       "dependencies": ["product-filters"],
       "notes": "Single-row header with 3 breakpoints; logo switching (full→face); AuthMenu dual-variant (text+icons); mobile sheet layout; header border; active category highlighting. Code review fixes: accessibility (aria-label/removed aria-hidden), FSD compliance (Banner→shared/ui/banner), SVG clipPath positioning.",
-      "commits": ["b493d7e (main)", "7ef1cf3 (review fixes)", "593faae (UX improvements)"],
+      "commits": [
+        "b493d7e (main)",
+        "7ef1cf3 (review fixes)",
+        "593faae (UX improvements)"
+      ],
       "docs": ["docs/superpowers/specs/2026-05-06-header-redesign-design.md"]
     },
     {
