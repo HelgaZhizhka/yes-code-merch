@@ -18,6 +18,6 @@ export const ProfileLink = ({
     </Link>
   ) : (
     <Link to={ROUTES.PROFILE}>
-      <User className="w-9 h-9 text-primary-foreground" />
+      <User className="w-7 h-7 text-primary-foreground" />
     </Link>
   );

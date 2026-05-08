@@ -20,6 +20,6 @@ export const LogoutButton = ({
     </button>
   ) : (
     <button className="p-0 m-0 bg-none border-none" onClick={onLogout}>
-      <LogOut className="w-9 h-9 text-primary-foreground" />
+      <LogOut className="w-7 h-7 text-primary-foreground" />
     </button>
   );
