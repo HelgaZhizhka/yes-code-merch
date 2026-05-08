@@ -4,11 +4,13 @@
 
 ---
 
-## Текущий статус (2026-05-07)
+## Текущий статус (2026-05-08)
 
 **Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
 
-**Следующий шаг:** YES-136 завершена ✅. Следующие приоритетные: YES-137 → YES-138 → YES-139.
+**Сессия 2026-05-08:** Post-review fixes для YES-136 — исправлены bg-transparent/border-0 в LogoutButton, aria-label на ProfileLink, sm:max-w-[400px] в SheetContent, w-full max-w-[300px] в Banner, stagger убран из спека, init.sh OK constant для Sonar. Supabase MCP настроен через .mcp.json. PR #209 code review (code-review skill) — 1 issue (aria-label) уже исправлен и запушен. Ветка yes-136 запушена, готова к merge.
+
+**Следующий шаг:** Новая ветка. Приоритет: YES-137 (HeroSlider + USPSection) → YES-138 → YES-139.
 
 ### Порядок задач на ветке yes-136
 
