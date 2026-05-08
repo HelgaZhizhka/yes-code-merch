@@ -57,21 +57,6 @@
   - Добавить `@import 'tw-animate-css';` в `src/app/styles/index.css` сразу после `@import 'tailwindcss';`
   - Существующие `animate-in / slide-in-from-* / fade-in-*` классы в `sheet.tsx` начинают работать.
 
-### Поэтапное появление пунктов меню (stagger)
-
-- Каждый пункт списка категорий появляется с задержкой относительно предыдущего.
-- keyframe `menu-item-fade-in` (translateY + opacity) в `src/app/styles/index.css` + утилитный класс `.animate-menu-item` с `animation-delay` через inline-стиль по индексу:
-  ```tsx
-  <li
-    style={{ animationDelay: `${index * 60}ms` }}
-    className="animate-menu-item"
-  >
-    ...
-  </li>
-  ```
-- Длительность одного шага ~300ms, шаг между пунктами ~60–80ms (точное значение визуально).
-- Анимация запускается только при открытии sheet.
-
 ### Layout sheet — промо + телефон прибиты к низу
 
 - Текущий `MobileMenu`: список категорий → телефон → промо-баннер (вертикально, `flex flex-col gap-4`).
@@ -106,9 +91,8 @@
 - `src/shared/ui/header/index.tsx` — основной рефакторинг: одна строка, новые брейкпоинты, переключение логотипа, удаление нижней `bg-dark-background` секции
 - `src/shared/ui/auth-menu/auth-links.tsx` — добавить иконочный вариант (от <640) через Tailwind responsive classes
 - `src/shared/assets/header-logo-sprite.svg` — добавить `<symbol id="face-logo">` (чёрные пути → `currentColor`, оранжевые `#FF9843`)
-- `src/shared/ui/mobile-menu/index.tsx` — обновить layout: категории `flex-1` сверху, промо + телефон `mt-auto` снизу. Подключить stagger-анимацию к пунктам.
-- `src/shared/ui/categories-tree.tsx` (или соседний файл, где рендерятся пункты) — добавить класс `animate-menu-item` + inline `animationDelay` по индексу (только для `variant="mobile"`).
-- `src/app/styles/index.css` — keyframe `menu-item-fade-in` + утилитный класс `.animate-menu-item`. Подключить плагин для slide-in анимаций sheet (см. секцию выше).
+- `src/shared/ui/mobile-menu/index.tsx` — обновить layout: категории `flex-1` сверху, промо + телефон `mt-auto` снизу.
+- `src/app/styles/index.css` — подключить плагин для slide-in анимаций sheet (см. секцию выше).
 - `src/shared/ui/header/banner.tsx` — без изменений в этой ветке (рефактор переедет в YES-139)
 - `src/layouts/index.tsx` — без изменений
 

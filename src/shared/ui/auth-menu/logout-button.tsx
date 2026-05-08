@@ -19,7 +19,12 @@ export const LogoutButton = ({
       Logout
     </button>
   ) : (
-    <button className="p-0 m-0 bg-none border-none" onClick={onLogout}>
+    <button
+      type="button"
+      aria-label="Logout"
+      className="p-0 m-0 bg-transparent border-0"
+      onClick={onLogout}
+    >
       <LogOut className="w-7 h-7 text-primary-foreground" />
     </button>
   );

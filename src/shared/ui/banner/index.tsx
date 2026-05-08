@@ -14,7 +14,7 @@ const bannerVariants = cva('transition-all', {
     variant: {
       default: 'flex gap-2 grow items-center',
       mobile:
-        'flex flex-col w-[300px] items-center text-center mx-auto border-t-2 border-primary pt-8 gap-2',
+        'flex flex-col w-full max-w-[300px] items-center text-center mx-auto border-t-2 border-primary pt-8 gap-2',
     },
   },
   defaultVariants: {

@@ -40,7 +40,7 @@ export const MobileMenu = (): React.JSX.Element => {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="flex h-screen w-screen sm:max-w-screen flex-col p-5"
+        className="flex h-screen w-screen sm:max-w-[400px] flex-col p-5"
       >
         <SheetHeader className="p-2">
           <VisuallyHidden.Root>
