@@ -5,6 +5,8 @@
 
 set -e
 
+OK="    OK"
+
 echo "=== yes-code-merch: session smoke check ==="
 echo ""
 
@@ -23,17 +25,27 @@ fi
 # 3. TypeScript check
 echo ">>> TypeScript..."
 pnpm tsc -p tsconfig.json --noEmit
-echo "    OK"
+echo "$OK"
 
 # 4. Lint
 echo ">>> ESLint..."
 pnpm lint
-echo "    OK"
+echo "$OK"
 
 # 5. Unit tests
 echo ">>> Unit tests..."
 pnpm vitest run --config vitest.unit.config.ts
-echo "    OK"
+echo "$OK"
+
+# 6. Storybook tests
+echo ">>> Storybook tests..."
+pnpm test:storybook
+echo "$OK"
+
+# 7. Build check
+echo ">>> Build..."
+pnpm build
+echo "$OK"
 
 echo ""
 echo "=== Smoke check PASSED ==="

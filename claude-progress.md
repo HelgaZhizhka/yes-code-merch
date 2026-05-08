@@ -4,13 +4,22 @@
 
 ---
 
-## Текущий статус (2026-05-04)
+## Текущий статус (2026-05-08)
 
 **Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
 
-**Следующий шаг:** Смержить PR #203 → начать `cart` feature на новой ветке от `develop`.
+**Сессия 2026-05-08:** Post-review fixes для YES-136 — исправлены bg-transparent/border-0 в LogoutButton, aria-label на ProfileLink, sm:max-w-[400px] в SheetContent, w-full max-w-[300px] в Banner, stagger убран из спека, init.sh OK constant для Sonar. Supabase MCP настроен через .mcp.json. PR #209 code review (code-review skill) — 1 issue (aria-label) уже исправлен и запушен. Ветка yes-136 запушена, готова к merge.
 
-**Активная ветка:** `yes-100` запушена, PR #203 открыт → develop. Готов к мержу.
+**Следующий шаг:** Новая ветка. Приоритет: YES-137 (HeroSlider + USPSection) → YES-138 → YES-139.
+
+### Порядок задач на ветке yes-136
+
+| #   | Linear                                               | Задача                                      | Статус  |
+| --- | ---------------------------------------------------- | ------------------------------------------- | ------- |
+| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done |
+| 1   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending |
+| 2   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending |
+| 3   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | pending |
 
 ---
 
@@ -27,6 +36,40 @@
 
 ## Лог сессий
 
+### 2026-05-07 — YES-136 Header Redesign (Phase 1) ✅ DONE
+
+**Что сделано:**
+
+- ✅ Одностроковая шапка с адаптивом на 3 брейкпоинта (h-16 | h-20 | h-25)
+- ✅ Переключение логотипа (full "YES CODE" → compact "face-logo")
+- ✅ AuthMenu dual-variant (текст на десктопе, иконки на мобилке <640px)
+- ✅ Mobile sheet layout (категории scrollable, прomo+phone закреплены снизу)
+- ✅ UX улучшения:
+  - Padding между пунктами меню (py-2)
+  - Бордеры только у родительских категорий
+  - Расширенная область клика на стрелку (32px touch target)
+  - Стрелка прибита к краю справа (justify-between)
+  - Выделение активной категории (оранжевый + bold)
+- ✅ Header border для визуального разделения
+- ✅ Code review fixes (accessibility, FSD compliance, SVG clipPath)
+  - ThemeSwitcher: `type="button"` + `aria-label`
+  - SVG logos: убрана redundant `aria-hidden="false"`
+  - Banner: moved to public `shared/ui/banner/`
+  - SVG sprite: clipPath перемещён в outer defs
+
+**Коммиты:**
+
+- `b493d7e` — feat: header redesign
+- `7ef1cf3` — refactor: code review fixes
+- `593faae` — refactor: UX improvements
+- `192bb91` — docs: mark yes-136 as done
+
+**Верификация:** ✅ Визуальная проверка в браузере passed, lint ✓, tsc ✓, tests ✓
+
+**Следующий приоритет:** YES-139 Super Hot Deals (зависит от YES-137 & YES-138)
+
+---
+
 ### 2026-05-03 — Настройка системы continuity (walkinglabs шаблон)
 
 **Что сделано:**
@@ -39,12 +82,7 @@
 **Текущее состояние проекта:**
 
 - 4 фичи завершены: product-search-pagination, discount-calculation, unit-tests, product-filters
-- Следующая приоритетная фича: Shopping Cart
-
-**Нерешённые вопросы:**
-
-- Нет явной договорённости о стеке для Cart (Zustand + localStorage vs Supabase RLS orders table)
-- Перед стартом Cart нужно решить: сохранять корзину в Supabase или только локально
+- Следующая приоритетная фича: Redesign header, navigation and home page
 
 ---
 
@@ -64,43 +102,4 @@
 - Убраны категории из мобильного sheet
 - Убран лишний `div` вокруг сайдбара
 - `withRouter` декоратор для Storybook stories с TanStack Router хуками
-- Supabase PAT удалён из git-истории через `git filter-repo`
-- Ветка запушена, PR #203 открыт
-
-**Статус на конец сессии:** PR открыт, все тесты зелёные, репо чистое.
-
-**Нерешённые вопросы/блокеры:**
-
-- Supabase PAT нужно ротировать в Supabase Dashboard
-- Нет договорённости о стеке для Cart (Zustand + localStorage vs Supabase)
-
----
-
-### 2026-05-04 — Code review polish + CI setup
-
-**Что сделано:**
-
-- Запущен `superpowers:requesting-code-review` → исправлено ещё несколько issues
-- Fix: `Slider.Thumb` — добавлены `aria-label` Min/Max
-- Fix: `categories-tree` — `aria-label` стал динамическим, добавлен `aria-expanded`
-- Fix: `queries.ts` — удалён дублирующий `placeholderData` (мёртвый код)
-- Fix: `decorators.tsx` — убран лишний тип `React.FC`
-- Fix: `AI_ZUSTAND.md` — удалён stray heading и внешний code fence
-- Создан и затем удалён GitHub Actions Claude PR review (заменён на `/code-review` skill)
-- Telegram workflow временно отключён (`if: false`)
-- Изучены и сравнены 3 подхода к ревью: GitHub Actions / `fsd-code-reviewer` / `/code-review:code-review`
-- `/code-review:code-review` оставил комментарий в PR #203 (1 issue — `withRouter` singleton, решено не исправлять)
-
-**Статус на конец сессии:**
-
-- Все тесты зелёные: TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓
-- PR #203 открыт, готов к мержу
-- Ветка `yes-100` чистая
-
-**Нерешённые вопросы/блокеры:**
-
-- `withRouter` в `.storybook/decorators.tsx` создаёт роутер на каждый рендер — решено оставить как есть (Storybook only, тесты проходят)
-- Supabase PAT нужно ротировать в Supabase Dashboard (если ещё не сделано)
-- Нет договорённости о стеке для Cart (Zustand + localStorage vs Supabase)
-
-**Следующий шаг:** Смержить PR #203 → начать `cart` feature на новой ветке.
+- Ветка запушена, PR #203 закрыт

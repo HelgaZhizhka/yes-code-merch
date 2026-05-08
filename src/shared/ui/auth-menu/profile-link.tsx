@@ -17,7 +17,7 @@ export const ProfileLink = ({
       Profile
     </Link>
   ) : (
-    <Link to={ROUTES.PROFILE}>
-      <User className="w-9 h-9 text-primary-foreground" />
+    <Link to={ROUTES.PROFILE} aria-label="Profile">
+      <User className="w-7 h-7 text-primary-foreground" />
     </Link>
   );

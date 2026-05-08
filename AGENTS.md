@@ -22,8 +22,11 @@ Before writing any code, always do this:
 ## Working Rules
 
 - Work on one feature at a time.
+- Only start the next feature after the current one passes end-to-end verification.
+- Don't "also refactor" feature B while implementing feature A.
 - Don't mark a feature as done just because code was added.
-- Keep changes within the scope of the selected feature unless a blocker forces a narrow fix.
+- Keep changes within the scope of the selected feature. Unrelated bugs → create a separate issue.
+- Narrow exception: a 1–2 line fix that unblocks your feature is allowed — document it in the PR description.
 - Don't silently change verification rules during implementation.
 - Prefer durable repository artifacts over chat summaries.
 
@@ -42,8 +45,6 @@ Before finishing any session:
 If the session is interrupted mid-feature — fill in `session-handoff.md` before stopping.
 When the feature is done — clear `session-handoff.md` back to its empty template.
 
----
-
 ## Definition of Done
 
 A feature is only `done` when **all** of the following are true:
@@ -55,6 +56,14 @@ A feature is only `done` when **all** of the following are true:
 
 ---
 
+## Context Management
+
+- If a feature touches more than 10 files — break it into sub-tasks in `feature_list.json`.
+- If context feels large: start a fresh session and pass state via `session-handoff.md`.
+- Prefer `session-handoff.md` over chat summaries for mid-feature continuity.
+
+---
+
 ## Key Continuity Files
 
 | File                 | Purpose                                                                     |
@@ -63,5 +72,5 @@ A feature is only `done` when **all** of the following are true:
 | `claude-progress.md` | Live session log + current verified status + next step                      |
 | `session-handoff.md` | Filled only when interrupted mid-feature; cleared when feature is done      |
 | `init.sh`            | Standard start + smoke verification                                         |
-| `CLAUDE.md`          | Code style, architecture rules, project patterns, GG command                |
-| `docs/`              | Feature documentation including architectural decisions (Decisions section) |
+| `CLAUDE.md`          | Code style, architecture rules, project patterns, routing                   |
+| `docs/`              | Feature documentation including architectural decisions (created via GG)    |

@@ -18,7 +18,8 @@ const linkVariants = cva('transition-all', {
   variants: {
     variant: {
       default: '',
-      mobile: 'text-2xl text-primary-foreground',
+      mobile:
+        'text-2xl text-foreground hover:text-primary data-[active]:text-primary data-[active]:font-semibold',
       sidebar:
         'block w-full py-1 pl-3 text-sm text-muted-foreground border-l-2 border-transparent hover:text-foreground hover:border-border data-[active]:border-primary data-[active]:text-primary data-[active]:font-medium',
     },
@@ -49,8 +50,14 @@ const Node = React.memo(
     const isOpen = expandedNodes.has(node.id);
 
     return (
-      <li>
-        <div className="flex items-center gap-1">
+      <li
+        className={cn(
+          node.children.length > 0 &&
+            variant === 'mobile' &&
+            'border-b border-border'
+        )}
+      >
+        <div className="flex items-center gap-1 justify-between">
           <Link
             to={ROUTES.CATEGORY}
             params={{ _splat: pathToUse }}
@@ -69,8 +76,9 @@ const Node = React.memo(
               aria-label={`Toggle ${name} subcategories`}
               aria-expanded={isOpen}
               className={cn(
-                'ml-auto p-0.5 text-muted-foreground transition-colors hover:text-foreground',
-                variant === 'sidebar' && 'mr-1'
+                'text-muted-foreground transition-colors hover:text-foreground',
+                variant === 'sidebar' && 'mr-1 p-0.5',
+                variant === 'mobile' && 'p-2'
               )}
             >
               <ChevronRight
