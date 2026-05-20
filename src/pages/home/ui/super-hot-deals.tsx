@@ -12,7 +12,10 @@ export const SuperHotDeals = (): React.JSX.Element | null => {
   if (!result) return null;
 
   return (
-    <section aria-label={SECTION_TITLE} className="container mx-auto px-4 py-6">
+    <section
+      aria-label={SECTION_TITLE}
+      className="mx-auto max-w-[1020px] px-4 py-6"
+    >
       <h2 className="mb-2 text-2xl text-center">{SECTION_TITLE}</h2>
       <p className="mb-6 text-center text-muted-foreground">
         {SECTION_SUBTITLE}
