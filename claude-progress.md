@@ -8,7 +8,7 @@
 
 **Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 65 unit tests ✓, 67 storybook tests ✓.
 
-**Сессия 2026-05-20:** YES-139 завершена. Создана ветка `yes-139`, реализована секция "Super hot deals this month" с горизонтальным скроллом. Баннер в шапке теперь динамически показывает категорию с максимальным количеством активных скидок (используется `useTopDiscountedCategory` + `pickTopDiscountedRoot`). Проведён FSD-рефакторинг: каталог-логика выделена из `entities/product` в новую сущность `entities/catalog`, созданы filter features (`filter-by-color`, `filter-by-price`, `filter-by-size`, `active-filters`, `paginate`). Коммиты запушены, PR #210 создан → develop.
+**Сессия 2026-05-20 (code review):** Проведён FSD-code-review ветки `yes-139`. Исправлены все найденные проблемы: FSD-нарушение (cross-entity импорт), семантика списков, accessibility, unsafe type cast. Коммит `15fc29a` запушен в `yes-139`. PR #210 ожидает review/merge.
 
 **Следующий шаг:** PR #210 review/merge, затем YES-137 (HeroSlider + USPSection) → YES-138 (ProductCard discount badge + size selector).
 
@@ -35,6 +35,26 @@
 ---
 
 ## Лог сессий
+
+### 2026-05-20 — YES-139 Code Review Fixes ✅ DONE
+
+**Что сделано:**
+
+- ✅ FSD-нарушение: `entities/catalog` импортировал из `entities/product` — исправлено
+  - Новый файл `shared/api/product-types.ts`: `ProductImages`, `AppliedDiscount`, `ProductDiscountDTO`, `ProductSearchViewDTO`, `DISCOUNT_TYPES`
+  - Новый файл `shared/lib/discount.ts`: `applyDiscountsToProduct`, `productDiscountsSchema` + helpers
+  - `entities/catalog` теперь импортирует из `@shared` напрямую
+- ✅ `CatalogList`: `<div>` → `<ul>/<li>` (семантика)
+- ✅ `FilterSection`: добавлен `aria-hidden={!open}` на коллапсируемый контент
+- ✅ `FilterByPrice`: убран `as [number, number]` cast → деструктуризация
+- ✅ `Slider.Root`: убран мёртвый `aria-label`
+- ✅ `catalog/index.ts`: убраны `createPaginationMeta` и `mapFromViewToCatalogProducts` из публичного API
+
+**Коммит:** `15fc29a` → ветка `yes-139`, PR #210 → develop
+
+**Верификация:** ✅ tsc ✓, lint ✓, 65 unit tests ✓, 67 storybook tests ✓
+
+---
 
 ### 2026-05-20 — YES-139 Super Hot Deals + Catalog Entity Refactor ✅ DONE
 
