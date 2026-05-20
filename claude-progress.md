@@ -4,20 +4,20 @@
 
 ---
 
-## Текущий статус (2026-05-08)
+## Текущий статус (2026-05-20)
 
-**Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
+**Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 65 unit tests ✓, 67 storybook tests ✓.
 
-**Сессия 2026-05-08:** Post-review fixes для YES-136 — исправлены bg-transparent/border-0 в LogoutButton, aria-label на ProfileLink, sm:max-w-[400px] в SheetContent, w-full max-w-[300px] в Banner, stagger убран из спека, init.sh OK constant для Sonar. Supabase MCP настроен через .mcp.json. PR #209 code review (code-review skill) — 1 issue (aria-label) уже исправлен и запушен. Ветка yes-136 запушена, готова к merge.
+**Сессия 2026-05-20:** YES-139 завершена. Создана ветка `yes-139`, реализована секция "Super hot deals this month" с горизонтальным скроллом. Баннер в шапке теперь динамически показывает категорию с максимальным количеством активных скидок (используется `useTopDiscountedCategory` + `pickTopDiscountedRoot`). Проведён FSD-рефакторинг: каталог-логика выделена из `entities/product` в новую сущность `entities/catalog`, созданы filter features (`filter-by-color`, `filter-by-price`, `filter-by-size`, `active-filters`, `paginate`). Коммиты запушены, PR #210 создан → develop.
 
-**Следующий шаг:** Новая ветка. Приоритет: YES-139 (SuperHotDeals + BannerText refactor) → YES-137 (HeroSlider + USPSection) → YES-138 (ProductCard discount badge + size selector).
+**Следующий шаг:** PR #210 review/merge, затем YES-137 (HeroSlider + USPSection) → YES-138 (ProductCard discount badge + size selector).
 
-### Порядок задач на ветке yes-136
+### Порядок задач
 
 | #   | Linear                                               | Задача                                      | Статус         |
 | --- | ---------------------------------------------------- | ------------------------------------------- | -------------- |
 | —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done        |
-| 1   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | 🔨 in progress |
+| 1   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | ✅ done (PR #210) |
 | 2   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending        |
 | 3   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending        |
 
@@ -35,6 +35,38 @@
 ---
 
 ## Лог сессий
+
+### 2026-05-20 — YES-139 Super Hot Deals + Catalog Entity Refactor ✅ DONE
+
+**Что сделано:**
+
+- ✅ SuperHotDeals секция на главной (horizontal scroll mobile, grid desktop)
+- ✅ Динамический Banner — показывает категорию с максимальным числом скидок
+- ✅ `useTopDiscountedCategory` + `pickTopDiscountedRoot` — выбор категории по количеству скидок
+- ✅ Prop injection для DiscountBanner в Header и MobileMenu (без FSD-нарушений)
+- ✅ FSD-рефакторинг: новая сущность `entities/catalog` с api/model/lib/ui слоями
+- ✅ Новые filter features: `filter-by-color`, `filter-by-price`, `filter-by-size`, `active-filters`, `paginate`
+- ✅ `CatalogCard` перемещена в `entities/catalog/ui/`
+- ✅ Zod-схема для `product_discounts` (type-safe парсинг в маппере)
+- ✅ `line-clamp-2` для описания товара в карточке
+
+**Коммиты в ветке yes-139:**
+
+1. `feat: catalog entity with api, lib, model, ui layers`
+2. `feat: catalog filter features (color, price, size, active-filters, paginate)`
+3. `refactor: update shared and pages for catalog entity integration`
+4. `refactor: remove migrated catalog code from entities/product`
+5. `style: limit product description to 2 lines with ellipsis`
+6. `style: limit super hot deals section width to 1020px`
+7. `style: super hot deals horizontal scroll instead of grid`
+8. `feat: super hot deals switches to useTopDiscountedCategory`
+9. `feat: integrate DiscountBanner into Header and MobileMenu via prop injection`
+
+**Верификация:** ✅ tsc ✓, lint ✓, 65 unit tests ✓, 67 storybook tests ✓
+
+**PR:** #210 → develop (awaiting review)
+
+---
 
 ### 2026-05-07 — YES-136 Header Redesign (Phase 1) ✅ DONE
 

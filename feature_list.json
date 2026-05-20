@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-06",
+  "updated": "2026-05-20",
   "features": [
     {
       "id": "product-search-pagination",
@@ -72,12 +72,14 @@
       "name": "Home page — Super hot deals this month (product cards block)",
       "linear": "YES-139",
       "branch": "yes-139",
-      "status": "in-progress",
+      "status": "done",
       "priority": 1,
-      "verified": false,
+      "verified": true,
       "dependencies": ["redesign-header-navigation-home"],
-      "notes": "Section above HomeCatalog rendering ProductCard items for products with discount_price IS NOT NULL. Mobile carousel / desktop grid. Reuses ProductCard from entities/product. Hidden if no discounted products. Also bundles BannerText refactor.",
-      "docs": []
+      "notes": "SuperHotDeals section with horizontal scroll (mobile) / grid (desktop). Dynamic Banner shows category with most discounts via useTopDiscountedCategory. Catalog entity extracted from entities/product to entities/catalog. Filter features created: filter-by-color, filter-by-price, filter-by-size, active-filters, paginate. Prop injection pattern for DiscountBanner in Header/MobileMenu.",
+      "commits": ["5e8de0b (refactor remove migrated catalog code)", "740e3a4 (style product description)", "127e23a (style max-width)", "0842b64 (style horizontal scroll)", "6c12407 (feat switch to useTopDiscountedCategory)", "1afa4ae (feat integrate DiscountBanner)"],
+      "docs": ["docs/superpowers/specs/2026-05-20-super-hot-deals-design.md"],
+      "tech_debt": []
     },
     {
       "id": "home-hero-slider-usp",
