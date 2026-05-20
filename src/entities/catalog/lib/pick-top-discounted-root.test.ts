@@ -6,8 +6,6 @@ import { pickTopDiscountedRoot } from './pick-top-discounted-root';
 
 import type { CatalogProduct } from '../model/types';
 
-// --- helpers ---
-
 const makeRoot = (
   id: string,
   name: string,
@@ -59,13 +57,10 @@ const makeProduct = (
   images: null,
 });
 
-// --- roots fixture ---
 const clothes = makeRoot('r-clothes', 'Clothes', 'clothes', '001');
 const drinkware = makeRoot('r-drinkware', 'Drinkware', 'drinkware', '002');
 const tshirts = makeChild('c-tshirts', clothes);
 const mugs = makeChild('c-mugs', drinkware);
-
-// --- tests ---
 
 describe('pickTopDiscountedRoot', () => {
   it('returns null when products array is empty', () => {
@@ -111,8 +106,8 @@ describe('pickTopDiscountedRoot', () => {
 
   it('breaks ties by orderHint ascending', () => {
     const tree = [
-      { ...clothes, children: [tshirts] }, // orderHint '001'
-      { ...drinkware, children: [mugs] }, // orderHint '002'
+      { ...clothes, children: [tshirts] },
+      { ...drinkware, children: [mugs] },
     ];
     const products = [
       makeProduct('p1', ['c-tshirts']),
@@ -121,7 +116,7 @@ describe('pickTopDiscountedRoot', () => {
 
     const result = pickTopDiscountedRoot(products, tree);
 
-    expect(result?.root.id).toBe('r-clothes'); // '001' < '002'
+    expect(result?.root.id).toBe('r-clothes');
   });
 
   it('counts a product in both roots when it belongs to both', () => {
@@ -129,15 +124,13 @@ describe('pickTopDiscountedRoot', () => {
       { ...clothes, children: [tshirts] },
       { ...drinkware, children: [mugs] },
     ];
-    // p1 belongs to both roots
+
     const p1 = makeProduct('p1', ['c-tshirts', 'c-mugs']);
-    // p2 belongs only to clothes — makes clothes the winner
     const p2 = makeProduct('p2', ['c-tshirts']);
 
     const result = pickTopDiscountedRoot([p1, p2], tree);
 
-    expect(result?.root.id).toBe('r-clothes'); // clothes: 2, drinkware: 1
-    // p1 should appear in winner's products (it belongs to clothes too)
+    expect(result?.root.id).toBe('r-clothes');
     expect(result?.products.map((p) => p.productId)).toContain('p1');
   });
 
@@ -166,10 +159,7 @@ describe('pickTopDiscountedRoot', () => {
 
   it('ignores products with empty categoryIds', () => {
     const tree = [{ ...clothes, children: [tshirts] }];
-    const products = [
-      makeProduct('p1', []), // no categories
-      makeProduct('p2', ['c-tshirts']),
-    ];
+    const products = [makeProduct('p1', []), makeProduct('p2', ['c-tshirts'])];
 
     const result = pickTopDiscountedRoot(products, tree);
 
@@ -178,7 +168,6 @@ describe('pickTopDiscountedRoot', () => {
   });
 
   it('resolves leaf categoryId to correct root', () => {
-    // product's categoryId is a leaf (c-tshirts), not the root directly
     const tree = [{ ...clothes, children: [tshirts] }];
     const p = makeProduct('p1', ['c-tshirts']);
 
