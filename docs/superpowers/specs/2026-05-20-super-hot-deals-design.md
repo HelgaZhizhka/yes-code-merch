@@ -14,7 +14,7 @@ Home page has a "Super hot deals this month" section. Current implementation (`g
 
 ## Goal
 
-One source of truth — "the root category with the most active discounts right now" — drives both the Super Hot Deals section (up to 6 cards from that root) and the Header banner ("Discounts on {root} this month!"). If there are no active discounts, both render `null`.
+One source of truth — "the root category with the most active discounts right now" — drives the Super Hot Deals section (up to 6 cards from that root), the Header promo banner, and the MobileMenu banner. All three render the same `{root}` value ("Discounts on {root} this month!"). If there are no active discounts, all three render `null`.
 
 ## Out of scope
 
@@ -42,10 +42,11 @@ Three layers, each with one responsibility:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│ UI                                                            │
+│ UI (three consumers of the same hook)                         │
 │  ├─ DiscountBanner (entities/catalog/ui)                      │
 │  │    Smart: calls useTopDiscountedCategory, renders <Banner> │
-│  │    or null                                                 │
+│  │    or null. Two instances: Header (default variant),       │
+│  │    MobileMenu (mobile variant).                            │
 │  ├─ Banner (shared/ui/banner)                                 │
 │  │    Presentational shell: takes children + variant          │
 │  └─ SuperHotDeals (pages/home/ui)                             │
@@ -166,12 +167,16 @@ categoryIds: string[];
 `src/entities/catalog/ui/discount-banner.tsx`:
 
 ```tsx
-export const DiscountBanner = (): React.JSX.Element | null => {
+interface DiscountBannerProps {
+  variant?: 'default' | 'mobile';
+}
+
+export const DiscountBanner = ({ variant }: DiscountBannerProps = {}): React.JSX.Element | null => {
   const result = useTopDiscountedCategory();
   if (!result) return null;
 
   return (
-    <Banner>
+    <Banner variant={variant}>
       Discounts on{' '}
       <Link to={ROUTES.CATEGORY} params={{ _splat: result.root.slug }} className="hover:underline">
         {result.root.name}
@@ -181,6 +186,8 @@ export const DiscountBanner = (): React.JSX.Element | null => {
   );
 };
 ```
+
+Two instances of `<DiscountBanner/>` are mounted simultaneously (one in Header, one in MobileMenu). Both subscribe to the same TanStack Query key — one network request, shared cache.
 
 ### Header integration
 
@@ -209,18 +216,46 @@ return (
 );
 ```
 
-Layout injection:
+### MobileMenu integration
+
+Same constraint as Header: `MobileMenu` is in `shared/ui` and cannot import from `entities/catalog`. Add a `banner?: React.ReactNode` prop to `MobileMenu`. Render it in the sheet content above the contact widget (just above the `mt-auto` block, so it pins to the bottom alongside the contact info — matching the pre-existing mobile banner placement). Wrap in `<Suspense fallback={null}>` so the sheet opens immediately even if the discount query hasn't resolved yet.
+
+```tsx
+// src/shared/ui/mobile-menu/index.tsx
+interface MobileMenuProps {
+  banner?: React.ReactNode;
+}
+
+export const MobileMenu = ({ banner }: MobileMenuProps = {}): React.JSX.Element => {
+  // …existing…
+  return (
+    <Sheet …>
+      <SheetContent …>
+        {/* …existing header + scrollable categories tree… */}
+        <div className="mt-auto flex flex-col items-center gap-6">
+          {banner && <Suspense fallback={null}>{banner}</Suspense>}
+          <div className="flex items-center gap-2 text-2xl">
+            <ContactWidget …/>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+};
+```
+
+### Layout injection
 
 ```tsx
 // src/layouts/index.tsx
 <Header
   …existing props…
-  mobileMenu={<MobileMenu />}
+  mobileMenu={<MobileMenu banner={<DiscountBanner variant="mobile" />} />}
   banner={<DiscountBanner />}
 />
 ```
 
-`DiscountBanner` internally returns `null` when there's no winner, so the promo strip silently disappears in the empty state.
+`DiscountBanner` internally returns `null` when there's no winner — both the top promo strip and the mobile-menu bottom block silently disappear in the empty state.
 
 ### `<SuperHotDeals>` refactor
 
@@ -284,7 +319,8 @@ No new tests for the API layer (`getDiscountedProducts`) — the change is mecha
 - `src/entities/catalog/index.ts` — re-export new public symbols
 - `src/pages/home/ui/super-hot-deals.tsx` — switch to `useTopDiscountedCategory`
 - `src/shared/ui/header/index.tsx` — add `banner?: React.ReactNode` to `HeaderProps`; wrap render in fragment with `<Suspense fallback={null}>{banner}</Suspense>` above the existing `<header>` element
-- `src/layouts/index.tsx` — pass `banner={<DiscountBanner/>}` next to the existing `mobileMenu={<MobileMenu/>}`
+- `src/shared/ui/mobile-menu/index.tsx` — add `banner?: React.ReactNode` prop; render inside `<Suspense fallback={null}>` above the contact widget block
+- `src/layouts/index.tsx` — pass `banner={<DiscountBanner/>}` to Header and `banner={<DiscountBanner variant="mobile"/>}` to MobileMenu
 
 **Delete:** none.
 
@@ -312,13 +348,15 @@ E2E via `pnpm dev`:
    - Section "Super hot deals this month" shows 1–6 cards, all from the same root category (verifiable by checking which category names appear on the cards, or via network panel — single request to `products_search`).
    - If DB has no active discounts → section is absent entirely, no skeleton, no header.
 2. Header (≥1020px viewport):
-   - Banner text reads "Discounts on {category} this month!" where `{category}` matches the section's root.
+   - Banner promo strip above the header reads "Discounts on {category} this month!" where `{category}` matches the section's root.
    - Click on `{category}` link → navigates to `/category/{slug}`.
-   - Mobile viewport — banner mirrors the same data in the mobile variant slot.
-3. Network panel:
-   - Single `products_search` request with `product_discounts=not.is.null` on home page load.
+3. Mobile (<1020px viewport):
+   - Open burger → MobileMenu sheet — bottom of the sheet (above contact widget) shows the banner with the same `{category}` and link.
+   - Empty-state DB → no banner in either Header or MobileMenu, no skeleton.
+4. Network panel:
+   - Single `products_search` request with `product_discounts=not.is.null` on initial load (covers both Header banner and Home section even though two `<DiscountBanner/>` instances are mounted).
    - On navigation to another page → Header still has banner data from cache, no new request.
-4. Force-clear discounts in DB → reload home → banner and section both vanish without errors.
+5. Force-clear discounts in DB → reload → banner (Header + MobileMenu) and section all vanish without errors.
 
 ## Decisions left to verify in implementation (low-impact)
 
