@@ -27,14 +27,14 @@ One source of truth — "the root category with the most active discounts right 
 
 ## Decisions captured during brainstorm
 
-| # | Decision |
-|---|----------|
-| Q1 | Winning category rule: root with the maximum count of products that have at least one active discount. |
-| Q2 | If the winner has fewer than 6 eligible products, show what's available — do not fall through to the next root. |
-| Q3 | Selection happens at root level only (Clothes / Drinkware / Office / Bags). Banner says "Discounts on Clothes this month!" etc. |
-| Q4 | Computation runs client-side from a single query (no RPC, no two-query pattern). |
-| Q5 | Empty state: hide both the section and the banner. No fallback copy, no placeholder. |
-| Banner copy | `Discounts on {Category} this month!` — works grammatically for all four roots; no "all" article. |
+| #           | Decision                                                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Q1          | Winning category rule: root with the maximum count of products that have at least one active discount.                          |
+| Q2          | If the winner has fewer than 6 eligible products, show what's available — do not fall through to the next root.                 |
+| Q3          | Selection happens at root level only (Clothes / Drinkware / Office / Bags). Banner says "Discounts on Clothes this month!" etc. |
+| Q4          | Computation runs client-side from a single query (no RPC, no two-query pattern).                                                |
+| Q5          | Empty state: hide both the section and the banner. No fallback copy, no placeholder.                                            |
+| Banner copy | `Discounts on {Category} this month!` — works grammatically for all four roots; no "all" article.                               |
 
 ## Architecture
 
@@ -112,10 +112,7 @@ export const useTopDiscountedCategory = (): PickResult | null => {
   const { data: products } = useDiscountedProducts();
   const { data: tree } = useCategoriesTree();
 
-  return useMemo(
-    () => pickTopDiscountedRoot(products, tree),
-    [products, tree]
-  );
+  return useMemo(() => pickTopDiscountedRoot(products, tree), [products, tree]);
 };
 ```
 
@@ -134,12 +131,14 @@ export const getDiscountedProducts = async (): Promise<CatalogProduct[]> => {
     .range(0, DISCOUNTED_FETCH_HARD_LIMIT - 1)
     .throwOnError();
 
-  return mapFromViewToCatalogProducts(data ?? [])
-    .filter((product) => product.hasDiscount);
+  return mapFromViewToCatalogProducts(data ?? []).filter(
+    (product) => product.hasDiscount
+  );
 };
 ```
 
 Differences from current:
+
 - Drops `.order('created_at', { ascending: false })` — order doesn't matter for the pick step.
 - Drops the final `.slice(0, DISCOUNTED_LIMIT)` — slicing happens inside `pickTopDiscountedRoot` after the root is chosen.
 - Replaces `DISCOUNTED_FETCH_LIMIT = 18` with `DISCOUNTED_FETCH_HARD_LIMIT = 200` — a safety ceiling. With realistic discount volume (< 100 active rows), this never trips.
@@ -171,14 +170,20 @@ interface DiscountBannerProps {
   variant?: 'default' | 'mobile';
 }
 
-export const DiscountBanner = ({ variant }: DiscountBannerProps = {}): React.JSX.Element | null => {
+export const DiscountBanner = ({
+  variant,
+}: DiscountBannerProps = {}): React.JSX.Element | null => {
   const result = useTopDiscountedCategory();
   if (!result) return null;
 
   return (
     <Banner variant={variant}>
       Discounts on{' '}
-      <Link to={ROUTES.CATEGORY} params={{ _splat: result.root.slug }} className="hover:underline">
+      <Link
+        to={ROUTES.CATEGORY}
+        params={{ _splat: result.root.slug }}
+        className="hover:underline"
+      >
         {result.root.name}
       </Link>{' '}
       this month!
@@ -206,9 +211,7 @@ interface HeaderProps extends AuthProps {
 // inside the component:
 return (
   <>
-    {banner && (
-      <Suspense fallback={null}>{banner}</Suspense>
-    )}
+    {banner && <Suspense fallback={null}>{banner}</Suspense>}
     <header className="…existing classes…">
       {/* existing markup unchanged */}
     </header>
@@ -273,15 +276,15 @@ Current file fetches `useDiscountedProducts()` and renders all products. New ver
 
 ## Error / edge cases
 
-| Case | Behavior |
-|------|----------|
-| Discounted-products query fails | Caught by existing Suspense ErrorBoundary at layout level. Banner and section both disappear. |
-| Empty discount data | `pickTopDiscountedRoot` returns `null`. Banner and section render `null`. |
+| Case                                     | Behavior                                                                                               |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Discounted-products query fails          | Caught by existing Suspense ErrorBoundary at layout level. Banner and section both disappear.          |
+| Empty discount data                      | `pickTopDiscountedRoot` returns `null`. Banner and section render `null`.                              |
 | Zod parse failure on `product_discounts` | Existing mapper behavior — product gets `hasDiscount: false`, drops out of the candidate pool. Silent. |
-| Tree is empty | `pickTopDiscountedRoot` returns `null`. |
-| Product has empty `category_ids` | Ignored — contributes to no root count, excluded from output. |
-| Winning root has < 6 products | Returns what's available (3, 4, 5). No fallback to next root. |
-| Two roots tied on count | Lower `orderHint` wins. Deterministic. |
+| Tree is empty                            | `pickTopDiscountedRoot` returns `null`.                                                                |
+| Product has empty `category_ids`         | Ignored — contributes to no root count, excluded from output.                                          |
+| Winning root has < 6 products            | Returns what's available (3, 4, 5). No fallback to next root.                                          |
+| Two roots tied on count                  | Lower `orderHint` wins. Deterministic.                                                                 |
 
 ## Tests
 
@@ -302,12 +305,14 @@ No new tests for the API layer (`getDiscountedProducts`) — the change is mecha
 ## Files inventory
 
 **Create:**
+
 - `src/entities/catalog/lib/pick-top-discounted-root.ts`
 - `src/entities/catalog/lib/pick-top-discounted-root.test.ts`
 - `src/entities/catalog/ui/discount-banner.tsx`
 - `src/shared/ui/banner/index.tsx` (re-created — different API from the deleted version)
 
 **Modify:**
+
 - `src/entities/catalog/model/types.ts` — add `categoryIds: string[]` to `CatalogProduct`
 - `src/entities/catalog/lib/mapper.ts` — propagate `raw.category_ids`
 - `src/entities/catalog/api/index.ts` — rewrite `getDiscountedProducts` body

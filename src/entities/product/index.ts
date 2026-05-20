@@ -1,22 +1,25 @@
-export { productKeys, useFilterOptions, useProducts } from './api/hooks';
-export type {
-  AppliedDiscount,
-  CatalogParams,
-  CatalogProduct,
-  FilterOptions,
-  PaginatedCatalogProducts,
-  PaginationMeta,
-  ProductSortField,
-  SortDirection,
-} from './api/types';
-export { catalogSearchSchema, type CatalogSearch } from './lib';
 export {
-  DEFAULT_PAGE,
-  DEFAULT_PAGE_SIZE,
-  DEFAULT_SORT_DIRECTION,
-  DEFAULT_SORT_FIELD,
-  PRODUCT_SORT_FIELDS,
-  SORT_DIRECTIONS,
+  applyDiscountsToProduct,
+  calculateDiscountAmount,
+  calculateFinalPrice,
+  getActiveDiscounts,
+  productDiscountSchema,
+  productDiscountsSchema,
+  type ParsedProductDiscount,
 } from './lib';
-export { useCatalogSearch, type FilterTag } from './model/use-catalog-search';
-export { ProductCard, ProductList } from './ui';
+export {
+  DISCOUNT_TYPES,
+  type AppliedDiscount,
+  type DiscountType,
+  type ProductCategoryDTO,
+  type ProductDiscountDTO,
+  type ProductDiscountRowDTO,
+  type ProductDTO,
+  type ProductImageDTO,
+  type ProductImageRowDTO,
+  type ProductImages,
+  type ProductRowDTO,
+  type ProductSearchViewDTO,
+  type ProductVariantDTO,
+  type ProductVariantRowDTO,
+} from './api/types';

@@ -10,16 +10,16 @@
 
 **Сессия 2026-05-08:** Post-review fixes для YES-136 — исправлены bg-transparent/border-0 в LogoutButton, aria-label на ProfileLink, sm:max-w-[400px] в SheetContent, w-full max-w-[300px] в Banner, stagger убран из спека, init.sh OK constant для Sonar. Supabase MCP настроен через .mcp.json. PR #209 code review (code-review skill) — 1 issue (aria-label) уже исправлен и запушен. Ветка yes-136 запушена, готова к merge.
 
-**Следующий шаг:** Новая ветка. Приоритет: YES-137 (HeroSlider + USPSection) → YES-138 → YES-139.
+**Следующий шаг:** Новая ветка. Приоритет: YES-139 (SuperHotDeals + BannerText refactor) → YES-137 (HeroSlider + USPSection) → YES-138 (ProductCard discount badge + size selector).
 
 ### Порядок задач на ветке yes-136
 
-| #   | Linear                                               | Задача                                      | Статус  |
-| --- | ---------------------------------------------------- | ------------------------------------------- | ------- |
-| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done |
-| 1   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending |
-| 2   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending |
-| 3   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | pending |
+| #   | Linear                                               | Задача                                      | Статус         |
+| --- | ---------------------------------------------------- | ------------------------------------------- | -------------- |
+| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done        |
+| 1   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | 🔨 in progress |
+| 2   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending        |
+| 3   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending        |
 
 ---
 

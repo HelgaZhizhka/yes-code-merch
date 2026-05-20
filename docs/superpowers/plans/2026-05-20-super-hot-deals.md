@@ -12,30 +12,31 @@
 
 ## File Map
 
-| Action | File | What changes |
-|--------|------|-------------|
-| Modify | `src/entities/catalog/model/types.ts` | Add `categoryIds: string[]` to `CatalogProduct` |
-| Modify | `src/entities/catalog/lib/mapper.ts` | Propagate `raw.category_ids ?? []` into `categoryIds` |
-| Modify | `src/entities/catalog/lib/constants.ts` | Rename `DISCOUNTED_FETCH_LIMIT` → `DISCOUNTED_FETCH_HARD_LIMIT = 200` |
-| Create | `src/entities/catalog/lib/pick-top-discounted-root.ts` | Pure pick function + `PickResult` type |
-| Create | `src/entities/catalog/lib/pick-top-discounted-root.test.ts` | Unit tests (9 cases) |
-| Modify | `src/entities/catalog/lib/index.ts` | Export `pickTopDiscountedRoot`, `PickResult` |
-| Modify | `src/entities/catalog/api/index.ts` | Rewrite `getDiscountedProducts` (drop sort + slice, hard cap 200) |
-| Modify | `src/entities/catalog/api/hooks.ts` | Add `useTopDiscountedCategory` |
-| Create | `src/shared/ui/banner/index.tsx` | Presentational `<Banner children variant?>` shell |
-| Create | `src/entities/catalog/ui/discount-banner.tsx` | Smart `<DiscountBanner variant?>` using `useTopDiscountedCategory` |
-| Modify | `src/entities/catalog/ui/index.ts` | Export `DiscountBanner` |
-| Modify | `src/entities/catalog/index.ts` | Re-export `useTopDiscountedCategory`, `DiscountBanner`, `PickResult` |
-| Modify | `src/shared/ui/header/index.tsx` | Add `banner?: React.ReactNode` prop; render above `<header>` in Suspense |
-| Modify | `src/shared/ui/mobile-menu/index.tsx` | Add `banner?: React.ReactNode` prop; render above contact widget in Suspense |
-| Modify | `src/layouts/index.tsx` | Inject `<DiscountBanner/>` into Header and `<DiscountBanner variant="mobile"/>` into MobileMenu |
-| Modify | `src/pages/home/ui/super-hot-deals.tsx` | Switch from `useDiscountedProducts` to `useTopDiscountedCategory` |
+| Action | File                                                        | What changes                                                                                    |
+| ------ | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Modify | `src/entities/catalog/model/types.ts`                       | Add `categoryIds: string[]` to `CatalogProduct`                                                 |
+| Modify | `src/entities/catalog/lib/mapper.ts`                        | Propagate `raw.category_ids ?? []` into `categoryIds`                                           |
+| Modify | `src/entities/catalog/lib/constants.ts`                     | Rename `DISCOUNTED_FETCH_LIMIT` → `DISCOUNTED_FETCH_HARD_LIMIT = 200`                           |
+| Create | `src/entities/catalog/lib/pick-top-discounted-root.ts`      | Pure pick function + `PickResult` type                                                          |
+| Create | `src/entities/catalog/lib/pick-top-discounted-root.test.ts` | Unit tests (9 cases)                                                                            |
+| Modify | `src/entities/catalog/lib/index.ts`                         | Export `pickTopDiscountedRoot`, `PickResult`                                                    |
+| Modify | `src/entities/catalog/api/index.ts`                         | Rewrite `getDiscountedProducts` (drop sort + slice, hard cap 200)                               |
+| Modify | `src/entities/catalog/api/hooks.ts`                         | Add `useTopDiscountedCategory`                                                                  |
+| Create | `src/shared/ui/banner/index.tsx`                            | Presentational `<Banner children variant?>` shell                                               |
+| Create | `src/entities/catalog/ui/discount-banner.tsx`               | Smart `<DiscountBanner variant?>` using `useTopDiscountedCategory`                              |
+| Modify | `src/entities/catalog/ui/index.ts`                          | Export `DiscountBanner`                                                                         |
+| Modify | `src/entities/catalog/index.ts`                             | Re-export `useTopDiscountedCategory`, `DiscountBanner`, `PickResult`                            |
+| Modify | `src/shared/ui/header/index.tsx`                            | Add `banner?: React.ReactNode` prop; render above `<header>` in Suspense                        |
+| Modify | `src/shared/ui/mobile-menu/index.tsx`                       | Add `banner?: React.ReactNode` prop; render above contact widget in Suspense                    |
+| Modify | `src/layouts/index.tsx`                                     | Inject `<DiscountBanner/>` into Header and `<DiscountBanner variant="mobile"/>` into MobileMenu |
+| Modify | `src/pages/home/ui/super-hot-deals.tsx`                     | Switch from `useDiscountedProducts` to `useTopDiscountedCategory`                               |
 
 ---
 
 ## Task 1: Extend `CatalogProduct` type + mapper
 
 **Files:**
+
 - Modify: `src/entities/catalog/model/types.ts`
 - Modify: `src/entities/catalog/lib/mapper.ts`
 
@@ -107,6 +108,7 @@ git commit -m "feat: add categoryIds to CatalogProduct type and mapper"
 ## Task 2: Update discount constants
 
 **Files:**
+
 - Modify: `src/entities/catalog/lib/constants.ts`
 
 - [ ] **Step 1: Rename constant and increase hard cap**
@@ -158,6 +160,7 @@ git commit -m "feat: rename DISCOUNTED_FETCH_LIMIT to DISCOUNTED_FETCH_HARD_LIMI
 ## Task 3: TDD — `pickTopDiscountedRoot`
 
 **Files:**
+
 - Create: `src/entities/catalog/lib/pick-top-discounted-root.test.ts`
 - Create: `src/entities/catalog/lib/pick-top-discounted-root.ts`
 
@@ -194,10 +197,7 @@ const makeRoot = (
   children,
 });
 
-const makeChild = (
-  id: string,
-  parentRoot: CategoryTree
-): CategoryTree => ({
+const makeChild = (id: string, parentRoot: CategoryTree): CategoryTree => ({
   id,
   name: `Child ${id}`,
   slug: `child-${id}`,
@@ -281,8 +281,8 @@ describe('pickTopDiscountedRoot', () => {
 
   it('breaks ties by orderHint ascending', () => {
     const tree = [
-      { ...clothes, children: [tshirts] },    // orderHint '001'
-      { ...drinkware, children: [mugs] },      // orderHint '002'
+      { ...clothes, children: [tshirts] }, // orderHint '001'
+      { ...drinkware, children: [mugs] }, // orderHint '002'
     ];
     const products = [
       makeProduct('p1', ['c-tshirts']),
@@ -337,7 +337,7 @@ describe('pickTopDiscountedRoot', () => {
   it('ignores products with empty categoryIds', () => {
     const tree = [{ ...clothes, children: [tshirts] }];
     const products = [
-      makeProduct('p1', []),           // no categories
+      makeProduct('p1', []), // no categories
       makeProduct('p2', ['c-tshirts']),
     ];
 
@@ -504,6 +504,7 @@ git commit -m "feat: add pickTopDiscountedRoot pure function with unit tests"
 ## Task 4: Export from lib index
 
 **Files:**
+
 - Modify: `src/entities/catalog/lib/index.ts`
 
 - [ ] **Step 1: Add export**
@@ -551,6 +552,7 @@ git commit -m "feat: export pickTopDiscountedRoot and PickResult from catalog li
 ## Task 5: Rewrite `getDiscountedProducts` API
 
 **Files:**
+
 - Modify: `src/entities/catalog/api/index.ts`
 
 - [ ] **Step 1: Update the function**
@@ -588,6 +590,7 @@ export const getDiscountedProducts = async (): Promise<CatalogProduct[]> => {
 ```
 
 Changes:
+
 - Removed `.order('created_at', { ascending: false })` — order is irrelevant for the pick step.
 - Removed final `.slice(0, DISCOUNTED_LIMIT)` — slicing happens inside `pickTopDiscountedRoot`.
 - `DISCOUNTED_FETCH_LIMIT` (18) → `DISCOUNTED_FETCH_HARD_LIMIT` (200).
@@ -612,6 +615,7 @@ git commit -m "feat: rewrite getDiscountedProducts — active discounts, hard ca
 ## Task 6: Add `useTopDiscountedCategory` hook
 
 **Files:**
+
 - Modify: `src/entities/catalog/api/hooks.ts`
 - Modify: `src/entities/catalog/index.ts`
 
@@ -622,7 +626,10 @@ In `src/entities/catalog/api/hooks.ts`, add imports at the top:
 ```ts
 import { useMemo } from 'react';
 import { useCategoriesTree } from '@shared/api';
-import { pickTopDiscountedRoot, type PickResult } from '../lib/pick-top-discounted-root';
+import {
+  pickTopDiscountedRoot,
+  type PickResult,
+} from '../lib/pick-top-discounted-root';
 ```
 
 Add the hook after the existing `useDiscountedProducts`:
@@ -632,10 +639,7 @@ export const useTopDiscountedCategory = (): PickResult | null => {
   const { data: products } = useDiscountedProducts();
   const { data: tree } = useCategoriesTree();
 
-  return useMemo(
-    () => pickTopDiscountedRoot(products, tree),
-    [products, tree]
-  );
+  return useMemo(() => pickTopDiscountedRoot(products, tree), [products, tree]);
 };
 ```
 
@@ -704,6 +708,7 @@ git commit -m "feat: add useTopDiscountedCategory hook to entities/catalog"
 ## Task 7: Create presentational `<Banner>`
 
 **Files:**
+
 - Create: `src/shared/ui/banner/index.tsx`
 
 - [ ] **Step 1: Create the file**
@@ -767,6 +772,7 @@ git commit -m "feat: recreate presentational Banner component (children + varian
 ## Task 8: Create `<DiscountBanner>` smart component
 
 **Files:**
+
 - Create: `src/entities/catalog/ui/discount-banner.tsx`
 - Modify: `src/entities/catalog/ui/index.ts`
 - Modify: `src/entities/catalog/index.ts`
@@ -847,6 +853,7 @@ git commit -m "feat: add DiscountBanner smart component to entities/catalog"
 ## Task 9: Integrate Banner into Header, MobileMenu, and Layout
 
 **Files:**
+
 - Modify: `src/shared/ui/header/index.tsx`
 - Modify: `src/shared/ui/mobile-menu/index.tsx`
 - Modify: `src/layouts/index.tsx`
@@ -888,7 +895,9 @@ export const Header = ({
       {banner && <Suspense fallback={null}>{banner}</Suspense>}
       <header className="flex h-16 items-center gap-4 px-4 border-b border-border min-[1020px]:h-20 min-[1020px]:px-8 min-[1120px]:h-25 min-[1120px]:px-11">
         <div className="flex items-center gap-3">
-          {mobileMenu && <div className="min-[1020px]:hidden">{mobileMenu}</div>}
+          {mobileMenu && (
+            <div className="min-[1020px]:hidden">{mobileMenu}</div>
+          )}
           <Link
             to={ROUTES.HOME}
             className="flex items-center text-foreground"
@@ -972,7 +981,9 @@ interface MobileMenuProps {
   banner?: React.ReactNode;
 }
 
-export const MobileMenu = ({ banner }: MobileMenuProps = {}): React.JSX.Element => {
+export const MobileMenu = ({
+  banner,
+}: MobileMenuProps = {}): React.JSX.Element => {
   const { isOpen, open: openMenu, close: closeMenu } = useMobileMenu();
   const location = useLocation();
   const { data: categoryTree } = useCategoriesTree();
@@ -1102,6 +1113,7 @@ git commit -m "feat: integrate DiscountBanner into Header and MobileMenu via pro
 ## Task 10: Refactor `<SuperHotDeals>`
 
 **Files:**
+
 - Modify: `src/pages/home/ui/super-hot-deals.tsx`
 
 - [ ] **Step 1: Switch to `useTopDiscountedCategory`**
@@ -1194,6 +1206,7 @@ pnpm dev
 ```
 
 Open `http://localhost:3000/`. At ≥1020px viewport:
+
 - A promo strip appears above the header with text like "Discounts on Clothes this month!" (or whichever root wins).
 - The category name is a link — click it → navigates to `/category/clothes`.
 - "Super hot deals this month" section below "Shop by category" shows 1–6 cards, all from the same root category.
@@ -1201,11 +1214,13 @@ Open `http://localhost:3000/`. At ≥1020px viewport:
 - [ ] **Step 3: Verify mobile banner**
 
 In DevTools, set viewport to 375px. Open the burger menu:
+
 - At the bottom of the sheet (above the phone contact widget), the banner appears with `variant="mobile"` styling — `border-t-2 border-primary`, centered text, same category name and link.
 
 - [ ] **Step 4: Verify empty state**
 
 If active discounts are unavailable (no rows in DB or all `is_active=false`):
+
 - Promo strip in Header: absent.
 - Mobile menu banner slot: absent.
 - "Super hot deals this month" section: absent (no heading, no skeleton).
@@ -1233,21 +1248,22 @@ git commit -m "chore: lint fixes post-implementation"
 
 **Spec coverage check:**
 
-| Spec requirement | Task |
-|-----------------|------|
-| `categoryIds` in mapper | Task 1 |
-| `DISCOUNTED_FETCH_HARD_LIMIT = 200` | Task 2 |
-| `pickTopDiscountedRoot` with 9 test cases | Task 3 |
-| Lib re-export | Task 4 |
-| Rewrite `getDiscountedProducts` | Task 5 |
-| `useTopDiscountedCategory` hook | Task 6 |
-| Presentational `<Banner>` | Task 7 |
-| Smart `<DiscountBanner>` | Task 8 |
-| Header + MobileMenu inject | Task 9 |
-| `SuperHotDeals` refactor | Task 10 |
-| E2E verification | Task 11 |
+| Spec requirement                          | Task    |
+| ----------------------------------------- | ------- |
+| `categoryIds` in mapper                   | Task 1  |
+| `DISCOUNTED_FETCH_HARD_LIMIT = 200`       | Task 2  |
+| `pickTopDiscountedRoot` with 9 test cases | Task 3  |
+| Lib re-export                             | Task 4  |
+| Rewrite `getDiscountedProducts`           | Task 5  |
+| `useTopDiscountedCategory` hook           | Task 6  |
+| Presentational `<Banner>`                 | Task 7  |
+| Smart `<DiscountBanner>`                  | Task 8  |
+| Header + MobileMenu inject                | Task 9  |
+| `SuperHotDeals` refactor                  | Task 10 |
+| E2E verification                          | Task 11 |
 
 **Type consistency across tasks:**
+
 - `PickResult` defined in Task 3 (`pick-top-discounted-root.ts`) and exported in Task 4 — imported by hook (Task 6) and re-exported from entity public API (Task 6).
 - `DISCOUNTED_FETCH_HARD_LIMIT` renamed in Task 2, used in Task 5.
 - `useTopDiscountedCategory` defined in Task 6, used in Tasks 8 and 10.
@@ -1255,6 +1271,7 @@ git commit -m "chore: lint fixes post-implementation"
 - `Banner` `variant?: 'default' | 'mobile'` used consistently in Tasks 7, 8.
 
 **FSD boundary check:**
+
 - `shared/ui/banner` → no entity imports ✓
 - `shared/ui/header` → no entity imports; receives `banner` prop ✓
 - `shared/ui/mobile-menu` → no entity imports; receives `banner` prop ✓

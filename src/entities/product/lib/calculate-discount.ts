@@ -5,6 +5,9 @@ import {
   type ProductDiscountDTO,
 } from '../api/types';
 
+const isDiscountType = (value: string): value is DiscountType =>
+  value === DISCOUNT_TYPES.PERCENT || value === DISCOUNT_TYPES.AMOUNT;
+
 export const getActiveDiscounts = (
   discounts: ProductDiscountDTO[],
   currentDate: Date = new Date()
@@ -99,10 +102,14 @@ export const applyDiscountsToProduct = (
   const discountAmount = calculateDiscountAmount(discount, originalPrice);
   const finalPrice = calculateFinalPrice(originalPrice, discountAmount);
 
+  if (!isDiscountType(discount.discount_type)) {
+    throw new Error(`Invalid discount type: ${discount.discount_type}`);
+  }
+
   const appliedDiscount: AppliedDiscount = {
     id: discount.id,
     name: discount.name,
-    type: discount.discount_type as DiscountType,
+    type: discount.discount_type,
     value: discount.discount_value,
     validUntil: discount.valid_to ? new Date(discount.valid_to) : undefined,
   };
