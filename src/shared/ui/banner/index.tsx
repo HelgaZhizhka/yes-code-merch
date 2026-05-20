@@ -1,81 +1,34 @@
-import { Link } from '@tanstack/react-router';
 import { cva } from 'class-variance-authority';
 
 import icon from '@shared/assets/subtract.svg';
-import { ROUTES } from '@shared/config/routes';
+import { cn } from '@shared/lib/utils';
 
 type BannerProps = {
-  category: string;
+  children: React.ReactNode;
   variant?: 'default' | 'mobile';
+  className?: string;
 };
 
-const bannerVariants = cva('transition-all', {
+const bannerVariants = cva('flex gap-2 transition-all', {
   variants: {
     variant: {
-      default: 'flex gap-2 grow items-center',
+      default: 'grow items-center',
       mobile:
-        'flex flex-col w-full max-w-[300px] items-center text-center mx-auto border-t-2 border-primary pt-8 gap-2',
+        'flex-col w-full max-w-[300px] items-center text-center mx-auto border-t-2 border-primary pt-8',
     },
   },
-  defaultVariants: {
-    variant: 'default',
-  },
+  defaultVariants: { variant: 'default' },
 });
 
-const BannerText = ({ category }: { category: string }): React.JSX.Element => {
-  let Text: React.JSX.Element = <>Discounts are coming!</>;
-
-  switch (category) {
-    case 'DrinkWare': {
-      Text = (
-        <>
-          Free shipping on all{' '}
-          <Link
-            to={ROUTES.CATEGORY}
-            params={{ _splat: category.toLowerCase() }}
-            className="hover:underline"
-          >
-            {category}
-          </Link>{' '}
-          this month!
-        </>
-      );
-      break;
-    }
-    case 'T-Shirts': {
-      Text = (
-        <>
-          Discount on all{' '}
-          <Link
-            to={ROUTES.CATEGORY}
-            params={{
-              _splat: category.toLowerCase(),
-            }}
-            className="hover:underline"
-          >
-            {category}
-          </Link>{' '}
-          this month!
-        </>
-      );
-      break;
-    }
-    default: {
-      break;
-    }
-  }
-
-  return <p className="text-xl">{Text}</p>;
-};
-
 export const Banner = ({
-  category,
+  children,
   variant,
+  className,
 }: BannerProps): React.JSX.Element => {
   return (
-    <div className={bannerVariants({ variant })}>
+    <div className={cn(bannerVariants({ variant }), className)}>
       <img src={icon} width={28} height={28} alt="discount icon" />
-      <BannerText category={category} />
+      <p className="text-xl">{children}</p>
     </div>
   );
 };
