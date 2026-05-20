@@ -4,8 +4,7 @@ import { Menu, Phone } from 'lucide-react';
 import { Suspense, useEffect } from 'react';
 
 import { useCategoriesTree } from '@shared/api';
-import { SaleCategoryName } from '@shared/config';
-import { Banner } from '@shared/ui/banner';
+import { NAV_SKELETON_KEYS } from '@shared/lib/skeleton-keys';
 import { CategoriesTree } from '@shared/ui/categories-tree';
 import { ContactWidget } from '@shared/ui/contact-widget';
 import {
@@ -19,9 +18,13 @@ import {
 
 import { useMobileMenu } from './use-mobile-menu';
 
-const NAV_SKELETON_KEYS = ['nav-1', 'nav-2', 'nav-3', 'nav-4'] as const;
+interface MobileMenuProps {
+  banner?: React.ReactNode;
+}
 
-export const MobileMenu = (): React.JSX.Element => {
+export const MobileMenu = ({
+  banner,
+}: MobileMenuProps = {}): React.JSX.Element => {
   const { isOpen, open: openMenu, close: closeMenu } = useMobileMenu();
   const location = useLocation();
   const { data: categoryTree } = useCategoriesTree();
@@ -65,7 +68,7 @@ export const MobileMenu = (): React.JSX.Element => {
           </Suspense>
         </div>
         <div className="mt-auto flex flex-col items-center gap-6">
-          <Banner category={SaleCategoryName} variant="mobile" />
+          {banner && <Suspense fallback={null}>{banner}</Suspense>}
           <div className="flex items-center gap-2 text-2xl">
             <ContactWidget
               icon={<Phone className="h-8" />}
