@@ -99,12 +99,12 @@ export const applyDiscountsToProduct = (
 
   const discount = selectBestDiscount(activeDiscounts, originalPrice);
 
-  const discountAmount = calculateDiscountAmount(discount, originalPrice);
-  const finalPrice = calculateFinalPrice(originalPrice, discountAmount);
-
   if (!isDiscountType(discount.discount_type)) {
     throw new Error(`Invalid discount type: ${discount.discount_type}`);
   }
+
+  const discountAmount = calculateDiscountAmount(discount, originalPrice);
+  const finalPrice = calculateFinalPrice(originalPrice, discountAmount);
 
   const appliedDiscount: AppliedDiscount = {
     id: discount.id,

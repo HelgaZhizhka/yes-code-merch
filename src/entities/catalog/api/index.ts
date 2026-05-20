@@ -82,6 +82,7 @@ export const getDiscountedProducts = async (): Promise<CatalogProduct[]> => {
     .from('products_search')
     .select('*')
     .not('product_discounts', 'is', null)
+    .order('created_at', { ascending: false })
     .range(0, DISCOUNTED_FETCH_HARD_LIMIT - 1)
     .throwOnError();
 
