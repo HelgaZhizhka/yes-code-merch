@@ -14,12 +14,12 @@
 
 ### Порядок задач
 
-| #   | Linear                                               | Задача                                      | Статус         |
-| --- | ---------------------------------------------------- | ------------------------------------------- | -------------- |
-| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done        |
+| #   | Linear                                               | Задача                                      | Статус            |
+| --- | ---------------------------------------------------- | ------------------------------------------- | ----------------- |
+| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done           |
 | 1   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | ✅ done (PR #210) |
-| 2   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending        |
-| 3   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending        |
+| 2   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending           |
+| 3   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending           |
 
 ---
 
