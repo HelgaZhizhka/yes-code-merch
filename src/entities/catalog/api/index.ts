@@ -6,7 +6,6 @@ import {
   DEFAULT_SORT_DIRECTION,
   DEFAULT_SORT_FIELD,
   DISCOUNTED_FETCH_HARD_LIMIT,
-  DISCOUNTED_LIMIT,
   SORT_DIRECTIONS,
 } from '../lib/constants';
 import { mapFromViewToCatalogProducts } from '../lib/mapper';
@@ -83,13 +82,12 @@ export const getDiscountedProducts = async (): Promise<CatalogProduct[]> => {
     .from('products_search')
     .select('*')
     .not('product_discounts', 'is', null)
-    .order('created_at', { ascending: false })
     .range(0, DISCOUNTED_FETCH_HARD_LIMIT - 1)
     .throwOnError();
 
-  return mapFromViewToCatalogProducts(data ?? [])
-    .filter((product) => product.hasDiscount)
-    .slice(0, DISCOUNTED_LIMIT);
+  return mapFromViewToCatalogProducts(data ?? []).filter(
+    (product) => product.hasDiscount
+  );
 };
 
 export const getFilterOptions = async (
