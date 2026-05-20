@@ -26,7 +26,6 @@ export const Header = ({
 }: HeaderProps): React.JSX.Element => {
   return (
     <>
-      {banner && <Suspense fallback={null}>{banner}</Suspense>}
       <header className="flex h-16 items-center gap-4 px-4 border-b border-border min-[1020px]:h-20 min-[1020px]:px-8 min-[1120px]:h-25 min-[1120px]:px-11">
         <div className="flex items-center gap-3">
           {mobileMenu && (
@@ -55,6 +54,7 @@ export const Header = ({
         </div>
 
         <div className="hidden flex-1 items-center justify-center min-[1020px]:flex">
+          {banner && <Suspense fallback={null}>{banner}</Suspense>}
           <ContactWidget
             icon={<Phone className="h-6" />}
             label="(+971) 58 8284186"

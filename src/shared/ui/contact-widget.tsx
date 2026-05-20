@@ -29,7 +29,7 @@ export const ContactWidget = ({
   variant = LayoutView.HEADER,
 }: PhoneWidgetProps): React.JSX.Element => {
   return (
-    <>
+    <span className="flex items-center gap-2">
       {icon}
       {href ? (
         <a href={href} className={cn(linkVariants({ variant }))}>
@@ -38,6 +38,6 @@ export const ContactWidget = ({
       ) : (
         <span>{label}</span>
       )}
-    </>
+    </span>
   );
 };

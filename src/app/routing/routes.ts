@@ -81,11 +81,11 @@ const ResetPassword = lazy(() =>
 
 import {
   catalogSearchSchema,
+  CATALOG_SORT_FIELDS,
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
-  PRODUCT_SORT_FIELDS,
   SORT_DIRECTIONS,
-} from '@entities/product';
+} from '@entities/catalog';
 
 import { categoriesTreeQueryOptions } from '@shared/api';
 import { ONBOARDING_STEPS, ROUTES } from '@shared/config/routes';
@@ -200,7 +200,7 @@ export const categoryRoute = (parentRoute: FlexibleRouteType) =>
         stripSearchParams({
           page: DEFAULT_PAGE,
           pageSize: DEFAULT_PAGE_SIZE,
-          sortField: PRODUCT_SORT_FIELDS.CREATED_AT,
+          sortField: CATALOG_SORT_FIELDS.CREATED_AT,
           sortDirection: SORT_DIRECTIONS.DESC,
         }),
       ],

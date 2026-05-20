@@ -1,13 +1,15 @@
-import { CATALOG_TEXT } from '@pages/catalog/lib';
+import { ActiveFilters } from '@features/active-filters';
+import { FilterByColor } from '@features/filter-by-color';
+import { FilterByPrice } from '@features/filter-by-price';
+import { FilterBySize } from '@features/filter-by-size';
 
-import { useFilterOptions, useCatalogSearch } from '@entities/product';
+import {
+  CATALOG_TEXT,
+  useFilterOptions,
+  useCatalogSearch,
+} from '@entities/catalog';
 
-import { FilterSection } from './filter-section';
-
-import { CatalogActiveFilters } from '../catalog-active-filters';
-import { CatalogColorFilter } from '../catalog-color-filter';
-import { CatalogPriceFilter } from '../catalog-price-filter';
-import { CatalogSizeFilter } from '../catalog-size-filter';
+import { FilterSection } from '@shared/ui/filter-section';
 
 interface CatalogFiltersProps {
   categoryIds: string[];
@@ -36,20 +38,20 @@ export const CatalogFilters = ({
         </button>
       </div>
 
-      <CatalogActiveFilters />
+      <ActiveFilters />
 
       {hasSizeFilter && (
         <FilterSection title={CATALOG_TEXT.size.title}>
-          <CatalogSizeFilter available={sizes} />
+          <FilterBySize available={sizes} />
         </FilterSection>
       )}
 
       <FilterSection title={CATALOG_TEXT.color.title}>
-        <CatalogColorFilter available={colors} />
+        <FilterByColor available={colors} />
       </FilterSection>
 
       <FilterSection title={CATALOG_TEXT.price.title}>
-        <CatalogPriceFilter bounds={{ min: priceMin, max: priceMax }} />
+        <FilterByPrice bounds={{ min: priceMin, max: priceMax }} />
       </FilterSection>
     </div>
   );

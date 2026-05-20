@@ -7,8 +7,6 @@ export type {
   UpdateUserDTO,
 } from './auth/types';
 export type {
-  Category,
-  CategoryRowDTO,
   CategoryTree,
   CategoryTreeDTO,
   BreadcrumbItem,
@@ -26,9 +24,5 @@ export {
   updateUser,
 } from './auth';
 export { categoriesTreeQueryOptions } from './categories/queries';
-export {
-  useCategoriesTree,
-  useCategoryData,
-  useRootCategories,
-} from './categories/hooks';
+export { useCategoriesTree, useCategoryData } from './categories/hooks';
 export { useCountries } from './countries/hooks';

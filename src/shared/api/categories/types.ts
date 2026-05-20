@@ -1,10 +1,9 @@
 import type { Public } from '@shared/api/supabase-client';
 
-export type CategoryRowDTO = Public['Tables']['categories']['Row'];
 export type CategoryTreeDTO =
   Public['Functions']['get_all_categories_tree']['Returns'][0];
 
-export interface Category {
+interface CategoryBase {
   id: string;
   name: string;
   slug: string;
@@ -12,7 +11,7 @@ export interface Category {
   orderHint: string;
 }
 
-export type CategoryTree = Category & {
+export type CategoryTree = CategoryBase & {
   depth: number;
   rootId: string;
   rootName: string;

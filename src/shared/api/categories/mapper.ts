@@ -1,21 +1,4 @@
-import type {
-  Category,
-  CategoryRowDTO,
-  CategoryTree,
-  CategoryTreeDTO,
-} from './types';
-
-export const mapCategories = (
-  categories: readonly CategoryRowDTO[]
-): Category[] => {
-  return categories.map(({ id, name, slug, parent_id, order_hint }) => ({
-    id,
-    name,
-    slug,
-    parentId: parent_id,
-    orderHint: order_hint,
-  }));
-};
+import type { CategoryTree, CategoryTreeDTO } from './types';
 
 export const mapCategoriesTree = (
   rows: readonly CategoryTreeDTO[]

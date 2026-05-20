@@ -9,7 +9,7 @@ type BannerProps = {
   className?: string;
 };
 
-const bannerVariants = cva('flex gap-2 transition-all', {
+const bannerVariants = cva('flex gap-2', {
   variants: {
     variant: {
       default: 'grow items-center',

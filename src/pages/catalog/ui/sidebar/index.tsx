@@ -1,11 +1,11 @@
-import { CATALOG_TEXT } from '@pages/catalog/lib';
+import { CATALOG_TEXT } from '@entities/catalog';
 
 import { CategoriesTree } from '@shared/ui/categories-tree';
+import { FilterSection } from '@shared/ui/filter-section';
 
 import type { CategoryTree } from '@/shared/api';
 
 import { CatalogFilters } from '../catalog-filters';
-import { FilterSection } from '../catalog-filters/filter-section';
 
 interface SideBarProps {
   categoryTree: CategoryTree[];

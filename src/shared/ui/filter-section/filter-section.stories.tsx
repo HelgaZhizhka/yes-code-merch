@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FilterSection } from './filter-section';
 
 const meta: Meta<typeof FilterSection> = {
-  title: 'Catalog/FilterSection',
+  title: 'Shared/FilterSection',
   component: FilterSection,
 };
 
