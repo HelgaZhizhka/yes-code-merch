@@ -21,13 +21,13 @@ export const SuperHotDeals = (): React.JSX.Element | null => {
       <div
         role="list"
         aria-label="Discounted products"
-        className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-4 xl:grid-cols-5"
+        className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:px-0"
       >
         {result.products.map((product) => (
           <div
             key={product.productId}
             role="listitem"
-            className="w-[260px] shrink-0 snap-start sm:w-auto"
+            className="w-[260px] shrink-0 snap-start"
           >
             <CatalogCard
               product={product}
