@@ -1,4 +1,4 @@
-export { CatalogCard, CatalogList } from './ui';
+export { CatalogCard, CatalogList, DiscountBanner } from './ui';
 export {
   getCatalogProducts,
   getDiscountedProducts,
