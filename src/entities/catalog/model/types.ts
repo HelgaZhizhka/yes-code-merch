@@ -2,7 +2,7 @@ import type {
   AppliedDiscount,
   ProductImages,
   ProductSearchViewDTO,
-} from '@entities/product';
+} from '@shared/api/product-types';
 
 import type { CATALOG_SORT_FIELDS, SORT_DIRECTIONS } from '../lib/constants';
 

@@ -1,10 +1,19 @@
+import type { ProductDiscountDTO } from '@shared/api/product-types';
 import type { Public } from '@shared/api/supabase-client';
+
+export {
+  DISCOUNT_TYPES,
+  type AppliedDiscount,
+  type DiscountType,
+  type ProductDiscountDTO,
+  type ProductDiscountRowDTO,
+  type ProductImages,
+  type ProductSearchViewDTO,
+} from '@shared/api/product-types';
 
 export type ProductRowDTO = Public['Tables']['products']['Row'];
 export type ProductVariantRowDTO = Public['Tables']['product_variants']['Row'];
 export type ProductImageRowDTO = Public['Tables']['product_images']['Row'];
-export type ProductDiscountRowDTO =
-  Public['Tables']['product_discounts']['Row'];
 
 export interface ProductImageDTO {
   url: string;
@@ -23,41 +32,6 @@ export interface ProductVariantDTO {
   product_images?: ProductImageDTO[];
 }
 
-export type ProductDiscountDTO = Pick<
-  ProductDiscountRowDTO,
-  | 'id'
-  | 'name'
-  | 'discount_type'
-  | 'discount_value'
-  | 'priority'
-  | 'valid_from'
-  | 'valid_to'
-  | 'is_active'
-  | 'variant_id'
-  | 'product_id'
->;
-
-export const DISCOUNT_TYPES = {
-  PERCENT: 'percent',
-  AMOUNT: 'amount',
-} as const;
-
-export type DiscountType = (typeof DISCOUNT_TYPES)[keyof typeof DISCOUNT_TYPES];
-
-export interface AppliedDiscount {
-  id: string;
-  name: string;
-  type: DiscountType;
-  value: number;
-  validUntil?: Date;
-}
-
-export interface ProductImages {
-  large: string | null;
-  medium: string | null;
-  small: string | null;
-}
-
 export interface ProductCategoryDTO {
   category_id: string;
 }
@@ -71,5 +45,3 @@ export interface ProductDTO {
   product_discounts?: ProductDiscountDTO[];
   product_categories: ProductCategoryDTO[];
 }
-
-export type ProductSearchViewDTO = Public['Views']['products_search']['Row'];

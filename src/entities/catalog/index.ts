@@ -21,8 +21,6 @@ export {
   SORT_DIRECTIONS,
   CATALOG_TEXT,
   catalogSearchSchema,
-  createPaginationMeta,
-  mapFromViewToCatalogProducts,
   type CatalogSearch,
 } from './lib';
 export { useCatalogSearch } from './model/use-catalog-search';

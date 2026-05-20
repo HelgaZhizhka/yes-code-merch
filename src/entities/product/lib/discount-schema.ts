@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { DISCOUNT_TYPES } from '../api/types';
+import { DISCOUNT_TYPES } from '@shared/api/product-types';
 
 export const productDiscountSchema = z.object({
   id: z.string(),

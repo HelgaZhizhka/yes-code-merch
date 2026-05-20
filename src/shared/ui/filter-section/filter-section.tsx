@@ -37,7 +37,11 @@ export const FilterSection = ({
           aria-hidden
         />
       </button>
-      <div id={bodyId} className={cn('pb-3.5', !open && 'hidden')}>
+      <div
+        id={bodyId}
+        aria-hidden={!open}
+        className={cn('pb-3.5', !open && 'hidden')}
+      >
         {children}
       </div>
     </div>

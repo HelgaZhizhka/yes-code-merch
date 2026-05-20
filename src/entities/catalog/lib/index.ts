@@ -10,7 +10,6 @@ export {
   catalogSearchSchema,
   type CatalogSearch,
 } from './catalog-search-schema';
-export { createPaginationMeta, mapFromViewToCatalogProducts } from './mapper';
 export { CATALOG_TEXT } from './catalog-text';
 export {
   pickTopDiscountedRoot,

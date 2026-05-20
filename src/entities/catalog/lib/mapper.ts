@@ -1,9 +1,11 @@
+import type {
+  ProductImages,
+  ProductSearchViewDTO,
+} from '@shared/api/product-types';
 import {
   applyDiscountsToProduct,
   productDiscountsSchema,
-} from '@entities/product';
-import type { ProductImages, ProductSearchViewDTO } from '@entities/product';
-
+} from '@shared/lib/discount';
 import { getStorageUrl, isNotNull } from '@shared/lib/utils';
 
 import type { CatalogProduct, PaginationMeta } from '../model/types';

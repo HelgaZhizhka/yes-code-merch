@@ -60,10 +60,11 @@ export const FilterByPrice = ({
         max={maxEur}
         step={1}
         value={draft}
-        onValueChange={(value: number[]) =>
-          setDraft([value[0], value[1]] as [number, number])
-        }
-        aria-label={CATALOG_TEXT.price.rangeAriaLabel}
+        onValueChange={([min, max]: number[]) => {
+          if (min !== undefined && max !== undefined) {
+            setDraft([min, max]);
+          }
+        }}
         minStepsBetweenThumbs={1}
       >
         <Slider.Track className="relative h-1 grow rounded-sm bg-border">

@@ -14,14 +14,12 @@ export const CatalogList = ({
   renderActions,
 }: CatalogListProps): React.JSX.Element => {
   return (
-    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {products.map((product) => (
-        <CatalogCard
-          key={product.productId}
-          product={product}
-          actions={renderActions?.(product)}
-        />
+        <li key={product.productId}>
+          <CatalogCard product={product} actions={renderActions?.(product)} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
