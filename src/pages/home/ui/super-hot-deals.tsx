@@ -21,24 +21,19 @@ export const SuperHotDeals = (): React.JSX.Element | null => {
         {SECTION_SUBTITLE}
       </p>
 
-      <div
-        role="list"
+      <ul
         aria-label="Discounted products"
         className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:px-0"
       >
         {result.products.map((product) => (
-          <div
-            key={product.productId}
-            role="listitem"
-            className="w-[260px] shrink-0 snap-start"
-          >
+          <li key={product.productId} className="w-[260px] shrink-0 snap-start">
             <CatalogCard
               product={product}
               actions={<AddToCart variant="catalog" />}
             />
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 };
