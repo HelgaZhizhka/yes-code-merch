@@ -5,6 +5,7 @@ import { Categories } from '@shared/ui/categories';
 
 import { SuperHotDeals } from './ui/super-hot-deals';
 import { SuperHotDealsSkeleton } from './ui/super-hot-deals-skeleton';
+import { USPSection } from './ui/usp-section';
 
 export const Home = (): React.JSX.Element => {
   return (
@@ -30,6 +31,8 @@ export const Home = (): React.JSX.Element => {
       <Suspense fallback={<SuperHotDealsSkeleton />}>
         <SuperHotDeals />
       </Suspense>
+
+      <USPSection />
     </div>
   );
 };
