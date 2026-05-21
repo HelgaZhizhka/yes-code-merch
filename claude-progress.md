@@ -4,22 +4,22 @@
 
 ---
 
-## Текущий статус (2026-05-08)
+## Текущий статус (2026-05-20)
 
-**Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 56 unit tests ✓, 75 storybook tests ✓.
+**Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 65 unit tests ✓, 67 storybook tests ✓.
 
-**Сессия 2026-05-08:** Post-review fixes для YES-136 — исправлены bg-transparent/border-0 в LogoutButton, aria-label на ProfileLink, sm:max-w-[400px] в SheetContent, w-full max-w-[300px] в Banner, stagger убран из спека, init.sh OK constant для Sonar. Supabase MCP настроен через .mcp.json. PR #209 code review (code-review skill) — 1 issue (aria-label) уже исправлен и запушен. Ветка yes-136 запушена, готова к merge.
+**Сессия 2026-05-20 (code review):** Проведён FSD-code-review ветки `yes-139`. Исправлены все найденные проблемы: FSD-нарушение (cross-entity импорт), семантика списков, accessibility, unsafe type cast. Коммит `15fc29a` запушен в `yes-139`. PR #210 ожидает review/merge.
 
-**Следующий шаг:** Новая ветка. Приоритет: YES-137 (HeroSlider + USPSection) → YES-138 → YES-139.
+**Следующий шаг:** PR #210 review/merge, затем YES-137 (HeroSlider + USPSection) → YES-138 (ProductCard discount badge + size selector).
 
-### Порядок задач на ветке yes-136
+### Порядок задач
 
-| #   | Linear                                               | Задача                                      | Статус  |
-| --- | ---------------------------------------------------- | ------------------------------------------- | ------- |
-| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done |
-| 1   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending |
-| 2   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending |
-| 3   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | pending |
+| #   | Linear                                               | Задача                                      | Статус            |
+| --- | ---------------------------------------------------- | ------------------------------------------- | ----------------- |
+| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done           |
+| 1   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | ✅ done (PR #210) |
+| 2   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending           |
+| 3   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending           |
 
 ---
 
@@ -35,6 +35,58 @@
 ---
 
 ## Лог сессий
+
+### 2026-05-20 — YES-139 Code Review Fixes ✅ DONE
+
+**Что сделано:**
+
+- ✅ FSD-нарушение: `entities/catalog` импортировал из `entities/product` — исправлено
+  - Новый файл `shared/api/product-types.ts`: `ProductImages`, `AppliedDiscount`, `ProductDiscountDTO`, `ProductSearchViewDTO`, `DISCOUNT_TYPES`
+  - Новый файл `shared/lib/discount.ts`: `applyDiscountsToProduct`, `productDiscountsSchema` + helpers
+  - `entities/catalog` теперь импортирует из `@shared` напрямую
+- ✅ `CatalogList`: `<div>` → `<ul>/<li>` (семантика)
+- ✅ `FilterSection`: добавлен `aria-hidden={!open}` на коллапсируемый контент
+- ✅ `FilterByPrice`: убран `as [number, number]` cast → деструктуризация
+- ✅ `Slider.Root`: убран мёртвый `aria-label`
+- ✅ `catalog/index.ts`: убраны `createPaginationMeta` и `mapFromViewToCatalogProducts` из публичного API
+
+**Коммит:** `15fc29a` → ветка `yes-139`, PR #210 → develop
+
+**Верификация:** ✅ tsc ✓, lint ✓, 65 unit tests ✓, 67 storybook tests ✓
+
+---
+
+### 2026-05-20 — YES-139 Super Hot Deals + Catalog Entity Refactor ✅ DONE
+
+**Что сделано:**
+
+- ✅ SuperHotDeals секция на главной (horizontal scroll mobile, grid desktop)
+- ✅ Динамический Banner — показывает категорию с максимальным числом скидок
+- ✅ `useTopDiscountedCategory` + `pickTopDiscountedRoot` — выбор категории по количеству скидок
+- ✅ Prop injection для DiscountBanner в Header и MobileMenu (без FSD-нарушений)
+- ✅ FSD-рефакторинг: новая сущность `entities/catalog` с api/model/lib/ui слоями
+- ✅ Новые filter features: `filter-by-color`, `filter-by-price`, `filter-by-size`, `active-filters`, `paginate`
+- ✅ `CatalogCard` перемещена в `entities/catalog/ui/`
+- ✅ Zod-схема для `product_discounts` (type-safe парсинг в маппере)
+- ✅ `line-clamp-2` для описания товара в карточке
+
+**Коммиты в ветке yes-139:**
+
+1. `feat: catalog entity with api, lib, model, ui layers`
+2. `feat: catalog filter features (color, price, size, active-filters, paginate)`
+3. `refactor: update shared and pages for catalog entity integration`
+4. `refactor: remove migrated catalog code from entities/product`
+5. `style: limit product description to 2 lines with ellipsis`
+6. `style: limit super hot deals section width to 1020px`
+7. `style: super hot deals horizontal scroll instead of grid`
+8. `feat: super hot deals switches to useTopDiscountedCategory`
+9. `feat: integrate DiscountBanner into Header and MobileMenu via prop injection`
+
+**Верификация:** ✅ tsc ✓, lint ✓, 65 unit tests ✓, 67 storybook tests ✓
+
+**PR:** #210 → develop (awaiting review)
+
+---
 
 ### 2026-05-07 — YES-136 Header Redesign (Phase 1) ✅ DONE
 

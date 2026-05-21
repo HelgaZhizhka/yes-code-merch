@@ -1,11 +1,17 @@
-import { ProductList, useCatalogSearch, useProducts } from '@entities/product';
+import { ActiveFilters } from '@features/active-filters';
+import { AddToCart } from '@features/add-to-cart';
+import { PaginateCatalog } from '@features/paginate-catalog';
+
+import {
+  CatalogList,
+  useCatalogProducts,
+  useCatalogSearch,
+} from '@entities/catalog';
 
 import { cn } from '@shared/lib/utils';
 
-import { CatalogActiveFilters } from '../catalog-active-filters';
 import { CatalogEmptyState } from '../catalog-empty-state';
 import { CatalogFiltersSheet } from '../catalog-filters-sheet';
-import { CatalogPagination } from '../catalog-pagination';
 import { ContentSkeleton } from '../catalog-skeleton';
 
 interface CatalogContentProps {
@@ -17,7 +23,7 @@ export const CatalogContent = ({
 }: CatalogContentProps): React.JSX.Element | null => {
   const { searchParams } = useCatalogSearch();
 
-  const query = useProducts({
+  const query = useCatalogProducts({
     categoryIds: categoryIds ?? [],
     ...searchParams,
   });
@@ -38,7 +44,7 @@ export const CatalogContent = ({
     <div className="flex flex-1 flex-col" aria-busy={isFetching}>
       <div className="mb-3 flex flex-wrap items-center gap-2 lg:hidden">
         <CatalogFiltersSheet categoryIds={categoryIds} />
-        <CatalogActiveFilters />
+        <ActiveFilters />
       </div>
 
       {isEmpty ? (
@@ -51,9 +57,12 @@ export const CatalogContent = ({
               isFetching && 'opacity-60 pointer-events-none'
             )}
           >
-            <ProductList products={products} />
+            <CatalogList
+              products={products}
+              renderActions={() => <AddToCart variant="catalog" />}
+            />
           </div>
-          <CatalogPagination meta={meta} />
+          <PaginateCatalog meta={meta} />
         </>
       )}
     </div>

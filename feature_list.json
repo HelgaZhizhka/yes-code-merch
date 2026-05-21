@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-06",
+  "updated": "2026-05-20",
   "features": [
     {
       "id": "product-search-pagination",
@@ -68,15 +68,37 @@
       "docs": ["docs/superpowers/specs/2026-05-06-header-redesign-design.md"]
     },
     {
+      "id": "home-super-hot-deals",
+      "name": "Home page — Super hot deals this month (product cards block)",
+      "linear": "YES-139",
+      "branch": "yes-139",
+      "status": "done",
+      "priority": 1,
+      "verified": true,
+      "dependencies": ["redesign-header-navigation-home"],
+      "notes": "SuperHotDeals section with horizontal scroll (mobile) / grid (desktop). Dynamic Banner shows category with most discounts via useTopDiscountedCategory. Catalog entity extracted from entities/product to entities/catalog. Filter features created: filter-by-color, filter-by-price, filter-by-size, active-filters, paginate. Prop injection pattern for DiscountBanner in Header/MobileMenu. Code review: FSD violation fixed (shared types moved to shared/api/product-types + shared/lib/discount), accessibility fixes, semantic markup.",
+      "commits": [
+        "5e8de0b (refactor remove migrated catalog code)",
+        "740e3a4 (style product description)",
+        "127e23a (style max-width)",
+        "0842b64 (style horizontal scroll)",
+        "6c12407 (feat switch to useTopDiscountedCategory)",
+        "1afa4ae (feat integrate DiscountBanner)",
+        "15fc29a (fix code review issues)"
+      ],
+      "docs": ["docs/superpowers/specs/2026-05-20-super-hot-deals-design.md"],
+      "tech_debt": []
+    },
+    {
       "id": "home-hero-slider-usp",
       "name": "Implement Home Page Hero Slider and USP Section",
       "linear": "YES-137",
       "branch": "yes-137",
       "status": "pending",
-      "priority": 1,
+      "priority": 2,
       "verified": false,
       "dependencies": ["redesign-header-navigation-home"],
-      "notes": "HeroSlider (2-3 static slides, prev/next, dots, no autoplay) + USPSection (3 cards: delivery/range/order). Wire up in src/pages/home/index.tsx above HomeCatalog. Implement FIRST within the yes-136 redesign scope.",
+      "notes": "HeroSlider (2-3 static slides, prev/next, dots, no autoplay) + USPSection (3 cards: delivery/range/order). Wire up in src/pages/home/index.tsx above HomeCatalog. Implement after YES-139 is done.",
       "docs": []
     },
     {
@@ -89,21 +111,6 @@
       "verified": false,
       "dependencies": ["redesign-header-navigation-home"],
       "notes": "Discount badge on product image (top-left) + size selector UI. Implement after YES-137 is done.",
-      "docs": []
-    },
-    {
-      "id": "home-super-hot-deals",
-      "name": "Home page — Super hot deals this month (product cards block)",
-      "linear": "YES-139",
-      "branch": "yes-139",
-      "status": "pending",
-      "priority": 2,
-      "verified": false,
-      "dependencies": [
-        "home-hero-slider-usp",
-        "productcard-discount-badge-size"
-      ],
-      "notes": "Section above HomeCatalog rendering ProductCard items for products with discount_price IS NOT NULL. Mobile carousel / desktop grid. Reuses ProductCard from entities/product. Hidden if no discounted products. Also bundles BannerText refactor.",
       "docs": []
     },
     {

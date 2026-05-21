@@ -1,9 +1,7 @@
 import { SlidersHorizontal } from 'lucide-react';
 import { Suspense, useState } from 'react';
 
-import { CATALOG_TEXT } from '@pages/catalog/lib';
-
-import { useCatalogSearch } from '@entities/product';
+import { CATALOG_TEXT, useCatalogSearch } from '@entities/catalog';
 
 import {
   Sheet,

@@ -1,16 +1,16 @@
 import { Suspense } from 'react';
 
-import { LayoutView } from '@shared/types';
+import { NAV_SKELETON_KEYS } from '@shared/lib/skeleton-keys';
 import { Categories } from '@shared/ui/categories';
 
-const NAV_SKELETON_KEYS = ['nav-1', 'nav-2', 'nav-3', 'nav-4'] as const;
+import { SuperHotDeals } from './ui/super-hot-deals';
+import { SuperHotDealsSkeleton } from './ui/super-hot-deals-skeleton';
 
 export const Home = (): React.JSX.Element => {
   return (
     <div className="flex flex-1 flex-col items-center justify-between p-4">
-      <h1 className="text-2xl mb-4">Home page</h1>
       <div className="flex flex-col items-center gap-4 w-full">
-        <h2 className="text-xl">Shop by category</h2>
+        <h2 className="text-2xl">Shop by category</h2>
         <Suspense
           fallback={
             <div className="flex flex-wrap justify-center gap-4 w-full">
@@ -23,9 +23,13 @@ export const Home = (): React.JSX.Element => {
             </div>
           }
         >
-          <Categories variant={LayoutView.HOME} />
+          <Categories />
         </Suspense>
       </div>
+
+      <Suspense fallback={<SuperHotDealsSkeleton />}>
+        <SuperHotDeals />
+      </Suspense>
     </div>
   );
 };

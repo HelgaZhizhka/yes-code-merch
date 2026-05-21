@@ -1,4 +1,6 @@
-const CARD_SKELETON_KEYS = ['card-1', 'card-2', 'card-3', 'card-4'] as const;
+import { makeSkeletonKeys } from '@shared/lib/skeleton-keys';
+
+const CARD_SKELETON_KEYS = makeSkeletonKeys('card', 4);
 
 const FilterSectionSkeleton = (): React.JSX.Element => (
   <div className="border-t border-border">

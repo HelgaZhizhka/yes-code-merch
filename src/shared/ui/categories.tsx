@@ -1,20 +1,13 @@
 import { Link } from '@tanstack/react-router';
-import { cva } from 'class-variance-authority';
 import type React from 'react';
 
-import { useRootCategories } from '@shared/api/categories/hooks';
+import { useCategoriesTree } from '@shared/api';
 import Bags from '@shared/assets/bags.png';
 import Clothes from '@shared/assets/clothes.png';
 import Drinkware from '@shared/assets/drinkware.png';
 import Office from '@shared/assets/office.png';
 import Raccoon from '@shared/assets/Raccoon.svg';
 import { ROUTES } from '@shared/config/routes';
-import { cn } from '@shared/lib/utils';
-import { LayoutView, type LayoutViewType } from '@shared/types';
-
-interface CategoriesProps {
-  variant?: LayoutViewType;
-}
 
 interface Asset {
   image: string;
@@ -56,42 +49,12 @@ const categoriesAssets: Record<string, Asset> = {
   },
 };
 
-const containerVariants = cva('', {
-  variants: {
-    variant: {
-      header: 'flex gap-12 text-2xl',
-      footer: 'space-y-1',
-      home: 'flex gap-8 flex-wrap w-full justify-center',
-    },
-  },
-  defaultVariants: {
-    variant: 'header',
-  },
-});
-
-const linkVariants = cva('transition-all', {
-  variants: {
-    variant: {
-      header:
-        'text-secondary-foreground hover:text-primary data-[active=true]:text-primary',
-      footer:
-        'text-violet-foreground hover:text-violet-accent-foreground data-[active=true]:text-violet-accent-foreground',
-      home: 'flex flex-col items-center text-primary-foreground hover:text-primary text-center',
-    },
-  },
-  defaultVariants: {
-    variant: 'header',
-  },
-});
-
-export const Categories = ({
-  variant = LayoutView.HEADER,
-}: CategoriesProps): React.JSX.Element | null => {
-  const { data: categories } = useRootCategories();
+export const Categories = (): React.JSX.Element => {
+  const { data: categories } = useCategoriesTree();
 
   return (
     <nav aria-label="Categories">
-      <ul className={cn(containerVariants({ variant }))}>
+      <ul className="flex gap-8 flex-wrap w-full justify-center">
         {categories.map((category) => {
           const { id, name, slug } = category;
           const assets = categoriesAssets[slug] ?? categoriesAssets.default;
@@ -101,37 +64,31 @@ export const Categories = ({
                 to={ROUTES.CATEGORY}
                 preload="intent"
                 params={{ _splat: slug }}
-                className={cn(linkVariants({ variant }))}
+                className="flex flex-col items-center text-primary-foreground hover:text-primary text-center transition-all"
                 activeProps={{
                   'data-active': true,
                   'aria-current': 'page',
                 }}
               >
-                {variant === 'home' ? (
-                  <>
-                    <div
-                      className="shadow-block w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full flex items-center justify-center mb-2 p-2 overflow-hidden"
-                      style={
-                        {
-                          backgroundColor: assets.color,
-                          '--shadow-color': assets.color,
-                        } as React.CSSProperties
-                      }
-                    >
-                      <img
-                        src={assets.image}
-                        alt={name}
-                        width={assets.width}
-                        height={assets.height}
-                        className="w-4/5 h-4/5 object-contain"
-                        loading="lazy"
-                      />
-                    </div>
-                    <span>{name}</span>
-                  </>
-                ) : (
-                  name
-                )}
+                <div
+                  className="shadow-block w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full flex items-center justify-center mb-2 p-2 overflow-hidden"
+                  style={
+                    {
+                      backgroundColor: assets.color,
+                      '--shadow-color': assets.color,
+                    } as React.CSSProperties
+                  }
+                >
+                  <img
+                    src={assets.image}
+                    alt={name}
+                    width={assets.width}
+                    height={assets.height}
+                    className="w-4/5 h-4/5 object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <span>{name}</span>
               </Link>
             </li>
           );

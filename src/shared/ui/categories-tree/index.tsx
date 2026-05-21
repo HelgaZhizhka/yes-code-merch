@@ -9,7 +9,7 @@ import { cn } from '@shared/lib/utils';
 
 type CategoriesTreeProps = {
   categoryTree: CategoryTree[];
-  variant?: 'default' | 'mobile' | 'sidebar';
+  variant?: 'default' | 'mobile' | 'sidebar' | 'footer';
   className?: string;
   useFullPath?: boolean;
 };
@@ -22,6 +22,8 @@ const linkVariants = cva('transition-all', {
         'text-2xl text-foreground hover:text-primary data-[active]:text-primary data-[active]:font-semibold',
       sidebar:
         'block w-full py-1 pl-3 text-sm text-muted-foreground border-l-2 border-transparent hover:text-foreground hover:border-border data-[active]:border-primary data-[active]:text-primary data-[active]:font-medium',
+      footer:
+        'text-violet-foreground hover:text-violet-accent-foreground data-[active]:text-violet-accent-foreground data-[active]:font-medium',
     },
   },
   defaultVariants: { variant: 'default' },
@@ -76,15 +78,21 @@ const Node = React.memo(
               aria-label={`Toggle ${name} subcategories`}
               aria-expanded={isOpen}
               className={cn(
-                'text-muted-foreground transition-colors hover:text-foreground',
-                variant === 'sidebar' && 'mr-1 p-0.5',
-                variant === 'mobile' && 'p-2'
+                'transition-colors',
+                variant === 'sidebar' &&
+                  'mr-1 p-0.5 text-muted-foreground hover:text-foreground',
+                variant === 'mobile' &&
+                  'p-2 text-muted-foreground hover:text-foreground',
+                variant === 'footer' &&
+                  'p-0.5 text-violet-foreground hover:text-violet-accent-foreground'
               )}
             >
               <ChevronRight
                 className={cn(
                   'transition-transform',
-                  variant === 'sidebar' ? 'h-3.5 w-3.5' : 'h-6 w-6',
+                  variant === 'sidebar' || variant === 'footer'
+                    ? 'h-3.5 w-3.5'
+                    : 'h-6 w-6',
                   isOpen && 'rotate-90'
                 )}
               />
@@ -139,7 +147,9 @@ export const CategoriesTree = ({
       <ul
         className={cn(
           'flex flex-col',
-          variant === 'sidebar' ? 'gap-0.5' : 'gap-4'
+          variant === 'sidebar' && 'gap-0.5',
+          variant === 'footer' && 'gap-1',
+          variant !== 'sidebar' && variant !== 'footer' && 'gap-4'
         )}
       >
         {categoryTree.map((root) => (

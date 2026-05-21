@@ -7,8 +7,9 @@ import Logo from '@shared/assets/logo.svg';
 import { ROUTES } from '@shared/config/routes';
 import { LayoutView } from '@shared/types';
 import { AuthMenu } from '@shared/ui/auth-menu';
-import { Categories } from '@shared/ui/categories';
 import { ContactWidget } from '@shared/ui/contact-widget';
+
+import { FooterCategories } from './footer-categories';
 
 interface FooterProps extends AuthProps {
   onLogout(): Promise<void>;
@@ -45,14 +46,14 @@ export const Footer = ({
         <div className="hidden md:block">
           <h5 className="font-bold mb-2">Categories</h5>
           <Suspense fallback={null}>
-            <Categories variant={LayoutView.FOOTER} />
+            <FooterCategories />
           </Suspense>
         </div>
 
         <div>
           <h5 className="font-bold mb-2">Contact us</h5>
           <ul className="space-y-2">
-            <li className="flex items-center gap-2">
+            <li>
               <ContactWidget
                 icon={<Phone className="w-5 h-5" />}
                 label="(+971) 58 8284186"
@@ -60,14 +61,14 @@ export const Footer = ({
                 variant={LayoutView.FOOTER}
               />
             </li>
-            <li className="flex items-center gap-2">
+            <li>
               <ContactWidget
                 icon={<MessageCircle className="w-5 h-5" />}
                 label="(+971) 58 8284186"
                 variant={LayoutView.FOOTER}
               />
             </li>
-            <li className="flex items-center gap-2">
+            <li>
               <ContactWidget
                 icon={<Mail className="w-5 h-5" />}
                 label="yescode@gmail.com"
