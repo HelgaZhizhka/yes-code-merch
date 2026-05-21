@@ -47,11 +47,14 @@ describe('USPSection', () => {
   it('renders "More" buttons as router links pointing to /', async () => {
     renderWithRouter(<USPSection />);
     await waitFor(() => {
-      const moreLinks = screen.getAllByRole('link', { name: /^more$/i });
-      expect(moreLinks).toHaveLength(2);
-      moreLinks.forEach((link) => {
-        expect(link).toHaveAttribute('href', '/');
+      const deliveryLink = screen.getByRole('link', {
+        name: /more about free and fast delivery/i,
       });
+      const rangeLink = screen.getByRole('link', {
+        name: /more about our wide range/i,
+      });
+      expect(deliveryLink).toHaveAttribute('href', '/');
+      expect(rangeLink).toHaveAttribute('href', '/');
     });
   });
 });

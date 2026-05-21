@@ -8,7 +8,7 @@ type UspCard = {
   id: string;
   title: string;
   description: string;
-  cta: { label: string; href: string; isExternal: boolean };
+  cta: { label: string; href: string; isExternal: boolean; ariaLabel: string };
   bg: string;
 };
 
@@ -18,7 +18,12 @@ const USP_CARDS: UspCard[] = [
     title: 'Free and Fast delivery',
     description:
       'Receipt of goods within 1-2 weeks. We will pack your package securely and ship it carefully. Want more information?',
-    cta: { label: 'More', href: '/', isExternal: false },
+    cta: {
+      label: 'More',
+      href: '/',
+      isExternal: false,
+      ariaLabel: 'More about free and fast delivery',
+    },
     bg: 'bg-blue-600',
   },
   {
@@ -26,7 +31,12 @@ const USP_CARDS: UspCard[] = [
     title: 'Wide range',
     description:
       'A large selection of quality goods. Funny gifts for you and your loved ones. Go to catalog to see more.',
-    cta: { label: 'More', href: '/', isExternal: false },
+    cta: {
+      label: 'More',
+      href: '/',
+      isExternal: false,
+      ariaLabel: 'More about our wide range',
+    },
     bg: 'bg-green-700',
   },
   {
@@ -34,7 +44,12 @@ const USP_CARDS: UspCard[] = [
     title: 'Quick order placement',
     description:
       'Our team will be happy to process your order quickly. If you have any questions - write or call us!',
-    cta: { label: 'Contact us', href: 'tel:971588284186', isExternal: true },
+    cta: {
+      label: 'Contact us',
+      href: 'tel:971588284186',
+      isExternal: true,
+      ariaLabel: 'Contact us for quick order placement',
+    },
     bg: 'bg-purple-600',
   },
 ];
@@ -44,10 +59,13 @@ const SECTION_TITLE = 'Shopping easy with YES CODE!';
 export const USPSection = (): React.JSX.Element => {
   return (
     <section
-      aria-label={SECTION_TITLE}
+      aria-labelledby="usp-section-heading"
       className="mx-auto max-w-[1020px] px-4 py-10"
     >
-      <h2 className="text-2xl font-bold text-center text-foreground">
+      <h2
+        id="usp-section-heading"
+        className="text-2xl font-bold text-center text-foreground"
+      >
         {SECTION_TITLE}
       </h2>
       <div className="w-10 h-1 bg-pink-500 mx-auto mt-2 mb-8" />
@@ -72,11 +90,21 @@ export const USPSection = (): React.JSX.Element => {
               <p className="text-sm text-white/90">{card.description}</p>
               <div className="mt-2">
                 {card.cta.isExternal ? (
-                  <Button asChild variant="outline" className="bg-white">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white"
+                    aria-label={card.cta.ariaLabel}
+                  >
                     <a href={card.cta.href}>{card.cta.label}</a>
                   </Button>
                 ) : (
-                  <Button asChild variant="outline" className="bg-white">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white"
+                    aria-label={card.cta.ariaLabel}
+                  >
                     <Link to={ROUTES.HOME}>{card.cta.label}</Link>
                   </Button>
                 )}
