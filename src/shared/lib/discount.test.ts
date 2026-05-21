@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
+import type { ProductDiscountDTO } from '@shared/api/product-types';
+
 import {
   applyDiscountsToProduct,
   calculateDiscountAmount,
   calculateFinalPrice,
   getActiveDiscounts,
   selectBestDiscount,
-} from './calculate-discount';
-
-import type { ProductDiscountDTO } from '../api/types';
+} from './discount';
 
 const createDiscount = (
   overrides: Partial<ProductDiscountDTO> = {}
