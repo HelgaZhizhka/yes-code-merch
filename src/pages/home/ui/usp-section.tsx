@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
 
 import Raccoon from '@shared/assets/Raccoon.svg';
+import { ROUTES } from '@shared/config/routes';
 import { Button } from '@shared/ui/button';
 
 type UspCard = {
@@ -76,7 +77,7 @@ export const USPSection = (): React.JSX.Element => {
                   </Button>
                 ) : (
                   <Button asChild variant="outline" className="bg-white">
-                    <Link to={card.cta.href as '/'}>{card.cta.label}</Link>
+                    <Link to={ROUTES.HOME}>{card.cta.label}</Link>
                   </Button>
                 )}
               </div>
