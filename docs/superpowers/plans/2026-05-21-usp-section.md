@@ -12,17 +12,18 @@
 
 ## Files
 
-| Action | Path |
-|--------|------|
-| Create | `src/pages/home/ui/usp-section.tsx` |
+| Action | Path                                     |
+| ------ | ---------------------------------------- |
+| Create | `src/pages/home/ui/usp-section.tsx`      |
 | Create | `src/pages/home/ui/usp-section.test.tsx` |
-| Modify | `src/pages/home/index.tsx` |
+| Modify | `src/pages/home/index.tsx`               |
 
 ---
 
 ## Task 1: Write failing tests
 
 **Files:**
+
 - Create: `src/pages/home/ui/usp-section.test.tsx`
 
 - [ ] **Step 1: Create the test file**
@@ -94,6 +95,7 @@ Expected output: `Cannot find module './usp-section'` or similar — the file do
 ## Task 2: Implement `usp-section.tsx`
 
 **Files:**
+
 - Create: `src/pages/home/ui/usp-section.tsx`
 
 - [ ] **Step 1: Create the component**
@@ -153,7 +155,10 @@ export const USPSection = (): React.JSX.Element => {
       </h2>
       <div className="w-10 h-1 bg-pink-500 mx-auto mt-2 mb-8" />
 
-      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3" aria-label="Benefits">
+      <ul
+        className="grid grid-cols-1 gap-4 sm:grid-cols-3"
+        aria-label="Benefits"
+      >
         {USP_CARDS.map((card) => (
           <li
             key={card.id}
@@ -216,6 +221,7 @@ git commit -m "feat: add USPSection component with 3 benefit cards (YES-142)"
 ## Task 3: Wire up in home page
 
 **Files:**
+
 - Modify: `src/pages/home/index.tsx`
 
 - [ ] **Step 1: Import and add `<USPSection />`**
@@ -278,6 +284,7 @@ pnpm dev
 ```
 
 Open `http://localhost:3000`, scroll to the USP section below Super Hot Deals. Verify:
+
 - Heading "Shopping easy with YES CODE!" visible with pink accent line
 - 3 cards visible: blue / green / purple
 - Raccoon image in each card (top-right)

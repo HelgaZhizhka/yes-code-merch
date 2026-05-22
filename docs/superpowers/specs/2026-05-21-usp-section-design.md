@@ -65,17 +65,21 @@ const USP_CARDS: UspCard[] = [
 ## Layout
 
 ### Section wrapper
+
 - `<section aria-label="Shopping easy with YES CODE!">`
 - `mx-auto max-w-[1020px] px-4 py-10`
 
 ### Heading
+
 - `<h2>` with `text-foreground` (dark-mode compatible)
 - Pink accent line: `<div>` with `w-10 h-1 bg-pink-500 mx-auto mt-2 mb-8`
 
 ### Grid
+
 - `<ul>` with `grid grid-cols-1 gap-4 sm:grid-cols-3`
 
 ### Card (`<li>`)
+
 - `relative overflow-hidden rounded-xl min-h-[280px] p-6 flex flex-col justify-between {bg}`
 - **Raccoon image:** `absolute top-0 right-0 w-40 h-40 object-contain` — `Raccoon.svg` from `@shared/assets/Raccoon.svg`, `alt=""` (decorative, ignored by screen readers)
 - **Title:** `text-xl font-bold text-white`
@@ -83,6 +87,7 @@ const USP_CARDS: UspCard[] = [
 - **CTA button:** `mt-4` — `variant="outline"` with explicit `bg-white` override
 
 ### CTA link logic
+
 - `isExternal: false` → `<Button asChild><Link to={href}>` from `@tanstack/react-router`
 - `isExternal: true` → `<Button asChild><a href={href}>` (tel: link)
 

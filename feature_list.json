@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-20",
+  "updated": "2026-05-21",
   "features": [
     {
       "id": "product-search-pagination",
@@ -90,15 +90,27 @@
       "tech_debt": []
     },
     {
-      "id": "home-hero-slider-usp",
-      "name": "Implement Home Page Hero Slider and USP Section",
-      "linear": "YES-137",
-      "branch": "yes-137",
-      "status": "pending",
+      "id": "home-usp-section",
+      "name": "Implement Home Page USP Section",
+      "linear": "YES-142",
+      "branch": "yes-142",
+      "status": "in-progress",
       "priority": 2,
       "verified": false,
       "dependencies": ["redesign-header-navigation-home"],
-      "notes": "HeroSlider (2-3 static slides, prev/next, dots, no autoplay) + USPSection (3 cards: delivery/range/order). Wire up in src/pages/home/index.tsx above HomeCatalog. Implement after YES-139 is done.",
+      "notes": "USPSection (3 cards: Free delivery/Wide range/Quick order). Section heading 'Shopping easy with YES CODE!'. Responsive 1→3 col grid. Raccoon.svg illustration. Internal links via TanStack Router Link. Wire up in src/pages/home/index.tsx below HeroSlider, above catalog.",
+      "docs": []
+    },
+    {
+      "id": "home-hero-slider",
+      "name": "Implement Home Page Hero Slider",
+      "linear": "YES-141",
+      "branch": "yes-141",
+      "status": "pending",
+      "priority": 2,
+      "verified": false,
+      "dependencies": ["home-usp-section"],
+      "notes": "HeroSlider: 2-3 static slides (id/title/subtitle/ctaLabel/ctaHref/bgFrom/bgTo), prev/next buttons (lucide ChevronLeft/Right), dot indicators, min-h-[280px] mobile / min-h-[400px] desktop, CTA via Button asChild + Link, no autoplay. Wire up in src/pages/home/index.tsx above catalog.",
       "docs": []
     },
     {

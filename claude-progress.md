@@ -4,22 +4,23 @@
 
 ---
 
-## Текущий статус (2026-05-20)
+## Текущий статус (2026-05-21)
 
 **Последнее проверенное состояние:** TypeScript ✓, ESLint ✓, 65 unit tests ✓, 67 storybook tests ✓.
 
-**Сессия 2026-05-20 (code review):** Проведён FSD-code-review ветки `yes-139`. Исправлены все найденные проблемы: FSD-нарушение (cross-entity импорт), семантика списков, accessibility, unsafe type cast. Коммит `15fc29a` запушен в `yes-139`. PR #210 ожидает review/merge.
+**Сессия 2026-05-21:** YES-137 разбит на два отдельных тикета: YES-142 (USPSection) и YES-141 (HeroSlider). Текущая ветка `yes-142` — реализация USPSection.
 
-**Следующий шаг:** PR #210 review/merge, затем YES-137 (HeroSlider + USPSection) → YES-138 (ProductCard discount badge + size selector).
+**Следующий шаг:** Реализовать YES-142 (USPSection) → затем YES-141 (HeroSlider) → YES-138 (ProductCard discount badge + size selector).
 
 ### Порядок задач
 
-| #   | Linear                                               | Задача                                      | Статус            |
-| --- | ---------------------------------------------------- | ------------------------------------------- | ----------------- |
-| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done           |
-| 1   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | ✅ done (PR #210) |
-| 2   | [YES-137](https://linear.app/yes-code/issue/YES-137) | HeroSlider + USPSection на home page        | pending           |
-| 3   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending           |
+| #   | Linear                                               | Задача                                      | Статус                         |
+| --- | ---------------------------------------------------- | ------------------------------------------- | ------------------------------ |
+| —   | [YES-136](https://linear.app/yes-code/issue/YES-136) | Header / nav / mobile menu redesign         | ✅ done                        |
+| —   | [YES-139](https://linear.app/yes-code/issue/YES-139) | Super hot deals блок + BannerText refactor  | ✅ done (PR #210)              |
+| 1   | [YES-142](https://linear.app/yes-code/issue/YES-142) | USPSection на home page                     | 🔄 in-progress (ветка yes-142) |
+| 2   | [YES-141](https://linear.app/yes-code/issue/YES-141) | HeroSlider на home page                     | pending                        |
+| 3   | [YES-138](https://linear.app/yes-code/issue/YES-138) | ProductCard: discount badge + size selector | pending                        |
 
 ---
 
