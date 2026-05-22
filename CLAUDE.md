@@ -17,7 +17,7 @@
 9. ❌ Force push to main
 10. ❌ Run sub-agents without approval
 11. ❌ Add dependencies without asking
-12. ❌ Do extra work beyond the ask
+12. ❌ Do extra work beyond the ask — don't improve adjacent code, don't reformat unrelated lines, don't remove pre-existing dead code. Every changed line must trace back to the request.
 13. ❌ Commit code with security holes
 14. ❌ Create circular dependencies between layers
 15. ❌ Use `eval`, ignore accessibility
@@ -31,6 +31,16 @@
 **yes-code-merch** — React + TypeScript + Vite + TanStack Router + Zustand + Supabase + Tailwind  
 **Architecture:** Feature-Sliced Design (FSD)  
 **Package Manager:** pnpm only
+
+---
+
+## Git Flow
+
+- **Branches:** `yes-NNN` cut from `develop`
+- **PRs:** `yes-NNN` → `develop` (never directly to `main`)
+- **`develop`** = integration branch; **`main`** = production
+- **Merge policy:** squash merge
+- **Naming:** match the Linear ticket — `yes-142`, `yes-139`, etc.
 
 ---
 
@@ -85,29 +95,5 @@ Optional: See [.claude/SETUP_OPTIONAL.md](.claude/SETUP_OPTIONAL.md) for Supabas
 
 ---
 
-## Session End Checklist
-
-Before leaving:
-
-1. Update `claude-progress.md` (what was done, next step)
-2. Update `feature_list.json` (mark feature as done if Definition of Done met)
-3. Commit to git (safe state)
-4. Leave repo clean enough for `./init.sh` to pass
-
-If interrupted mid-feature: fill `session-handoff.md`.  
-If feature is done: clear `session-handoff.md`.
-
----
-
-## Definition of Done
-
-Feature is `done` only when **all** true:
-
-- ✅ Target behavior implemented
-- ✅ Verification actually run (lint + tsc + tests)
-- ✅ Evidence in `feature_list.json` or `claude-progress.md`
-- ✅ `./init.sh` passes
-
----
-
-**Questions?** See [.claude/AI_QUICKSTART.md](.claude/AI_QUICKSTART.md) or the topic-specific docs above.
+**Questions?** See [.claude/AI_QUICKSTART.md](.claude/AI_QUICKSTART.md) or the topic-specific docs above.  
+**Session workflow + Definition of Done:** [AGENTS.md](AGENTS.md)
